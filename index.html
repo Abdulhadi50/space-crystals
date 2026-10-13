@@ -864,14 +864,21 @@ async function boot(){
     STATE.user.lastTick = Date.now();
     STATE.user.pending = 0;
     STATE.user.requests = STATE.user.requests || [];
-  } catch(e){
-    $('loader').innerHTML = `<div style="padding:30px;text-align:center;color:#E59A94">
-      <h2>خطأ في الاتصال</h2>
-      <p style="margin:10px 0;font-size:13px">${e.message}</p>
-      <button onclick="location.reload()" style="padding:10px 20px;background:#284D46;color:#fff;border-radius:12px;margin-top:10px">إعادة المحاولة</button>
-    </div>`;
-    return;
-  }
+  } catch (e) {
+  $('loader').innerHTML = `<div style="padding:30px;text-align:center;color:#E59A94;font-family:monospace;direction:ltr">
+    <h2 style="color:#9AC3B3">Debug Info</h2>
+    <div style="background:#000;padding:14px;border-radius:8px;margin:14px 0;text-align:left;font-size:11px;word-break:break-all">
+      <div style="color:#5fe0a8">Error: ${e.message}</div>
+      <div style="color:#fff;margin-top:8px">hasTG: ${!!window.Telegram}</div>
+      <div style="color:#fff">hasTGApp: ${!!(window.Telegram && window.Telegram.WebApp)}</div>
+      <div style="color:#fff">hasUser: ${!!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user)}</div>
+      <div style="color:#fff">initDataLen: ${((window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || '').length}</div>
+      <div style="color:#fff">workerURL: ${typeof WORKER_URL !== 'undefined' ? WORKER_URL : 'undefined'}</div>
+    </div>
+    <button onclick="location.reload()" style="padding:10px 20px;background:#284D46;color:#fff;border-radius:12px;margin-top:10px">إعادة المحاولة</button>
+  </div>`;
+  return;
+}
 
   $('app').style.display = 'flex';
   $('loader').classList.add('hide');
