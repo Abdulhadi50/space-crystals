@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050607">
 <title>Space Crystals — بلورات الفضاء</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -19,188 +20,101 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'SF Arabic','SF Pro Text','Geeza Pro','Noto Sans Arabic','Segoe UI',system-ui,sans-serif;
-  color:var(--tx);font-size:15px;line-height:1.5;
-  -webkit-user-select:none;user-select:none;overscroll-behavior:none;
-  -webkit-font-smoothing:antialiased
-}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Arabic','Geeza Pro','Noto Sans Arabic',system-ui,sans-serif;
+  color:var(--tx);font-size:15px;line-height:1.5;-webkit-user-select:none;user-select:none;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
 button,input{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input{-webkit-user-select:text;user-select:text}
 svg{display:block}
 ::-webkit-scrollbar{display:none}
 .num{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;display:inline-block}
-button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
 
-/* BACKGROUND */
 .bg,.stars,.stars::before,.stars::after{position:fixed;inset:0;pointer-events:none}
-.bg{z-index:0;background:
-  radial-gradient(ellipse 70% 38% at 50% 24%,rgba(154,195,179,.11),transparent 70%),
-  radial-gradient(ellipse 90% 55% at 50% 105%,rgba(40,77,70,.30),transparent 70%),
-  linear-gradient(180deg,var(--bg),var(--bg2) 60%,var(--bg))}
-.stars{z-index:0;opacity:.75;background-size:260px 300px;
-  background-image:
-    radial-gradient(1px 1px at 8% 14%,#fffc,transparent),
-    radial-gradient(1px 1px at 23% 41%,#fff8,transparent),
-    radial-gradient(1px 1px at 41% 8%,#fff9,transparent),
-    radial-gradient(1px 1px at 57% 52%,#9AC3B3cc,transparent),
-    radial-gradient(1px 1px at 73% 27%,#fff8,transparent),
-    radial-gradient(1px 1px at 91% 63%,#fff9,transparent),
-    radial-gradient(1px 1px at 15% 77%,#fff7,transparent),
-    radial-gradient(1px 1px at 66% 90%,#fffa,transparent)}
-.stars::before{content:"";background-size:410px 470px;animation:tw 6s ease-in-out infinite;
-  background-image:
-    radial-gradient(1.4px 1.4px at 20% 30%,#fff,transparent),
-    radial-gradient(1.6px 1.6px at 62% 18%,#CDE8DD,transparent),
-    radial-gradient(1.4px 1.4px at 80% 72%,#fff,transparent),
-    radial-gradient(1.2px 1.2px at 38% 84%,#fff,transparent)}
-.stars::after{content:"";background-size:150px 170px;opacity:.55;animation:tw 9s ease-in-out -3s infinite;
-  background-image:
-    radial-gradient(.8px .8px at 5% 50%,#fff8,transparent),
-    radial-gradient(.8px .8px at 30% 20%,#fff7,transparent),
-    radial-gradient(.8px .8px at 48% 75%,#fff8,transparent),
-    radial-gradient(.8px .8px at 70% 45%,#fff7,transparent),
-    radial-gradient(.8px .8px at 88% 10%,#fff8,transparent)}
+.bg{z-index:0;background:radial-gradient(ellipse 70% 38% at 50% 24%,rgba(154,195,179,.11),transparent 70%),radial-gradient(ellipse 90% 55% at 50% 105%,rgba(40,77,70,.30),transparent 70%),linear-gradient(180deg,var(--bg),var(--bg2) 60%,var(--bg))}
+.stars{z-index:0;opacity:.75;background-size:260px 300px;background-image:radial-gradient(1px 1px at 8% 14%,#fffc,transparent),radial-gradient(1px 1px at 23% 41%,#fff8,transparent),radial-gradient(1px 1px at 41% 8%,#fff9,transparent),radial-gradient(1px 1px at 57% 52%,#9AC3B3cc,transparent),radial-gradient(1px 1px at 73% 27%,#fff8,transparent),radial-gradient(1px 1px at 91% 63%,#fff9,transparent),radial-gradient(1px 1px at 15% 77%,#fff7,transparent),radial-gradient(1px 1px at 66% 90%,#fffa,transparent)}
+.stars::before{content:"";background-size:410px 470px;animation:tw 6s ease-in-out infinite;background-image:radial-gradient(1.4px 1.4px at 20% 30%,#fff,transparent),radial-gradient(1.6px 1.6px at 62% 18%,#CDE8DD,transparent),radial-gradient(1.4px 1.4px at 80% 72%,#fff,transparent),radial-gradient(1.2px 1.2px at 38% 84%,#fff,transparent)}
 
-/* LAYOUT */
 .app{position:relative;z-index:2;max-width:480px;height:100dvh;margin:0 auto;display:none;flex-direction:column;overflow:hidden}
 .main{flex:1;min-height:0;overflow-y:auto;padding:calc(12px + var(--st)) 16px calc(var(--dock) + var(--sb) + 36px);overscroll-behavior:contain}
 .screen{display:none}.screen.active{display:block;animation:in .35s var(--ease)}
 .ic{width:20px;height:20px;flex-shrink:0}
-
-.card{padding:16px;border-radius:var(--r-lg);background:var(--glass);border:1px solid var(--bd);margin-bottom:12px;
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.card{padding:16px;border-radius:var(--r-lg);background:var(--glass);border:1px solid var(--bd);margin-bottom:12px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
 .label{font-size:11.5px;font-weight:500;color:var(--tx2)}
-
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:var(--r-md);
-  font-weight:600;font-size:15px;transition:transform .15s var(--ease),opacity .2s}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:var(--r-md);font-weight:600;font-size:15px;transition:transform .15s var(--ease),opacity .2s}
 .btn:active{transform:scale(.98)}.btn:disabled{opacity:.45;pointer-events:none}
-.btn-p{background:linear-gradient(180deg,var(--em2),var(--em));border:1px solid rgba(154,195,179,.3);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 22px rgba(0,0,0,.4)}
+.btn-p{background:linear-gradient(180deg,var(--em2),var(--em));border:1px solid rgba(154,195,179,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 22px rgba(0,0,0,.4)}
 .btn-m{background:var(--glass2);border:1px solid var(--bd);color:var(--mint)}
-.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--em);display:grid;place-items:center;
-  border:1px solid rgba(154,195,179,.3);flex-shrink:0}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--em);display:grid;place-items:center;border:1px solid rgba(154,195,179,.3);flex-shrink:0}
 .icon-btn .ic{width:17px;height:17px}
-
 .sec{display:flex;align-items:center;gap:10px;margin:6px 4px 14px;font-weight:700;font-size:18px}
-.sec .ic,.lbl-f .ic{color:var(--mint)}
-.alert{display:flex;gap:10px;padding:12px 14px;margin-bottom:14px;border-radius:var(--r-md);
-  background:rgba(40,77,70,.28);border:1px solid var(--bd);font-size:12.5px;line-height:1.7;color:var(--tx2)}
-.alert .ic{color:var(--mint);width:18px;height:18px;margin-top:3px}.alert b{color:var(--tx)}
-.alert.warn{background:rgba(229,154,148,.08);border-color:rgba(229,154,148,.25)}.alert.warn .ic{color:var(--err)}
-
+.sec .ic{color:var(--mint)}
+.alert{display:flex;gap:10px;padding:12px 14px;margin-bottom:14px;border-radius:var(--r-md);background:rgba(40,77,70,.28);border:1px solid var(--bd);font-size:12.5px;line-height:1.7;color:var(--tx2)}
+.alert .ic{color:var(--mint);width:18px;height:18px;margin-top:3px}
 .empty{text-align:center;padding:24px 16px;color:var(--tx2);font-size:13px}
 .empty .ic{width:30px;height:30px;margin:0 auto 10px;color:var(--mint);opacity:.6}
 
-/* TOPBAR */
 .topbar{display:flex;align-items:center;gap:12px;padding:4px 0 8px}
-.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
-  background:var(--surf);border:1px solid var(--bd);color:var(--mint)}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:var(--surf);border:1px solid var(--bd);color:var(--mint);overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
 .tb-meta{flex:1;min-width:0}.tb-hello{font-size:11.5px;color:var(--tx2)}
 .tb-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chip{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:999px;flex-shrink:0;
-  background:var(--glass);border:1px solid var(--bd)}
-.coin{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--mint);
-  border:1px solid rgba(154,195,179,.35);background:rgba(40,77,70,.4)}
+.chip{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:999px;flex-shrink:0;background:var(--glass);border:1px solid var(--bd)}
+.coin{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--mint);border:1px solid rgba(154,195,179,.35);background:rgba(40,77,70,.4)}
 .coin .ic{width:15px;height:15px}.chip b{font-size:15px;font-weight:700}
 
-/* HERO / HOME */
 .stage{position:relative;height:250px;display:flex;align-items:center;justify-content:center}
-.glow{position:absolute;width:240px;height:240px;border-radius:50%;
-  background:radial-gradient(circle,rgba(154,195,179,.2),rgba(40,77,70,.2) 45%,transparent 70%);
-  animation:breathe 6s ease-in-out infinite}
-.gem-wrap{position:relative;width:100px;height:130px;animation:float 5s ease-in-out infinite;
-  filter:drop-shadow(0 14px 22px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(154,195,179,.22))}
+.glow{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(154,195,179,.2),rgba(40,77,70,.2) 45%,transparent 70%);animation:breathe 6s ease-in-out infinite}
+.gem-wrap{position:relative;width:100px;height:130px;animation:float 5s ease-in-out infinite;filter:drop-shadow(0 14px 22px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(154,195,179,.22))}
 .gem-wrap svg{width:100%;height:100%}
 #heroGem .gem-wrap{width:130px;height:170px}
-.stage-cap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);white-space:nowrap;
-  font-size:12px;color:var(--tx2);padding:5px 14px;border-radius:999px;
-  background:rgba(5,6,7,.55);border:1px solid var(--bd)}
-.live-badge{position:absolute;top:4px;left:50%;transform:translateX(-50%);z-index:4;
-  display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-  background:rgba(5,6,7,.7);border:1px solid rgba(154,195,179,.3);
-  font-size:10.5px;font-weight:600;color:var(--mint);white-space:nowrap}
-.live-badge .dot{width:6px;height:6px;border-radius:50%;background:#5fe0a8;
-  box-shadow:0 0 8px #5fe0a8;animation:liveDot 1.6s ease-in-out infinite}
-.live-badge b{color:var(--tx)}
+.stage-cap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;color:var(--tx2);padding:5px 14px;border-radius:999px;background:rgba(5,6,7,.55);border:1px solid var(--bd)}
+.live-badge{position:absolute;top:4px;left:50%;transform:translateX(-50%);z-index:4;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:rgba(5,6,7,.7);border:1px solid rgba(154,195,179,.3);font-size:10.5px;font-weight:600;color:var(--mint);white-space:nowrap}
+.live-badge .dot{width:6px;height:6px;border-radius:50%;background:#5fe0a8;box-shadow:0 0 8px #5fe0a8;animation:liveDot 1.6s ease-in-out infinite}
 
-.balance{text-align:center;padding:18px 14px 16px;margin-bottom:12px;border-radius:var(--r-lg);
-  background:linear-gradient(170deg,rgba(40,77,70,.38),rgba(17,23,21,.65));border:1px solid var(--bd)}
+.balance{text-align:center;padding:18px 14px 16px;margin-bottom:12px;border-radius:var(--r-lg);background:linear-gradient(170deg,rgba(40,77,70,.38),rgba(17,23,21,.65));border:1px solid var(--bd)}
 .big{font-size:28px;font-weight:700;color:var(--mint);margin:5px 0 3px;line-height:1.15;max-width:100%}
 .rate{font-size:12px;color:var(--tx2)}
 
 .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin:14px 0 12px}
-.s3{padding:14px 6px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);
-  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
-.s3 .ic{width:18px;height:18px;color:var(--mint)}.s3 b{font-size:14px;font-weight:700}
-.s3 span.l{font-size:11px;color:var(--tx2)}
-
+.s3{padding:14px 6px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.s3 .ic{width:18px;height:18px;color:var(--mint)}.s3 b{font-size:14px;font-weight:700}.s3 span.l{font-size:11px;color:var(--tx2)}
 .stats-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.st2{padding:12px 10px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);
-  display:flex;align-items:center;gap:10px}
-.st2 .ic{color:var(--mint)}.st2 b{display:block;font-size:16px;line-height:1.1}
-.st2 small{font-size:10.5px;color:var(--tx2)}
+.st2{padding:12px 10px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.st2 .ic{color:var(--mint)}.st2 b{display:block;font-size:16px;line-height:1.1}.st2 small{font-size:10.5px;color:var(--tx2)}
 
-/* MY CRYSTALS */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.duo .dc{position:relative;overflow:hidden;padding:20px 12px 18px;border-radius:var(--r-lg);text-align:center;
-  background:linear-gradient(165deg,rgba(40,77,70,.45),rgba(12,16,14,.75));border:1px solid var(--bd);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
-.duo .dc::after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;
-  top:-40px;inset-inline-end:-40px;background:radial-gradient(circle,rgba(154,195,179,.18),transparent 70%)}
-.duo .bub{width:46px;height:46px;margin:0 auto 10px;border-radius:16px;display:grid;place-items:center;
-  color:var(--mint);background:rgba(154,195,179,.1);border:1px solid rgba(154,195,179,.25)}
+.duo .dc{position:relative;overflow:hidden;padding:20px 12px 18px;border-radius:var(--r-lg);text-align:center;background:linear-gradient(165deg,rgba(40,77,70,.45),rgba(12,16,14,.75));border:1px solid var(--bd);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.duo .bub{width:46px;height:46px;margin:0 auto 10px;border-radius:16px;display:grid;place-items:center;color:var(--mint);background:rgba(154,195,179,.1);border:1px solid rgba(154,195,179,.25)}
 .duo .bub .ic{width:22px;height:22px}
 .duo b{display:block;font-size:34px;font-weight:700;line-height:1.1;color:var(--tx)}
 .duo small{font-size:12px;color:var(--tx2)}
 
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
-.gcard{position:relative;overflow:hidden;padding:12px 10px 14px;border-radius:var(--r-lg);
-  background:linear-gradient(170deg,rgba(40,77,70,.35),var(--glass) 70%);border:1px solid var(--bd);
-  text-align:center;transition:transform .15s var(--ease)}
+.gcard{position:relative;overflow:hidden;padding:12px 10px 14px;border-radius:var(--r-lg);background:linear-gradient(170deg,rgba(40,77,70,.35),var(--glass) 70%);border:1px solid var(--bd);text-align:center;transition:transform .15s var(--ease)}
 .gcard:active{transform:scale(.97)}
 .gcard .gem-wrap{width:80px;height:104px;margin:2px auto 6px;animation-duration:5s}
 .gcard .name{font-size:12.5px;font-weight:700}.gcard .tag{font-size:10.5px;color:var(--tx2)}
-.gcard .hint{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:4px 10px;
-  border-radius:999px;background:rgba(40,77,70,.55);border:1px solid var(--bd);
-  font-size:10.5px;color:var(--mint);font-weight:600}
+.gcard .hint{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:4px 10px;border-radius:999px;background:rgba(40,77,70,.55);border:1px solid var(--bd);font-size:10.5px;color:var(--mint);font-weight:600}
 .gcard .hint .ic{width:12px;height:12px}
 .gcard.breaking{animation:shake .4s}
-.burst{position:absolute;inset:0;pointer-events:none;z-index:5}
-.burst .p{position:absolute;top:50%;left:50%;width:12px;height:16px;
-  background:linear-gradient(180deg,#9AC3B3,#284D46);border-radius:3px;
-  animation:burstP 1s var(--ease) forwards}
-.float-gain{position:absolute;top:50%;left:50%;font-size:22px;font-weight:800;color:var(--mint);
-  pointer-events:none;animation:floatGain 1.2s var(--ease) forwards;z-index:6}
 
-/* SHOP */
-.cc{padding:18px;margin-bottom:14px;text-align:center;border-radius:var(--r-lg);
-  background:linear-gradient(170deg,rgba(40,77,70,.22),var(--glass) 60%);border:1px solid var(--bd)}
+.cc{padding:18px;margin-bottom:14px;text-align:center;border-radius:var(--r-lg);background:linear-gradient(170deg,rgba(40,77,70,.22),var(--glass) 60%);border:1px solid var(--bd)}
 .cc .gem-wrap{width:90px;height:118px;margin:2px auto 8px;animation-duration:6s}
 .cc h3{font-size:18px}.desc{font-size:12px;color:var(--tx2);margin:2px 0 12px}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:start}
 .metric{padding:10px 12px;border-radius:var(--r-sm);background:var(--glass2);border:1px solid var(--bd2)}
-.metric small{display:block;font-size:10.5px;color:var(--tx3)}
-.metric b{font-size:14px}.metric b.hi{color:var(--mint)}
+.metric small{display:block;font-size:10.5px;color:var(--tx3)}.metric b{font-size:14px}.metric b.hi{color:var(--mint)}
 
-/* FORMS */
 .lbl-f{font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.amt{padding:12px 4px;border-radius:var(--r-sm);background:var(--glass2);border:1px solid var(--bd);
-  color:var(--tx2);font-weight:600;transition:.2s}
+.amt{padding:12px 4px;border-radius:var(--r-sm);background:var(--glass2);border:1px solid var(--bd);color:var(--tx2);font-weight:600;transition:.2s}
 .amt.on{background:var(--em);color:var(--tx);border-color:var(--mint)}
-.inp{width:100%;height:50px;padding:0 14px;border-radius:var(--r-sm);background:rgba(0,0,0,.4);
-  border:1px solid var(--bd);outline:none;direction:ltr;text-align:left;font-weight:500;cursor:text}
+.inp{width:100%;height:50px;padding:0 14px;border-radius:var(--r-sm);background:rgba(0,0,0,.4);border:1px solid var(--bd);outline:none;direction:ltr;text-align:left;font-weight:500;cursor:text}
 .inp:focus{border-color:var(--mint)}.inp.bad{border-color:var(--err)}
 .inp::placeholder{color:var(--tx3)}
 .hint-e{font-size:11.5px;color:var(--err);margin-top:8px;min-height:1em}
-
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:var(--r-md);
-  background:var(--glass2);border:1px solid var(--bd);margin-bottom:12px}
-.tabs button{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 6px;
-  border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--tx2)}
-.tabs button.on{background:var(--em);color:var(--tx)}.tabs button.on .ic{color:var(--mint)}
-.tabs .ic{width:17px;height:17px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:var(--r-md);background:var(--glass2);border:1px solid var(--bd);margin-bottom:12px}
+.tabs button{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 6px;border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--tx2)}
+.tabs button.on{background:var(--em);color:var(--tx)}.tabs button.on .ic{color:var(--mint)}.tabs .ic{width:17px;height:17px}
 
 .irows{padding:4px 14px;margin-bottom:12px;border-radius:var(--r-md);background:var(--glass2);border:1px solid var(--bd)}
 .irow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;font-size:13px}
@@ -210,71 +124,46 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
 .irow b{font-weight:700;overflow:hidden;text-overflow:ellipsis;word-break:break-all}
 .irow b.hi{color:var(--mint)}.irow .empty-v{color:var(--tx3);font-size:12px}
 
-/* REFERRAL */
-.ref-link{padding:14px;margin-bottom:12px;border-radius:var(--r-sm);background:rgba(0,0,0,.4);
-  border:1px dashed var(--bd);font-size:11px;direction:ltr;text-align:left;word-break:break-all;
-  color:var(--tx2);-webkit-user-select:text;user-select:text}
+.ref-link{padding:14px;margin-bottom:12px;border-radius:var(--r-sm);background:rgba(0,0,0,.4);border:1px dashed var(--bd);font-size:11px;direction:ltr;text-align:left;word-break:break-all;color:var(--tx2);-webkit-user-select:text;user-select:text}
 .btn-row{display:grid;grid-template-columns:1.5fr 1fr;gap:8px}.btn-row .btn{height:46px;font-size:13.5px}
-.code-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:12px 14px;
-  border-radius:var(--r-md);background:var(--glass2);border:1px solid var(--bd)}
+.code-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:12px 14px;border-radius:var(--r-md);background:var(--glass2);border:1px solid var(--bd)}
 .code-val{font-size:20px;font-weight:700;letter-spacing:3px}
-.bonus{display:grid;grid-template-columns:1fr 1fr;margin-top:12px;border-radius:var(--r-md);
-  background:rgba(40,77,70,.28);border:1px solid var(--bd)}
+.bonus{display:grid;grid-template-columns:1fr 1fr;margin-top:12px;border-radius:var(--r-md);background:rgba(40,77,70,.28);border:1px solid var(--bd)}
 .bonus div{padding:12px;text-align:center}.bonus div+div{border-inline-start:1px solid var(--bd)}
-.bonus .val{display:flex;align-items:center;justify-content:center;gap:6px;font-size:18px;
-  color:var(--mint);font-weight:700}
+.bonus .val{display:flex;align-items:center;justify-content:center;gap:6px;font-size:18px;color:var(--mint);font-weight:700}
 .bonus small{font-size:11px;color:var(--tx2)}
 
-/* REQUEST ROWS */
 .req{display:flex;align-items:center;gap:10px;padding:10px 4px;font-size:12.5px}
 .req+.req{border-top:1px solid var(--bd2)}
 .req .m{flex:1;min-width:0}.req .m small{display:block;color:var(--tx3);font-size:10.5px}
-.badge{padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:600;
-  background:rgba(154,195,179,.12);color:var(--mint);white-space:nowrap}
+.badge{padding:3px 10px;border-radius:999px;font-size:10.5px;font-weight:600;background:rgba(154,195,179,.12);color:var(--mint);white-space:nowrap}
 .badge.loc{background:rgba(229,154,148,.12);color:var(--err)}
 
-/* STATS */
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.stat{padding:14px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);
-  display:flex;flex-direction:column;gap:5px}
+.stat{padding:14px;border-radius:var(--r-md);background:var(--glass);border:1px solid var(--bd);display:flex;flex-direction:column;gap:5px}
 .stat .ic{color:var(--mint)}.stat b{font-size:18px}.stat span:last-child{font-size:11.5px;color:var(--tx2)}
 
-/* PROFILE */
 .pf{text-align:center;padding:24px 16px}
 .pf .avatar{width:74px;height:74px;margin:0 auto 12px}.pf .avatar .ic{width:32px;height:32px}
 .pf h2{font-size:20px}.pf p{font-size:12px;color:var(--tx3);margin-top:4px}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:var(--r-md);
-  background:var(--glass2);border:1px solid var(--bd)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:var(--r-md);background:var(--glass2);border:1px solid var(--bd)}
 .seg button{padding:11px;border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--tx2)}
 .seg button.on{background:var(--em);color:var(--tx)}
 .menu{padding:0;overflow:hidden}
-.menu button{width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:start;
-  font-weight:600;font-size:14px;border-bottom:1px solid var(--bd2)}
+.menu button{width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:start;font-weight:600;font-size:14px;border-bottom:1px solid var(--bd2)}
 .menu button:last-child{border-bottom:0}
-.ic-box{width:36px;height:36px;border-radius:12px;background:rgba(40,77,70,.45);color:var(--mint);
-  display:grid;place-items:center;flex-shrink:0}
+.ic-box{width:36px;height:36px;border-radius:12px;background:rgba(40,77,70,.45);color:var(--mint);display:grid;place-items:center;flex-shrink:0}
 .menu .chev{margin-inline-start:auto;color:var(--tx3)}
-[dir=ltr] .chev svg{transform:scaleX(-1)}
 
-/* DOCK */
 .dock{position:absolute;left:14px;right:14px;bottom:calc(12px + var(--sb));height:var(--dock);z-index:50}
-.dock-in{height:100%;display:flex;padding:6px;gap:4px;border-radius:999px;background:rgba(47,53,51,.86);
-  border:1px solid rgba(154,195,179,.2);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  box-shadow:0 14px 36px rgba(0,0,0,.5)}
-.dock button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  border-radius:999px;font-size:10.5px;font-weight:600;color:rgba(245,247,246,.55);
-  transition:background .25s,color .25s;white-space:nowrap}
+.dock-in{height:100%;display:flex;padding:6px;gap:4px;border-radius:999px;background:rgba(47,53,51,.86);border:1px solid rgba(154,195,179,.2);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 14px 36px rgba(0,0,0,.5)}
+.dock button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:999px;font-size:10.5px;font-weight:600;color:rgba(245,247,246,.55);transition:background .25s,color .25s;white-space:nowrap}
 .dock button.on{background:var(--em);color:var(--tx)}.dock button.on .ic{color:var(--mint)}
 
-/* MODAL / TOAST / LOADER */
-.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;
-  background:rgba(5,6,7,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(5,6,7,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .modal.show{display:flex;animation:fade .25s}
-.mbox{width:100%;max-width:340px;max-height:92dvh;overflow:auto;padding:26px 22px 22px;
-  border-radius:var(--r-lg);text-align:center;background:linear-gradient(170deg,#18211D,var(--bg2));
-  border:1px solid var(--bd);animation:pop .35s var(--ease)}
-.mico{width:62px;height:62px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;
-  color:var(--mint);background:rgba(40,77,70,.5);border:1px solid rgba(154,195,179,.3)}
+.mbox{width:100%;max-width:340px;max-height:92dvh;overflow:auto;padding:26px 22px 22px;border-radius:var(--r-lg);text-align:center;background:linear-gradient(170deg,#18211D,var(--bg2));border:1px solid var(--bd);animation:pop .35s var(--ease)}
+.mico{width:62px;height:62px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;color:var(--mint);background:rgba(40,77,70,.5);border:1px solid rgba(154,195,179,.3)}
 .mico .ic{width:28px;height:28px}
 .mttl{font-size:19px;font-weight:700;margin-bottom:6px}
 .msub{font-size:13px;color:var(--tx2);line-height:1.7}
@@ -282,23 +171,17 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
 .mamt small{font-size:13px;color:var(--tx2);margin-inline-start:6px}
 .mbox .btn{margin-top:18px}
 
-.toast{position:fixed;top:calc(12px + var(--st));left:50%;z-index:2000;display:flex;align-items:center;gap:10px;
-  max-width:92%;padding:11px 18px;border-radius:999px;background:rgba(17,23,21,.97);
-  border:1px solid rgba(154,195,179,.25);font-size:13px;font-weight:600;
-  transform:translate(-50%,-160px);transition:transform .35s var(--ease);pointer-events:none}
+.toast{position:fixed;top:calc(12px + var(--st));left:50%;z-index:2000;display:flex;align-items:center;gap:10px;max-width:92%;padding:11px 18px;border-radius:999px;background:rgba(17,23,21,.97);border:1px solid rgba(154,195,179,.25);font-size:13px;font-weight:600;transform:translate(-50%,-160px);transition:transform .35s var(--ease);pointer-events:none}
 .toast.show{transform:translate(-50%,0)}
 .toast .ic{color:var(--ok);width:18px;height:18px}
-.toast.err .ic{color:var(--err)}
-.toast.info .ic{color:var(--mint)}
+.toast.err .ic{color:var(--err)}.toast.info .ic{color:var(--mint)}
 
-.loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;transition:opacity .5s}
+.loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .5s}
 .loader.hide{opacity:0;pointer-events:none}
 .loader .gem-wrap{width:84px;height:110px;animation-duration:3s}
 .loader h2{font-size:17px;letter-spacing:4px;direction:ltr;color:var(--mint)}
 .loader small{font-size:12px;color:var(--tx3)}
 
-/* ANIMATIONS */
 @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -309,15 +192,6 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
 @keyframes shake{20%{transform:translate(-4px,2px) rotate(-2deg)}40%{transform:translate(4px,-2px) rotate(2deg)}60%{transform:translate(-3px,-1px)}80%{transform:translate(3px,1px)}}
 @keyframes burstP{0%{transform:translate(-50%,-50%) scale(0);opacity:1}100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(.6) rotate(360deg);opacity:0}}
 @keyframes floatGain{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}30%{opacity:1;transform:translate(-50%,-70%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-160%)}}
-
-@media (max-width:360px){
-  .big{font-size:23px}.stage{height:220px}
-  #heroGem .gem-wrap{width:110px;height:144px}
-  .dock button{font-size:9.5px}.s3 b{font-size:12.5px}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
 </style>
 </head>
 <body>
@@ -326,22 +200,21 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
 <div class="loader" id="loader">
   <div id="loaderGem"></div>
   <h2>SPACE CRYSTALS</h2>
-  <small data-i18n="loading">جاري التحميل...</small>
+  <small id="loaderTx">جاري التحميل...</small>
 </div>
 
 <div class="app" id="app">
   <div class="main" id="mainScroll">
 
-  <!-- ══════════ HOME ══════════ -->
   <section class="screen active" id="screen-home">
     <header class="topbar">
-      <div class="avatar" data-ic="user"></div>
+      <div class="avatar" id="homeAvatar"></div>
       <div class="tb-meta">
-        <div class="tb-hello" data-i18n="hello">مرحباً بك</div>
-        <div class="tb-name" id="homeName" data-i18n="guest">ضيف فضائي</div>
+        <div class="tb-hello">مرحباً بك</div>
+        <div class="tb-name" id="homeName">ضيف فضائي</div>
       </div>
       <div class="chip">
-        <span class="coin" data-ic="coin"></span>
+        <span class="coin" id="coinIcon"></span>
         <b class="num" id="topUsdt">0.0000</b>
       </div>
     </header>
@@ -349,240 +222,119 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
     <div class="stage">
       <div class="live-badge">
         <span class="dot"></span>
-        <span data-i18n="mining_live">يُعدّن</span>
+        <span>يُعدّن</span>
         <b class="num" id="liveVal">0.0000000000</b>
       </div>
       <div class="glow"></div>
       <div id="heroGem"></div>
-      <div class="stage-cap" data-i18n="mining_crystal">بلورة التعدين</div>
+      <div class="stage-cap">بلورة التعدين</div>
     </div>
 
     <div class="balance">
-      <div class="label" data-i18n="balance_usdt">الرصيد · USDT</div>
+      <div class="label">الرصيد · USDT</div>
       <div class="big num" id="homeUsdt">0.0000000000</div>
-      <div class="rate">
-        <span data-i18n="pending_mining">قيد التعدين</span>:
-        <b class="num" id="pendingVal">0.0000000000</b>
-      </div>
+      <div class="rate">قيد التعدين: <b class="num" id="pendingVal">0.0000000000</b></div>
     </div>
 
     <button class="btn btn-p" id="collectBtn">
-      <span data-ic="down"></span>
-      <span data-i18n="collect">جمع الرصيد المتراكم</span>
+      <span id="icDown"></span><span>جمع الرصيد المتراكم</span>
     </button>
 
     <div class="stats3">
-      <div class="s3">
-        <span data-ic="bolt"></span>
-        <b class="num" id="stDaily">0</b>
-        <span class="l" data-i18n="daily_profit">الربح اليومي</span>
-      </div>
-      <div class="s3">
-        <span data-ic="coin"></span>
-        <b class="num" id="stMonthly">0</b>
-        <span class="l" data-i18n="monthly_profit">الربح الشهري</span>
-      </div>
-      <div class="s3">
-        <span data-ic="wallet"></span>
-        <b class="num" id="stTotal">0</b>
-        <span class="l" data-i18n="total">المجموع</span>
-      </div>
+      <div class="s3"><span id="icBolt"></span><b class="num" id="stDaily">0</b><span class="l">الربح اليومي</span></div>
+      <div class="s3"><span id="icCoin"></span><b class="num" id="stMonthly">0</b><span class="l">الربح الشهري</span></div>
+      <div class="s3"><span id="icWallet"></span><b class="num" id="stTotal">0</b><span class="l">المجموع</span></div>
     </div>
 
     <div class="stats-row2">
-      <div class="st2">
-        <span data-ic="shard"></span>
-        <div><b class="num" id="stShards">0</b><small data-i18n="shards">شظايا</small></div>
-      </div>
-      <div class="st2">
-        <span data-ic="gem"></span>
-        <div><b class="num" id="stCrystals">0</b><small data-i18n="crystals">بلورات</small></div>
-      </div>
+      <div class="st2"><span id="icShard"></span><div><b class="num" id="stShards">0</b><small>شظايا</small></div></div>
+      <div class="st2"><span id="icGem"></span><div><b class="num" id="stCrystals">0</b><small>بلورات</small></div></div>
     </div>
 
     <button class="btn btn-m" id="breakBtn">
-      <span data-ic="gem"></span>
-      <span data-i18n="my_crystals">بلوراتي · اكسر البلورات</span>
+      <span id="icGem2"></span><span>بلوراتي · اكسر البلورات</span>
     </button>
   </section>
 
-  <!-- ══════════ SHARDS ══════════ -->
   <section class="screen" id="screen-shards">
-    <div class="sec"><span data-ic="gem"></span><span data-i18n="my_crystals_title">بلوراتي</span></div>
-
+    <div class="sec"><span id="icGem3"></span><span>بلوراتي</span></div>
     <div class="duo">
-      <div class="dc">
-        <div class="bub" data-ic="gem"></div>
-        <b class="num" id="shCrystals">0</b>
-        <small data-i18n="crystals">بلورات</small>
-      </div>
-      <div class="dc">
-        <div class="bub" data-ic="shard"></div>
-        <b class="num" id="shShards">0</b>
-        <small data-i18n="shards">شظايا</small>
-      </div>
+      <div class="dc"><div class="bub" id="bubGem"></div><b class="num" id="shCrystals">0</b><small>بلورات</small></div>
+      <div class="dc"><div class="bub" id="bubShard"></div><b class="num" id="shShards">0</b><small>شظايا</small></div>
     </div>
-
-    <div class="alert">
-      <span data-ic="info"></span>
-      <div data-i18n="break_hint">اضغط على أي بلورة لكسرها والحصول على 1 إلى 5 شظايا عشوائياً. كل شظية تمنحك +3% قوة تعدين دائمة.</div>
-    </div>
-
+    <div class="alert"><span id="icInfo1"></span><div>اضغط على أي بلورة لكسرها والحصول على 1 إلى 5 شظايا عشوائياً. كل شظية تمنحك +3% قوة تعدين دائمة.</div></div>
     <div id="gallery" class="gallery"></div>
     <div id="emptyGallery" class="empty" style="display:none">
-      <span data-ic="gem"></span>
-      <div data-i18n="no_crystals">لا تملك أي بلورة بعد — ادعُ أصدقاءك لتحصل على بلورة عن كل دعوة!</div>
+      <div id="icGem4"></div>
+      <div>لا تملك أي بلورة بعد — ادعُ أصدقاءك لتحصل على بلورة عن كل دعوة!</div>
     </div>
-
     <button class="btn btn-p" id="goRefBtn" style="margin-top:6px">
-      <span data-ic="users"></span>
-      <span data-i18n="invite_for_crystals">دعوة الأصدقاء للحصول على بلورات</span>
+      <span id="icUsers1"></span><span>دعوة الأصدقاء للحصول على بلورات</span>
     </button>
   </section>
 
-  <!-- ══════════ SHOP ══════════ -->
   <section class="screen" id="screen-shop">
-    <div class="sec"><span data-ic="gem"></span><span data-i18n="shop_title">متجر البلورات</span></div>
-    <div class="alert">
-      <span data-ic="info"></span>
-      <div data-i18n="shop_hint">تُكتسب البلورات من الدعوات. كل شظية تمنح +3% قوة تعدين دائمة.</div>
-    </div>
+    <div class="sec"><span id="icGem5"></span><span>متجر البلورات</span></div>
+    <div class="alert"><span id="icInfo2"></span><div>تُكتسب البلورات من الدعوات. كل شظية تمنح +3% قوة تعدين دائمة.</div></div>
     <div id="shopList"></div>
   </section>
 
-  <!-- ══════════ REFERRAL ══════════ -->
   <section class="screen" id="screen-ref">
-    <div class="sec"><span data-ic="users"></span><span data-i18n="invite_title">دعوة الأصدقاء</span></div>
-
+    <div class="sec"><span id="icUsers2"></span><span>دعوة الأصدقاء</span></div>
     <div class="card">
       <div class="stats" style="margin:0">
-        <div class="stat">
-          <span data-ic="users"></span>
-          <b class="num" id="refCount">0</b>
-          <span data-i18n="invited_count">عدد المدعوين</span>
-        </div>
-        <div class="stat">
-          <span data-ic="gem"></span>
-          <b class="num" id="refCrystals">0</b>
-          <span data-i18n="crystals_earned">بلورات مكتسبة</span>
-        </div>
+        <div class="stat"><span id="icUsers3"></span><b class="num" id="refCount">0</b><span>عدد المدعوين</span></div>
+        <div class="stat"><span id="icGem6"></span><b class="num" id="refCrystals">0</b><span>بلورات مكتسبة</span></div>
       </div>
     </div>
-
     <div class="card">
-      <div class="lbl-f"><span data-ic="share"></span><span data-i18n="invite_link">رابط الدعوة</span></div>
+      <div class="lbl-f"><span id="icShare1"></span><span>رابط الدعوة</span></div>
       <div class="ref-link" id="refLink">...</div>
       <div class="btn-row">
-        <button class="btn btn-p" id="refShare">
-          <span data-ic="share"></span><span data-i18n="share">مشاركة</span>
-        </button>
-        <button class="btn btn-m" id="refCopy">
-          <span data-ic="copy"></span><span data-i18n="copy">نسخ</span>
-        </button>
+        <button class="btn btn-p" id="refShare"><span id="icShare2"></span><span>مشاركة</span></button>
+        <button class="btn btn-m" id="refCopy"><span id="icCopy1"></span><span>نسخ</span></button>
       </div>
       <div class="code-row">
-        <div>
-          <div class="label" data-i18n="invite_code">كود الدعوة</div>
-          <div class="code-val num" id="refCode">------</div>
-        </div>
-        <button class="icon-btn" id="refCodeCopy" aria-label="Copy">
-          <span data-ic="copy"></span>
-        </button>
+        <div><div class="label">كود الدعوة</div><div class="code-val num" id="refCode">------</div></div>
+        <button class="icon-btn" id="refCodeCopy"><span id="icCopy2"></span></button>
       </div>
       <div class="bonus">
-        <div>
-          <span class="val"><span data-ic="gem"></span>+1</span>
-          <small data-i18n="you_per_friend">لك عن كل صديق</small>
-        </div>
-        <div>
-          <span class="val"><span data-ic="gem"></span>+1</span>
-          <small data-i18n="gift_for_friend">هدية لصديقك</small>
-        </div>
+        <div><span class="val"><span id="icGem7"></span>+1</span><small>لك عن كل صديق</small></div>
+        <div><span class="val"><span id="icGem8"></span>+1</span><small>هدية لصديقك</small></div>
       </div>
     </div>
-
-    <div class="sec" style="font-size:16px">
-      <span data-ic="crown"></span><span data-i18n="top_10">أعلى 10 دعوات</span>
-    </div>
-    <div class="card" id="lbList" style="padding:6px"></div>
+    <div class="sec" style="font-size:16px"><span id="icCrown1"></span><span>أعلى 10 دعوات</span></div>
+    <div class="card" id="lbList" style="padding:6px"><div class="empty">جاري التحميل...</div></div>
   </section>
 
-  <!-- ══════════ DEPOSIT ══════════ -->
   <section class="screen" id="screen-deposit">
-    <div class="sec"><span data-ic="down"></span><span data-i18n="deposit_title">إيداع</span></div>
-
+    <div class="sec"><span id="icDown2"></span><span>إيداع</span></div>
     <div class="tabs" id="depMethod">
-      <button class="on" data-method="binance">
-        <span data-ic="wallet"></span><span>Binance Pay</span>
-      </button>
-      <button data-method="suby">
-        <span data-ic="coin"></span><span data-i18n="deposit_usdt">إيداع USDT</span>
-      </button>
+      <button class="on" data-method="binance"><span id="icWallet2"></span><span>Binance Pay</span></button>
+      <button data-method="suby"><span id="icCoin2"></span><span>إيداع USDT</span></button>
     </div>
-
-    <!-- Binance Pay: عرض فقط -->
     <div id="paneBinance">
       <div class="card">
-        <div class="lbl-f"><span data-ic="info"></span><span data-i18n="deposit_info">معلومات التحويل</span></div>
+        <div class="lbl-f"><span id="icInfo3"></span><span>معلومات التحويل</span></div>
         <div class="irows" style="margin:0">
-          <div class="irow">
-            <span data-i18n="binance_id">معرّف Binance Pay</span>
-            <div class="v">
-              <b class="num" id="binanceIdValue">1121748571</b>
-              <button class="icon-btn" data-copy="1121748571" aria-label="Copy">
-                <span data-ic="copy"></span>
-              </button>
-            </div>
-          </div>
-          <div class="irow">
-            <span data-i18n="currency">العملة</span>
-            <div class="v"><b>USDT</b></div>
-          </div>
-          <div class="irow">
-            <span data-i18n="your_id">معرّفك الشخصي</span>
-            <div class="v">
-              <b class="num" id="depUserIdBinance">--------</b>
-              <button class="icon-btn" id="depCopyUserBinance" aria-label="Copy">
-                <span data-ic="copy"></span>
-              </button>
-            </div>
-          </div>
+          <div class="irow"><span>معرّف Binance Pay</span><div class="v"><b class="num">1121748571</b></div></div>
+          <div class="irow"><span>العملة</span><div class="v"><b>USDT</b></div></div>
+          <div class="irow"><span>معرّفك الشخصي</span><div class="v"><b class="num" id="depUserIdBinance">--------</b><button class="icon-btn" id="depCopyUserBinance"><span id="icCopy3"></span></button></div></div>
         </div>
       </div>
-
-      <div class="alert">
-        <span data-ic="info"></span>
-        <div data-i18n="binance_note">حوّل المبلغ إلى معرّف Binance أعلاه. ضع معرّفك في ملاحظة التحويل. الرصيد يُضاف بعد تأكيد العملية.</div>
-      </div>
+      <div class="alert"><span id="icInfo4"></span><div>حوّل المبلغ إلى معرّف Binance أعلاه. ضع معرّفك في ملاحظة التحويل. الرصيد يُضاف بعد تأكيد العملية.</div></div>
     </div>
-
-    <!-- USDT via Suby -->
     <div id="paneSuby" style="display:none">
       <div class="card">
-        <div class="lbl-f"><span data-ic="info"></span><span data-i18n="suby_info">الإيداع عبر USDT</span></div>
+        <div class="lbl-f"><span id="icInfo5"></span><span>الإيداع عبر USDT</span></div>
         <div class="irows" style="margin:0">
-          <div class="irow">
-            <span data-i18n="currency">العملة</span>
-            <div class="v"><b>USDT</b></div>
-          </div>
-          <div class="irow">
-            <span data-i18n="network">الشبكة</span>
-            <div class="v"><b data-i18n="network_value">تُعرض عند فتح بوابة الدفع</b></div>
-          </div>
-          <div class="irow">
-            <span data-i18n="your_id">معرّفك الشخصي</span>
-            <div class="v">
-              <b class="num" id="depUserIdSuby">--------</b>
-              <button class="icon-btn" id="depCopyUserSuby" aria-label="Copy">
-                <span data-ic="copy"></span>
-              </button>
-            </div>
-          </div>
+          <div class="irow"><span>العملة</span><div class="v"><b>USDT</b></div></div>
+          <div class="irow"><span>الشبكة</span><div class="v"><b>TRC20 / ERC20</b></div></div>
+          <div class="irow"><span>معرّفك الشخصي</span><div class="v"><b class="num" id="depUserIdSuby">--------</b><button class="icon-btn" id="depCopyUserSuby"><span id="icCopy4"></span></button></div></div>
         </div>
       </div>
-
       <div class="card">
-        <div class="lbl-f"><span data-ic="coin"></span><span data-i18n="deposit_amount">مبلغ الإيداع</span></div>
+        <div class="lbl-f"><span id="icCoin3"></span><span>مبلغ الإيداع</span></div>
         <div class="amts" id="depAmounts">
           <button class="amt num" data-amt="10">10</button>
           <button class="amt num" data-amt="20">20</button>
@@ -591,33 +343,18 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
           <button class="amt num" data-amt="500">500</button>
           <button class="amt num" data-amt="1000">1000</button>
         </div>
-        <input class="inp" id="depAmountCustom" inputmode="decimal"
-               placeholder="USDT" autocomplete="off" style="margin-top:10px">
+        <input class="inp" id="depAmountCustom" inputmode="decimal" placeholder="USDT" style="margin-top:10px">
       </div>
-
-      <button class="btn btn-p" id="depSubyBtn">
-        <span data-ic="check"></span>
-        <span data-i18n="deposit_open_gateway">فتح بوابة الدفع</span>
-      </button>
-
-      <div class="alert" style="margin-top:14px">
-        <span data-ic="info"></span>
-        <div data-i18n="suby_note">سيتم تحويلك إلى بوابة الدفع الآمنة. لا تغلق الصفحة حتى تأكيد العملية.</div>
-      </div>
+      <button class="btn btn-p" id="depSubyBtn"><span id="icCheck1"></span><span>فتح بوابة الدفع</span></button>
+      <div class="alert" style="margin-top:14px"><span id="icInfo6"></span><div>سيتم تحويلك إلى بوابة الدفع الآمنة. لا تغلق الصفحة حتى تأكيد العملية.</div></div>
     </div>
   </section>
 
-  <!-- ══════════ WITHDRAW ══════════ -->
   <section class="screen" id="screen-withdraw">
-    <div class="sec"><span data-ic="up"></span><span data-i18n="withdraw_title">سحب USDT</span></div>
-
-    <div class="alert">
-      <span data-ic="info"></span>
-      <div data-i18n="withdraw_note">السحب عبر Binance Pay. الحد الأدنى 0.10 USDT.</div>
-    </div>
-
+    <div class="sec"><span id="icUp1"></span><span>سحب USDT</span></div>
+    <div class="alert"><span id="icInfo7"></span><div>السحب عبر Binance Pay. الحد الأدنى 0.10 USDT.</div></div>
     <div class="card">
-      <div class="lbl-f"><span data-ic="coin"></span><span data-i18n="amount">المبلغ</span></div>
+      <div class="lbl-f"><span id="icCoin4"></span><span>المبلغ</span></div>
       <div class="amts" id="wdAmounts" style="margin-bottom:10px">
         <button class="amt num" data-amt="0.1">0.10</button>
         <button class="amt num" data-amt="0.5">0.50</button>
@@ -626,107 +363,64 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
         <button class="amt num" data-amt="10">10</button>
         <button class="amt num" data-amt="50">50</button>
       </div>
-      <input class="inp" id="wdAmount" inputmode="decimal" placeholder="0.10" autocomplete="off">
+      <input class="inp" id="wdAmount" inputmode="decimal" placeholder="0.10">
     </div>
-
     <div class="card">
-      <div class="lbl-f"><span data-ic="wallet"></span><span data-i18n="binance_id_label">معرّف Binance Pay</span></div>
-      <input class="inp" id="wdAccount" placeholder="Binance Pay ID"
-             autocomplete="off" inputmode="numeric">
+      <div class="lbl-f"><span id="icWallet3"></span><span>معرّف Binance Pay</span></div>
+      <input class="inp" id="wdAccount" placeholder="Binance Pay ID" inputmode="numeric">
       <div class="hint-e" id="wdHint"></div>
     </div>
-
     <div class="irows">
-      <div class="irow"><span data-i18n="amount">المبلغ</span>
-        <b class="hi num" id="wdChosen">0.0000 USDT</b></div>
-      <div class="irow"><span data-i18n="fee">العمولة (1.5%)</span>
-        <b class="num" id="wdFee">0.0000 USDT</b></div>
-      <div class="irow"><span data-i18n="you_receive">المبلغ المستلم</span>
-        <b class="num" id="wdNet">0.0000 USDT</b></div>
+      <div class="irow"><span>المبلغ</span><b class="hi num" id="wdChosen">0.0000 USDT</b></div>
+      <div class="irow"><span>العمولة (1.5%)</span><b class="num" id="wdFee">0.0000 USDT</b></div>
+      <div class="irow"><span>المبلغ المستلم</span><b class="num" id="wdNet">0.0000 USDT</b></div>
     </div>
-
-    <button class="btn btn-p" id="wdSubmit">
-      <span data-ic="check"></span>
-      <span data-i18n="withdraw_submit">تقديم طلب السحب</span>
-    </button>
-
-    <div class="sec" style="font-size:15px;margin-top:18px">
-      <span data-i18n="my_requests">طلبات السحب</span>
-    </div>
+    <button class="btn btn-p" id="wdSubmit"><span id="icCheck2"></span><span>تقديم طلب السحب</span></button>
+    <div class="sec" style="font-size:15px;margin-top:18px"><span>طلبات السحب</span></div>
     <div class="card" id="wdReqs" style="padding:8px 14px"></div>
   </section>
 
-  <!-- ══════════ PROFILE ══════════ -->
   <section class="screen" id="screen-profile">
     <div class="card pf">
-      <div class="avatar" data-ic="user"></div>
-      <h2 id="profName" data-i18n="guest">ضيف فضائي</h2>
+      <div class="avatar" id="profAvatar"></div>
+      <h2 id="profName">ضيف فضائي</h2>
       <p>ID · <span class="num" id="profId">--------</span></p>
     </div>
-
     <div class="stats">
-      <div class="stat"><span data-ic="coin"></span>
-        <b class="num" id="profUsdt">0.0000</b>
-        <span data-i18n="balance">الرصيد</span></div>
-      <div class="stat"><span data-ic="shard"></span>
-        <b class="num" id="profShards">0</b>
-        <span data-i18n="shards">شظايا</span></div>
-      <div class="stat"><span data-ic="gem"></span>
-        <b class="num" id="profCrystals">0</b>
-        <span data-i18n="crystals">بلورات</span></div>
-      <div class="stat"><span data-ic="bolt"></span>
-        <b class="num" id="profBoost">0%</b>
-        <span data-i18n="mining_power">قوة التعدين</span></div>
+      <div class="stat"><span id="icCoin5"></span><b class="num" id="profUsdt">0.0000</b><span>الرصيد</span></div>
+      <div class="stat"><span id="icShard2"></span><b class="num" id="profShards">0</b><span>شظايا</span></div>
+      <div class="stat"><span id="icGem9"></span><b class="num" id="profCrystals">0</b><span>بلورات</span></div>
+      <div class="stat"><span id="icBolt2"></span><b class="num" id="profBoost">0%</b><span>قوة التعدين</span></div>
     </div>
-
     <div class="card">
-      <div class="lbl-f"><span data-ic="globe"></span><span data-i18n="language">اللغة</span></div>
+      <div class="lbl-f"><span id="icGlobe1"></span><span>اللغة</span></div>
       <div class="seg">
         <button id="langAr" class="on">العربية</button>
         <button id="langEn">English</button>
       </div>
     </div>
-
     <div class="card menu">
-      <button data-go="shards">
-        <span class="ic-box" data-ic="gem"></span>
-        <span data-i18n="my_crystals_title">بلوراتي</span>
-        <span class="chev" data-ic="chev"></span>
-      </button>
-      <button data-go="shop">
-        <span class="ic-box" data-ic="shard"></span>
-        <span data-i18n="shop_title">متجر البلورات</span>
-        <span class="chev" data-ic="chev"></span>
-      </button>
-      <button data-go="deposit">
-        <span class="ic-box" data-ic="down"></span>
-        <span data-i18n="deposit_title">إيداع</span>
-        <span class="chev" data-ic="chev"></span>
-      </button>
-      <button data-go="withdraw">
-        <span class="ic-box" data-ic="up"></span>
-        <span data-i18n="withdraw_title">سحب USDT</span>
-        <span class="chev" data-ic="chev"></span>
-      </button>
+      <button data-go="shards"><span class="ic-box" id="icGem10"></span><span>بلوراتي</span><span class="chev" id="icChev1"></span></button>
+      <button data-go="shop"><span class="ic-box" id="icShard3"></span><span>متجر البلورات</span><span class="chev" id="icChev2"></span></button>
+      <button data-go="deposit"><span class="ic-box" id="icDown3"></span><span>إيداع</span><span class="chev" id="icChev3"></span></button>
+      <button data-go="withdraw"><span class="ic-box" id="icUp2"></span><span>سحب USDT</span><span class="chev" id="icChev4"></span></button>
     </div>
   </section>
 
   </div>
 
-  <!-- ══════════ DOCK ══════════ -->
-  <nav class="dock" aria-label="Navigation">
+  <nav class="dock">
     <div class="dock-in">
-      <button class="on" data-nav="home"><span data-ic="home"></span><span data-i18n="nav_home">الرئيسية</span></button>
-      <button data-nav="shards"><span data-ic="gem"></span><span data-i18n="nav_crystals">بلوراتي</span></button>
-      <button data-nav="ref"><span data-ic="users"></span><span data-i18n="nav_invite">إحالة</span></button>
-      <button data-nav="deposit"><span data-ic="down"></span><span data-i18n="nav_deposit">إيداع</span></button>
-      <button data-nav="profile"><span data-ic="user"></span><span data-i18n="nav_profile">حسابي</span></button>
+      <button class="on" data-nav="home"><span id="icHome1"></span><span>الرئيسية</span></button>
+      <button data-nav="shards"><span id="icGem11"></span><span>بلوراتي</span></button>
+      <button data-nav="ref"><span id="icUsers4"></span><span>إحالة</span></button>
+      <button data-nav="deposit"><span id="icDown4"></span><span>إيداع</span></button>
+      <button data-nav="profile"><span id="icUser1"></span><span>حسابي</span></button>
     </div>
   </nav>
 </div>
 
-<!-- ══════════ MODAL ══════════ -->
-<div class="modal" id="modal" role="dialog" aria-modal="true">
+<div class="modal" id="modal">
   <div class="mbox">
     <div class="mico" id="mIco"></div>
     <div class="mttl" id="mTitle"></div>
@@ -736,18 +430,36 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mint);outline-o
   </div>
 </div>
 
-<div class="toast" id="toast">
-  <span id="toastIc"></span><span id="toastMsg"></span>
-</div>
+<div class="toast" id="toast"><span id="toastIc"></span><span id="toastMsg"></span></div>
 
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════════════════════════
-   SPACE CRYSTALS · Core
-   ═══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   Space Crystals — v1.0
+   Backend: Cloudflare Worker + Firebase + Suby
+   ══════════════════════════════════════════════════════════════ */
 
-/* ────────── ICONS ────────── */
+const WORKER_URL = 'https://space-crystals-api.starlimitedcom.workers.dev';
+const BOT_USERNAME = 'spacecrystals_bot';
+const APP_NAME = 'space';
+
+const CONFIG = {
+  baseDailyRate: 0.0001,
+  shardBoost: 0.03,
+  minWithdraw: 0.10,
+  feeRate: 0.015,
+  botUsername: BOT_USERNAME,
+  binanceId: '1121748571',
+  crystals: [
+    {name:'البلورة الأولى', nameEn:'First Crystal', desc:'بداية رحلتك', daily:0.7, monthly:21, dailyPct:7, monthlyPct:210, pal:0},
+    {name:'بلورة الشرارة', nameEn:'Spark Crystal', desc:'أضئ إمكانات جديدة', daily:1.5, monthly:45, dailyPct:7.5, monthlyPct:225, pal:1},
+    {name:'بلورة الوفاء', nameEn:'Loyal Crystal', desc:'احفظ كل بريق', daily:4, monthly:120, dailyPct:8, monthlyPct:240, pal:2},
+    {name:'بلورة الأسطورة', nameEn:'Legend Crystal', desc:'لقب يستحقه القليل', daily:8.5, monthly:255, dailyPct:8.5, monthlyPct:255, pal:3}
+  ]
+};
+
+/* ─── ICONS ─── */
 const ICONS = {
   home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
   gem:'<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20"/>',
@@ -762,34 +474,23 @@ const ICONS = {
   check:'<path d="M20 6L9 17l-5-5"/>',
   chev:'<path d="M9 6l6 6-6 6"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
-  warn:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
   crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',
   wallet:'<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M16 13h2M3 10h18"/>',
   coin:'<circle cx="12" cy="12" r="9"/><path d="M9 9h6M12 9v7"/>',
   globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'
 };
-const ic = (name, cls='') =>
-  `<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
-    aria-hidden="true">${ICONS[name]||''}</svg>`;
+const ic = n => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||''}</svg>`;
 
-/* ────────── CRYSTAL ART ────────── */
-const PAL = [
-  ['#9AC3B3','#284D46'],
-  ['#D7EDE4','#4F8A7C'],
-  ['#7FB3A2','#1C3B35'],
-  ['#C4E2D6','#2F6358']
-];
+const PAL = [['#9AC3B3','#284D46'],['#D7EDE4','#4F8A7C'],['#7FB3A2','#1C3B35'],['#C4E2D6','#2F6358']];
 let gemSeq = 0;
-function gem(pal=0){
-  const [a,b] = PAL[pal % PAL.length];
+function gem(p=0){
+  const [a,b] = PAL[p % PAL.length];
   const id = 'gd' + (gemSeq++);
-  return `<div class="gem-wrap"><svg viewBox="0 0 120 150" aria-hidden="true">
+  return `<div class="gem-wrap"><svg viewBox="0 0 120 150">
     <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/>
     </linearGradient></defs>
-    <path d="M60 4L104 52 92 128 60 146 28 128 16 52Z"
-          fill="url(#${id})" stroke="rgba(245,247,246,.35)" stroke-width="1.2"/>
+    <path d="M60 4L104 52 92 128 60 146 28 128 16 52Z" fill="url(#${id})" stroke="rgba(245,247,246,.35)" stroke-width="1.2"/>
     <path d="M60 4L104 52 60 60 16 52Z" fill="rgba(255,255,255,.28)"/>
     <path d="M60 60L104 52 92 128Z" fill="rgba(0,0,0,.12)"/>
     <path d="M60 60L16 52 28 128Z" fill="rgba(255,255,255,.08)"/>
@@ -797,319 +498,150 @@ function gem(pal=0){
   </svg></div>`;
 }
 
-/* ────────── CONFIG ────────── */
-const CONFIG = {
-  baseDailyRate:  0.0001,
-  shardBoost:     0.03,
-  minWithdraw:    0.10,
-  feeRate:        0.015,
-  shardRewards:   [1,2,3,4,5],
-  tickMs:         1000,
-  botUsername:    'spacecrystals_bot',
-  binanceId:      '1121748571',
-
-  /* ══ Suby gateway — أضف الرابط هنا عند الربط ══ */
-  subyGatewayUrl: '',
-
-  /* ══ Admin endpoint — أضف رابط Worker عند الربط ══ */
-  adminEndpoint: '',
-
-  crystals: [
-    { name:'البلورة الأولى',  nameEn:'First Crystal',  desc:'بداية رحلتك',        descEn:'Start your journey',   daily:0.7, monthly:21,  dailyPct:7,   monthlyPct:210, pal:0 },
-    { name:'بلورة الشرارة',   nameEn:'Spark Crystal',  desc:'أضئ إمكانات جديدة',  descEn:'Light new potential',  daily:1.5, monthly:45,  dailyPct:7.5, monthlyPct:225, pal:1 },
-    { name:'بلورة الوفاء',    nameEn:'Loyal Crystal',  desc:'احفظ كل بريق',       descEn:'Keep every sparkle',   daily:4,   monthly:120, dailyPct:8,   monthlyPct:240, pal:2 },
-    { name:'بلورة الأسطورة',  nameEn:'Legend Crystal', desc:'لقب يستحقه القليل',  descEn:'For the few',          daily:8.5, monthly:255, dailyPct:8.5, monthlyPct:255, pal:3 }
-  ]
-};
-
-/* ────────── I18N ────────── */
-const I18N = {
-  ar: {
-    loading:'جاري التحميل...',
-    hello:'مرحباً بك', guest:'ضيف فضائي',
-    mining_crystal:'بلورة التعدين', mining_live:'يُعدّن',
-    balance_usdt:'الرصيد · USDT', pending_mining:'قيد التعدين',
-    collect:'جمع الرصيد المتراكم',
-    daily_profit:'الربح اليومي', monthly_profit:'الربح الشهري', total:'المجموع',
-    shards:'شظايا', crystals:'بلورات',
-    my_crystals:'بلوراتي · اكسر البلورات', my_crystals_title:'بلوراتي',
-    break_hint:'اضغط على أي بلورة لكسرها والحصول على 1 إلى 5 شظايا عشوائياً. كل شظية تمنحك +3% قوة تعدين دائمة.',
-    no_crystals:'لا تملك أي بلورة بعد — ادعُ أصدقاءك لتحصل على بلورة عن كل دعوة!',
-    invite_for_crystals:'دعوة الأصدقاء للحصول على بلورات',
-    shop_title:'متجر البلورات',
-    shop_hint:'تُكتسب البلورات من الدعوات. كل شظية تمنح +3% قوة تعدين دائمة.',
-    daily_return:'العائد اليومي', monthly_return:'العائد الشهري',
-    daily_earnings:'الأرباح اليومية', monthly_earnings:'الأرباح الشهرية',
-    invite_title:'دعوة الأصدقاء', invited_count:'عدد المدعوين', crystals_earned:'بلورات مكتسبة',
-    invite_link:'رابط الدعوة', share:'مشاركة', copy:'نسخ',
-    invite_code:'كود الدعوة',
-    you_per_friend:'لك عن كل صديق', gift_for_friend:'هدية لصديقك',
-    top_10:'أعلى 10 دعوات', loading_top:'سيظهر المتصدرون هنا بعد ربط الخادم',
-    deposit_title:'إيداع', deposit_usdt:'إيداع USDT',
-    deposit_info:'معلومات التحويل', deposit_amount:'مبلغ الإيداع',
-    deposit_open_gateway:'فتح بوابة الدفع',
-    binance_id:'معرّف Binance Pay', currency:'العملة',
-    network:'الشبكة', network_value:'تُعرض عند فتح بوابة الدفع',
-    your_id:'معرّفك الشخصي',
-    binance_note:'حوّل المبلغ إلى معرّف Binance أعلاه. ضع معرّفك في ملاحظة التحويل. الرصيد يُضاف بعد تأكيد العملية.',
-    suby_info:'الإيداع عبر USDT',
-    suby_note:'سيتم تحويلك إلى بوابة الدفع الآمنة. لا تغلق الصفحة حتى تأكيد العملية.',
-    withdraw_title:'سحب USDT',
-    withdraw_note:'السحب عبر Binance Pay. الحد الأدنى 0.10 USDT.',
-    amount:'المبلغ', binance_id_label:'معرّف Binance Pay',
-    fee:'العمولة (1.5%)', you_receive:'المبلغ المستلم',
-    withdraw_submit:'تقديم طلب السحب',
-    my_requests:'طلبات السحب',
-    no_requests:'لا توجد طلبات',
-    pending_review:'قيد المراجعة', not_sent:'لم يُرسل للإدارة',
-    profile:'حسابي', balance:'الرصيد', mining_power:'قوة التعدين',
-    language:'اللغة',
-    nav_home:'الرئيسية', nav_crystals:'بلوراتي', nav_invite:'إحالة',
-    nav_deposit:'إيداع', nav_profile:'حسابي',
-    ok:'حسناً',
-    copied:'تم النسخ', copy_failed:'تعذر النسخ',
-    choose_amount:'اختر المبلغ',
-    insufficient_balance:'رصيد غير كافٍ',
-    min_withdraw:'الحد الأدنى',
-    enter_amount:'أدخل المبلغ',
-    enter_binance_id:'أدخل معرّف Binance صحيح',
-    invalid_amount:'أدخل مبلغاً صحيحاً',
-    request_sent:'تم إرسال الطلب',
-    request_local:'تم حفظ الطلب محلياً',
-    gateway_not_ready:'بوابة الدفع غير جاهزة بعد',
-    gateway_ready_soon:'سيتم تفعيل الإيداع قريباً',
-    withdraw_confirm_title:'تم إرسال طلب السحب',
-    withdraw_confirm_sub:'سيراجع المسؤول الطلب ويحوّل المبلغ إلى Binance Pay.',
-    broke_crystal:'انكسرت البلورة!',
-    got_shards:'حصلت على {n} شظية · +{p}% قوة تعدين',
-    shards_label:'شظية',
-    great:'رائع',
-    no_earnings:'لم تتراكم أرباح بعد',
-    no_shards:'لا تملك شظايا',
-    boost_done:'تمت زيادة التعدين!',
-    boost_sub:'+{n} شظية دائمة · +{p}% قوة تعدين',
-    boost_btn:'زيادة التعدين بالشظايا',
-  },
-  en: {
-    loading:'Loading...',
-    hello:'Welcome', guest:'Space Guest',
-    mining_crystal:'Mining Crystal', mining_live:'Mining',
-    balance_usdt:'Balance · USDT', pending_mining:'Pending',
-    collect:'Collect Accrued Balance',
-    daily_profit:'Daily Profit', monthly_profit:'Monthly Profit', total:'Total',
-    shards:'Shards', crystals:'Crystals',
-    my_crystals:'My Crystals · Break Them', my_crystals_title:'My Crystals',
-    break_hint:'Tap any crystal to break it and earn 1–5 random shards. Each shard gives +3% permanent mining power.',
-    no_crystals:'You have no crystals yet — invite friends to get one per invite!',
-    invite_for_crystals:'Invite Friends to Get Crystals',
-    shop_title:'Crystal Shop',
-    shop_hint:'Crystals are earned via invites. Each shard grants +3% permanent mining power.',
-    daily_return:'Daily Return', monthly_return:'Monthly Return',
-    daily_earnings:'Daily Earnings', monthly_earnings:'Monthly Earnings',
-    invite_title:'Invite Friends', invited_count:'Invited', crystals_earned:'Crystals Earned',
-    invite_link:'Invite Link', share:'Share', copy:'Copy',
-    invite_code:'Invite Code',
-    you_per_friend:'You per friend', gift_for_friend:'Gift for your friend',
-    top_10:'Top 10 Inviters', loading_top:'Leaderboard will appear after backend is connected',
-    deposit_title:'Deposit', deposit_usdt:'USDT Deposit',
-    deposit_info:'Transfer Info', deposit_amount:'Deposit Amount',
-    deposit_open_gateway:'Open Payment Gateway',
-    binance_id:'Binance Pay ID', currency:'Currency',
-    network:'Network', network_value:'Shown at gateway',
-    your_id:'Your ID',
-    binance_note:'Transfer to the Binance ID above. Put your ID in the transfer note. Balance is credited after confirmation.',
-    suby_info:'USDT Deposit',
-    suby_note:'You will be redirected to the secure payment gateway. Do not close until confirmed.',
-    withdraw_title:'USDT Withdraw',
-    withdraw_note:'Withdrawal via Binance Pay. Minimum 0.10 USDT.',
-    amount:'Amount', binance_id_label:'Binance Pay ID',
-    fee:'Fee (1.5%)', you_receive:'You receive',
-    withdraw_submit:'Submit Withdrawal Request',
-    my_requests:'Withdrawal Requests',
-    no_requests:'No requests',
-    pending_review:'Pending', not_sent:'Not sent',
-    profile:'Profile', balance:'Balance', mining_power:'Mining Power',
-    language:'Language',
-    nav_home:'Home', nav_crystals:'Crystals', nav_invite:'Invite',
-    nav_deposit:'Deposit', nav_profile:'Profile',
-    ok:'OK',
-    copied:'Copied', copy_failed:'Copy failed',
-    choose_amount:'Choose amount',
-    insufficient_balance:'Insufficient balance',
-    min_withdraw:'Minimum',
-    enter_amount:'Enter amount',
-    enter_binance_id:'Enter a valid Binance ID',
-    invalid_amount:'Enter a valid amount',
-    request_sent:'Request sent',
-    request_local:'Request saved locally',
-    gateway_not_ready:'Gateway not ready',
-    gateway_ready_soon:'Deposit will be enabled soon',
-    withdraw_confirm_title:'Withdrawal request sent',
-    withdraw_confirm_sub:'Admin will review and transfer to Binance Pay.',
-    broke_crystal:'Crystal broken!',
-    got_shards:'You got {n} shards · +{p}% mining power',
-    shards_label:'shards',
-    great:'Great',
-    no_earnings:'No earnings accrued yet',
-    no_shards:'You have no shards',
-    boost_done:'Mining boosted!',
-    boost_sub:'+{n} permanent shards · +{p}% mining power',
-    boost_btn:'Boost Mining with Shards',
-  }
-};
-let LANG = 'ar';
-const t = (key, vars) => {
-  let s = (I18N[LANG] && I18N[LANG][key]) || key;
-  if (vars) for (const k in vars) s = s.replace('{'+k+'}', vars[k]);
-  return s;
-};
-
-/* ────────── STATE ────────── */
-const STATE = {
-  user: null,
-  busy: false,
-  depAmt: 0,
-  wdAmt: 0,
-  method: 'binance'
-};
-const STORAGE_KEY = 'space_crystals_v4';
+/* ─── HELPERS ─── */
 const $ = id => document.getElementById(id);
-
-const f4  = n => Number(n||0).toFixed(4);
+const f4 = n => Number(n||0).toFixed(4);
 const f10 = n => Number(n||0).toFixed(10);
+const num = n => Number(n||0);
 
-const newUser = () => ({
-  id:'demo_' + Date.now(),
-  name:'',                         // اسم المستخدم الحقيقي يضاف من تلغرام
-  nameEn:'',
-  usdt: 0,
-  pending: 0,
-  lastTick: Date.now(),
-  shards: 0,
-  crystals: 0,
-  referralCount: 0,
-  refCode: 'DEMO' + Math.floor(Math.random()*9000+1000),
-  lang: 'ar',
-  requests: [],
-  createdAt: Date.now()
-});
-
-/* ────────── HELPERS ────────── */
 let toastTimer;
 function toast(msg, kind='ok'){
   const box = $('toast');
   box.className = 'toast ' + kind;
-  $('toastIc').innerHTML = ic(kind==='ok' ? 'check' : kind==='err' ? 'warn' : 'info');
+  $('toastIc').innerHTML = ic(kind==='ok' ? 'check' : 'info');
   $('toastMsg').textContent = msg;
   box.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => box.classList.remove('show'), 2600);
 }
-
-let modalCloseCb = null;
-function showModal({ icon='check', title='', sub='', amount='', btn, onClose }){
+let modalCb = null;
+function showModal({icon='check', title='', sub='', amount='', btn='موافق', onClose}){
   $('mIco').innerHTML = ic(icon);
   $('mTitle').textContent = title;
   $('mSub').textContent = sub;
   $('mAmt').innerHTML = amount;
   $('mAmt').style.display = amount ? 'block' : 'none';
-  $('mBtnTx').textContent = btn || t('ok');
-  modalCloseCb = onClose || null;
+  $('mBtnTx').textContent = btn;
+  modalCb = onClose || null;
   $('modal').classList.add('show');
-  $('mBtn').focus();
 }
 function closeModal(){
   if (!$('modal').classList.contains('show')) return;
   $('modal').classList.remove('show');
-  const cb = modalCloseCb;
-  modalCloseCb = null;
+  const cb = modalCb; modalCb = null;
   if (cb) cb();
 }
-
-function copyText(text, msg){
-  const ok = () => toast(msg || t('copied'));
-  const fail = () => toast(t('copy_failed'), 'err');
-  const legacy = () => {
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
-      document.body.appendChild(ta); ta.select();
-      const r = document.execCommand('copy'); ta.remove();
-      r ? ok() : fail();
-    } catch(e){ fail(); }
-  };
-  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, legacy);
-  else legacy();
+function copyText(t, msg){
+  const ok = () => toast(msg || 'تم النسخ');
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, () => toast('تعذر النسخ','err'));
+  else {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); ok(); } catch(e){ toast('تعذر النسخ','err'); }
+    ta.remove();
+  }
 }
 
-/* ────────── MINING ENGINE ────────── */
+/* ─── TELEGRAM ─── */
+const TG = {
+  app: null, user: null, id: null, initData: null,
+  init(){
+    this.app = window.Telegram && Telegram.WebApp;
+    if (!this.app || !this.app.initDataUnsafe) return false;
+    this.user = this.app.initDataUnsafe.user;
+    if (!this.user) return false;
+    this.id = String(this.user.id);
+    this.initData = this.app.initData || '';
+    try { this.app.ready(); this.app.expand(); this.app.disableVerticalSwipes && this.app.disableVerticalSwipes(); } catch(e){}
+    return true;
+  }
+};
+
+/* ─── WORKER API ─── */
+const API = {
+  async post(path, body = {}){
+    const r = await fetch(WORKER_URL + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: TG.initData, ...body })
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'API error');
+    return data.data;
+  },
+  async get(path){
+    const r = await fetch(WORKER_URL + path);
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'API error');
+    return data.data;
+  }
+};
+
+/* ─── STATE ─── */
+const STATE = {
+  user: null, busy: false, depAmt: 0, wdAmt: 0,
+  method: 'binance', tickTimer: null, saveTimer: null
+};
+
+/* ─── MINING ENGINE (local display only) ─── */
 const Mining = {
   dailyRate(){
-    return CONFIG.baseDailyRate * (1 + ((STATE.user && STATE.user.shards) || 0) * CONFIG.shardBoost);
+    return CONFIG.baseDailyRate * (1 + num(STATE.user?.shards) * CONFIG.shardBoost);
   },
   tick(){
     if (!STATE.user) return;
     const now = Date.now();
     const elapsed = Math.max(0, (now - (STATE.user.lastTick || now)) / 1000);
     if (elapsed <= 0 || elapsed > 3600){ STATE.user.lastTick = now; return; }
-    STATE.user.pending = (STATE.user.pending || 0) + elapsed * this.dailyRate() / 86400;
+    STATE.user.pending = num(STATE.user.pending) + elapsed * this.dailyRate() / 86400;
     STATE.user.lastTick = now;
-  },
-  collect(){
-    if (!STATE.user) return 0;
-    this.tick();
-    const p = STATE.user.pending || 0;
-    if (p < 1e-12) return 0;
-    STATE.user.usdt += p;
-    STATE.user.pending = 0;
-    save();
-    return p;
   }
 };
 
-const shortId = () => STATE.user.id.replace('demo_','');
-
-/* ────────── RENDER ────────── */
+/* ─── RENDER ─── */
 function renderAll(){
   const u = STATE.user;
   if (!u) return;
-  const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
+  const name = u.name || 'ضيف فضائي';
+  const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
 
   const d = Mining.dailyRate();
-  const boost = u.shards * CONFIG.shardBoost * 100;
-  const name = LANG === 'en' ? (u.nameEn || u.name || t('guest')) : (u.name || t('guest'));
+  const boost = num(u.shards) * CONFIG.shardBoost * 100;
+
+  $('homeAvatar').innerHTML = u.photoUrl
+    ? `<img src="${u.photoUrl}" alt="" referrerpolicy="no-referrer">`
+    : ic('user');
+  $('profAvatar').innerHTML = u.photoUrl
+    ? `<img src="${u.photoUrl}" alt="" referrerpolicy="no-referrer">`
+    : ic('user');
 
   set('topUsdt', f4(u.usdt));
   set('homeName', name);
   set('stDaily', d.toFixed(5));
   set('stMonthly', (d * 30).toFixed(5));
   set('stTotal', f4(u.usdt));
-  set('stShards', u.shards);
-  set('stCrystals', u.crystals);
-  set('shCrystals', u.crystals);
-  set('shShards', u.shards);
+  set('stShards', u.shards || 0);
+  set('stCrystals', u.crystals || 0);
+  set('shCrystals', u.crystals || 0);
+  set('shShards', u.shards || 0);
 
   set('profName', name);
-  set('profId', shortId());
+  set('profId', TG.id ? TG.id.slice(-8) : '--------');
   set('profUsdt', f4(u.usdt));
-  set('profShards', u.shards);
-  set('profCrystals', u.crystals);
+  set('profShards', u.shards || 0);
+  set('profCrystals', u.crystals || 0);
   set('profBoost', boost.toFixed(0) + '%');
 
-  set('refCount', u.referralCount);
-  set('refCrystals', u.crystals);
-  set('refCode', u.refCode);
-  set('refLink', 'https://t.me/' + CONFIG.botUsername + '?startapp=ref_' + u.refCode);
+  set('refCount', u.referralCount || 0);
+  set('refCrystals', u.crystals || 0);
+  set('refCode', u.refCode || TG.id);
+  set('refLink', 'https://t.me/' + BOT_USERNAME + '?startapp=ref_' + (u.refCode || TG.id));
 
-  set('depUserIdBinance', shortId());
-  set('depUserIdSuby', shortId());
-  set('binanceIdValue', CONFIG.binanceId);
+  set('depUserIdBinance', TG.id ? TG.id.slice(-8) : '--------');
+  set('depUserIdSuby', TG.id ? TG.id.slice(-8) : '--------');
 
-  renderLive();
-  renderGallery();
-  renderShop();
-  renderWd();
-  renderReqs('withdraw');
+  renderLive(); renderGallery(); renderShop(); renderWd(); renderReqs();
 }
 
 function renderLive(){
@@ -1121,39 +653,34 @@ function renderLive(){
 
 function renderGallery(){
   const u = STATE.user;
-  const grid = $('gallery');
   const n = u.crystals || 0;
   $('emptyGallery').style.display = n ? 'none' : 'block';
   let html = '';
   for (let i = 0; i < n; i++){
     const c = CONFIG.crystals[i % CONFIG.crystals.length];
-    const name = LANG === 'en' ? c.nameEn : c.name;
     html += `<button class="gcard" data-break="${i}">
       ${gem(c.pal)}
-      <div class="name">${name}</div>
+      <div class="name">${c.name}</div>
       <div class="tag num">#${String(i+1).padStart(2,'0')}</div>
-      <div class="hint">${ic('shard')}<span>${t('shards')}</span></div>
+      <div class="hint">${ic('shard')}<span>شظايا</span></div>
     </button>`;
   }
-  grid.innerHTML = html;
+  $('gallery').innerHTML = html;
 }
 
 function renderShop(){
-  $('shopList').innerHTML = CONFIG.crystals.map(c => {
-    const name = LANG === 'en' ? c.nameEn : c.name;
-    const desc = LANG === 'en' ? c.descEn : c.desc;
-    return `<article class="cc">
+  $('shopList').innerHTML = CONFIG.crystals.map(c => `
+    <article class="cc">
       ${gem(c.pal)}
-      <h3>${name}</h3>
-      <p class="desc">${desc}</p>
+      <h3>${c.name}</h3>
+      <p class="desc">${c.desc}</p>
       <div class="metrics">
-        <div class="metric"><small>${t('daily_return')}</small><b class="hi num">${c.dailyPct}%</b></div>
-        <div class="metric"><small>${t('daily_earnings')}</small><b class="num">${c.daily} USDT</b></div>
-        <div class="metric"><small>${t('monthly_return')}</small><b class="hi num">${c.monthlyPct}%</b></div>
-        <div class="metric"><small>${t('monthly_earnings')}</small><b class="num">${c.monthly} USDT</b></div>
+        <div class="metric"><small>العائد اليومي</small><b class="hi num">${c.dailyPct}%</b></div>
+        <div class="metric"><small>الأرباح اليومية</small><b class="num">${c.daily} USDT</b></div>
+        <div class="metric"><small>العائد الشهري</small><b class="hi num">${c.monthlyPct}%</b></div>
+        <div class="metric"><small>الأرباح الشهرية</small><b class="num">${c.monthly} USDT</b></div>
       </div>
-    </article>`;
-  }).join('');
+    </article>`).join('');
 }
 
 function renderWd(){
@@ -1163,260 +690,205 @@ function renderWd(){
   $('wdNet').textContent = f4(a - fee) + ' USDT';
 }
 
-function renderReqs(type){
-  const box = $(type === 'deposit' ? 'depReqs' : 'wdReqs');
-  if (!box) return;
-  const list = (STATE.user.requests || []).filter(r => r.type === type).slice(-5).reverse();
-  if (!list.length){
-    box.innerHTML = `<div class="empty">${t('no_requests')}</div>`;
-    return;
-  }
+function renderReqs(){
+  const list = (STATE.user.requests || []).slice(-5).reverse();
+  const box = $('wdReqs');
+  if (!list.length){ box.innerHTML = `<div class="empty">لا توجد طلبات</div>`; return; }
   box.innerHTML = list.map(r => `
     <div class="req">
-      <div class="m">
-        <b class="num">${f4(r.amount)} USDT</b>
-        <small class="num">${new Date(r.ts).toLocaleString(LANG==='en'?'en-GB':'ar-EG')}</small>
-      </div>
-      <span class="badge ${r.sent?'':'loc'}">${r.sent ? t('pending_review') : t('not_sent')}</span>
+      <div class="m"><b class="num">${f4(r.amount)} USDT</b>
+      <small class="num">${new Date(r.ts).toLocaleString('ar-EG')}</small></div>
+      <span class="badge ${r.sent?'':'loc'}">${r.sent ? 'قيد المراجعة' : 'لم يُرسل'}</span>
     </div>`).join('');
 }
 
-/* ────────── LANGUAGE ────────── */
-function applyLang(lang, persist=true){
-  LANG = lang;
-  STATE.user.lang = lang;
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
-
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    el.textContent = t(key);
-  });
-
-  $('langAr').classList.toggle('on', lang === 'ar');
-  $('langEn').classList.toggle('on', lang === 'en');
-
-  renderAll();
-  if (persist) save();
-}
-
-/* ────────── NAVIGATION ────────── */
+/* ─── NAVIGATION ─── */
 function nav(screen){
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   const target = $('screen-' + screen);
   if (target) target.classList.add('active');
-
   document.querySelectorAll('.dock button').forEach(b => {
-    b.classList.toggle('on', b.dataset.nav === screen
-      || ((screen === 'withdraw' || screen === 'shop') && b.dataset.nav === 'profile'));
+    b.classList.toggle('on', b.dataset.nav === screen || ((screen==='withdraw'||screen==='shop') && b.dataset.nav==='profile'));
   });
-
   $('mainScroll').scrollTop = 0;
-
-  if (screen === 'ref') renderLeaderboard();
-  if (screen === 'deposit') renderReqs('deposit');
-  if (screen === 'withdraw') renderReqs('withdraw');
+  if (screen === 'ref') loadLeaderboard();
 }
 
-function renderLeaderboard(){
-  $('lbList').innerHTML = `<div class="empty">${ic('crown')}<div>${t('loading_top')}</div></div>`;
-}
-
-/* ────────── ACTIONS ────────── */
-function collect(){
-  const earned = Mining.collect();
-  if (earned <= 0) return toast(t('no_earnings'), 'info');
-  renderAll();
-  toast('+' + f10(earned) + ' USDT');
-}
-
-function boostWithShards(){
+/* ─── ACTIONS ─── */
+async function collect(){
   if (STATE.busy) return;
-  const u = STATE.user;
-  if (!u || u.shards <= 0) return toast(t('no_shards'), 'info');
-  const used = u.shards;
-  save();
-  renderAll();
-  showModal({
-    icon:'bolt',
-    title:t('boost_done'),
-    sub:t('boost_sub', { n: used, p: used * 3 }),
-    amount:'+' + used + '<small>' + t('shards_label') + '</small>',
-    btn:t('great')
-  });
+  STATE.busy = true;
+  $('collectBtn').disabled = true;
+  try {
+    const res = await API.post('/api/mining/collect');
+    STATE.user.usdt = res.usdt;
+    STATE.user.pending = 0;
+    STATE.user.lastTick = Date.now();
+    renderAll();
+    if (res.earned > 0) toast('+' + f10(res.earned) + ' USDT');
+    else toast('لم تتراكم أرباح بعد', 'info');
+  } catch(e){ toast('خطأ: ' + e.message, 'err'); }
+  finally { STATE.busy = false; $('collectBtn').disabled = false; }
 }
 
-function breakCrystal(index){
-  const u = STATE.user;
-  if (STATE.busy || u.crystals <= 0 || index < 0 || index >= u.crystals) return;
-
-  const card = document.querySelector(`[data-break="${index}"]`);
-  if (!card) return;
-
+async function breakCrystal(index){
+  if (STATE.busy || STATE.user.crystals <= 0) return;
   STATE.busy = true;
-  const shards = CONFIG.shardRewards[Math.floor(Math.random() * CONFIG.shardRewards.length)];
-
-  card.classList.add('breaking');
-  const burst = document.createElement('div');
-  burst.className = 'burst';
-  for (let k = 0; k < 8; k++){
-    const p = document.createElement('div');
-    p.className = 'p';
-    const angle = Math.PI * 2 * k / 8 + (Math.random() - .5) * .6;
-    const dist = 60 + Math.random() * 50;
-    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-    burst.appendChild(p);
-  }
-  card.appendChild(burst);
-
-  const gain = document.createElement('div');
-  gain.className = 'float-gain';
-  gain.textContent = '+' + shards;
-  card.appendChild(gain);
-
-  setTimeout(() => {
-    u.crystals -= 1;
-    u.shards += shards;
-    save();
+  const card = document.querySelector(`[data-break="${index}"]`);
+  if (card) card.classList.add('breaking');
+  try {
+    const res = await API.post('/api/crystal/break');
+    STATE.user.crystals = res.crystals;
+    STATE.user.shards = res.totalShards;
     renderAll();
     showModal({
-      icon:'gem',
-      title:t('broke_crystal'),
-      sub:t('got_shards', { n: shards, p: shards * 3 }),
-      amount:'+' + shards + '<small>' + t('shards_label') + '</small>',
-      btn:t('great'),
-      onClose:() => { STATE.busy = false; }
+      icon:'gem', title:'انكسرت البلورة!',
+      sub:`حصلت على ${res.shards} شظية · +${res.shards*3}% قوة تعدين`,
+      amount: '+' + res.shards + '<small>شظية</small>',
+      btn: 'رائع'
     });
-  }, 600);
+  } catch(e){ toast('خطأ: ' + e.message, 'err'); }
+  finally { STATE.busy = false; if (card) card.classList.remove('breaking'); }
 }
 
-/* ────────── DEPOSIT (Binance / USDT) ────────── */
 function switchDepositMethod(method){
   STATE.method = method;
-  document.querySelectorAll('#depMethod button').forEach(b => {
-    b.classList.toggle('on', b.dataset.method === method);
-  });
+  document.querySelectorAll('#depMethod button').forEach(b => b.classList.toggle('on', b.dataset.method === method));
   $('paneBinance').style.display = method === 'binance' ? 'block' : 'none';
   $('paneSuby').style.display = method === 'suby' ? 'block' : 'none';
 }
 
-function openSubyGateway(){
-  const u = STATE.user;
+async function openSubyGateway(){
+  if (STATE.busy) return;
   const amt = parseFloat($('depAmountCustom').value || STATE.depAmt || '0');
-  if (!(amt > 0)) return toast(t('enter_amount'), 'err');
-  if (!CONFIG.subyGatewayUrl) return toast(t('gateway_ready_soon'), 'info');
-
-  const params = new URLSearchParams({
-    amount: amt.toFixed(2),
-    currency: 'USDT',
-    externalId: u.id,
-    ref: u.refCode
-  });
-  const url = CONFIG.subyGatewayUrl + (CONFIG.subyGatewayUrl.includes('?') ? '&' : '?') + params.toString();
-
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink)
-    Telegram.WebApp.openLink(url);
-  else
-    window.open(url, '_blank');
+  if (!(amt > 0)) return toast('أدخل المبلغ', 'err');
+  STATE.busy = true;
+  $('depSubyBtn').disabled = true;
+  try {
+    const res = await API.post('/api/deposit/create', { amount: amt });
+    if (res.paymentUrl){
+      if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink)
+        Telegram.WebApp.openLink(res.paymentUrl);
+      else window.open(res.paymentUrl, '_blank');
+    } else toast('لم يعد رابط الدفع', 'err');
+  } catch(e){ toast('خطأ: ' + e.message, 'err'); }
+  finally { STATE.busy = false; $('depSubyBtn').disabled = false; }
 }
 
-/* ────────── WITHDRAW ────────── */
 async function submitWithdraw(){
-  const u = STATE.user;
   const acc = ($('wdAccount').value || '').trim();
   $('wdHint').textContent = '';
   $('wdAccount').classList.remove('bad');
 
-  if (!(STATE.wdAmt > 0)) return toast(t('enter_amount'), 'err');
-  if (STATE.wdAmt < CONFIG.minWithdraw - 1e-9)
-    return toast(t('min_withdraw') + ' ' + CONFIG.minWithdraw.toFixed(2) + ' USDT', 'err');
-  if (STATE.wdAmt > u.usdt + 1e-9)
-    return toast(t('insufficient_balance'), 'err');
+  if (!(STATE.wdAmt > 0)) return toast('أدخل المبلغ', 'err');
+  if (STATE.wdAmt < CONFIG.minWithdraw) return toast('الحد الأدنى 0.10 USDT', 'err');
+  if (STATE.wdAmt > STATE.user.usdt) return toast('رصيد غير كافٍ', 'err');
   if (!/^[A-Za-z0-9_-]{4,40}$/.test(acc)){
-    $('wdHint').textContent = t('enter_binance_id');
+    $('wdHint').textContent = 'أدخل معرّف Binance صحيح';
     $('wdAccount').classList.add('bad');
     return;
   }
   if (STATE.busy) return;
-
   STATE.busy = true;
   $('wdSubmit').disabled = true;
+  try {
+    const res = await API.post('/api/withdraw/request', { amount: STATE.wdAmt, account: acc });
+    STATE.user.usdt -= STATE.wdAmt;
+    STATE.user.requests = STATE.user.requests || [];
+    STATE.user.requests.push({ amount: STATE.wdAmt, ts: Date.now(), sent: true, status: 'pending' });
+    renderAll();
+    showModal({
+      icon:'check', title:'تم إرسال طلب السحب',
+      sub:'سيراجع المسؤول الطلب ويحوّل المبلغ إلى Binance Pay.',
+      amount: f4(res.net) + '<small>USDT</small>', btn: 'حسناً'
+    });
+  } catch(e){ toast('خطأ: ' + e.message, 'err'); }
+  finally { STATE.busy = false; $('wdSubmit').disabled = false; }
+}
 
-  const amt = STATE.wdAmt;
-  const fee = amt * CONFIG.feeRate;
-  const net = amt - fee;
+async function loadLeaderboard(){
+  try {
+    const res = await API.get('/api/leaderboard');
+    const list = res.leaderboard || [];
+    if (!list.length){
+      $('lbList').innerHTML = `<div class="empty">لا يوجد مدعوون بعد</div>`;
+      return;
+    }
+    $('lbList').innerHTML = list.map((u, i) => {
+      const rank = i + 1;
+      const crown = rank <= 3 ? '👑' : '';
+      return `<div class="req" style="padding:8px 4px">
+        <span class="badge">${crown} #${rank}</span>
+        <div class="m"><b>${u.name || 'لاعب'}</b><small>${u.referralCount} دعوة</small></div>
+      </div>`;
+    }).join('');
+  } catch(e){ $('lbList').innerHTML = `<div class="empty">تعذر التحميل</div>`; }
+}
 
-  // احتفظ بالرصيد أثناء انتظار المراجعة
-  u.usdt = Math.max(0, u.usdt - amt);
-
-  const request = {
-    id: 'rq_' + Date.now(),
-    type: 'withdraw',
-    amount: amt,
-    fee, net,
-    method: 'binance',
-    account: acc,
-    userId: u.id,
-    username: u.name || '',
-    status: 'pending',
-    sent: false,
-    ts: Date.now()
+/* ─── BOOT ─── */
+async function boot(){
+  if (!TG.init()){
+    $('loader').innerHTML = '<div style="padding:30px;text-align:center;color:#9AC3B3"><h2>Space Crystals</h2><p style="margin:10px 0">هذا التطبيق يعمل داخل تيليجرام فقط.</p></div>';
+    return;
+  }
+  // ارسم الأيقونات
+  const icMap = {
+    icDown:'down', icBolt:'bolt', icCoin:'coin', icWallet:'wallet', icShard:'shard',
+    icGem:'gem', icGem2:'gem', icGem3:'gem', icGem4:'gem', icGem5:'gem', icGem6:'gem',
+    icGem7:'gem', icGem8:'gem', icGem9:'gem', icGem10:'gem', icGem11:'gem',
+    icInfo1:'info', icInfo2:'info', icInfo3:'info', icInfo4:'info', icInfo5:'info',
+    icInfo6:'info', icInfo7:'info',
+    icUsers1:'users', icUsers2:'users', icUsers3:'users', icUsers4:'users',
+    icShare1:'share', icShare2:'share',
+    icCopy1:'copy', icCopy2:'copy', icCopy3:'copy', icCopy4:'copy',
+    icCrown1:'crown', icDown2:'down', icDown3:'down', icDown4:'down',
+    icUp1:'up', icUp2:'up', icCheck1:'check', icCheck2:'check',
+    icWallet2:'wallet', icWallet3:'wallet', icCoin2:'coin', icCoin3:'coin', icCoin4:'coin', icCoin5:'coin',
+    icShard2:'shard', icShard3:'shard',
+    icBolt2:'bolt', icGlobe1:'globe', icHome1:'home', icUser1:'user',
+    icChev1:'chev', icChev2:'chev', icChev3:'chev', icChev4:'chev',
+    bubGem:'gem', bubShard:'shard', coinIcon:'coin'
   };
+  for (const k in icMap){
+    const el = $(k);
+    if (el) el.innerHTML = ic(icMap[k]);
+  }
+  $('loaderGem').innerHTML = gem(0);
+  $('heroGem').innerHTML = gem(0);
 
-  if (CONFIG.adminEndpoint){
-    try {
-      const res = await fetch(CONFIG.adminEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
-      });
-      request.sent = res.ok;
-    } catch (e) { request.sent = false; }
+  bindEvents();
+
+  try {
+    const res = await API.post('/api/auth/verify');
+    STATE.user = res.user;
+    STATE.user.lastTick = Date.now();
+    STATE.user.pending = 0;
+    STATE.user.requests = STATE.user.requests || [];
+  } catch(e){
+    $('loader').innerHTML = `<div style="padding:30px;text-align:center;color:#E59A94">
+      <h2>خطأ في الاتصال</h2>
+      <p style="margin:10px 0;font-size:13px">${e.message}</p>
+      <button onclick="location.reload()" style="padding:10px 20px;background:#284D46;color:#fff;border-radius:12px;margin-top:10px">إعادة المحاولة</button>
+    </div>`;
+    return;
   }
 
-  u.requests = (u.requests || []).concat(request);
-  save();
+  $('app').style.display = 'flex';
+  $('loader').classList.add('hide');
   renderAll();
 
-  STATE.busy = false;
-  $('wdSubmit').disabled = false;
-
-  showModal({
-    icon: request.sent ? 'check' : 'info',
-    title: t('withdraw_confirm_title'),
-    sub: t('withdraw_confirm_sub'),
-    amount: f4(net) + '<small>USDT</small>',
-    btn: t('ok')
-  });
+  setInterval(() => { if (STATE.user && !document.hidden){ Mining.tick(); renderLive(); } }, 1000);
+  setInterval(renderAll, 15000);
 }
 
-/* ────────── PERSISTENCE ────────── */
-function save(){
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE.user)); } catch(e){}
-}
-function load(){
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return false;
-    const u = JSON.parse(raw);
-    if (!u || !u.id) return false;
-    STATE.user = Object.assign(newUser(), u);
-    Mining.tick();
-    return true;
-  } catch(e){ return false; }
-}
-
-/* ────────── EVENTS ────────── */
+/* ─── EVENTS ─── */
 function bindEvents(){
   document.addEventListener('click', e => {
     const el = e.target.closest('button');
     if (!el) return;
-
     if (el.dataset.nav) return nav(el.dataset.nav);
-    if (el.dataset.go)  return nav(el.dataset.go);
+    if (el.dataset.go) return nav(el.dataset.go);
     if (el.dataset.break !== undefined) return breakCrystal(+el.dataset.break);
-    if (el.dataset.copy) return copyText(el.dataset.copy);
 
     if (el.dataset.amt){
       const group = el.parentElement;
@@ -1426,36 +898,32 @@ function bindEvents(){
       else { STATE.wdAmt = +el.dataset.amt; $('wdAmount').value = el.dataset.amt; }
       return renderWd();
     }
-
-    if (el.dataset.method){
-      return switchDepositMethod(el.dataset.method);
-    }
+    if (el.dataset.method) return switchDepositMethod(el.dataset.method);
 
     switch (el.id){
-      case 'collectBtn':       return collect();
-      case 'breakBtn':         return nav('shards');
-      case 'goRefBtn':         return nav('ref');
-      case 'refCopy':          return copyText($('refLink').textContent);
-      case 'refCodeCopy':      return copyText($('refCode').textContent);
+      case 'collectBtn': return collect();
+      case 'breakBtn': return nav('shards');
+      case 'goRefBtn': return nav('ref');
+      case 'refCopy': return copyText($('refLink').textContent);
+      case 'refCodeCopy': return copyText($('refCode').textContent);
       case 'refShare': {
         const url = $('refLink').textContent;
-        if (navigator.share) navigator.share({ url, title:'Space Crystals' }).catch(()=>{});
-        else copyText(url);
+        const tgShare = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent('انضم إلى Space Crystals!');
+        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink)
+          Telegram.WebApp.openTelegramLink(tgShare);
+        else window.open(tgShare, '_blank');
         return;
       }
-      case 'depCopyUserBinance': return copyText(shortId());
-      case 'depCopyUserSuby':    return copyText(shortId());
-      case 'depSubyBtn':         return openSubyGateway();
-      case 'wdSubmit':           return submitWithdraw();
-      case 'langAr':             return applyLang('ar');
-      case 'langEn':             return applyLang('en');
-      case 'mBtn':               return closeModal();
+      case 'depCopyUserBinance': return copyText(TG.id || '');
+      case 'depCopyUserSuby': return copyText(TG.id || '');
+      case 'depSubyBtn': return openSubyGateway();
+      case 'wdSubmit': return submitWithdraw();
+      case 'langAr': case 'langEn': return toast('قريباً', 'info');
+      case 'mBtn': return closeModal();
     }
   });
 
   $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
-
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   $('wdAmount').addEventListener('input', e => {
     const v = parseFloat(String(e.target.value).replace(',','.'));
@@ -1463,41 +931,10 @@ function bindEvents(){
     document.querySelectorAll('#wdAmounts .amt').forEach(x => x.classList.remove('on'));
     renderWd();
   });
-
   $('depAmountCustom').addEventListener('input', e => {
     const v = parseFloat(String(e.target.value).replace(',','.'));
     STATE.depAmt = isFinite(v) && v > 0 ? v : 0;
   });
-}
-
-/* ────────── BOOT ────────── */
-function boot(){
-  if (!load()) STATE.user = newUser();
-  STATE.user.lastTick = Date.now();
-
-  // ارسم الأيقونات
-  document.querySelectorAll('[data-ic]').forEach(el => { el.innerHTML = ic(el.dataset.ic); });
-  $('loaderGem').innerHTML = gem(0);
-  $('heroGem').innerHTML = gem(0);
-
-  bindEvents();
-  applyLang(STATE.user.lang || 'ar', false);
-  renderAll();
-
-  setTimeout(() => {
-    $('app').style.display = 'flex';
-    $('loader').classList.add('hide');
-  }, 900);
-
-  let tick = 0;
-  setInterval(() => {
-    if (!STATE.user || document.hidden) return;
-    Mining.tick();
-    renderLive();
-    if (++tick % 15 === 0) renderAll();
-  }, CONFIG.tickMs);
-
-  setInterval(save, 15000);
 }
 
 document.addEventListener('DOMContentLoaded', boot);
