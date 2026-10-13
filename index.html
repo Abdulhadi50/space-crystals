@@ -885,6 +885,38 @@ async function boot(){
   renderAll();
 
   setInterval(() => { if (STATE.user && !document.hidden){ Mining.tick(); renderLive(); } }, 1000);
+
+// ═══ التعدين في الخلفية — يعتمد على Firebase ═══
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && STATE.user){
+    try {
+      const res = await API.post('/api/mining/collect');
+      if (res.earned > 0){
+        STATE.user.usdt = res.usdt;
+        STATE.user.lastTick = res.lastTick;
+        STATE.user.pending = 0;
+        renderAll();
+      } else {
+        STATE.user.lastTick = Date.now();
+      }
+    } catch(e){ /* تجاهل الخطأ */ }
+  }
+});
+
+// مزامنة دورية كل 60 ثانية (في المقدمة)
+setInterval(async () => {
+  if (STATE.user && !document.hidden){
+    try {
+      const res = await API.post('/api/mining/collect');
+      if (res.earned > 0){
+        STATE.user.usdt = res.usdt;
+        STATE.user.lastTick = res.lastTick;
+        STATE.user.pending = 0;
+        renderAll();
+      }
+    } catch(e){}
+  }
+}, 60000);
   setInterval(renderAll, 15000);
 }
 
