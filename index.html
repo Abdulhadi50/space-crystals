@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الملصق المتحرك</title>
+  <title>مكتبة الملصقات المتحركة</title>
 
   <style>
     * {
@@ -13,24 +13,45 @@
     body {
       margin: 0;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 25px 15px;
       background: #171821;
       font-family: Arial, sans-serif;
       color: white;
     }
 
     .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
       text-align: center;
     }
 
+    h2 {
+      font-size: 21px;
+      margin-bottom: 25px;
+    }
+
+    .stickers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .sticker-card {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #343541;
+      border-radius: 16px;
+      background: #20212d;
+    }
+
     .sticker-box {
-      width: 250px;
-      height: 250px;
+      width: 100%;
+      aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       background: transparent;
     }
 
@@ -41,20 +62,41 @@
       background: transparent;
     }
 
-    h3 {
-      font-size: 16px;
-      margin-top: 15px;
+    .sticker-name {
+      min-height: 35px;
+      margin: 10px 0;
+      font-size: 12px;
+      color: #d5d5df;
+      overflow-wrap: anywhere;
+      direction: ltr;
     }
 
     button {
-      margin-top: 12px;
-      padding: 10px 24px;
+      width: 100%;
+      padding: 10px 8px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 9px;
       background: #bea97c;
       color: #171821;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: bold;
       cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .error {
+      color: #ff8585;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 350px) {
+      .stickers {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -62,27 +104,83 @@
 <body>
 
   <div class="container">
-    <div class="sticker-box">
-      <video id="sticker" autoplay loop muted playsinline>
-        <source src="stickerget.webm" type="video/webm">
-      </video>
+    <h2>مكتبة الملصقات المتحركة</h2>
+
+    <div class="stickers">
+
+      <!-- الملصق الأول -->
+      <div class="sticker-card">
+        <div class="sticker-box">
+          <video class="sticker" autoplay loop muted playsinline>
+            <source src="stickerget.webm" type="video/webm">
+          </video>
+        </div>
+
+        <div class="sticker-name">stickerget.webm</div>
+
+        <button onclick="replaySticker(this)">إعادة الحركة</button>
+        <div class="error"></div>
+      </div>
+
+      <!-- الملصق الثاني -->
+      <div class="sticker-card">
+        <div class="sticker-box">
+          <video class="sticker" autoplay loop muted playsinline>
+            <source src="HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm"
+                   type="video/webm">
+          </video>
+        </div>
+
+        <div class="sticker-name">
+          HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm
+        </div>
+
+        <button onclick="replaySticker(this)">إعادة الحركة</button>
+        <div class="error"></div>
+      </div>
+
+      <!-- الملصق الثالث -->
+      <div class="sticker-card">
+        <div class="sticker-box">
+          <video class="sticker" autoplay loop muted playsinline>
+            <source src="Brooch_9f32_by_StickerEmojiRobot-002.webm"
+                   type="video/webm">
+          </video>
+        </div>
+
+        <div class="sticker-name">
+          Brooch_9f32_by_StickerEmojiRobot-002.webm
+        </div>
+
+        <button onclick="replaySticker(this)">إعادة الحركة</button>
+        <div class="error"></div>
+      </div>
+
     </div>
-
-    <h3>الملصق المتحرك</h3>
-
-    <button onclick="playSticker()">إعادة تشغيل الحركة</button>
   </div>
 
   <script>
-    const sticker = document.getElementById("sticker");
+    function replaySticker(button) {
+      const card = button.closest(".sticker-card");
+      const video = card.querySelector("video");
 
-    function playSticker() {
-      sticker.currentTime = 0;
-      sticker.play();
+      video.currentTime = 0;
+      video.play().catch(() => {
+        card.querySelector(".error").textContent =
+          "تعذر التشغيل. تحقق من وجود الملف وصيغته.";
+      });
     }
 
-    sticker.play().catch(() => {
-      console.log("اضغط زر إعادة التشغيل لبدء الحركة.");
+    document.querySelectorAll(".sticker").forEach(video => {
+      video.play().catch(() => {
+        // يمكن تشغيل الملصق باستخدام زر إعادة الحركة.
+      });
+
+      video.addEventListener("error", () => {
+        video.closest(".sticker-card")
+          .querySelector(".error").textContent =
+          "تعذر تحميل الملف. تحقق من اسم الملف ومكانه.";
+      });
     });
   </script>
 
