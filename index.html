@@ -119,6 +119,7 @@ input { font: inherit; color: inherit; }
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1.5px solid var(--border);
 }
 
 /* ============ MAIN SCROLL ============ */
@@ -222,6 +223,7 @@ input { font: inherit; color: inherit; }
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--gold-light);
   box-shadow: 0 3px 10px rgba(198, 161, 91, 0.25);
   flex-shrink: 0;
 }
@@ -753,6 +755,7 @@ input { font: inherit; color: inherit; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  border: 2px solid var(--gold);
 }
 .wallet-balance-sub {
   font-size: 13px;
@@ -837,6 +840,7 @@ input { font: inherit; color: inherit; }
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -1120,6 +1124,7 @@ input { font: inherit; color: inherit; }
   width: 26px;
   height: 26px;
   border-radius: 50%;
+  border: 2px solid var(--gold-light);
 }
 
 .ref-rewards-grid {
@@ -1722,17 +1727,16 @@ input { font: inherit; color: inherit; }
     <div class="view active" id="view-home">
       <div class="home-hero">
         <div class="greeting-row">
+          <div class="greeting-avatar" id="greetAvatar"><i class="fas fa-user"></i></div>
           <div class="greeting-text">
             <div class="greeting-hello">مرحباً <span id="greetName">لاعب</span></div>
             <div class="greeting-sub">متجر المقتنيات الذكية</div>
           </div>
         </div>
-        <div class="big-balance" style="flex-direction:column;align-items:flex-start;gap:4px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <img src="https://up6.cc/2026/10/179267515752371.jpg" class="balance-icon-big" alt="">
-            <div class="balance-value-big" id="homeGemCount">0</div>
-          </div>
-          <div class="balance-usd-small" id="homeGemUsd" style="margin-right:54px">$0.00</div>
+        <div class="big-balance">
+          <img src="https://up6.cc/2026/10/179267515752371.jpg" class="balance-icon-big" alt="">
+          <div class="balance-value-big" id="homeGemCount">0</div>
+          <div class="balance-usd-small" id="homeGemUsd">$0.00</div>
         </div>
         <div class="hero-actions">
           <button class="hero-action-btn primary" data-view="deposit">
@@ -1752,23 +1756,18 @@ input { font: inherit; color: inherit; }
           <div class="action-card-title">المقتنيات</div>
           <div class="action-card-desc">اعرض وبِع مقتنياتك</div>
         </div>
-        <div class="action-card" data-view="tasks">
-          <div class="action-card-icon blue"><i class="fas fa-tasks"></i></div>
-          <div class="action-card-title">المهام</div>
-          <div class="action-card-desc">مهام الدعوة والهدايا</div>
+        <div class="action-card" data-view="exchange">
+          <div class="action-card-icon blue"><i class="fas fa-right-left"></i></div>
+          <div class="action-card-title">تبديل العملات</div>
+          <div class="action-card-desc">1000 عملة = 10 ماسات</div>
         </div>
       </div>
-
-      <div class="section-header">
-        <div class="section-title">سيارات (Cars)</div>
-        <div class="section-hint" data-view="allcards">عرض الكل <i class="fas fa-chevron-left"></i></div>
-      </div>
-      <div class="bundles-row" id="carsContainer"></div>
 
       <div class="section-header">
         <div class="section-title">بطاقات الشراء</div>
         <div class="section-hint">تمرير <i class="fas fa-arrow-left"></i></div>
       </div>
+
       <div class="bundles-row" id="bundleContainer"></div>
 
       <div class="section-header">
@@ -1781,7 +1780,7 @@ input { font: inherit; color: inherit; }
     <!-- STORE -->
     <div class="view" id="view-store">
       <div class="page-title">متجر المقتنيات</div>
-      <div class="page-subtitle">تُباع المقتنيات بعد 7 أيام من الشراء — ربح مختلف لكل بطاقة</div>
+      <div class="page-subtitle">تُباع المقتنيات بعد 7 أيام من الشراء بربح 5%</div>
 
       <div class="store-stats">
         <div class="store-stat">
@@ -1904,6 +1903,46 @@ input { font: inherit; color: inherit; }
       <div id="dep-tab-sham" style="display:none"></div>
     </div>
 
+    <!-- EXCHANGE -->
+    <div class="view" id="view-exchange">
+      <div class="page-title">تبديل العملات</div>
+      <div class="page-subtitle">1000 عملة = 10 ماسات — الحد الأدنى 10,000 عملة</div>
+
+      <div class="amount-grid" id="exAmounts">
+        <div class="amount-chip" data-examt="10000">10K</div>
+        <div class="amount-chip" data-examt="50000">50K</div>
+        <div class="amount-chip" data-examt="100000">100K</div>
+        <div class="amount-chip" data-examt="250000">250K</div>
+        <div class="amount-chip" data-examt="500000">500K</div>
+        <div class="amount-chip" data-examt="1000000">1M</div>
+      </div>
+
+      <div class="pro-input-group">
+        <label>أو أدخل عدد العملات</label>
+        <input class="pro-input" id="exInput" type="number" min="10000" step="1000" placeholder="10000">
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-row">
+          <span>العملات المحوّلة</span>
+          <span class="calc-val" id="exChosen">0</span>
+        </div>
+        <div class="calc-row">
+          <span>الماسات المستقبلة</span>
+          <span class="calc-val" id="exReceive">0</span>
+        </div>
+        <div class="calc-row">
+          <span>رصيدك</span>
+          <span class="calc-val" id="exBal">0</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="exSubmit">
+        <i class="fas fa-right-left"></i>
+        <span>تبديل الآن</span>
+      </button>
+    </div>
+
     <!-- WITHDRAW -->
     <div class="view" id="view-withdraw">
       <div class="page-title">سحب الأموال</div>
@@ -1971,83 +2010,6 @@ input { font: inherit; color: inherit; }
       <div class="wd-history-list" id="wdHistory"></div>
     </div>
 
-    <!-- TASKS -->
-    <div class="view" id="view-tasks">
-      <div class="page-title">المهام</div>
-      <div class="page-subtitle">أكمل المهام واحصل على مكافآت وماسات وهدية خاصة</div>
-
-      <div class="ref-rewards-grid" style="margin-bottom:16px">
-        <div class="ref-reward-card">
-          <div class="ref-reward-icon you"><i class="fas fa-user-plus"></i></div>
-          <div class="ref-reward-value" id="taskRefCount">0</div>
-          <div class="ref-reward-label">دعوات مكتملة</div>
-        </div>
-        <div class="ref-reward-card">
-          <div class="ref-reward-icon friend"><i class="fas fa-gem"></i></div>
-          <div class="ref-reward-value" id="taskGemsEarned">0</div>
-          <div class="ref-reward-label">ماسات من المهام</div>
-        </div>
-      </div>
-
-      <div class="section-header"><div class="section-title">مهام الدعوة</div></div>
-      <div class="collectible-item" id="taskInvite3">
-        <div class="collectible-header">
-          <div class="action-card-icon gold" style="margin:0"><i class="fas fa-users"></i></div>
-          <div class="collectible-info">
-            <div class="collectible-title">ادعُ 3 أصدقاء</div>
-            <div class="collectible-date">مكافأة +15 ماسة</div>
-          </div>
-        </div>
-        <button class="collectible-btn sell" id="claimTask3" style="display:none"><i class="fas fa-gift"></i> استلام المكافأة</button>
-        <button class="collectible-btn locked" id="lockedTask3" disabled><i class="fas fa-lock"></i> غير مكتمل</button>
-      </div>
-      <div class="collectible-item" id="taskInvite5">
-        <div class="collectible-header">
-          <div class="action-card-icon gold" style="margin:0"><i class="fas fa-users"></i></div>
-          <div class="collectible-info">
-            <div class="collectible-title">ادعُ 5 أصدقاء</div>
-            <div class="collectible-date">مكافأة +30 ماسة</div>
-          </div>
-        </div>
-        <button class="collectible-btn sell" id="claimTask5" style="display:none"><i class="fas fa-gift"></i> استلام المكافأة</button>
-        <button class="collectible-btn locked" id="lockedTask5" disabled><i class="fas fa-lock"></i> غير مكتمل</button>
-      </div>
-      <div class="collectible-item" id="taskInvite10">
-        <div class="collectible-header">
-          <div class="action-card-icon gold" style="margin:0"><i class="fas fa-users"></i></div>
-          <div class="collectible-info">
-            <div class="collectible-title">ادعُ 10 أصدقاء</div>
-            <div class="collectible-date">مكافأة +60 ماسة</div>
-          </div>
-        </div>
-        <button class="collectible-btn sell" id="claimTask10" style="display:none"><i class="fas fa-gift"></i> استلام المكافأة</button>
-        <button class="collectible-btn locked" id="lockedTask10" disabled><i class="fas fa-lock"></i> غير مكتمل</button>
-      </div>
-
-      <div class="section-header" style="margin-top:20px"><div class="section-title">مهمة صعبة — هدية خاصة</div></div>
-      <div class="collectible-item free-item" id="taskHardGift">
-        <div class="collectible-header">
-          <div class="collectible-thumb">
-            <video src="gifts_by_StickerEmojiRobot-041.webm" autoplay loop muted playsinline id="taskGiftVideo"></video>
-          </div>
-          <div class="collectible-info">
-            <div class="collectible-title">هدية المهام الصعبة</div>
-            <div class="collectible-date">قيمة 100 نجمة — تحتاج 25 دعوة</div>
-          </div>
-          <div class="collectible-value">100 <img src="https://up6.cc/2026/10/17926810487851.png" alt=""></div>
-        </div>
-        <button class="collectible-btn sell" id="claimHardGift" style="display:none"><i class="fas fa-gift"></i> استلام الهدية</button>
-        <button class="collectible-btn locked" id="lockedHardGift" disabled><i class="fas fa-lock"></i> تحتاج 25 دعوة</button>
-      </div>
-    </div>
-
-    <!-- ALL CARDS -->
-    <div class="view" id="view-allcards">
-      <div class="page-title">جميع البطاقات</div>
-      <div class="page-subtitle">سيارات وهدايا — اختر البطاقة للشراء</div>
-      <div id="allCardsList"></div>
-    </div>
-
     <!-- PROFILE -->
     <div class="view" id="view-profile">
       <div class="profile-hero">
@@ -2092,11 +2054,11 @@ input { font: inherit; color: inherit; }
           </div>
           <i class="fas fa-chevron-left menu-arrow"></i>
         </div>
-        <div class="menu-item" data-view="tasks">
-          <div class="menu-icon blue"><i class="fas fa-tasks"></i></div>
+        <div class="menu-item" data-view="exchange">
+          <div class="menu-icon blue"><i class="fas fa-right-left"></i></div>
           <div class="menu-text">
-            <div class="menu-title">المهام</div>
-            <div class="menu-desc">مهام الدعوة والهدايا</div>
+            <div class="menu-title">تبديل العملات</div>
+            <div class="menu-desc">1000 عملة = 10 ماسات</div>
           </div>
           <i class="fas fa-chevron-left menu-arrow"></i>
         </div>
@@ -2333,19 +2295,10 @@ const CONFIG = {
     holdMs: 7 * 24 * 60 * 60 * 1000,
     profitRate: 0.05,
     bundles: [
-      { stars: 150, gems: 150, webm: 'gifts_by_StickerEmojiRobot-078.webm', free: true, profitRate: 0.05, section: 'gifts' },
-      { stars: 200, gems: 9000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm', profitRate: 0.06, section: 'gifts' },
-      { stars: 500, gems: 45000, webm: 'gifts_by_StickerEmojiRobot-069.webm', profitRate: 0.07, section: 'gifts' },
-      { stars: 700, gems: 63000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm', profitRate: 0.08, section: 'gifts' },
-      { stars: 100, gems: 100, webm: 'gifts_by_StickerEmojiRobot-041.webm', taskGift: true, profitRate: 0.10, section: 'gifts' }
-    ],
-    cars: [
-      { stars: 2900, gems: 290000, webm: 'Cars_by_StickerEmojiRobot-045.webm', profitRate: 0.12, section: 'cars' },
-      { stars: 2000, gems: 200000, webm: 'Cars_by_StickerEmojiRobot-036.webm', profitRate: 0.11, section: 'cars' },
-      { stars: 1500, gems: 150000, webm: 'Cars_by_StickerEmojiRobot-033.webm', profitRate: 0.10, section: 'cars' },
-      { stars: 1000, gems: 100000, webm: 'Cars_by_StickerEmojiRobot-040.webm', profitRate: 0.09, section: 'cars' },
-      { stars: 900, gems: 90000, webm: 'Cars_by_StickerEmojiRobot-042.webm', profitRate: 0.085, section: 'cars' },
-      { stars: 850, gems: 85000, webm: 'Cars_by_StickerEmojiRobot-043.webm', profitRate: 0.08, section: 'cars' }
+      { stars: 150, gems: 150, webm: 'gifts_by_StickerEmojiRobot-078.webm', free: true },
+      { stars: 200, gems: 9000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
+      { stars: 500, gems: 45000, webm: 'gifts_by_StickerEmojiRobot-069.webm' },
+      { stars: 700, gems: 63000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' }
     ]
   }
 };
@@ -2359,13 +2312,7 @@ const pad = n => String(n).padStart(2, '0');
 const usd = g => { const n = Math.floor(Number(g || 0)); return (Math.floor(n / 100) * 0.01).toFixed(2); };
 const usdBinanceFee = g => (parseFloat(usd(g)) * CONFIG.wd.binanceFee).toFixed(2);
 const usdBinanceNet = g => (parseFloat(usd(g)) * (1 - CONFIG.wd.binanceFee)).toFixed(2);
-const getAllBundles = () => [...CONFIG.collectibles.bundles, ...CONFIG.collectibles.cars];
-const getBundleByStars = stars => getAllBundles().find(b => b.stars === stars) || null;
-const getProfitRate = (c) => {
-  if (c && typeof c.profitRate === "number") return c.profitRate;
-  const b = getBundleByStars(c && (c.bundleStars || c.stars));
-  return (b && typeof b.profitRate === "number") ? b.profitRate : CONFIG.collectibles.profitRate;
-};
+const getBundleByStars = stars => CONFIG.collectibles.bundles.find(b => b.stars === stars) || null;
 
 // ===================== TELEGRAM =====================
 const TG = {
@@ -2433,7 +2380,6 @@ const newUser = () => ({
   referralCode: TG.id, referredBy: null,
   referralCount: 0, referralEarnings: 0, referralUsed: false,
   collectibles: [], freeClaimed: false,
-  taskClaims: {}, taskGems: 0,
   createdAt: Date.now(), updatedAt: Date.now()
 });
 
@@ -2476,8 +2422,6 @@ function go(viewName) {
   if (viewName === 'withdraw') loadWdHistory();
   if (viewName === 'deposit') { setDepTab('stars'); updateStarsUI(); }
   if (viewName === 'store') renderCollectibles();
-  if (viewName === 'tasks') updateTasksUI();
-  if (viewName === 'allcards') renderAllCards();
   if (viewName !== 'deposit' && cryptoPollTimer) stopPaymentPolling();
 }
 
@@ -2494,6 +2438,7 @@ function renderAll() {
   if (u.photoUrl) {
     $('topProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
     $('navProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
+    $('greetAvatar').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer">';
   }
 
   $('greetName').textContent = (u.name || 'لاعب').split(' ')[0];
@@ -2517,6 +2462,8 @@ function renderAll() {
   $('wdGems').textContent = fmt(u.gems);
   $('wdUsd').textContent = '$' + usd(u.gems);
 
+  $('exBal').textContent = fmt(u.coins);
+
   $('refLink').textContent = 'https://t.me/' + CONFIG.bot.username + '/' + CONFIG.bot.appName + '?startapp=ref_' + (u.referralCode || TG.id);
   $('refCount').textContent = u.referralCount || 0;
   $('refEarn').textContent = fmt(u.referralEarnings || 0);
@@ -2524,14 +2471,13 @@ function renderAll() {
   $('refPending').textContent = fmt((u.referralCount || 0) * 50);
   $('enterCard').style.display = u.referralUsed ? 'none' : 'block';
 
+  updateEx();
   updateWd();
   updatePendingBanner();
   updateStoreBadge();
-  updateTasksUI();
 
   if ($('view-home').classList.contains('active')) renderHomeCollectiblesPreview();
   if ($('view-store').classList.contains('active')) renderCollectibles();
-  if ($('view-tasks') && $('view-tasks').classList.contains('active')) updateTasksUI();
 }
 
 function updateStoreBadge() {
@@ -2559,7 +2505,7 @@ function renderHomeCollectiblesPreview() {
     const bundleInfo = getBundleByStars(c.bundleStars);
     const elapsed = Date.now() - c.purchasedAt;
     const canSell = elapsed >= CONFIG.collectibles.holdMs;
-    const sellValue = Math.floor(c.gemsValue * (1 + getProfitRate(c)));
+    const sellValue = Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate));
     const webm = c.webm || bundleInfo?.webm || '';
     return `<div class="menu-item" data-view="store">
       <div class="collectible-thumb" style="width:44px;height:44px;border-radius:11px">
@@ -2588,14 +2534,14 @@ function renderCollectibles() {
   const sold = items.filter(c => c.sold);
 
   const readyItems = active.filter(c => (Date.now() - c.purchasedAt) >= CONFIG.collectibles.holdMs);
-  const totalValue = active.reduce((s, c) => s + Math.floor(c.gemsValue * (1 + getProfitRate(c))), 0);
+  const totalValue = active.reduce((s, c) => s + Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate)), 0);
 
   $('storeActiveCount').textContent = active.length;
   $('storeTotalValue').textContent = fmt(totalValue);
 
   const rb = $('readyBannerContainer');
   if (readyItems.length > 0) {
-    const totalReadyValue = readyItems.reduce((s, c) => s + Math.floor(c.gemsValue * (1 + getProfitRate(c))), 0);
+    const totalReadyValue = readyItems.reduce((s, c) => s + Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate)), 0);
     rb.innerHTML = `<div class="ready-banner">
       <div class="ready-banner-icon"><i class="fas fa-hand-holding-dollar"></i></div>
       <div class="ready-banner-text">
@@ -2635,19 +2581,13 @@ function renderCollectibles() {
   el.querySelectorAll('[data-sell]').forEach(b => {
     b.onclick = () => sellCollectible(b.dataset.sell);
   });
-  el.querySelectorAll('video[data-shortplay]').forEach(v => {
-    v.loop = false;
-    const playOnce = () => { v.currentTime = 0; v.play().catch(()=>{}); setTimeout(() => { try { v.pause(); } catch(e){} }, 800); };
-    if (v.readyState >= 2) playOnce();
-    else v.addEventListener('loadeddata', playOnce, { once: true });
-  });
 }
 
 function renderCollectibleItem(c) {
   const elapsed = Date.now() - c.purchasedAt;
   const remain = Math.max(0, CONFIG.collectibles.holdMs - elapsed);
   const canSell = remain <= 0;
-  const sellValue = Math.floor(c.gemsValue * (1 + getProfitRate(c)));
+  const sellValue = Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate));
   const profit = sellValue - c.gemsValue;
   const bundleInfo = getBundleByStars(c.bundleStars);
   const progressPct = Math.min(100, (elapsed / CONFIG.collectibles.holdMs) * 100);
@@ -2669,7 +2609,7 @@ function renderCollectibleItem(c) {
   return `<div class="collectible-item ${canSell ? 'ready' : ''} ${c.isFree ? 'free-item' : ''}">
     <div class="collectible-header">
       <div class="collectible-thumb">
-        <video src="${webm}" muted playsinline data-shortplay="1"></video>
+        <video src="${webm}" autoplay loop muted playsinline></video>
       </div>
       <div class="collectible-info">
         <div class="collectible-title">
@@ -2703,7 +2643,7 @@ function renderCollectibleItem(c) {
 }
 
 function renderSoldItem(c) {
-  const sellValue = c.sellValue || Math.floor(c.gemsValue * (1 + getProfitRate(c)));
+  const sellValue = c.sellValue || Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate));
   const dateStr = new Date(c.soldAt || Date.now()).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' });
   return `<div class="sold-collectible">
     <div class="sold-collectible-icon"><i class="fas fa-check"></i></div>
@@ -2725,7 +2665,7 @@ async function sellCollectible(id) {
 
   S.busy = true;
   try {
-    const sellValue = Math.floor(item.gemsValue * (1 + getProfitRate(item)));
+    const sellValue = Math.floor(item.gemsValue * (1 + CONFIG.collectibles.profitRate));
     item.sold = true;
     item.soldAt = Date.now();
     item.sellValue = sellValue;
@@ -2744,204 +2684,60 @@ async function sellCollectible(id) {
 // ===================== BUNDLES =====================
 let currentSelectedBundle = null;
 
-function createBundleCard(b, shortPlay) {
-  const isClaimed = b.free && S.user.freeClaimed;
-  const isTaskGift = b.taskGift;
-  const card = document.createElement('div');
-  card.className = 'bundle-card' + (b.free ? ' free' : '') + (isClaimed ? ' claimed' : '');
-  if (!isClaimed && !isTaskGift) card.onclick = () => openBundleModal(b);
-
-  if (b.free && !isClaimed) {
-    const badge = document.createElement('div');
-    badge.className = 'free-badge';
-    badge.innerHTML = '<i class="fas fa-gift"></i> مجاناً';
-    card.appendChild(badge);
-  }
-  if (isClaimed) {
-    const badge = document.createElement('div');
-    badge.className = 'free-badge';
-    badge.style.background = 'var(--bg-soft)';
-    badge.style.color = 'var(--text-secondary)';
-    badge.innerHTML = '<i class="fas fa-check"></i> مستلمة';
-    card.appendChild(badge);
-  }
-  if (isTaskGift) {
-    const badge = document.createElement('div');
-    badge.className = 'free-badge';
-    badge.innerHTML = '<i class="fas fa-tasks"></i> مهام';
-    card.appendChild(badge);
-  }
-
-  const videoWrap = document.createElement('div');
-  videoWrap.className = 'bundle-video';
-  const video = document.createElement('video');
-  video.src = b.webm;
-  video.muted = true; video.playsInline = true;
-  if (shortPlay) {
-    video.loop = false;
-    video.onloadeddata = () => { video.currentTime = 0; video.play().catch(()=>{}); setTimeout(() => { try { video.pause(); } catch(e){} }, 800); };
-  } else {
-    video.autoplay = true; video.loop = true;
-    video.style.opacity = '0';
-    video.style.transition = 'opacity .3s';
-    video.oncanplaythrough = () => { video.style.opacity = '1'; video.play().catch(() => {}); };
-  }
-  video.onerror = () => { videoWrap.innerHTML = '<i class="fas fa-gift" style="font-size:32px;color:var(--gold)"></i>'; };
-  videoWrap.appendChild(video);
-
-  const priceTag = document.createElement('div');
-  priceTag.className = 'bundle-price' + (b.free ? ' gift' : '');
-  if (b.free) {
-    priceTag.innerHTML = '<i class="fas fa-gift"></i> <span>مجاناً</span>';
-  } else if (isTaskGift) {
-    priceTag.innerHTML = '<i class="fas fa-tasks"></i> <span>مهام</span>';
-  } else {
-    priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${b.stars}</span>`;
-  }
-
-  const label = document.createElement('div');
-  label.className = 'bundle-label';
-  const pr = getProfitRate(b);
-  label.innerHTML = `<img src="https://up6.cc/2026/10/179267515752371.jpg" alt=""> ${fmt(b.gems)} · ربح ${(pr*100).toFixed(0)}%`;
-
-  card.appendChild(videoWrap);
-  card.appendChild(priceTag);
-  card.appendChild(label);
-  return card;
-}
-
 function initStarBundles() {
   const container = $('bundleContainer');
   if (!container) return;
   container.innerHTML = '';
-  CONFIG.collectibles.bundles.filter(b => !b.taskGift).forEach(b => {
-    container.appendChild(createBundleCard(b, false));
-  });
-  initCarsBundles();
-}
 
-function initCarsBundles() {
-  const container = $('carsContainer');
-  if (!container) return;
-  container.innerHTML = '';
-  (CONFIG.collectibles.cars || []).forEach(b => {
-    container.appendChild(createBundleCard(b, false));
-  });
-}
+  CONFIG.collectibles.bundles.forEach(b => {
+    const isClaimed = b.free && S.user.freeClaimed;
+    const card = document.createElement('div');
+    card.className = 'bundle-card' + (b.free ? ' free' : '') + (isClaimed ? ' claimed' : '');
+    if (!isClaimed) card.onclick = () => openBundleModal(b);
 
-function renderAllCards() {
-  const el = $('allCardsList');
-  if (!el) return;
-  el.innerHTML = '';
-  const sections = [
-    { title: 'سيارات (Cars)', items: CONFIG.collectibles.cars || [] },
-    { title: 'الهدايا', items: CONFIG.collectibles.bundles.filter(b => !b.taskGift) }
-  ];
-  sections.forEach(sec => {
-    const h = document.createElement('div');
-    h.className = 'section-header';
-    h.innerHTML = '<div class="section-title">' + sec.title + '</div>';
-    el.appendChild(h);
-    const row = document.createElement('div');
-    row.className = 'bundles-row';
-    row.style.marginBottom = '16px';
-    sec.items.forEach(b => row.appendChild(createBundleCard(b, true)));
-    el.appendChild(row);
-  });
-}
-
-function updateTasksUI() {
-  if (!S.user) return;
-  const refs = S.user.referralCount || 0;
-  const claimed = S.user.taskClaims || {};
-  if ($('taskRefCount')) $('taskRefCount').textContent = refs;
-  if ($('taskGemsEarned')) $('taskGemsEarned').textContent = fmt(S.user.taskGems || 0);
-
-  const setTask = (n, reward) => {
-    const claimBtn = $('claimTask' + n);
-    const lockBtn = $('lockedTask' + n);
-    if (!claimBtn || !lockBtn) return;
-    if (claimed['invite' + n]) {
-      claimBtn.style.display = 'none';
-      lockBtn.style.display = 'flex';
-      lockBtn.innerHTML = '<i class="fas fa-check"></i> تم الاستلام';
-    } else if (refs >= n) {
-      claimBtn.style.display = 'flex';
-      lockBtn.style.display = 'none';
-      claimBtn.onclick = () => claimTaskReward('invite' + n, reward);
-    } else {
-      claimBtn.style.display = 'none';
-      lockBtn.style.display = 'flex';
+    if (b.free && !isClaimed) {
+      const badge = document.createElement('div');
+      badge.className = 'free-badge';
+      badge.innerHTML = '<i class="fas fa-gift"></i> مجاناً';
+      card.appendChild(badge);
     }
-  };
-  setTask(3, 15); setTask(5, 30); setTask(10, 60);
-
-  const hardClaim = $('claimHardGift');
-  const hardLock = $('lockedHardGift');
-  if (hardClaim && hardLock) {
-    if (claimed.hardGift) {
-      hardClaim.style.display = 'none';
-      hardLock.style.display = 'flex';
-      hardLock.innerHTML = '<i class="fas fa-check"></i> تم الاستلام';
-    } else if (refs >= 25) {
-      hardClaim.style.display = 'flex';
-      hardLock.style.display = 'none';
-      hardClaim.onclick = claimHardGift;
-    } else {
-      hardClaim.style.display = 'none';
-      hardLock.style.display = 'flex';
-      hardLock.innerHTML = '<i class="fas fa-lock"></i> تحتاج 25 دعوة (' + refs + '/25)';
+    if (isClaimed) {
+      const badge = document.createElement('div');
+      badge.className = 'free-badge';
+      badge.style.background = 'var(--bg-soft)';
+      badge.style.color = 'var(--text-secondary)';
+      badge.innerHTML = '<i class="fas fa-check"></i> مستلمة';
+      card.appendChild(badge);
     }
-  }
-}
 
-async function claimTaskReward(key, gems) {
-  if (S.busy || !S.user) return;
-  if ((S.user.taskClaims || {})[key]) return;
-  S.busy = true;
-  try {
-    S.user.taskClaims = S.user.taskClaims || {};
-    S.user.taskClaims[key] = true;
-    S.user.gems = (S.user.gems || 0) + gems;
-    S.user.taskGems = (S.user.taskGems || 0) + gems;
-    await FB.set({ gems: S.user.gems, taskClaims: S.user.taskClaims, taskGems: S.user.taskGems });
-    renderAll();
-    updateTasksUI();
-    showModal({ icon: 'fa-gem', title: 'تم استلام المكافأة', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
-  } catch (e) { toast('حدثت مشكلة', 'err'); }
-  finally { S.busy = false; }
-}
+    const videoWrap = document.createElement('div');
+    videoWrap.className = 'bundle-video';
+    const video = document.createElement('video');
+    video.src = b.webm;
+    video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
+    video.style.opacity = '0';
+    video.style.transition = 'opacity .3s';
+    video.oncanplaythrough = () => { video.style.opacity = '1'; video.play().catch(() => {}); };
+    video.onerror = () => { videoWrap.innerHTML = '<i class="fas fa-gift" style="font-size:32px;color:var(--gold)"></i>'; };
+    videoWrap.appendChild(video);
 
-async function claimHardGift() {
-  if (S.busy || !S.user) return;
-  if ((S.user.taskClaims || {}).hardGift) return;
-  if ((S.user.referralCount || 0) < 25) return toast('تحتاج 25 دعوة', 'err');
-  S.busy = true;
-  try {
-    const bundle = CONFIG.collectibles.bundles.find(b => b.taskGift);
-    if (!bundle) return;
-    S.user.taskClaims = S.user.taskClaims || {};
-    S.user.taskClaims.hardGift = true;
-    const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
-    items.push({
-      id: 'task_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      bundleStars: bundle.stars,
-      gemsValue: bundle.gems,
-      purchasedAt: Date.now(),
-      sold: false,
-      isFree: true,
-      isTaskGift: true,
-      profitRate: bundle.profitRate,
-      webm: bundle.webm,
-      profitRate: getProfitRate(bundle)
-    });
-    S.user.collectibles = items;
-    await FB.set({ taskClaims: S.user.taskClaims, collectibles: items });
-    renderAll();
-    updateTasksUI();
-    showModal({ icon: 'fa-gift', title: 'تم استلام الهدية', sub: 'الهدية في متجرك — يمكن بيعها بعد 7 أيام', amount: fmt(bundle.gems) + ' ماسة', btn: 'عرض المتجر', onClose: () => go('store') });
-  } catch (e) { toast('حدثت مشكلة', 'err'); }
-  finally { S.busy = false; }
+    const priceTag = document.createElement('div');
+    priceTag.className = 'bundle-price' + (b.free ? ' gift' : '');
+    if (b.free) {
+      priceTag.innerHTML = '<i class="fas fa-gift"></i> <span>مجاناً</span>';
+    } else {
+      priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${b.stars}</span>`;
+    }
+
+    const label = document.createElement('div');
+    label.className = 'bundle-label';
+    label.innerHTML = `<img src="https://up6.cc/2026/10/179267515752371.jpg" alt=""> ${fmt(b.gems)}`;
+
+    card.appendChild(videoWrap);
+    card.appendChild(priceTag);
+    card.appendChild(label);
+    container.appendChild(card);
+  });
 }
 
 function openBundleModal(bundle) {
@@ -2955,14 +2751,13 @@ function openBundleModal(bundle) {
   video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
   webmBox.appendChild(video);
 
-  const sellValue = Math.floor(bundle.gems * (1 + getProfitRate(bundle)));
+  const sellValue = Math.floor(bundle.gems * (1 + CONFIG.collectibles.profitRate));
   const currentStars = S.user.stars || 0;
 
-  const prPct = (getProfitRate(bundle) * 100).toFixed(0);
   $('bcTitle').textContent = bundle.free ? 'بطاقة مجانية' : 'تأكيد الشراء';
   $('bcDesc').textContent = bundle.free
-    ? 'احصل عليها مجاناً مرة واحدة فقط — يمكن بيعها بعد 7 أيام بربح ' + prPct + '%'
-    : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح ' + prPct + '%';
+    ? 'احصل عليها مجاناً مرة واحدة فقط — يمكن بيعها بعد 7 أيام بربح 5%'
+    : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح 5%';
 
   if (bundle.free) {
     $('bcPrice').innerHTML = '<span style="color:var(--success);font-weight:800">مجاناً</span>';
@@ -3017,8 +2812,7 @@ async function claimFreeBundle(bundle) {
       gemsValue: bundle.gems,
       purchasedAt: Date.now(),
       sold: false, isFree: true,
-      webm: bundle.webm,
-      profitRate: getProfitRate(bundle)
+      webm: bundle.webm
     });
     S.user.collectibles = items;
     S.user.freeClaimed = true;
@@ -3052,8 +2846,7 @@ async function buyFromStarsBalance(bundle) {
       gemsValue: bundle.gems,
       purchasedAt: Date.now(),
       sold: false,
-      webm: bundle.webm,
-      profitRate: getProfitRate(bundle)
+      webm: bundle.webm
     });
     S.user.collectibles = items;
     await FB.set({ stars: S.user.stars, collectibles: items });
@@ -3109,8 +2902,7 @@ async function buyDirectly(bundle) {
             gemsValue: bundle.gems,
             purchasedAt: Date.now(),
             sold: false,
-            webm: bundle.webm,
-            profitRate: getProfitRate(bundle)
+            webm: bundle.webm
           });
 
           await FB.set({ gems: newGems, collectibles: items });
@@ -3216,6 +3008,44 @@ async function startStarsTopup() {
     });
   } catch (e) {
     toast(e.message || 'تعذر بدء الدفع', 'err');
+    S.busy = false;
+    btn.disabled = false;
+    btn.innerHTML = old;
+  }
+}
+
+// ===================== EXCHANGE =====================
+function updateEx() {
+  const a = S.ex || 0;
+  $('exChosen').textContent = fmt(a);
+  $('exReceive').textContent = fmt(Math.floor(a * CONFIG.ex.rate));
+}
+
+async function doExchange() {
+  if (S.busy) return;
+  const a = S.ex, u = S.user;
+  if (!a || a < CONFIG.ex.min) return toast('الحد الأدنى ' + fmt(CONFIG.ex.min) + ' عملة', 'err');
+  if (a > u.coins) return toast('رصيد غير كافٍ', 'err');
+
+  const g = Math.floor(a * CONFIG.ex.rate);
+  S.busy = true;
+  const btn = $('exSubmit');
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحويل...';
+
+  try {
+    u.coins -= a; u.gems += g;
+    await save();
+    await db.collection(CONFIG.txCol).add({ userId: TG.id, type: 'exchange', amount: -a, currency: 'coins', meta: { toGems: g }, createdAt: Date.now() });
+    S.ex = 0;
+    $('exInput').value = '';
+    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
+    renderAll();
+    showModal({ icon: 'fa-right-left', title: 'تم التبديل', sub: 'حوّلت ' + fmt(a) + ' عملة', amount: '+' + fmt(g) + ' ماسة', btn: 'رائع' });
+  } catch (e) {
+    toast('حدثت مشكلة', 'err');
+  } finally {
     S.busy = false;
     btn.disabled = false;
     btn.innerHTML = old;
@@ -3658,6 +3488,24 @@ function bind() {
 
   bindWdAmounts();
 
+  document.querySelectorAll('#exAmounts .amount-chip').forEach(c => {
+    c.onclick = () => {
+      document.querySelectorAll('#exAmounts .amount-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      S.ex = +c.dataset.examt;
+      $('exInput').value = c.dataset.examt;
+      updateEx();
+    };
+  });
+
+  $('exInput').oninput = e => {
+    const v = parseInt(e.target.value, 10) || 0;
+    S.ex = v;
+    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
+    updateEx();
+  };
+
+  $('exSubmit').onclick = doExchange;
   $('wdSubmit').onclick = doWithdraw;
 
   // Stars input
@@ -3747,8 +3595,6 @@ async function boot() {
       if (!Array.isArray(S.user.collectibles)) S.user.collectibles = [];
       if (typeof S.user.freeClaimed !== 'boolean') S.user.freeClaimed = false;
       if (typeof S.user.stars !== 'number') S.user.stars = 0;
-      if (!S.user.taskClaims || typeof S.user.taskClaims !== 'object') S.user.taskClaims = {};
-      if (typeof S.user.taskGems !== 'number') S.user.taskGems = 0;
     } else {
       S.user = newUser();
       try { await FB.set(S.user, false); } catch (e) {}
@@ -3765,8 +3611,6 @@ async function boot() {
   try { bind(); } catch (e) { console.warn('Bind:', e); }
   try { renderAll(); } catch (e) { console.warn('Render:', e); }
   try { initStarBundles(); } catch (e) { console.warn('Bundles:', e); }
-  // Preload other pages (priority remains home which is already active)
-  try { setTimeout(() => { renderAllCards(); updateTasksUI(); }, 300); } catch (e) {}
 
   setInterval(() => {
     if ($('view-store').classList.contains('active')) renderCollectibles();
