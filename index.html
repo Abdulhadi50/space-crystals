@@ -303,64 +303,21 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 .fly-board-empty{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
 .fly-board-note{text-align:center;font-size:11px;color:var(--ink2);padding:16px 10px 6px;line-height:1.8;font-weight:700;opacity:.7}
 
-/* --- Styles for the new Star Bundles --- */
-.bundle-cards-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 12px;
-}
-.bundle-card {
-    background: linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF);
-    border: 2px solid var(--edge);
-    border-radius: 16px;
-    padding: 8px 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 0 var(--edge-d);
-    transition: transform 0.1s;
-    cursor: pointer;
-    position: relative;
-}
-.bundle-card:active {
-    transform: translateY(3px);
-    box-shadow: 0 0 0 var(--edge-d);
-}
-.bundle-card .webm-box {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 4px;
-    position: relative;
-    background: transparent;
-}
-.bundle-card .webm-box video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    position: absolute;
-}
-.bundle-card .price-tag {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    background: #FFF9E8;
-    padding: 2px 8px;
-    border-radius: 10px;
-    border: 1px solid var(--edge);
-    font-weight: 800;
-    font-size: 12px;
-    color: var(--ink);
-}
-.bundle-card .price-tag img {
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
-}
+/* --- Styles for Star Bundles & Modals --- */
+.bundle-cards-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.bundle-card { background: linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF); border: 2px solid var(--edge); border-radius: 16px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 3px 0 var(--edge-d); transition: transform 0.1s; cursor: pointer; position: relative; }
+.bundle-card:active { transform: translateY(3px); box-shadow: 0 0 0 var(--edge-d); }
+.bundle-card .webm-box { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative; background: transparent; }
+.bundle-card .webm-box video { width: 100%; height: 100%; object-fit: contain; position: absolute; }
+.bundle-card .price-tag { display: flex; align-items: center; gap: 3px; background: #FFF9E8; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--edge); font-weight: 800; font-size: 12px; color: var(--ink); }
+.bundle-card .price-tag img { width: 14px; height: 14px; object-fit: contain; }
+
+#bundleConfirmModal .webm-box { width: 100px; height: 100px; margin: 0 auto 15px; position: relative; display: flex; align-items: center; justify-content: center; }
+#bundleConfirmModal .webm-box video { width: 100%; height: 100%; object-fit: contain; position: absolute; }
+#bundleConfirmModal .detail-row { display: flex; justify-content: space-between; align-items: center; background: #FFF9E8; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #CFF4FC; font-weight: 800; font-size: 15px; }
+#bundleConfirmModal .detail-row span:first-child { color: var(--ink2); }
+#bundleConfirmModal .detail-row span:last-child { color: var(--gold-d); font-size: 18px; display: flex; align-items: center; gap: 4px; }
+#bundleConfirmModal .detail-row img { width: 18px; height: 18px; object-fit: contain; }
 </style>
 </head>
 <body>
@@ -805,6 +762,31 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
     </div>
     <div class="fly-board-scroll" id="flyBoardScroll"></div>
   </section>
+</div>
+
+<!-- نافذة التأكيد للبطاقات -->
+<div class="modal" id="bundleConfirmModal">
+  <div class="card" style="max-width:320px">
+    <div class="ttl" style="font-size:20px;margin-bottom:12px" id="bcTitle">تأكيد الشراء</div>
+    
+    <div class="webm-box" id="bcWebmBox">
+        <!-- سيتم إدراج الفيديو هنا -->
+    </div>
+
+    <div class="detail-row">
+        <span>النجوم المطلوبة</span>
+        <span id="bcStars" style="color:var(--red)">0 <img src="https://up6.cc/2026/10/17926810487851.png"></span>
+    </div>
+    <div class="detail-row">
+        <span>الجواهر المستقبلة</span>
+        <span id="bcGems">0 <i class="fas fa-gem" style="color:var(--sky-d)"></i></span>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn b-off" id="bcCancelBtn" style="height:46px;font-size:14px">إلغاء</button>
+        <button class="btn b-g" id="bcConfirmBtn" style="height:46px;font-size:14px">تأكيد الشراء</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal" id="modal"><div class="card">
@@ -2977,7 +2959,9 @@ function drawAvatarHelper(g,cx,cy,r,variant){
   g.beginPath();g.arc(cx,cy,r-g.lineWidth/2,0,Math.PI*2);g.stroke();
 }
 
-// --- دالة إنشاء بطاقات النجوم ---
+// --- Star Bundles Logic ---
+let currentSelectedBundle = null;
+
 function initStarBundles() {
     const container = $('bundleContainer');
     if (!container) return;
@@ -2993,7 +2977,8 @@ function initStarBundles() {
     bundles.forEach(b => {
         const card = document.createElement('div');
         card.className = 'bundle-card';
-        card.onclick = () => buyStarsBundle(b.stars);
+        // التغيير هنا: فتح النافذة المنبثقة بدلاً من الشراء المباشر
+        card.onclick = () => openBundleModal(b);
 
         const webmBox = document.createElement('div');
         webmBox.className = 'webm-box';
@@ -3005,21 +2990,20 @@ function initStarBundles() {
         video.muted = true;
         video.playsInline = true;
         
-        // إخفاء الفيديو حتى يصبح جاهزاً
         video.style.visibility = 'hidden';
         video.style.opacity = '0';
         video.style.transition = 'opacity 0.3s';
         
-        // عند اكتمال التحميل وجاهزية التشغيل
         video.oncanplaythrough = () => {
             video.style.visibility = 'visible';
             video.style.opacity = '1';
             video.play().catch(() => {});
         };
 
-        // في حال فشل التحميل، نخفي الحاوية بالكامل
         video.onerror = () => {
+            // إخفاء إذا فشل التحميل لتجنب كسر التصميم
             webmBox.style.display = 'none';
+            console.warn('Failed to load:', b.webm);
         };
         
         webmBox.appendChild(video);
@@ -3034,7 +3018,48 @@ function initStarBundles() {
     });
 }
 
-// --- دالة شراء بطاقات النجوم ---
+function openBundleModal(bundle) {
+    currentSelectedBundle = bundle;
+    const modal = $('bundleConfirmModal');
+    const webmBox = $('bcWebmBox');
+    
+    // مسح المحتوى القديم
+    webmBox.innerHTML = '';
+    
+    // إنشاء فيديو جديد للنافذة المنبثقة
+    const video = document.createElement('video');
+    video.src = bundle.webm;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    
+    video.style.visibility = 'hidden';
+    video.style.opacity = '0';
+    video.style.transition = 'opacity 0.3s';
+    
+    video.oncanplaythrough = () => {
+        video.style.visibility = 'visible';
+        video.style.opacity = '1';
+        video.play().catch(() => {});
+    };
+    
+    webmBox.appendChild(video);
+
+    // تحديث النصوص
+    $('bcStars').innerHTML = `${bundle.stars} <img src="https://up6.cc/2026/10/17926810487851.png">`;
+    $('bcGems').innerHTML = `${fmt(bundle.gems)} <i class="fas fa-gem" style="color:var(--sky-d)"></i>`;
+
+    modal.classList.add('show');
+}
+
+function closeBundleModal() {
+    $('bundleConfirmModal').classList.remove('show');
+    // مسح الفيديو لإيقاف التشغيل وتخفيف الذاكرة
+    $('bcWebmBox').innerHTML = '';
+    currentSelectedBundle = null;
+}
+
 async function buyStarsBundle(stars) {
     if(S.busy) return;
     if(!TG.app || !TG.app.openInvoice){
@@ -3056,6 +3081,7 @@ async function buyStarsBundle(stars) {
         TG.app.openInvoice(data.invoiceLink, (status) => {
             S.busy = false;
             if(status === 'paid'){
+                closeBundleModal(); // إغلاق النافذة عند النجاح
                 SFX.play('reward');
                 showModal({
                     icon:'fa-star',
@@ -3120,6 +3146,15 @@ function bind(){
   $('codeSubmit').onclick=()=>withBtn($('codeSubmit'),'جاري التحقق...',()=>applyCode($('codeInput').value.trim().replace(/^ref_/,'')));
   document.addEventListener('click',e=>{if(e.target.closest('.btn,.amt,.g-btn,.dock button,.quick .card,.dep-tab,.game-card,.bundle-card'))SFX.play('tap')});
   $('refCopy').onclick=()=>navigator.clipboard?navigator.clipboard.writeText(link()).then(()=>toast('تم نسخ الرابط')):toast('تعذر النسخ','err');
+
+  // مستمعو أحداث نافذة تأكيد البطاقات
+  $('bcCancelBtn').onclick = closeBundleModal;
+  $('bcConfirmBtn').onclick = () => {
+      if(currentSelectedBundle) {
+          buyStarsBundle(currentSelectedBundle.stars);
+      }
+  };
+  $('bundleConfirmModal').onclick = (e) => { if(e.target.id === 'bundleConfirmModal') closeBundleModal(); };
 
   buildMd();
   document.querySelectorAll('.dep-tab').forEach(b=>b.onclick=()=>setDepTab(b.dataset.tab));
