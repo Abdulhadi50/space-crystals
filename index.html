@@ -303,19 +303,63 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 .fly-board-empty{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
 .fly-board-note{text-align:center;font-size:11px;color:var(--ink2);padding:16px 10px 6px;line-height:1.8;font-weight:700;opacity:.7}
 
-/* --- Freebie Screen (Matched to existing design) --- */
-#screen-freebie .fb-strip-container { position: relative; overflow: hidden; display: flex; align-items: center; height: 110px; background: #FFF9E8; border: 2px solid var(--edge); border-radius: 16px; margin-bottom: 14px; }
-#screen-freebie .fb-pointer { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: var(--red); transform: translateX(-50%); z-index: 10; box-shadow: 0 0 10px var(--red); }
-#screen-freebie .fb-track { display: flex; align-items: center; gap: 8px; padding: 0 10px; will-change: transform; }
-#screen-freebie .fb-item { flex: 0 0 80px; height: 90px; background: #fff; border: 2px solid var(--edge); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 -3px 0 rgba(0,0,0,.05); }
-#screen-freebie .fb-item .fb-icon-wrap { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 34px; }
-#screen-freebie .fb-item .fb-val { position: absolute; bottom: 4px; font-size: 11px; font-weight: 800; color: var(--gold-d); display: flex; align-items: center; gap: 2px; background: #FFF9E8; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--edge); }
-#screen-freebie .fb-live-item { flex: 0 0 70px; height: 70px; background: #fff; border: 2px solid var(--edge); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-#screen-freebie .fb-live-item .fb-icon-wrap { font-size: 26px; }
-#screen-freebie .fb-live-item .fb-val { position: absolute; bottom: 4px; font-size: 10px; font-weight: 800; color: var(--gold-d); }
-#screen-freebie .fb-prize-card { background: #fff; border: 2px solid var(--edge); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 100px; }
-#screen-freebie .fb-prize-card .fb-icon-wrap { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
-#screen-freebie .fb-prize-card .fb-val { font-size: 14px; font-weight: 800; color: var(--gold-d); display: flex; align-items: center; gap: 4px; }
+/* --- Styles for the new Star Bundles --- */
+.bundle-cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.bundle-card {
+    background: linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF);
+    border: 2px solid var(--edge);
+    border-radius: 16px;
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 var(--edge-d);
+    transition: transform 0.1s;
+    cursor: pointer;
+    position: relative;
+}
+.bundle-card:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--edge-d);
+}
+.bundle-card .webm-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    position: relative;
+}
+.bundle-card .webm-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+}
+.bundle-card .price-tag {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: #FFF9E8;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--edge);
+    font-weight: 800;
+    font-size: 12px;
+    color: var(--ink);
+}
+.bundle-card .price-tag img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
 </style>
 </head>
 <body>
@@ -337,19 +381,6 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 
     <section class="screen active" id="screen-home">
       
-      <!-- بطاقة Freebie -->
-      <button class="card" data-go="freebie" style="width:100%;text-align:start;margin-bottom:12px;border-color:var(--gold-d);background:linear-gradient(160deg,#FFF9D6,#FFE95C 55%,#FFD52E)">
-        <div class="row">
-          <span class="ico" style="width:50px;height:50px;font-size:24px;background:radial-gradient(circle at 30% 25%,#FFF3A8,#FFD52E 45%,#B97A00);color:#fff"><i class="fas fa-gift"></i></span>
-          <div class="grow">
-            <div class="ttl" style="color:#5A3A00">Freebie</div>
-            <div class="sub" style="color:#6B4200">جوائز مجانية! ادفع 20 نجمة للدوران</div>
-          </div>
-          <span style="background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px">جديد</span>
-          <i class="fas fa-chevron-left" style="color:#5A3A00"></i>
-        </div>
-      </button>
-
       <div class="games-row">
         <div class="game-card game-merge">
           <div class="game-level-badge"><i class="fas fa-trophy"></i> مستوى <span id="homeLevel">1</span></div>
@@ -392,6 +423,9 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
         </div>
       </button>
 
+      <!-- البطاقات الثلاث الجديدة -->
+      <div class="bundle-cards-container" id="bundleContainer"></div>
+
       <button class="card" data-go="deposit" style="width:100%;text-align:start;margin-top:10px">
         <div class="row">
           <span class="ico i-gold" style="width:50px;height:50px;font-size:22px"><i class="fas fa-gem"></i></span>
@@ -399,35 +433,6 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
           <i class="fas fa-chevron-left" style="color:var(--ink2)"></i>
         </div>
       </button>
-    </section>
-
-    <!-- شاشة Freebie -->
-    <section class="screen" id="screen-freebie">
-      <div class="hero2">
-        <div class="ico i-gold"><i class="fas fa-gift"></i></div>
-        <div class="ttl" style="font-size:19px">Freebie</div>
-        <div class="sub">جوائز مجانية! ادفع 20 نجمة للدوران</div>
-      </div>
-
-      <!-- شريط التدوير -->
-      <div class="fb-strip-container" id="fbStripContainer">
-        <div class="fb-track" id="fbStripTrack"></div>
-        <div class="fb-pointer"></div>
-      </div>
-
-      <!-- زر الدفع -->
-      <button class="btn b-g" id="freebieSpinBtn" style="height:60px;font-size:18px;margin-bottom:8px">
-        <span>↻ Open for 20 <i class="fas fa-star" style="color:#FFD52E;margin-left:4px;"></i></span>
-      </button>
-      <div class="sub" style="text-align:center;margin-bottom:20px;font-size:11px">خصم 20 نجمة لكل دورة. اضغط للبدء.</div>
-
-      <!-- قسم Live -->
-      <div class="sec"><span class="ico i-green"><i class="fas fa-play"></i></span> Live</div>
-      <div class="fb-live-track" id="fbLiveTrack" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:20px"></div>
-
-      <!-- قائمة الجوائز -->
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-trophy"></i></span> Prize list</div>
-      <div class="fb-prize-grid" id="fbPrizeGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
     </section>
 
     <section class="screen" id="screen-game">
@@ -590,7 +595,7 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
         </div>
         <div class="info">
           <div>مبلغ الشراء <b id="cryptoChosenUsd">$0.00</b></div>
-          <div>الجواهر المستقلة <b id="cryptoReceiveGems">0 💎</b></div>
+          <div>الجواهر المستقبلة <b id="cryptoReceiveGems">0 💎</b></div>
           <div>رصيدك الحالي <b id="depGemsCrypto">0 💎</b></div>
         </div>
         <button class="btn b-g" id="cryptoPayBtn" style="margin-top:10px" disabled>
@@ -886,16 +891,6 @@ const CONFIG={
   },
 };
 
-// إعدادات Freebie
-const FreebiePrizes = [
-    { id: 'grand', type: 'webm', src: 'gifts_by_StickerEmojiRobot-069.webm', value: 500, isGems: true, weight: 1 }, // 1%
-    { id: 'p1', type: 'emoji', char: '🍦', value: 325, isGems: false, weight: 15 },
-    { id: 'p2', type: 'emoji', char: '⭐', value: 35, isGems: false, weight: 30 },
-    { id: 'p3', type: 'emoji', char: '🍭', value: 327, isGems: false, weight: 15 },
-    { id: 'p4', type: 'emoji', char: '🦩', value: 330, isGems: false, weight: 15 },
-    { id: 'p5', type: 'emoji', char: '⭐', value: 180, isGems: false, weight: 24 }
-];
-
 const SOCIAL_PLATFORMS = {
   telegram:  { label:'Telegram',  icon:'fab fa-telegram-plane', color:'#229ED9' },
   instagram: { label:'Instagram', icon:'fab fa-instagram',      color:'#E1306C' },
@@ -1121,7 +1116,6 @@ function renderAll(){
   if($('screen-deposit').classList.contains('active'))updateStarsUI();
   if($('screen-invest').classList.contains('active'))renderInvestments();
   updatePendingBanner();
-  if($('screen-freebie').classList.contains('active'))FreebieGame.updateButtonState();
 }
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -1139,7 +1133,6 @@ function go(s){
   if(s==='wheel'){S.busy=false;renderWheel();}
   if(s==='missions'){loadSocialTasks(true);renderMissions();}
   if(s==='fly'){FlyGame.enter();return;}
-  if(s==='freebie'){FreebieGame.init();return;}
   if(s !== 'deposit' && cryptoPollTimer){ stopPaymentPolling(); }
 }
 
@@ -1270,247 +1263,6 @@ function showNoEnergy(){
     onClose:()=>{ go('home'); }
   });
 }
-
-// --- Freebie Game Logic ---
-const FreebieGame = {
-    isSpinning: false,
-    init: function() {
-        this.buildStrip();
-        this.renderPrizeList();
-        this.renderLiveFeed();
-        this.updateButtonState();
-        
-        // ربط زر التدوير
-        $('freebieSpinBtn').onclick = () => this.spin();
-    },
-    createWebmElement: function(src, width, height) {
-        const container = document.createElement('div');
-        container.style.width = width;
-        container.style.height = height;
-        container.style.position = 'relative';
-        container.style.display = 'flex';
-        container.style.alignItems = 'center';
-        container.style.justifyContent = 'center';
-        container.style.overflow = 'hidden';
-
-        const video = document.createElement('video');
-        video.src = src;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.style.width = '100%';
-        video.style.height = '100%';
-        video.style.objectFit = 'contain';
-        video.style.position = 'absolute';
-        video.style.visibility = 'hidden'; // مخفي حتى يجهز
-        video.style.opacity = '0';
-        video.style.transition = 'opacity 0.3s';
-
-        video.oncanplaythrough = () => {
-            video.style.visibility = 'visible';
-            video.style.opacity = '1';
-            video.play().catch(() => {});
-        };
-        video.onerror = () => {
-            container.style.display = 'none'; // إخفاء تماماً عند الفشل
-        };
-
-        container.appendChild(video);
-        return container;
-    },
-    buildStrip: function() {
-        const track = $('fbStripTrack');
-        track.innerHTML = '';
-        track.style.transition = 'none';
-        track.style.transform = 'translateX(0)';
-
-        // إنشاء 50 عنصر عشوائي للشريط
-        let html = '';
-        for (let i = 0; i < 50; i++) {
-            const prize = FreebiePrizes[Math.floor(Math.random() * FreebiePrizes.length)];
-            html += this.createItemHTML(prize, true);
-        }
-        track.innerHTML = html;
-    },
-    createItemHTML: function(prize, isStrip) {
-        const size = isStrip ? '70px' : '100%';
-        const iconSize = isStrip ? '50px' : '70px';
-        let innerContent = '';
-        
-        if (prize.type === 'webm') {
-            // نستخدم عنصر وهمي هنا وسيتم استبداله عبر JS بعد الإضافة لـ DOM
-            innerContent = `<div class="webm-container" data-src="${prize.src}" style="width:${iconSize};height:${iconSize};display:flex;align-items:center;justify-content:center;"></div>`;
-        } else {
-            innerContent = `<div class="fb-icon-wrap" style="font-size:${iconSize};">${prize.char}</div>`;
-        }
-
-        return `
-            <div class="fb-item" style="flex: 0 0 ${size}; height: ${isStrip ? '90px' : '100px'};">
-                ${innerContent}
-                <div class="fb-val">${prize.isGems ? '<i class="fas fa-gem"></i>' : '<i class="fas fa-star"></i>'} ${prize.value}</div>
-            </div>
-        `;
-    },
-    renderPrizeList: function() {
-        const grid = $('fbPrizeGrid');
-        grid.innerHTML = '';
-        FreebiePrizes.forEach(prize => {
-            const card = document.createElement('div');
-            card.className = 'fb-prize-card';
-            
-            if (prize.type === 'webm') {
-                const webmContainer = this.createWebmElement(prize.src, '70px', '70px');
-                card.appendChild(webmContainer);
-            } else {
-                const icon = document.createElement('div');
-                icon.className = 'fb-icon-wrap';
-                icon.textContent = prize.char;
-                card.appendChild(icon);
-            }
-            
-            const val = document.createElement('div');
-            val.className = 'fb-val';
-            val.innerHTML = `${prize.isGems ? '<i class="fas fa-gem"></i>' : '<i class="fas fa-star"></i>'} ${prize.value}`;
-            card.appendChild(val);
-            
-            grid.appendChild(card);
-        });
-    },
-    renderLiveFeed: function() {
-        const liveTrack = $('fbLiveTrack');
-        liveTrack.innerHTML = '';
-        // إضافة 10 عناصر وهمية
-        for (let i = 0; i < 10; i++) {
-            const prize = FreebiePrizes[Math.floor(Math.random() * FreebiePrizes.length)];
-            const item = document.createElement('div');
-            item.className = 'fb-live-item';
-            
-            if (prize.type === 'webm') {
-                const webmContainer = this.createWebmElement(prize.src, '40px', '40px');
-                item.appendChild(webmContainer);
-            } else {
-                const icon = document.createElement('div');
-                icon.className = 'fb-icon-wrap';
-                icon.textContent = prize.char;
-                item.appendChild(icon);
-            }
-            
-            const val = document.createElement('div');
-            val.className = 'fb-val';
-            val.innerHTML = `${prize.isGems ? '<i class="fas fa-gem"></i>' : '<i class="fas fa-star"></i>'} ${prize.value}`;
-            item.appendChild(val);
-            
-            liveTrack.appendChild(item);
-        }
-    },
-    updateButtonState: function() {
-        const btn = $('freebieSpinBtn');
-        if (this.isSpinning) {
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spn"></span> جاري التدوير...';
-        } else {
-            btn.disabled = (S.user.coins < 20);
-            btn.innerHTML = `<span>↻ Open for 20 <i class="fas fa-star" style="color:#FFD52E;margin-left:4px;"></i></span>`;
-        }
-    },
-    getRandomPrize: function() {
-        const totalWeight = FreebiePrizes.reduce((sum, p) => sum + p.weight, 0);
-        let random = Math.random() * totalWeight;
-        for (const prize of FreebiePrizes) {
-            if (random < prize.weight) return prize;
-            random -= prize.weight;
-        }
-        return FreebiePrizes[FreebiePrizes.length - 1];
-    },
-    spin: async function() {
-        if (this.isSpinning) return;
-        if (S.user.coins < 20) {
-            toast('ليس لديك ما يكفي من النجوم (تحتاج 20)', 'err');
-            return;
-        }
-
-        // خصم 20 نجمة
-        S.user.coins -= 20;
-        await save();
-        renderAll();
-
-        this.isSpinning = true;
-        this.updateButtonState();
-        SFX.play('tap');
-
-        // 1. تحديد الجائزة بناءً على الاحتمالات
-        const winningPrize = this.getRandomPrize();
-        
-        // 2. إعادة بناء الشريط ووضع الجائزة الفائزة في مكان محدد (مثلاً الفهرس 45)
-        const track = $('fbStripTrack');
-        track.style.transition = 'none';
-        track.style.transform = 'translateX(0)';
-        
-        let stripHTML = '';
-        const winnerIndex = 45;
-        for (let i = 0; i < 50; i++) {
-            let prize = (i === winnerIndex) ? winningPrize : FreebiePrizes[Math.floor(Math.random() * FreebiePrizes.length)];
-            stripHTML += this.createItemHTML(prize, true);
-        }
-        track.innerHTML = stripHTML;
-
-        // إضافة فيديوهات WEBM بعد بناء الـ HTML
-        track.querySelectorAll('.webm-container').forEach(container => {
-            const src = container.dataset.src;
-            const webm = this.createWebmElement(src, '50px', '50px');
-            container.appendChild(webm);
-        });
-
-        // حساب المسافة المطلوبة للتوقف عند العنصر الفائز
-        // عرض العنصر 80px + الفجوة 8px = 88px
-        const itemWidth = 88; 
-        const containerWidth = $('fbStripContainer').offsetWidth;
-        
-        // حساب الإزاحة: نريد أن يكون مركز العنصر الفائز في منتصف الحاوية
-        // نضيف مسافة عشوائية صغيرة لتبدو طبيعية
-        const randomOffset = (Math.random() - 0.5) * 40; 
-        const targetTranslate = -((winnerIndex * itemWidth) + (itemWidth / 2) - (containerWidth / 2) + randomOffset);
-
-        // 3. بدء الحركة
-        await sleep(50); // تأخير بسيط لضمان تطبيق التغييرات
-        track.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
-        track.style.transform = `translateX(${targetTranslate}px)`;
-
-        // 4. معالجة النتيجة بعد انتهاء الحركة
-        setTimeout(async () => {
-            this.isSpinning = false;
-            SFX.play('win');
-            
-            // إعطاء المكافأة
-            if (winningPrize.isGems) {
-                S.user.gems += winningPrize.value;
-                await save();
-                renderAll();
-                showModal({
-                    icon: 'fa-gem',
-                    title: '🎉 جائزة كبرى!',
-                    sub: 'لقد ربحت الجائزة الكبرى وحصلت على جواهر مباشرة',
-                    amount: '+' + winningPrize.value + ' 💎',
-                    btn: 'رائع'
-                });
-            } else {
-                S.user.coins += winningPrize.value;
-                await save();
-                renderAll();
-                showModal({
-                    icon: 'fa-star',
-                    title: 'مبروك!',
-                    sub: 'لقد ربحت من Freebie',
-                    amount: '+' + winningPrize.value + ' ⭐',
-                    btn: 'حسناً'
-                });
-            }
-            
-            this.updateButtonState();
-        }, 4100); // 4 ثواني للحركة + 100ms احتياط
-    }
-};
 
 let rot=0;
 function spinsLeft(){const u=S.user;return u.wheelLastDate===today()?(u.wheelSpins||0):CONFIG.spins}
@@ -3224,6 +2976,113 @@ function drawAvatarHelper(g,cx,cy,r,variant){
   g.beginPath();g.arc(cx,cy,r-g.lineWidth/2,0,Math.PI*2);g.stroke();
 }
 
+// --- دالة إنشاء بطاقات النجوم ---
+function initStarBundles() {
+    const container = $('bundleContainer');
+    if (!container) return;
+
+    const bundles = [
+        { stars: 500, gems: 45000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
+        { stars: 700, gems: 63000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
+        { stars: 200, gems: 9000,  webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
+    ];
+
+    container.innerHTML = '';
+    
+    bundles.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'bundle-card';
+        card.onclick = () => buyStarsBundle(b.stars);
+
+        const webmBox = document.createElement('div');
+        webmBox.className = 'webm-box';
+        
+        const video = document.createElement('video');
+        video.src = b.webm;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        
+        // إخفاء الفيديو حتى يصبح جاهزاً
+        video.style.visibility = 'hidden';
+        video.style.opacity = '0';
+        video.style.transition = 'opacity 0.3s';
+        
+        // عند اكتمال التحميل وجاهزية التشغيل
+        video.oncanplaythrough = () => {
+            video.style.visibility = 'visible';
+            video.style.opacity = '1';
+            video.play().catch(() => {});
+        };
+
+        // في حال فشل التحميل، نخفي الحاوية بالكامل
+        video.onerror = () => {
+            webmBox.style.display = 'none';
+        };
+        
+        webmBox.appendChild(video);
+        
+        const priceTag = document.createElement('div');
+        priceTag.className = 'price-tag';
+        priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt="star"> <span>${b.stars}</span>`;
+
+        card.appendChild(webmBox);
+        card.appendChild(priceTag);
+        container.appendChild(card);
+    });
+}
+
+// --- دالة شراء بطاقات النجوم ---
+async function buyStarsBundle(stars) {
+    if(S.busy) return;
+    if(!TG.app || !TG.app.openInvoice){
+        return toast('يجب فتح التطبيق داخل تلغرام','err');
+    }
+    S.busy = true;
+    SFX.play('tap');
+    
+    try {
+        const resp = await fetch(CONFIG.api.base+'/api/create-invoice',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({userId:TG.id, stars: stars})
+        });
+        
+        const data = await resp.json();
+        if(!data.ok || !data.invoiceLink) throw new Error(data.error||'فشل إنشاء الفاتورة');
+        
+        TG.app.openInvoice(data.invoiceLink, (status) => {
+            S.busy = false;
+            if(status === 'paid'){
+                SFX.play('reward');
+                showModal({
+                    icon:'fa-star',
+                    title:'✅ تم الدفع بنجاح!',
+                    sub:`حصلت على ${fmt(data.gems)} جوهرة`,
+                    amount:'+'+fmt(data.gems)+' 💎',
+                    btn:'رائع',
+                    onClose: async () => {
+                        try {
+                            const fresh = await FB.get();
+                            if(fresh) S.user = Object.assign(S.user, fresh);
+                        } catch(e) {}
+                        renderAll();
+                    }
+                });
+            } else if(status === 'cancelled'){
+                toast('تم إلغاء الدفع','info');
+            } else if(status === 'failed'){
+                toast('فشل الدفع، حاول مجدداً','err');
+            }
+        });
+    } catch(e) {
+        console.error(e);
+        toast(e.message||'تعذر بدء الدفع','err');
+        S.busy = false;
+    }
+}
+
 function bind(){
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -3258,7 +3117,7 @@ function bind(){
   $('refShare').onclick=()=>TG.share(link(),'🐾 انضم إلى Puppy Merge واربح الجواهر!');
   $('codeCopy').onclick=()=>navigator.clipboard?navigator.clipboard.writeText($('refCode').textContent).then(()=>toast('تم نسخ المعرّف')):toast('تعذر النسخ','err');
   $('codeSubmit').onclick=()=>withBtn($('codeSubmit'),'جاري التحقق...',()=>applyCode($('codeInput').value.trim().replace(/^ref_/,'')));
-  document.addEventListener('click',e=>{if(e.target.closest('.btn,.amt,.g-btn,.dock button,.quick .card,.dep-tab,.game-card,.fb-item'))SFX.play('tap')});
+  document.addEventListener('click',e=>{if(e.target.closest('.btn,.amt,.g-btn,.dock button,.quick .card,.dep-tab,.game-card,.bundle-card'))SFX.play('tap')});
   $('refCopy').onclick=()=>navigator.clipboard?navigator.clipboard.writeText(link()).then(()=>toast('تم نسخ الرابط')):toast('تعذر النسخ','err');
 
   buildMd();
@@ -3371,6 +3230,9 @@ async function boot(){
   try { FlyGame.preload(); } catch(e){}
   try { initLang(); } catch(e){ console.warn('Lang:', e); }
   try { loadSocialTasks(true); } catch(e){ console.warn('SocialTasks:', e); }
+  
+  // توليد البطاقات الجديدة
+  try { initStarBundles(); } catch(e){ console.warn('StarBundles:', e); }
 
   setInterval(()=>{ 
     try { renderEnergy(); wheelTimer(); updateInvestmentsUI(); } catch(e){}
