@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#A8DCF0">
-<title>Puppy Merge — دمج الجراء</title>
+<title>Puppy Merge — متجر المقتنيات</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='12008608' data-sdk='show_12008608'></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -39,14 +39,9 @@ input,select{font:inherit;color:inherit}
 .b-g{background:linear-gradient(180deg,#76F344,#4BE51E 72%,#35C915);color:#fff;text-shadow:0 2px 0 #27820D;box-shadow:0 5px 0 var(--green-d),inset 0 3px 0 rgba(255,255,255,.55)}
 .b-g:active{box-shadow:0 2px 0 var(--green-d)}
 .b-y{background:linear-gradient(180deg,#FFE95C,#FFD52E 72%,#F4B900);color:var(--ink);box-shadow:0 5px 0 var(--gold-d),inset 0 3px 0 rgba(255,255,255,.7)}
-.b-y:active{box-shadow:0 2px 0 var(--gold-d)}
 .b-s{background:linear-gradient(180deg,#8CEBFF,#59D7F2 70%,#2FB8DC);color:#fff;text-shadow:0 2px 0 var(--sky-d);box-shadow:0 5px 0 var(--sky-d),inset 0 3px 0 rgba(255,255,255,.55)}
-.b-s:active{box-shadow:0 2px 0 var(--sky-d)}
-.b-r{background:linear-gradient(180deg,#FF8F8F,#FF4D4D 72%,#C62828);color:#fff;text-shadow:0 2px 0 #8B0000;box-shadow:0 5px 0 #8B0000,inset 0 3px 0 rgba(255,255,255,.5)}
-.b-r:active{box-shadow:0 2px 0 #8B0000}
+.b-r{background:linear-gradient(180deg,#FF8F8F,#FF4D4D 72%,#C62828);color:#fff;box-shadow:0 5px 0 #8B0000,inset 0 3px 0 rgba(255,255,255,.5)}
 .b-sm{height:38px;width:auto;padding:0 14px;font-size:12px;border-radius:14px}
-.btn,.dock button,.g-btn,.amt,.menu button{color:var(--ink)!important;-webkit-text-stroke:0;text-shadow:none}
-.b-g,.b-s,.b-r{color:var(--ink);text-shadow:none}
 .b-off{background:#D5D5D5;color:var(--ink);box-shadow:0 4px 0 #A5A5A5;text-shadow:none}
 .loader{position:fixed;inset:0;z-index:9999;background:linear-gradient(180deg,#1A1F3A,#2A2F52);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;text-align:center;transition:opacity .4s}
 .loader.hide{opacity:0;pointer-events:none}
@@ -57,66 +52,6 @@ input,select{font:inherit;color:inherit}
 .pill .ico{width:32px;height:32px;font-size:14px}
 .pill b{font-size:14px;direction:ltr;display:block;line-height:1.1}
 .pill small{font-size:9px;color:var(--ink2);direction:ltr;display:block}
-.hero{border-radius:28px;padding:18px 16px;margin-bottom:12px;text-align:center;border:3px solid var(--gold-d);background:linear-gradient(160deg,#FFE95C,#FFD52E 55%,#F4B900);box-shadow:0 6px 0 #8A5A00,0 12px 24px rgba(0,0,0,.15),inset 0 3px 0 rgba(255,255,255,.6)}
-.hero .lv{display:inline-flex;gap:6px;align-items:center;background:#fff;padding:4px 14px;border-radius:16px;font-weight:800;font-size:12px;margin-bottom:10px}
-.paws{display:flex;justify-content:center;margin-bottom:10px}
-.paws .ico{width:56px;height:56px;font-size:26px;margin:0 -5px;animation:bn 2s infinite}
-.paws .ico:nth-child(2n){animation-delay:.3s}
-@keyframes bn{50%{transform:translateY(-5px)}}
-.hero h1{font-size:24px;color:#fff;text-shadow:0 2px 0 #8A5A00,0 3px 0 rgba(0,0,0,.2)}
-.hero p{font-size:12.5px;font-weight:700;margin:2px 0 14px;color:#6B4200}
-.hero .btn{height:60px;font-size:19px}
-.bar{height:16px;border-radius:10px;background:#CFF4FC;overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,.15)}
-.bar i{display:block;height:100%;border-radius:10px;background:linear-gradient(180deg,#B7FFB8,#4BE51E 50%,#35C915);transition:width .4s}
-.en-val{font-size:22px;font-weight:900;direction:ltr;line-height:1;color:#8B0000}
-.en-val small{font-size:14px;color:var(--edge-d)}
-.timer{font-weight:900;font-size:15px;direction:ltr;color:var(--ink2);min-width:50px;text-align:left}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.quick .card{display:flex;flex-direction:column;gap:6px;text-align:start;position:relative;margin:0;transition:transform .1s}
-.quick .card:active{transform:translateY(3px)}
-.badge{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:12px}
-.g-head{display:flex;gap:10px;margin-bottom:16px}
-.g-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:18px;background:linear-gradient(180deg,#fff,var(--cream));border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge-d)}
-.g-ttl{flex:1;height:44px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-weight:800;background:linear-gradient(180deg,#fff,var(--cream));border:2px solid var(--edge);box-shadow:0 4px 0 var(--edge-d)}
-.g-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-.g-stats .card{padding:8px;margin:0;text-align:center;border-width:2px;border-radius:16px;box-shadow:0 3px 0 var(--edge-d),inset 0 2px 0 rgba(255,255,255,.7)}
-.g-stats b{display:block;font-size:17px;direction:ltr}
-.board-wrap{padding:16px 12px 12px;margin-bottom:18px}
-.target{display:block;width:max-content;margin:0 auto 16px;padding:4px 16px;border-radius:12px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(180deg,#8CEBFF,#2FB8DC);border:2px solid var(--sky-d);box-shadow:0 3px 0 var(--sky-d)}
-.board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;aspect-ratio:1}
-.tile{border-radius:12px;background:rgba(232,213,168,.5);touch-action:manipulation}
-.tile i{width:100%;height:100%;border-radius:12px;display:grid;place-items:center;font-size:22px;color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15),inset 0 3px 0 rgba(255,255,255,.35),0 3px 0 rgba(0,0,0,.1);transition:transform .15s}
-.t0 i{background:linear-gradient(160deg,#C58CE8,#8E24AA)}.t1 i{background:linear-gradient(160deg,#FFE28A,#E0A300)}.t2 i{background:linear-gradient(160deg,#7EFF6A,#2BA845)}
-.t3 i{background:linear-gradient(160deg,#FFB8D1,#C2185B)}.t4 i{background:linear-gradient(160deg,#FFB870,#E65100)}.t5 i{background:linear-gradient(160deg,#A8E2FF,#2874A6)}
-.tile.sel i{transform:scale(1.1);box-shadow:0 0 0 3px var(--gold),0 0 16px rgba(255,213,46,.9)}
-.tile.pop i{animation:pp .3s forwards}
-@keyframes pp{50%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(0);opacity:0}}
-.tile.bad i{animation:sh .3s}
-@keyframes sh{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.g-act{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stage{position:relative;max-width:310px;margin:34px auto 50px}
-.pointer{position:absolute;top:-24px;left:50%;transform:translateX(-50%);z-index:5;font-size:44px;color:var(--red);filter:drop-shadow(0 4px 0 rgba(0,0,0,.3))}
-.rim{position:relative;aspect-ratio:1;border-radius:50%;padding:16px;border:4px solid #8A5A00;background:conic-gradient(#FFD52E,#FFF3A8,#FFD52E,#E0A300,#FFD52E);box-shadow:0 8px 0 #8A5A00,0 18px 26px rgba(0,0,0,.22),inset 0 4px 0 rgba(255,255,255,.6)}
-.rim::before{content:'';position:absolute;inset:5px;border-radius:50%;border:4px dotted rgba(255,255,255,.9)}
-.wheel{width:100%;height:100%;border-radius:50%;border:4px solid #fff;overflow:hidden;box-shadow:inset 0 0 16px rgba(0,0,0,.25);transition:transform 5s cubic-bezier(.17,.67,.24,1)}
-.wheel svg{width:100%;height:100%;display:block}
-.hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;font-size:28px;border:4px solid #fff}
-.spin{height:80px;flex-direction:column;gap:4px;margin-bottom:14px}
-.spin .m{display:flex;gap:8px;font-size:12px}
-.spin .m b{display:flex;gap:5px;align-items:center;padding:2px 10px;border-radius:10px;background:rgba(0,0,0,.18);direction:ltr}
-.sec{display:flex;align-items:center;gap:8px;margin:8px 4px 10px;font-weight:800}
-.sec .ico{width:28px;height:28px;font-size:12px}
-.daily{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:10px}
-.day{aspect-ratio:1/1.3;border-radius:10px;background:rgba(232,213,168,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--ink2);border:2px solid transparent}
-.day i{font-size:14px;color:var(--gold-d);margin:2px 0}
-.day.done{background:linear-gradient(160deg,#FFE95C,#F4B900);color:#fff}.day.done i{color:#fff}
-.day.claim{background:linear-gradient(160deg,#76F344,#35C915);color:#fff;animation:cl 1.1s infinite}.day.claim i{color:#fff}
-@keyframes cl{50%{box-shadow:0 0 0 7px rgba(75,229,30,0)}0%{box-shadow:0 0 0 0 rgba(75,229,30,.7)}}
-.m-card{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:10px}
-.m-card .ico{width:50px;height:50px}
-.rw{display:inline-flex;gap:5px;align-items:center;padding:2px 9px;margin-left:3px;border-radius:10px;background:rgba(255,213,46,.35);border:1.5px solid rgba(139,90,0,.3);font-size:11.5px;font-weight:800;color:var(--gold-d)}
-.prog{display:flex;gap:6px;align-items:center;font-size:11px;font-weight:800;color:var(--sky-d);direction:ltr;margin-top:4px}
-.prog .bar{flex:1;height:7px}
 .hero2{border-radius:28px;padding:20px 16px;text-align:center;margin-bottom:14px;color:var(--ink);border:3px solid var(--edge);background:linear-gradient(160deg,#FFFDF0,#FFF3B8 55%,#CFF4FC);box-shadow:0 6px 0 var(--edge-d),0 12px 24px rgba(0,0,0,.1),inset 0 3px 0 rgba(255,255,255,.8)}
 .hero2 .ico{width:46px;height:46px;margin:0 auto 6px}
 .hero2 .big{font-size:34px;font-weight:900;direction:ltr;line-height:1.1}
@@ -186,7 +121,6 @@ input,select{font:inherit;color:inherit}
 .mini{display:flex;align-items:center;margin-top:12px;padding:8px 4px;border-radius:16px;background:#FFF9E8;border:2px solid var(--edge)}
 .mini>div:not(.sep){flex:1;text-align:center}.mini .sep{width:2px;height:34px;background:var(--edge)}
 .mini i{color:var(--sky-d);font-size:13px}.mini b{display:block;font-size:18px;line-height:1.1;direction:ltr}.mini span{font-size:10.5px;font-weight:700;color:var(--ink2)}
-html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1)}
 .dep-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;padding:4px;background:rgba(255,253,240,.6);border-radius:22px;border:2px solid var(--edge)}
 .dep-tab{flex:1;height:44px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink2);transition:all .2s;background:transparent;padding:0 4px;overflow:hidden;white-space:nowrap}
 .dep-tab img{width:20px;height:20px;object-fit:contain;border-radius:4px;flex-shrink:0}
@@ -197,134 +131,37 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 .crypto-pending-banner .row{margin-bottom:8px}
 .crypto-pending-banner .timer-badge{background:#fff;padding:4px 10px;border-radius:12px;font-weight:800;font-size:12px;direction:ltr;color:var(--gold-d)}
 .crypto-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.invest-banner{background:linear-gradient(160deg,#B7FFB8,#4BE51E 55%,#238A12);border:3px solid #1F6B0F;border-radius:24px;padding:16px;margin-bottom:14px;color:#fff;text-align:center;box-shadow:0 6px 0 #16540B,0 10px 20px rgba(0,0,0,.2),inset 0 3px 0 rgba(255,255,255,.4)}
-.invest-banner .paw{font-size:34px;margin-bottom:6px;animation:bn 2s infinite}
-.invest-banner .amount{font-size:38px;font-weight:900;direction:ltr;line-height:1;text-shadow:0 3px 0 rgba(0,0,0,.25)}
-.invest-banner .label{font-size:12px;font-weight:800;margin-top:4px;text-shadow:0 1px 0 rgba(0,0,0,.2)}
-.invest-banner .collect-btn{margin-top:12px;height:52px;background:linear-gradient(180deg,#fff,#FFF9E8);color:var(--green-d);box-shadow:0 5px 0 rgba(0,0,0,.2),inset 0 3px 0 rgba(255,255,255,.7)}
-.invest-active-card{border-color:var(--green-d);background:linear-gradient(180deg,#fff,#E8FFE8 60%,#DFF7DF)}
-.invest-locked{opacity:.75;filter:grayscale(.3)}
-.games-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.game-card{border-radius:22px;padding:14px 8px 10px;text-align:center;border:3px solid var(--edge);background:linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF);box-shadow:0 5px 0 var(--edge-d),0 8px 16px rgba(0,0,0,.08),inset 0 2px 0 rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
-.game-card.game-merge{border-color:#E0A300;background:linear-gradient(160deg,#FFF9D6,#FFE95C 55%,#FFD52E);box-shadow:0 5px 0 #8A5A00,0 8px 16px rgba(0,0,0,.1),inset 0 3px 0 rgba(255,255,255,.6)}
-.game-card.game-fly{border-color:var(--sky-d);background:linear-gradient(160deg,#E8FBFF,#8CEBFF 55%,#59D7F2);box-shadow:0 5px 0 var(--sky-d),0 8px 16px rgba(0,0,0,.1),inset 0 3px 0 rgba(255,255,255,.6)}
-.game-level-badge{position:absolute;top:8px;left:8px;background:#fff;padding:2px 8px;border-radius:10px;font-size:9.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:3px;box-shadow:0 2px 4px rgba(0,0,0,.08)}
-.game-icon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:#fff;margin-top:14px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12),inset 0 3px 0 rgba(255,255,255,.4),0 3px 6px rgba(0,0,0,.1)}
-.game-card.game-merge .game-icon{color:var(--gold-d)}
-.game-card.game-fly .game-icon{color:var(--sky-d)}
-.game-title{font-size:14px;font-weight:900;color:var(--ink);margin-top:4px;line-height:1.1}
-.game-sub{font-size:10px;font-weight:700;color:var(--ink2);margin-bottom:6px}
-.game-card .btn{height:40px;font-size:12.5px;padding:0 6px;margin-top:auto}
-.adm-panel{border:3px solid var(--red);background:linear-gradient(180deg,#fff,#FFF0F0 60%,#FFE0E0);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:0 5px 0 #8B0000}
-.adm-panel .ttl{color:#8B0000}
-.adm-field{margin-bottom:10px}
-.adm-field label{display:block;font-size:11.5px;font-weight:800;color:var(--ink2);margin-bottom:4px}
-.adm-field input,.adm-field select{width:100%;height:42px;padding:0 12px;border-radius:12px;background:#fff;border:2px solid var(--edge);font-weight:700;outline:none;font-size:13px}
-.adm-field input:focus,.adm-field select:focus{border-color:var(--gold-d)}
-.adm-field input[dir=ltr]{direction:ltr;text-align:left}
-.adm-task-row{display:flex;align-items:center;gap:8px;padding:8px;background:#fff;border:1.5px solid var(--edge);border-radius:12px;margin-bottom:6px}
-.adm-task-row .ttl{font-size:12.5px;color:var(--ink)}
-.adm-task-row .sub{font-size:10px}
-.adm-del{width:32px;height:32px;border-radius:50%;background:rgba(255,77,77,.15);color:var(--red);display:grid;place-items:center;font-size:13px;flex-shrink:0}
-.adm-del:active{transform:scale(.92)}
-.social-platform-badge{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;flex-shrink:0;color:#fff}
-.screen#screen-fly,.screen#screen-flyboard{position:fixed;inset:0;z-index:55;padding:0;margin:0;max-width:none;display:none;flex-direction:column;overflow:hidden}
-.screen#screen-fly.active,.screen#screen-flyboard.active{display:flex;animation:none}
-#screen-fly{background:#87CEEB}
-.fly-canvas-wrap{position:relative;width:100%;height:100%;overflow:hidden;background:#87CEEB}
-#flyCanvas{display:block;width:100%;height:100%;touch-action:none}
-.fly-balances{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:12px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;z-index:5;pointer-events:none}
-.fly-balance{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.95);border-radius:999px;padding:3px 12px 3px 10px;font-weight:800;font-size:12px;color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 6px rgba(0,0,0,.12);min-width:84px;direction:ltr;justify-content:flex-start;line-height:1.1}
-.fly-balance i{font-size:11px}
-.fly-balance.coins i{color:#B97A00}
-.fly-balance.gems i{color:#1B7FA8}
-.fly-balance b{direction:ltr;font-variant-numeric:tabular-nums}
-.fly-dist-center{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font-size:13px;font-weight:900;color:#2A1B00;text-shadow:0 1px 2px rgba(255,255,255,.95),0 2px 6px rgba(255,255,255,.6);z-index:5;pointer-events:none;direction:ltr}
-.fly-dist-center b{font-size:15px}
-.fly-dist-center span{font-size:10px;opacity:.75;margin-inline-start:2px}
-.fly-pause{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:12px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.85);border:1.5px solid #fff;display:grid;place-items:center;color:var(--ink);font-size:14px;pointer-events:auto;box-shadow:0 2px 6px rgba(0,0,0,.15);z-index:6;transition:transform .1s}
-.fly-pause:active{transform:scale(.9)}
-#flyFloaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}
-.fly-floater{position:absolute;font-size:30px;font-weight:900;color:#FFD52E;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff,-2px -2px 0 #8A5A00,2px -2px 0 #8A5A00,-2px 2px 0 #8A5A00,2px 2px 0 #8A5A00,0 6px 10px rgba(0,0,0,.4);animation:flyFloatUp 1.15s cubic-bezier(.2,.7,.4,1) forwards}
-.fly-floater.gem{color:#59D7F2;text-shadow:0 0 3px #fff,0 0 3px #fff,-2px -2px 0 #1B7FA8,2px -2px 0 #1B7FA8,-2px 2px 0 #1B7FA8,2px 2px 0 #1B7FA8,0 6px 10px rgba(0,0,0,.4)}
-@keyframes flyFloatUp{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}18%{transform:translate(-50%,-95%) scale(1.18);opacity:1}100%{transform:translate(-50%,-230%) scale(1);opacity:0}}
-.fly-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:10;overflow-y:auto}
-.fly-overlay.show{display:flex}
-#flyReadyOverlay{z-index:8;background:linear-gradient(180deg,rgba(10,30,60,.10),rgba(10,30,60,.30))}
-#flyPauseOverlay{z-index:12;background:rgba(10,20,40,.55)}
-.fly-ready-card{width:100%;max-width:320px;text-align:center;padding:22px 18px 18px;margin:0}
-.fly-ready-card .ico{width:64px;height:64px;font-size:30px;margin:0 auto 10px}
-.fly-ready-title{font-size:22px;font-weight:800}
-.fly-ready-sub{font-size:12.5px;font-weight:700;color:var(--ink2);margin:4px 0 16px}
-#flyOverOverlay{padding:0;overflow:hidden;background:linear-gradient(180deg,#6EC3E6 0%,#A8DCF0 38%,#DDF1F5 62%,#FFE8B8 100%)}
-.fly-over-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.fly-over-sun{position:absolute;top:8%;inset-inline-end:10%;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#FFFBE0 30%,rgba(255,225,150,.55) 60%,rgba(255,225,150,0) 72%)}
-.fly-over-bg .cl{position:absolute;color:rgba(255,255,255,.85)}
-.fly-over-dunes{position:absolute;left:0;right:0;bottom:0;width:100%;height:36%}
-.fly-over-content{position:relative;z-index:2;width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;padding:calc(26px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px))}
-.fly-over-head{text-align:center;font-size:20px;font-weight:800;color:var(--ink2)}
-.fly-over-center{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
-.fly-over-center .card{margin:0}
-.fly-over-distcard{text-align:center;padding:18px 14px}
-.fly-over-dist{direction:ltr;display:flex;align-items:baseline;justify-content:center;gap:8px;line-height:1}
-.fly-over-dist b{font-size:68px;font-weight:900;color:var(--ink)}
-.fly-over-dist span{font-size:20px;font-weight:800;color:var(--ink2)}
-.fly-over-best{margin-top:8px;font-size:13px;font-weight:800;color:var(--sky-d)}
-.fly-over-rewgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fly-over-rewgrid .card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px}
-.fly-over-rewgrid b{font-size:24px;direction:ltr;line-height:1}
-.fly-over-actions{display:flex;flex-direction:column;gap:12px;padding-top:12px}
-.fly-link-board{color:var(--ink);font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px}
-#screen-flyboard{background:linear-gradient(180deg,#E8F6FC 0%,#FFFDF0 100%)}
-.fly-board-header{padding:calc(10px + env(safe-area-inset-top,0px)) 12px 12px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#fff,#FFFDF0);border-bottom:2px solid var(--edge);flex-shrink:0}
-.fly-board-title{flex:1;text-align:center;font-weight:800;font-size:16px;color:var(--ink)}
-.fly-board-scroll{flex:1;min-height:0;overflow-y:auto;padding:16px 14px calc(30px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch}
-.fly-featured{text-align:center;margin-bottom:22px;padding-top:8px}
-.fly-featured-avatar{width:130px;height:130px;border-radius:50%;margin:14px auto 0;position:relative;overflow:visible}
-.fly-featured-avatar .inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.25);background:#fff;position:relative}
-.fly-featured-avatar .inner img{width:100%;height:100%;object-fit:cover;display:block}
-.fly-featured-avatar .inner canvas{width:100%;height:100%;display:block}
-.fly-featured-avatar .inner::after{content:'';position:absolute;top:-4px;inset-inline-start:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border-radius:50%;pointer-events:none;box-shadow:0 0 0 2px rgba(255,213,46,.6),0 0 24px rgba(255,213,46,.4)}
-.fly-featured-crown{position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:34px;z-index:2;filter:drop-shadow(0 4px 4px rgba(0,0,0,.2))}
-.fly-featured-medal{position:absolute;top:-6px;inset-inline-end:-6px;background:linear-gradient(180deg,#FFE95C,#F4B900);color:#5A3A00;font-size:12px;font-weight:900;padding:5px 12px;border-radius:12px;border:2px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.2);z-index:2}
-.fly-featured-dist{font-size:64px;font-weight:900;color:#1A1A1A;line-height:1;margin-top:14px;direction:ltr;letter-spacing:-1px}
-.fly-featured-name{font-size:15px;font-weight:800;color:var(--ink2);margin-top:4px}
-.fly-board-row{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--edge);border-radius:18px;padding:10px 12px;margin-bottom:9px;box-shadow:0 3px 0 var(--edge-d)}
-.fly-board-row.me{border-color:var(--gold-d);background:linear-gradient(90deg,rgba(255,213,46,.18),rgba(255,213,46,.06))}
-.fly-board-row .rk{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--edge);color:var(--ink);font-weight:900;font-size:13px;flex-shrink:0}
-.fly-board-row .rk.gold{background:radial-gradient(circle at 30% 25%,#FFF3A8,#E0A300 45%,#8A5A00);color:#fff}
-.fly-board-row .rk.silver{background:#B5B5B5;color:#fff}
-.fly-board-row .rk.bronze{background:#C26A00;color:#fff}
-.fly-board-row .av{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--gold);border:2px solid #fff;flex-shrink:0}
-.fly-board-row .av img{width:100%;height:100%;object-fit:cover;display:block}
-.fly-board-row .av canvas{width:100%;height:100%;display:block}
-.fly-board-row .nm{flex:1;font-weight:800;color:var(--ink);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:start}
-.fly-board-row .dist{font-size:20px;font-weight:900;color:#1A1A1A;direction:ltr;flex-shrink:0}
-.fly-board-empty{text-align:center;padding:40px 20px;color:var(--ink2);font-weight:700}
-.fly-board-note{text-align:center;font-size:11px;color:var(--ink2);padding:16px 10px 6px;line-height:1.8;font-weight:700;opacity:.7}
-
-/* --- Styles for Star Bundles & Modals --- */
-.bundle-cards-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-.bundle-card { background: linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF); border: 2px solid var(--edge); border-radius: 16px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 3px 0 var(--edge-d); transition: transform 0.1s; cursor: pointer; position: relative; }
-.bundle-card:active { transform: translateY(3px); box-shadow: 0 0 0 var(--edge-d); }
-.bundle-card .webm-box { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative; background: transparent; }
-.bundle-card .webm-box video { width: 100%; height: 100%; object-fit: contain; position: absolute; }
-.bundle-card .price-tag { display: flex; align-items: center; gap: 3px; background: #FFF9E8; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--edge); font-weight: 800; font-size: 12px; color: var(--ink); }
-.bundle-card .price-tag img { width: 14px; height: 14px; object-fit: contain; }
-
-#bundleConfirmModal .webm-box { width: 100px; height: 100px; margin: 0 auto 15px; position: relative; display: flex; align-items: center; justify-content: center; }
-#bundleConfirmModal .webm-box video { width: 100%; height: 100%; object-fit: contain; position: absolute; }
-#bundleConfirmModal .detail-row { display: flex; justify-content: space-between; align-items: center; background: #FFF9E8; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; border: 2px solid #CFF4FC; font-weight: 800; font-size: 15px; }
-#bundleConfirmModal .detail-row span:first-child { color: var(--ink2); }
-#bundleConfirmModal .detail-row span:last-child { color: var(--gold-d); font-size: 18px; display: flex; align-items: center; gap: 4px; }
-#bundleConfirmModal .detail-row img { width: 18px; height: 18px; object-fit: contain; }
+.bundle-cards-container{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.bundle-card{background:linear-gradient(180deg,#fff,var(--cream) 60%,#E8FAFF);border:2px solid var(--edge);border-radius:16px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--edge-d);transition:transform .1s;cursor:pointer;position:relative}
+.bundle-card:active{transform:translateY(3px);box-shadow:0 0 0 var(--edge-d)}
+.bundle-card .webm-box{width:50px;height:50px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;position:relative;background:transparent}
+.bundle-card .webm-box video{width:100%;height:100%;object-fit:contain;position:absolute}
+.bundle-card .price-tag{display:flex;align-items:center;gap:3px;background:#FFF9E8;padding:2px 8px;border-radius:10px;border:1px solid var(--edge);font-weight:800;font-size:12px;color:var(--ink)}
+.bundle-card .price-tag img{width:14px;height:14px;object-fit:contain}
+#bundleConfirmModal .webm-box{width:100px;height:100px;margin:0 auto 15px;position:relative;display:flex;align-items:center;justify-content:center}
+#bundleConfirmModal .webm-box video{width:100%;height:100%;object-fit:contain;position:absolute}
+#bundleConfirmModal .detail-row{display:flex;justify-content:space-between;align-items:center;background:#FFF9E8;padding:10px 14px;border-radius:12px;margin-bottom:10px;border:2px solid #CFF4FC;font-weight:800;font-size:14px}
+#bundleConfirmModal .detail-row span:first-child{color:var(--ink2)}
+#bundleConfirmModal .detail-row span:last-child{color:var(--gold-d);font-size:16px;display:flex;align-items:center;gap:4px}
+#bundleConfirmModal .detail-row img{width:16px;height:16px;object-fit:contain}
+#bundleConfirmModal .detail-row.sell-row{background:#E8FFE8;border-color:#B7FFB8}
+#bundleConfirmModal .detail-row.sell-row span:first-child{color:var(--green-d)}
+#bundleConfirmModal .detail-row.sell-row span:last-child{color:var(--green-d)}
+.collectible-card{border-color:var(--gold-d)}
+.collectible-card.ready{border-color:var(--green-d);background:linear-gradient(180deg,#fff,#E8FFE8 60%,#DFF7DF)}
+.progress-lbl{display:flex;justify-content:space-between;font-size:10.5px;font-weight:800;color:var(--ink2);margin-bottom:5px}
+.bar{height:16px;border-radius:10px;background:#CFF4FC;overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,.15)}
+.bar i{display:block;height:100%;border-radius:10px;background:linear-gradient(180deg,#B7FFB8,#4BE51E 50%,#35C915);transition:width .4s}
+.bar.hold i{background:linear-gradient(180deg,#FFE95C,#F4B900 50%,#B97A00)}
+.empty{text-align:center;color:var(--ink2);font-size:13px;font-weight:700;padding:30px 15px}
+.empty i{font-size:34px;opacity:.4;display:block;margin-bottom:10px}
 </style>
 </head>
 <body>
 
 <div class="loader" id="loader">
   <div class="ico i-gold"><i class="fas fa-paw"></i></div>
-  <h2>Puppy Merge</h2><div>دمج الجراء</div>
+  <h2>Puppy Merge</h2><div>متجر المقتنيات</div>
 </div>
 
 <div class="app" id="app" style="display:none">
@@ -332,149 +169,73 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
   <div class="top">
     <div class="pill"><span class="ico i-sky"><i class="fas fa-gem"></i></span><div><b id="gemTop">0</b><small id="gemUsd">$0.00</small></div></div>
     <div class="pill"><span class="ico i-gold"><i class="fas fa-coins"></i></span><b id="coinTop">0</b></div>
-    <div class="pill" style="flex:0 0 auto;min-width:78px"><span class="ico i-green"><i class="fas fa-bolt"></i></span><b id="energyTop">25</b></div>
+    <div class="pill" style="flex:0 0 auto;min-width:78px"><span class="ico i-green"><i class="fas fa-star"></i></span><b id="starTop">0</b></div>
   </div>
 
   <div class="main" id="mainScroll">
 
+    <!-- الرئيسية -->
     <section class="screen active" id="screen-home">
-      
-      <div class="games-row">
-        <div class="game-card game-merge">
-          <div class="game-level-badge"><i class="fas fa-trophy"></i> مستوى <span id="homeLevel">1</span></div>
-          <div class="game-icon"><i class="fas fa-paw"></i></div>
-          <div class="game-title">Puppy Merge</div>
-          <div class="game-sub">ادمج الجراء</div>
-          <button class="btn b-g" id="playBtn"><i class="fas fa-play"></i> العب</button>
-        </div>
-        <div class="game-card game-fly">
-          <div class="game-icon"><i class="fas fa-dove"></i></div>
-          <div class="game-title">Puppy Fly</div>
-          <div class="game-sub">حلّق واجمع</div>
-          <button class="btn b-g" id="flyPlayBtn"><i class="fas fa-play"></i> العب</button>
-        </div>
-      </div>
-
       <div class="card">
         <div class="row" style="margin-bottom:10px">
-          <span class="ico i-red" style="width:52px;height:52px"><i class="fas fa-bolt"></i></span>
-          <div class="grow"><div class="ttl">الطاقة</div><div class="en-val"><span id="energyCur">25</span><small> / <span id="energyMax">25</span></small></div></div>
-          <div class="timer" id="energyTimer">ممتلئة</div>
-        </div>
-        <div class="bar"><i id="energyFill" style="width:100%"></i></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-          <button class="btn b-s" id="energyAdBtn" style="height:46px;padding:0 6px;font-size:12.5px"><i class="fas fa-play-circle"></i> إعلان +1⚡</button>
-          <button class="btn b-y" id="energyBuyBtn" style="height:46px;padding:0 6px;font-size:12.5px"><i class="fas fa-plus"></i> 10💎 +1⚡</button>
+          <span class="ico i-sky" style="width:52px;height:52px;font-size:22px"><i class="fas fa-gem"></i></span>
+          <div class="grow">
+            <div class="ttl">رصيد الجواهر</div>
+            <div style="font-size:22px;font-weight:900;direction:ltr;color:var(--sky-d)" id="homeGems">0</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:18px;font-weight:900;direction:ltr;color:var(--ink)" id="homeUsd">$0.00</div>
+            <div style="font-size:10px;font-weight:800;color:var(--ink2)">قيمة</div>
+          </div>
         </div>
       </div>
 
-      <div class="quick">
-        <button class="card" data-go="wheel"><span class="ico i-gold"><i class="fas fa-dharmachakra"></i></span><div class="ttl">عجلة الحظ</div><div class="sub">لفّتان يومياً</div><span class="badge" id="wheelBadge" style="display:none">مجاناً</span></button>
-        <button class="card" data-go="missions"><span class="ico i-sky"><i class="fas fa-list-check"></i></span><div class="ttl">المهام</div><div class="sub">مكافآت يومية</div></button>
+      <div class="sec" style="display:flex;align-items:center;gap:8px;margin:8px 4px 10px;font-weight:800">
+        <span class="ico i-gold" style="width:28px;height:28px;font-size:12px"><i class="fas fa-tags"></i></span>
+        بطاقات الشراء
+      </div>
+      <div class="bundle-cards-container" id="bundleContainer"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink2);text-align:center;margin-bottom:12px;padding:0 10px;line-height:1.7">
+        <i class="fas fa-info-circle" style="color:var(--sky-d)"></i>
+        عند الشراء تُحفظ البطاقة في متجر المقتنيات — يمكن بيعها بعد 7 أيام بربح 5%
       </div>
 
-      <button class="card" data-go="invest" style="width:100%;text-align:start;margin-top:10px;border-color:var(--green-d)">
+      <button class="card" data-go="store" style="width:100%;text-align:start;margin-top:6px;border-color:var(--green-d)">
         <div class="row">
-          <span class="ico i-green" style="width:50px;height:50px;font-size:22px"><i class="fas fa-paw"></i></span>
-          <div class="grow"><div class="ttl">استثمار الجراء</div><div class="sub">اشترِ خطة واكسب الجواهر تلقائياً</div></div>
+          <span class="ico i-green" style="width:50px;height:50px;font-size:22px"><i class="fas fa-box-open"></i></span>
+          <div class="grow"><div class="ttl">متجر المقتنيات</div><div class="sub">اعرض مقتنياتك وبِعها بعد 7 أيام</div></div>
           <i class="fas fa-chevron-left" style="color:var(--ink2)"></i>
         </div>
       </button>
-
-      <!-- البطاقات الثلاث الجديدة -->
-      <div class="bundle-cards-container" id="bundleContainer"></div>
 
       <button class="card" data-go="deposit" style="width:100%;text-align:start;margin-top:10px">
         <div class="row">
           <span class="ico i-gold" style="width:50px;height:50px;font-size:22px"><i class="fas fa-gem"></i></span>
-          <div class="grow"><div class="ttl">شراء الجواهر</div><div class="sub">نجوم ⭐ أو كريبتو 💎 أو Binance أو شام كاش</div></div>
+          <div class="grow"><div class="ttl">شراء الجواهر مباشرة</div><div class="sub">نجوم ⭐ أو كريبتو 💎 أو Binance أو شام كاش</div></div>
+          <i class="fas fa-chevron-left" style="color:var(--ink2)"></i>
+        </div>
+      </button>
+
+      <button class="card" data-go="exchange" style="width:100%;text-align:start;margin-top:10px">
+        <div class="row">
+          <span class="ico i-green" style="width:50px;height:50px;font-size:22px"><i class="fas fa-right-left"></i></span>
+          <div class="grow"><div class="ttl">تبديل العملات</div><div class="sub">1000 🪙 = 10 💎</div></div>
           <i class="fas fa-chevron-left" style="color:var(--ink2)"></i>
         </div>
       </button>
     </section>
 
-    <section class="screen" id="screen-game">
-      <div class="g-head">
-        <button class="g-btn" id="gameBack"><i class="fas fa-arrow-right"></i></button>
-        <div class="g-ttl">المستوى&nbsp;<span id="gameLevel">1</span></div>
-        <button class="g-btn" id="gameRestart"><i class="fas fa-rotate"></i></button>
-      </div>
-      <div class="g-stats">
-        <div class="card"><div class="sub">النقاط</div><b id="gameScore">0</b></div>
-        <div class="card"><div class="sub">الهدف</div><b id="gameTarget">100</b></div>
-        <div class="card"><div class="sub">الحركات</div><b id="gameMoves">20</b></div>
-      </div>
-      <div class="card board-wrap">
-        <div class="target" id="boardTarget">الهدف: 100 نقطة</div>
-        <div class="board" id="board"></div>
-      </div>
-      <div class="g-act">
-        <button class="btn b-s" id="hintBtn"><i class="fas fa-lightbulb"></i> تلميح (30)</button>
-        <button class="btn b-y" id="shuffleBtn"><i class="fas fa-shuffle"></i> خلط (50)</button>
-      </div>
-    </section>
-
-    <section class="screen" id="screen-wheel">
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-dharmachakra"></i></span> عجلة الحظ</div>
-      <div class="stage">
-        <div class="pointer"><i class="fas fa-caret-down"></i></div>
-        <div class="rim">
-          <div class="wheel" id="wheel"><svg viewBox="0 0 200 200" id="wheelSvg"></svg></div>
-          <div class="ico i-gold hub"><i class="fas fa-paw"></i></div>
-        </div>
-      </div>
-      <button class="btn b-g spin" id="wheelSpinBtn">
-        <span style="font-size:18px"><i class="fas fa-dharmachakra"></i> لف العجلة</span>
-        <span class="m"><b><i class="fas fa-ticket"></i> <span id="spinsLeft">2</span> لفات</b></span>
-      </button>
-      <button class="btn b-s" id="wheelAdBtn" style="height:58px;flex-direction:column;gap:1px;margin-top:10px">
-        <span><i class="fas fa-circle-play"></i> شاهد إعلان واربح</span>
-        <small style="font-size:11px;font-weight:800"><i class="fas fa-clock"></i> <span id="wheelAdTimer">متاح (3/3)</span></small>
-      </button>
-    </section>
-
-    <section class="screen" id="screen-missions">
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-calendar-check"></i></span> التسجيل اليومي</div>
-      <div class="card daily" id="dailyGrid"></div>
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-list-check"></i></span> مهام التواصل الاجتماعي</div>
-      <div id="missionsDaily"></div>
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-medal"></i></span> مهام المستويات</div>
-      <div id="missionsLevel"></div>
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-user-plus"></i></span> مهام الدعوات</div>
-      <div id="missionsInvite"></div>
-      <div id="adminMissionsPanel" style="display:none"></div>
-    </section>
-
-    <section class="screen" id="screen-exchange">
-      <div class="hero2"><div class="ico i-green"><i class="fas fa-right-left"></i></div><div class="ttl" style="font-size:19px">تبديل العملات</div><div class="sub">اتجاه واحد فقط: 1000 🪙 = 10 💎</div></div>
-      <div class="card">
-        <div class="ttl" style="margin-bottom:10px">اختر عدد العملات</div>
-        <div class="amts" id="exAmounts">
-          <button class="amt" data-amt="10000">10,000 🪙</button><button class="amt" data-amt="50000">50,000 🪙</button><button class="amt" data-amt="100000">100,000 🪙</button>
-          <button class="amt" data-amt="250000">250,000 🪙</button><button class="amt" data-amt="500000">500,000 🪙</button><button class="amt" data-amt="1000000">1,000,000 🪙</button>
-        </div>
-      </div>
-      <div class="info"><div>العملات المُحوّلة<b id="exChosen">0 🪙</b></div><div>الجواهر المستقبلة<b id="exReceive">0 💎</b></div><div>رصيدك<b id="exBal">0 🪙</b></div></div>
-      <button class="btn b-g" id="exSubmit"><i class="fas fa-right-left"></i> تبديل الآن</button>
-    </section>
-
-    <section class="screen" id="screen-invest">
+    <!-- متجر المقتنيات -->
+    <section class="screen" id="screen-store">
       <div class="hero2">
-        <div class="ico i-green"><i class="fas fa-paw"></i></div>
-        <div class="ttl" style="font-size:19px">استثمار الجراء</div>
-        <div class="sub">اشترِ خطة بالجواهر واكسب أرباحاً تلقائياً</div>
+        <div class="ico i-gold"><i class="fas fa-box-open"></i></div>
+        <div class="ttl" style="font-size:19px">متجر المقتنيات</div>
+        <div class="sub">مقتنياتك محفوظة هنا — تُباع بعد 7 أيام بربح 5%</div>
       </div>
-      <div class="invest-banner" id="investBanner" style="display:none">
-        <div class="paw"><i class="fas fa-paw"></i></div>
-        <div class="amount" id="investTotalPending">0</div>
-        <div class="label">💎 متاح للجمع الآن</div>
-        <button class="btn collect-btn" id="investCollectAllBtn" style="margin-top:12px"><i class="fas fa-hand-holding-heart"></i> جمع الكل</button>
-      </div>
-      <div id="investActiveList"></div>
-      <div class="sec"><span class="ico i-green"><i class="fas fa-store"></i></span> الخطط المتاحة</div>
-      <div id="investPlansList"></div>
+      <div id="collectiblesList"></div>
     </section>
 
+    <!-- شراء الجواهر -->
     <section class="screen" id="screen-deposit">
       <div class="hero2">
         <div class="ico i-gold"><i class="fas fa-gem"></i></div>
@@ -497,9 +258,9 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
               <div class="sub">أدخل عدد النجوم — كل نجمة = 90 جوهرة</div>
             </div>
           </div>
-          <div class="adm-field" style="margin-bottom:10px">
-            <label>عدد النجوم (أرقام صحيحة فقط: 1 – 100000)</label>
-            <input type="text" id="starsCustomInput" inputmode="numeric" pattern="[0-9]*" placeholder="مثال: 1 أو 50" dir="ltr" style="text-align:center;font-size:18px;font-weight:900">
+          <div style="margin-bottom:10px">
+            <label style="font-size:11.5px;font-weight:800;color:var(--ink2);display:block;margin-bottom:4px">عدد النجوم (1 – 100000)</label>
+            <input type="text" id="starsCustomInput" inputmode="numeric" pattern="[0-9]*" placeholder="مثال: 50" dir="ltr" style="text-align:center;font-size:18px;font-weight:900;width:100%;height:52px;border-radius:16px;background:#FFF9E8;border:2px solid #CFF4FC;outline:none;font-family:inherit">
           </div>
           <div class="info" style="margin-bottom:10px">
             <div>عدد النجوم<b id="starsCount">0 ⭐</b></div>
@@ -508,47 +269,32 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
           </div>
           <button class="btn b-g" id="starsPayBtn" disabled><i class="fas fa-star"></i> إكمال الدفع بالنجوم</button>
         </div>
-        <div class="card" style="text-align:center;font-size:12px;color:var(--ink2)">
-          <i class="fas fa-shield-halved" style="color:var(--sky-d)"></i>
-          دفع آمن عبر تلغرام مباشرة. تصل الجواهر لحسابك فوراً بعد الدفع.
-        </div>
       </div>
 
       <div id="dep-tab-crypto" style="display:none">
         <div class="crypto-pending-banner" id="cryptoPendingBanner">
           <div class="row">
             <span class="ico i-gold" style="width:44px;height:44px;font-size:18px"><i class="fas fa-hourglass-half"></i></span>
-            <div class="grow">
-              <div class="ttl">لديك فاتورة معلقة</div>
-              <div class="sub">اضغط "تحقق الآن" لمراجعة حالة الدفع</div>
-            </div>
+            <div class="grow"><div class="ttl">لديك فاتورة معلقة</div><div class="sub">اضغط تحقق لمراجعة الحالة</div></div>
             <div class="timer-badge" id="cryptoPendingTimer">--:--</div>
           </div>
           <div class="crypto-actions">
             <button class="btn b-g b-sm" id="cryptoCheckBtn" style="height:40px"><i class="fas fa-rotate"></i> تحقق الآن</button>
-            <button class="btn b-r b-sm" id="cryptoCancelBtn" style="height:40px"><i class="fas fa-xmark"></i> إلغاء الطلب</button>
+            <button class="btn b-r b-sm" id="cryptoCancelBtn" style="height:40px"><i class="fas fa-xmark"></i> إلغاء</button>
           </div>
         </div>
         <div class="card">
           <div class="row" style="margin-bottom:12px">
             <span class="ico i-sky" style="width:52px;height:52px"><i class="fas fa-coins"></i></span>
-            <div class="grow">
-              <div class="ttl">ادفع بالكريبتو 💎</div>
-              <div class="sub">USDC / USDT / BTC / ZEC — بدون رسوم إضافية</div>
-            </div>
+            <div class="grow"><div class="ttl">ادفع بالكريبتو 💎</div><div class="sub">USDC / USDT / BTC / ZEC</div></div>
           </div>
         </div>
         <div class="card">
           <div class="ttl" style="margin-bottom:10px">اختر مبلغ الشراء (بالدولار)</div>
           <div class="amts" id="cryptoAmounts" style="grid-template-columns:repeat(3,1fr)">
-            <button class="amt" data-usd="1">$1</button>
-            <button class="amt" data-usd="5">$5</button>
-            <button class="amt" data-usd="10">$10</button>
-            <button class="amt" data-usd="25">$25</button>
-            <button class="amt" data-usd="50">$50</button>
-            <button class="amt" data-usd="100">$100</button>
+            <button class="amt" data-usd="1">$1</button><button class="amt" data-usd="5">$5</button><button class="amt" data-usd="10">$10</button>
+            <button class="amt" data-usd="25">$25</button><button class="amt" data-usd="50">$50</button><button class="amt" data-usd="100">$100</button>
           </div>
-          <div class="sub" style="text-align:center;margin-top:12px">أو أدخل مبلغاً مخصصاً</div>
           <input class="inp" id="cryptoCustomUsd" type="number" min="1" max="1000" step="1" placeholder="$1 - $1000" inputmode="decimal">
         </div>
         <div class="info">
@@ -556,29 +302,35 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
           <div>الجواهر المستقبلة <b id="cryptoReceiveGems">0 💎</b></div>
           <div>رصيدك الحالي <b id="depGemsCrypto">0 💎</b></div>
         </div>
-        <button class="btn b-g" id="cryptoPayBtn" style="margin-top:10px" disabled>
-          <i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو
-        </button>
-        <div class="card" style="text-align:center;font-size:12px;color:var(--ink2);margin-top:12px">
-          <i class="fas fa-shield-halved" style="color:var(--sky-d)"></i>
-          دفع آمن ومشفر. تصل الجواهر لحسابك فوراً بعد التأكيد.
-        </div>
+        <button class="btn b-g" id="cryptoPayBtn" disabled><i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو</button>
       </div>
 
       <div id="dep-tab-binance" style="display:none"></div>
       <div id="dep-tab-sham" style="display:none"></div>
     </section>
 
+    <!-- تبديل العملات -->
+    <section class="screen" id="screen-exchange">
+      <div class="hero2"><div class="ico i-green"><i class="fas fa-right-left"></i></div><div class="ttl" style="font-size:19px">تبديل العملات</div><div class="sub">اتجاه واحد فقط: 1000 🪙 = 10 💎</div></div>
+      <div class="card">
+        <div class="ttl" style="margin-bottom:10px">اختر عدد العملات</div>
+        <div class="amts" id="exAmounts">
+          <button class="amt" data-amt="10000">10,000 🪙</button><button class="amt" data-amt="50000">50,000 🪙</button><button class="amt" data-amt="100000">100,000 🪙</button>
+          <button class="amt" data-amt="250000">250,000 🪙</button><button class="amt" data-amt="500000">500,000 🪙</button><button class="amt" data-amt="1000000">1,000,000 🪙</button>
+        </div>
+      </div>
+      <div class="info"><div>العملات المُحوّلة<b id="exChosen">0 🪙</b></div><div>الجواهر المستقبلة<b id="exReceive">0 💎</b></div><div>رصيدك<b id="exBal">0 🪙</b></div></div>
+      <button class="btn b-g" id="exSubmit"><i class="fas fa-right-left"></i> تبديل الآن</button>
+    </section>
+
+    <!-- سحب الأموال -->
     <section class="screen" id="screen-withdraw">
       <div class="hero2"><div class="sub">رصيدك القابل للسحب</div><div class="big"><i class="fas fa-gem" style="color:var(--sky-d)"></i> <span id="wdGems">0</span></div><div class="ttl" id="wdUsd">$0.00</div></div>
       <div class="ttl" style="margin:4px 0 10px">اختر طريقة السحب</div>
 
       <div class="card row wd-method" data-method="usdt_crypto" style="border-color:var(--edge);opacity:.65">
         <span class="ico i-green" style="width:46px;height:46px;font-size:22px"><i class="fas fa-coins"></i></span>
-        <div class="grow">
-          <div class="ttl">USDT Crypto <span style="font-size:9px;background:#999;color:#fff;padding:1px 8px;border-radius:8px">قريباً</span></div>
-          <div class="sub">غير متاح مؤقتاً — قيد التجهيز</div>
-        </div>
+        <div class="grow"><div class="ttl">USDT Crypto <span style="font-size:9px;background:#999;color:#fff;padding:1px 8px;border-radius:8px">قريباً</span></div><div class="sub">غير متاح مؤقتاً</div></div>
         <i class="fas fa-lock" style="color:#999;font-size:18px"></i>
       </div>
 
@@ -604,7 +356,7 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 
       <div class="card">
         <div class="ttl" id="wdAccountTitle">معرّف Binance Pay</div>
-        <div class="sub" id="wdAccountHelp">أدخل معرّف Binance Pay أو البريد الإلكتروني لاستلام السحب</div>
+        <div class="sub" id="wdAccountHelp">أدخل معرّف Binance Pay لاستلام السحب</div>
         <input class="inp" id="wdAccount" placeholder="Binance Pay ID أو البريد الإلكتروني" autocomplete="off">
       </div>
 
@@ -617,10 +369,14 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
       </div>
       <button class="btn b-g" id="wdSubmit"><i class="fas fa-paper-plane"></i> تقديم طلب السحب</button>
 
-      <div class="sec" style="margin-top:16px"><span class="ico i-gold"><i class="fas fa-clock-rotate-left"></i></span> سجل السحوبات</div>
+      <div style="display:flex;align-items:center;gap:8px;margin:16px 4px 10px;font-weight:800">
+        <span class="ico i-gold" style="width:28px;height:28px;font-size:12px"><i class="fas fa-clock-rotate-left"></i></span>
+        سجل السحوبات
+      </div>
       <div id="wdHistory"></div>
     </section>
 
+    <!-- حسابي -->
     <section class="screen" id="screen-profile">
       <div class="hero2">
         <div class="avatar" id="profAvatar"><i class="fas fa-dog"></i></div>
@@ -630,20 +386,24 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
       <div class="stats">
         <div class="card"><span class="ico i-gold"><i class="fas fa-coins"></i></span><div><b id="profCoins">0</b><span class="sub">عملات</span></div></div>
         <div class="card"><span class="ico i-sky"><i class="fas fa-gem"></i></span><div><b id="profGems">0</b><span class="sub">جواهر</span></div></div>
-        <div class="card"><span class="ico i-green"><i class="fas fa-trophy"></i></span><div><b id="profLevel">1</b><span class="sub">المستوى</span></div></div>
+        <div class="card"><span class="ico i-green"><i class="fas fa-box-open"></i></span><div><b id="profCollectibles">0</b><span class="sub">مقتنيات</span></div></div>
         <div class="card"><span class="ico i-sky"><i class="fas fa-users"></i></span><div><b id="profRefs">0</b><span class="sub">إحالات</span></div></div>
       </div>
       <div class="card menu">
+        <button data-go="store"><span class="ico i-green"><i class="fas fa-box-open"></i></span><span class="grow">متجر المقتنيات</span><i class="fas fa-chevron-left"></i></button>
         <button data-go="deposit"><span class="ico i-gold"><i class="fas fa-gem"></i></span><span class="grow">شراء الجواهر</span><i class="fas fa-chevron-left"></i></button>
         <button data-go="exchange"><span class="ico i-green"><i class="fas fa-right-left"></i></span><span class="grow">تبديل العملات</span><i class="fas fa-chevron-left"></i></button>
         <button data-go="withdraw"><span class="ico i-gold"><i class="fas fa-money-bill-transfer"></i></span><span class="grow">سحب الأموال</span><i class="fas fa-chevron-left"></i></button>
-        <button id="openPolicy"><span class="ico i-sky"><i class="fas fa-shield-halved"></i></span><span class="grow">معلومات التطبيق وسياسة الخصوصية</span><i class="fas fa-chevron-left"></i></button>
+        <button id="openPolicy"><span class="ico i-sky"><i class="fas fa-shield-halved"></i></span><span class="grow">سياسة الخصوصية</span><i class="fas fa-chevron-left"></i></button>
         <button id="openHelp"><span class="ico i-green"><i class="fas fa-circle-question"></i></span><span class="grow">مركز المساعدة</span><i class="fas fa-chevron-left"></i></button>
       </div>
     </section>
 
+    <!-- الإحالة -->
     <section class="screen" id="screen-referral">
-      <div class="sec"><span class="ico i-gold"><i class="fas fa-user-plus"></i></span> دعوة الأصدقاء</div>
+      <div style="display:flex;align-items:center;gap:8px;margin:8px 4px 10px;font-weight:800">
+        <span class="ico i-gold" style="width:28px;height:28px;font-size:12px"><i class="fas fa-user-plus"></i></span> دعوة الأصدقاء
+      </div>
       <div class="card" id="enterCard" style="display:none">
         <div class="ttl">هل دعاك صديق؟</div><div class="sub">أدخل معرّف الدعوة لتحصل على +20 💎</div>
         <input class="inp" id="codeInput" inputmode="numeric" placeholder="معرّف الدعوة">
@@ -651,24 +411,8 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
       </div>
       <div class="card">
         <div class="duo">
-          <div class="tileR me"><div class="ico i-sky"><i class="fas fa-gem"></i></div><b>+50</b><span class="sub">إجمالي مكافآت الدعوة (مقسمة)</span></div>
+          <div class="tileR me"><div class="ico i-sky"><i class="fas fa-gem"></i></div><b>+50</b><span class="sub">إجمالي مكافآت الدعوة</span></div>
           <div class="tileR"><div class="ico i-green"><i class="fas fa-gift"></i></div><b>+20</b><span class="sub">هدية ترحيب لصديقك</span></div>
-        </div>
-        <div class="card" style="margin-bottom:10px;padding:10px;background:#FFF9E8">
-          <div class="ttl" style="margin-bottom:6px;font-size:13px"><i class="fas fa-list-check"></i> شروط المكافآت</div>
-          <div class="row" style="padding:4px 0;font-size:12px;font-weight:700">
-            <span class="rw" style="margin:0">+25 💎</span>
-            <span class="grow">عند وصول صديقك للمستوى 5</span>
-          </div>
-          <div class="row" style="padding:4px 0;font-size:12px;font-weight:700">
-            <span class="rw" style="margin:0">+25 💎</span>
-            <span class="grow">عند وصول صديقك للمستوى 10</span>
-          </div>
-        </div>
-        <div class="steps">
-          <div><div class="ico i-green"><i class="fas fa-share-nodes"></i></div>شارك رابطك</div>
-          <div><div class="ico i-green"><i class="fas fa-user-check"></i></div>صديقك ينضم</div>
-          <div><div class="ico i-green"><i class="fas fa-gem"></i></div>تستلم المكافآت</div>
         </div>
         <div class="sub" style="margin-bottom:6px">معرّف الدعوة الخاص بك</div>
         <div class="codebox"><b id="refCode">...</b><button class="btn b-y b-sm" id="codeCopy"><i class="fas fa-copy"></i> نسخ</button></div>
@@ -683,108 +427,40 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 
   <nav class="dock">
     <button class="on" data-nav="home"><i class="fas fa-house"></i><span>الرئيسية</span></button>
-    <button data-nav="missions"><i class="fas fa-list-check"></i><span>المهام</span></button>
-    <button data-nav="wheel"><i class="fas fa-dharmachakra"></i><span>العجلة</span></button>
+    <button data-nav="store"><i class="fas fa-box-open"></i><span>المتجر</span></button>
     <button data-nav="referral"><i class="fas fa-user-plus"></i><span>الإحالة</span></button>
     <button data-nav="profile"><i class="fas fa-user"></i><span>حسابي</span></button>
   </nav>
-
-  <section class="screen" id="screen-fly">
-    <div class="fly-canvas-wrap">
-      <canvas id="flyCanvas"></canvas>
-      <div class="fly-balances">
-        <div class="fly-balance coins"><i class="fas fa-coins"></i><b id="flyHudCoins">0</b></div>
-        <div class="fly-balance gems"><i class="fas fa-gem"></i><b id="flyHudDiamonds">0</b></div>
-      </div>
-      <div class="fly-dist-center"><b id="flyHudDist">0</b><span>م</span></div>
-      <button class="fly-pause" id="flyPause" aria-label="إيقاف"><i class="fas fa-pause"></i></button>
-      <div id="flyFloaters"></div>
-
-      <div class="fly-overlay show" id="flyReadyOverlay">
-        <div class="card fly-ready-card">
-          <span class="ico i-sky"><i class="fas fa-dove"></i></span>
-          <div class="fly-ready-title">جاهز للطيران؟</div>
-          <div class="fly-ready-sub">اضغط على الشاشة لترتفع وتجنّب الصبّار</div>
-          <button class="btn b-g" id="flyBtnStart"><i class="fas fa-play"></i> ابدأ الطيران</button>
-        </div>
-      </div>
-
-      <div class="fly-overlay" id="flyPauseOverlay">
-        <div class="card fly-ready-card">
-          <span class="ico i-sky"><i class="fas fa-pause"></i></span>
-          <div class="fly-ready-title">اللعبة متوقفة</div>
-          <div class="fly-ready-sub">ماذا تريد أن تفعل؟</div>
-          <button class="btn b-g" id="flyResume" style="margin-bottom:10px"><i class="fas fa-play"></i> استئناف</button>
-          <button class="btn b-y" id="flyQuit"><i class="fas fa-arrow-right"></i> خروج</button>
-        </div>
-      </div>
-
-      <div class="fly-overlay" id="flyOverOverlay">
-        <div class="fly-over-bg" aria-hidden="true">
-          <div class="fly-over-sun"></div>
-          <i class="fas fa-cloud cl" style="top:16%;left:6%;font-size:64px"></i>
-          <i class="fas fa-cloud cl" style="top:30%;left:58%;font-size:46px"></i>
-          <svg class="fly-over-dunes" viewBox="0 0 400 140" preserveAspectRatio="none">
-            <path d="M230 70 L275 6 L320 70Z" fill="rgba(220,185,130,.7)"/>
-            <path d="M0 60 Q80 20 160 55 T320 50 T400 40 V140 H0Z" fill="#F0CF92"/>
-            <path d="M0 90 Q100 55 200 88 T400 78 V140 H0Z" fill="#E0B87A"/>
-            <path d="M0 115 Q120 90 240 112 T400 105 V140 H0Z" fill="#C79A5C"/>
-          </svg>
-        </div>
-        <div class="fly-over-content">
-          <div class="fly-over-head">انتهت الجولة</div>
-          <div class="fly-over-center">
-            <div class="card fly-over-distcard">
-              <div class="sub">المسافة التي قطعتها</div>
-              <div class="fly-over-dist"><b id="flyOverDist">0</b><span>متر</span></div>
-              <div class="fly-over-best" id="flyOverBest"></div>
-            </div>
-            <div class="fly-over-rewgrid">
-              <div class="card"><span class="ico i-gold"><i class="fas fa-coins"></i></span><b id="flyOverCoins">0</b><span class="sub">عملات</span></div>
-              <div class="card"><span class="ico i-sky"><i class="fas fa-gem"></i></span><b id="flyOverGems">0</b><span class="sub">جواهر</span></div>
-            </div>
-          </div>
-          <div class="fly-over-actions">
-            <button class="btn b-y" id="flyBtnHome"><i class="fas fa-house"></i> الرئيسية</button>
-            <button class="btn b-g" id="flyBtnReplay"><i class="fas fa-rotate-right"></i> العب مرة أخرى</button>
-            <button class="fly-link-board" id="flyBtnBoard"><i class="fas fa-ranking-star"></i> لوحة المتصدرين</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="screen" id="screen-flyboard">
-    <div class="fly-board-header">
-      <button class="g-btn" id="flyBoardBack"><i class="fas fa-arrow-right"></i></button>
-      <div class="fly-board-title">لوحة المتصدرين</div>
-      <div style="width:44px"></div>
-    </div>
-    <div class="fly-board-scroll" id="flyBoardScroll"></div>
-  </section>
 </div>
 
-<!-- نافذة التأكيد للبطاقات -->
+<!-- نافذة تأكيد الشراء -->
 <div class="modal" id="bundleConfirmModal">
-  <div class="card" style="max-width:320px">
-    <div class="ttl" style="font-size:20px;margin-bottom:12px" id="bcTitle">تأكيد الشراء</div>
-    
-    <div class="webm-box" id="bcWebmBox">
-        <!-- سيتم إدراج الفيديو هنا -->
-    </div>
+  <div class="card" style="max-width:340px">
+    <div class="ttl" style="font-size:20px;margin-bottom:12px">تأكيد شراء المقتنى</div>
+    <div class="webm-box" id="bcWebmBox"></div>
 
     <div class="detail-row">
-        <span>النجوم المطلوبة</span>
-        <span id="bcStars" style="color:var(--red)">0 <img src="https://up6.cc/2026/10/17926810487851.png"></span>
+      <span>النجوم المطلوبة</span>
+      <span id="bcStars" style="color:var(--red)">0 <img src="https://up6.cc/2026/10/17926810487851.png"></span>
     </div>
     <div class="detail-row">
-        <span>الجواهر المستقبلة</span>
-        <span id="bcGems">0 <i class="fas fa-gem" style="color:var(--sky-d)"></i></span>
+      <span>قيمة المقتنى</span>
+      <span id="bcGems">0 <i class="fas fa-gem" style="color:var(--sky-d)"></i></span>
+    </div>
+    <div class="detail-row sell-row">
+      <span>قيمة البيع (+5%)</span>
+      <span id="bcSellValue">0 <i class="fas fa-gem"></i></span>
     </div>
 
-    <div style="display:flex;gap:10px;margin-top:20px">
-        <button class="btn b-off" id="bcCancelBtn" style="height:46px;font-size:14px">إلغاء</button>
-        <button class="btn b-g" id="bcConfirmBtn" style="height:46px;font-size:14px">تأكيد الشراء</button>
+    <div style="font-size:11px;font-weight:700;color:var(--ink2);text-align:center;margin:12px 0;line-height:1.7;background:#FFF9E8;padding:10px;border-radius:12px;border:1px dashed var(--edge)">
+      <i class="fas fa-info-circle" style="color:var(--sky-d)"></i>
+      يُحفظ المقتنى في متجر المقتنيات ولا يُحوَّل إلى جواهر.<br>
+      يمكن بيعه بعد 7 أيام من الشراء بربح 5%.
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn b-off" id="bcCancelBtn" style="height:46px;font-size:14px">إلغاء</button>
+      <button class="btn b-g" id="bcConfirmBtn" style="height:46px;font-size:14px">تأكيد الشراء</button>
     </div>
   </div>
 </div>
@@ -796,9 +472,10 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
   <div class="m-amt" id="mAmt"></div>
   <button class="btn b-y" id="mBtn"><i class="fas fa-check"></i> <span>موافق</span></button>
 </div></div>
+
 <div class="modal text-modal" id="contentModal" style="z-index:1600">
   <div class="card">
-    <div class="content-head"><span class="ico i-sky" id="contentIcon"><i class="fas fa-circle-info"></i></span><div class="grow ttl" style="font-size:18px" id="contentTitle">معلومات التطبيق</div><button class="g-btn" id="contentClose" aria-label="إغلاق"><i class="fas fa-xmark"></i></button></div>
+    <div class="content-head"><span class="ico i-sky" id="contentIcon"><i class="fas fa-circle-info"></i></span><div class="grow ttl" style="font-size:18px" id="contentTitle">معلومات</div><button class="g-btn" id="contentClose" aria-label="إغلاق"><i class="fas fa-xmark"></i></button></div>
     <div class="content-body" id="contentBody"></div>
     <button class="btn b-y" id="contentDone"><i class="fas fa-check"></i> إغلاق</button>
   </div>
@@ -811,30 +488,22 @@ html[dir=ltr] .fa-chevron-left,html[dir=ltr] .fa-arrow-right{transform:scaleX(-1
 'use strict';
 
 const CONFIG={
-  firebase:{apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
-  authDomain: "puppy-marge.firebaseapp.com",
-  projectId: "puppy-marge",
-  storageBucket: "puppy-marge.firebasestorage.app",
-  messagingSenderId: "907422647300",
-  appId: "1:907422647300:web:efa524fcfef96288c4a151"
-},
+  firebase:{
+    apiKey:"AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
+    authDomain:"puppy-marge.firebaseapp.com",
+    projectId:"puppy-marge",
+    storageBucket:"puppy-marge.firebasestorage.app",
+    messagingSenderId:"907422647300",
+    appId:"1:907422647300:web:efa524fcfef96288c4a151"
+  },
   bot:{username:'PuppyMerge_bot',appName:'PuppyMerge'},
   col:'puppy_users',wdCol:'puppy_withdrawals',txCol:'puppy_transactions',timeCol:'_puppy_time',depCol:'puppy_deposits',
-  flyCol:'puppy_fly_scores',
-  socialTasksCol:'puppy_social_tasks',
   admin:{telegram:'qo_ij2'},
-  energyMax:25,regenMs:600000,hintPrice:30,shufflePrice:50,
   ref:{
     newUser:20,
-    milestones:[
-      {level:5,  reward:25},
-      {level:10, reward:25},
-    ]
+    milestones:[{level:5,reward:25},{level:10,reward:25}]
   },
   ex:{min:10000,rate:0.01},
-  score:{divisor:1000,perUnit:100},
-  levelCoins:n=>100+n*50,
-  gameWin:{coinsPerLevel: 100, gemsEvery10: 10},
   wd:{
     min:5000,
     rate:0.0001,
@@ -842,55 +511,28 @@ const CONFIG={
     shamMin:1000,
     shamSypPerGem:0.01
   },
-  spins:2,
-  prizes:[500,800,1000,1500,2000,3000,4000,5000].map((v,i)=>['coins',v,['#F4B900','#35C915','#2FB8DC'][i%3]]),
-  daily:[[200,20],[300,30],[500,50],[700,70],[1000,100],[1500,150],[3000,300]],
   tg:'https://t.me/PuppyMerge',
   api:{base:'https://puppy-merge-api.starlimitedcom.workers.dev'},
   stars:{gemsPerStar:90, min:1, max:100000},
-  shieldz:{
-    gemsPerUsd:10000,
-    minUsd:1,
-    maxUsd:1000,
-    pollIntervalMs:5000,
-    pollMaxAttempts:60,
-    pendingTimeoutMs: 30 * 60 * 1000,
-  },
-  investPlans:[
-    {id:'p1', name:'خطة الجرو',    icon:'fa-paw',      days:7,  price:5000,   totalReturn:5500,   color:'#4BE51E'},
-    {id:'p2', name:'خطة النشيط',   icon:'fa-dog',      days:12, price:20000,  totalReturn:22600,  color:'#59D7F2'},
-    {id:'p3', name:'خطة المحترف',  icon:'fa-bone',     days:18, price:50000,  totalReturn:58000,  color:'#FFD52E'},
-    {id:'p4', name:'خطة الخبير',   icon:'fa-crown',    days:24, price:70000,  totalReturn:84000,  color:'#FF8F8F'},
-    {id:'p5', name:'خطة الأسطورة', icon:'fa-gem',      days:30, price:100000, totalReturn:125000, color:'#C58CE8'},
-  ],
-  fly:{
-    gravity:1850, flap:-520, maxFall:950, scroll:200, fixedDt:1/120, pxPerM:26,
-    pRMin:16, pRMax:28, oWMin:56, oWMax:88, oWR:0.16,
-    gapR:0.31, gapMin:158, gapMax:270,
-    spR:0.75, spMin:250, spMax:340,
-    grR:0.13, grMin:70, grMax:115,
-    coinPerPair:5, dMin:1, dMax:10,
-    bubbleIntervalMin:5, bubbleIntervalMax:10,
-  },
+  shieldz:{gemsPerUsd:10000, minUsd:1, maxUsd:1000, pollIntervalMs:5000, pollMaxAttempts:60, pendingTimeoutMs:30*60*1000},
+  // ====== إعدادات المقتنيات الجديدة ======
+  collectibles:{
+    holdMs: 7 * 24 * 60 * 60 * 1000, // 7 أيام
+    profitRate: 0.05, // 5% ربح
+    bundles:[
+      { stars:200, gems:9000,  webm:'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
+      { stars:500, gems:45000, webm:'gifts_by_StickerEmojiRobot-069.webm' },
+      { stars:700, gems:63000, webm:'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
+    ]
+  }
 };
-
-const SOCIAL_PLATFORMS = {
-  telegram:  { label:'Telegram',  icon:'fab fa-telegram-plane', color:'#229ED9' },
-  instagram: { label:'Instagram', icon:'fab fa-instagram',      color:'#E1306C' },
-  youtube:   { label:'YouTube',   icon:'fab fa-youtube',        color:'#FF0000' },
-  tiktok:    { label:'TikTok',    icon:'fab fa-tiktok',         color:'#010101' },
-  facebook:  { label:'Facebook',  icon:'fab fa-facebook-f',     color:'#1877F2' },
-  x:         { label:'X',         icon:'fab fa-x-twitter',      color:'#000000' },
-  whatsapp:  { label:'WhatsApp',  icon:'fab fa-whatsapp',       color:'#25D366' },
-  snapchat:  { label:'Snapchat',  icon:'fab fa-snapchat',       color:'#FFFC00' },
-  other:     { label:'رابط',      icon:'fas fa-link',           color:'#1B7FA8' }
-};
-function socialPlatformOf(id){ return SOCIAL_PLATFORMS[id] || SOCIAL_PLATFORMS.other; }
 
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n||0).toLocaleString('en-US');
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const pad=n=>String(n).padStart(2,'0');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 function usd(g){
   const n = Math.floor(Number(g||0));
@@ -899,37 +541,23 @@ function usd(g){
 }
 function usdBinanceNet(g){
   const gross = parseFloat(usd(g));
-  const net = gross * (1 - CONFIG.wd.binanceFee);
-  return net.toFixed(2);
+  return (gross * (1 - CONFIG.wd.binanceFee)).toFixed(2);
 }
 function usdBinanceFee(g){
   const gross = parseFloat(usd(g));
-  const fee = gross * CONFIG.wd.binanceFee;
-  return fee.toFixed(2);
+  return (gross * CONFIG.wd.binanceFee).toFixed(2);
 }
-
-const today=()=>new Date(TIME.now()).toISOString().slice(0,10);
-const pad=n=>String(n).padStart(2,'0');
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const rewardHtml=r=>(r.gems?'<span class="rw"><i class="fas fa-gem"></i>'+r.gems+'</span>':'')+(r.coins?'<span class="rw"><i class="fas fa-coins"></i>'+r.coins+'</span>':'');
-const rewardTxt=r=>'+'+(r.coins||0)+' 🪙'+(r.gems?' + '+r.gems+' 💎':'');
+function getBundleByStars(stars){
+  return CONFIG.collectibles.bundles.find(b => b.stars === stars) || null;
+}
 
 const SFX={ctx:null,
   tone(f,d,t='square',v=.2,w=0){try{this.ctx=this.ctx||new(window.AudioContext||window.webkitAudioContext)();const c=this.ctx,s=c.currentTime+w,o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(.0001,s);g.gain.linearRampToValueAtTime(v,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.05)}catch(e){}},
-  play(n){const m={tap:[[520,.07,0,'sine'],[780,.06,.035,'sine']],select:[[1000,.05,0,'triangle']],match:[[880,.09],[1320,.1,.04]],invalid:[[200,.13,0,'sawtooth']],
-    win:[523,659,784,1047,1319].map((f,i)=>[f,.2,i*.07]),lose:[400,350,300,220].map((f,i)=>[f,.18,i*.07,'sawtooth']),
-    reward:[880,1108,1320,1760].map((f,i)=>[f,.14,i*.05]),wheel:[523,659,784,1047,1319,1568].map((f,i)=>[f,.12,i*.06]),
-    flap:[[600,.05,0,'sine']]}[n]||[];
+  play(n){const m={tap:[[520,.07,0,'sine'],[780,.06,.035,'sine']],select:[[1000,.05,0,'triangle']],
+    reward:[880,1108,1320,1760].map((f,i)=>[f,.14,i*.05]),
+    lose:[400,350,300,220].map((f,i)=>[f,.18,i*.07,'sawtooth'])}[n]||[];
     m.forEach(([f,d,w,t])=>this.tone(f,d,t||'square',.2,w||0))}
 };
-
-function showRewardedAd() {
-  if (typeof window.show_12008608 !== 'function') return;
-  try {
-    const p = window.show_12008608();
-    if (p && typeof p.then === 'function') p.catch(() => {});
-  } catch (e) {}
-}
 
 const TG={app:null,user:null,id:null,start:null,isAdmin:false,
   init(){this.app=window.Telegram&&Telegram.WebApp;
@@ -943,6 +571,7 @@ const TG={app:null,user:null,id:null,start:null,isAdmin:false,
   openExternal(u){try{this.app&&this.app.openLink?this.app.openLink(u):window.open(u,'_blank')}catch(e){window.open(u,'_blank')}},
   share(u,t){this.open('https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent(t))}
 };
+
 let db=null;
 const FB={
   init(){try{firebase.apps.length||firebase.initializeApp(CONFIG.firebase);db=firebase.firestore()}catch(e){console.warn(e)}},
@@ -953,26 +582,11 @@ const FB={
 const save=(extra={})=>FB.set(Object.assign({
   coins:S.user.coins,
   gems:S.user.gems,
+  stars:S.user.stars||0,
   energy:S.user.energy,
   energyUpdatedAt:S.user.energyUpdatedAt,
   level:S.user.level,
-  totalScore:S.user.totalScore,
-  completedLevels:S.user.completedLevels,
-  dailyLogin:S.user.dailyLogin,
-  dailyRewards:S.user.dailyRewards,
-  levelMissions:S.user.levelMissions,
-  inviteMissions:S.user.inviteMissions,
-  inviteBase:S.user.inviteBase,
-  wheelSpins:S.user.wheelSpins,
-  wheelLastDate:S.user.wheelLastDate,
-  wheelSpinCount:S.user.wheelSpinCount,
-  wheelMissionClaimed:S.user.wheelMissionClaimed,
-  wheelAdTimes:S.user.wheelAdTimes,
-  investments:S.user.investments,
-  flyBest:S.user.flyBest,
-  flyCoins:S.user.flyCoins,
-  flyGems:S.user.flyGems,
-  flyTotal:S.user.flyTotal,
+  collectibles: S.user.collectibles,
   referralCount:S.user.referralCount,
   referralEarnings:S.user.referralEarnings,
   updatedAt:Date.now()
@@ -983,23 +597,36 @@ const TIME={serverAt:0,perfAt:0,synced:false,locked:false,
   async sync(){if(!db)return;try{const r=db.collection(CONFIG.timeCol).doc('t_'+TG.id),t0=performance.now();
     await r.set({ping:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
     const s=await r.get({source:'server'}),t1=performance.now(),ts=s.data()&&s.data().ping;
-    if(ts){this.serverAt=ts.toMillis()+(t1-t0)/2;this.perfAt=t1;this.synced=true;this.locked=Math.abs(this.serverAt-Date.now())>60000;if(this.locked)toast('تم اكتشاف تلاعب بالوقت — اضبط وقت الجهاز تلقائياً','err')}}catch(e){}}
+    if(ts){this.serverAt=ts.toMillis()+(t1-t0)/2;this.perfAt=t1;this.synced=true;this.locked=Math.abs(this.serverAt-Date.now())>60000;if(this.locked)toast('تم اكتشاف تلاعب بالوقت','err')}}catch(e){}}
 };
 
-const S={user:null,busy:false,wd:0,wdMethod:'binance',ex:0,socialTasks:[],socialTasksAt:0,starsInput:0};
-const newUser=()=>({telegramId:TG.id,name:(TG.user.first_name||'')+(TG.user.last_name?' '+TG.user.last_name:''),username:TG.user.username||null,photoUrl:TG.user.photo_url||null,
-  coins:0,gems:0,energy:CONFIG.energyMax,energyUpdatedAt:TIME.now(),level:1,totalScore:0,completedLevels:[],
-  referralCode:TG.id,referredBy:null,referralCount:0,referralEarnings:0,referralUsed:false,
+const S={user:null,busy:false,wd:0,wdMethod:'binance',ex:0,starsInput:0};
+
+const newUser=()=>({
+  telegramId:TG.id,
+  name:(TG.user.first_name||'')+(TG.user.last_name?' '+TG.user.last_name:''),
+  username:TG.user.username||null,
+  photoUrl:TG.user.photo_url||null,
+  coins:0,
+  gems:0,
+  stars:0,
+  energy:25,
+  energyUpdatedAt:TIME.now(),
+  level:1,
+  referralCode:TG.id,
+  referredBy:null,
+  referralCount:0,
+  referralEarnings:0,
+  referralUsed:false,
   referralMilestones:{},
-  investments:[],
-  wheelSpins:CONFIG.spins,wheelLastDate:null,wheelSpinCount:0,wheelMissionClaimed:false,wheelAdTimes:[],
-  dailyRewards:{},dailyLogin:{streak:0,lastClaimDate:null},levelMissions:{},inviteMissions:{},inviteBase:0,lang:null,
-  flyBest:0,flyCoins:0,flyGems:0,flyTotal:0,
-  socialClaimed:{},
-  createdAt:Date.now(),updatedAt:Date.now()});
+  collectibles:[],
+  createdAt:Date.now(),
+  updatedAt:Date.now()
+});
 
 let tt;
 function toast(msg,type='ok'){const e=$('toast');e.textContent=msg;e.className='toast '+type;void e.offsetWidth;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2600)}
+
 function showModal(o){
   $('mIcon').className='ico '+(o.type==='lose'?'i-red':o.type==='info'?'i-sky':'i-gold');
   $('mIcon').innerHTML='<i class="fas '+(o.icon||'fa-check')+'"></i>';
@@ -1012,756 +639,333 @@ function showModal(o){
 const closeModal=()=>$('modal').classList.remove('show');
 $('modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
 
+// ========== نظام الطاقة (محتفظ به لكن غير مستخدم بلعبة) ==========
 const Energy={
   cur(u){
     const st=Number(u.energy||0);
-    if(st>=CONFIG.energyMax)return CONFIG.energyMax;
+    if(st>=25)return 25;
     const now=TIME.now();
     const rawLast=Number(u.energyUpdatedAt||now);
     const last=rawLast>now+60000?now:rawLast;
     const elapsed=Math.max(0,now-last);
-    return Math.min(CONFIG.energyMax,Math.max(0,st+Math.floor(elapsed/CONFIG.regenMs)));
-  },
-  next(u){
-    if(this.cur(u)>=CONFIG.energyMax)return 0;
-    const now=TIME.now();
-    const rawLast=Number(u.energyUpdatedAt||now);
-    const last=rawLast>now+60000?now:rawLast;
-    const elapsed=Math.max(0,now-last);
-    return CONFIG.regenMs-(elapsed%CONFIG.regenMs);
-  },
-  async use(n=1){
-    const c=this.cur(S.user);
-    if(c<n)return false;
-    const now=TIME.now();
-    const rawLast=Number(S.user.energyUpdatedAt||now);
-    const last=rawLast>now+60000?now:rawLast;
-    const wasFull=c>=CONFIG.energyMax;
-    S.user.energy=c-n;
-    if(wasFull)S.user.energyUpdatedAt=now;
-    else S.user.energyUpdatedAt=last+Math.floor((now-last)/CONFIG.regenMs)*CONFIG.regenMs;
-    await FB.set({energy:S.user.energy,energyUpdatedAt:S.user.energyUpdatedAt});
-    renderEnergy();
-    return true;
-  },
-  async add(n=1){
-    const now=TIME.now();
-    const current=this.cur(S.user);
-    const rawLast=Number(S.user.energyUpdatedAt||now);
-    const last=rawLast>now+60000?now:rawLast;
-    const newVal=Math.min(current+n,CONFIG.energyMax);
-    S.user.energy=newVal;
-    if(newVal>=CONFIG.energyMax){
-      S.user.energyUpdatedAt=now;
-    }else{
-      S.user.energyUpdatedAt=last+Math.floor((now-last)/CONFIG.regenMs)*CONFIG.regenMs;
-    }
-    await FB.set({energy:S.user.energy,energyUpdatedAt:S.user.energyUpdatedAt});
-    renderEnergy();
+    return Math.min(25,Math.max(0,st+Math.floor(elapsed/600000)));
   }
 };
 function renderEnergy(){
   if(!S.user)return;
-  const c=Energy.cur(S.user),m=CONFIG.energyMax;
-  $('energyCur').textContent=c;$('energyMax').textContent=m;$('energyTop').textContent=c;
-  $('energyFill').style.width=(c/m*100)+'%';
-  const r=Energy.next(S.user);
-  $('energyTimer').textContent=c>=m?'ممتلئة':Math.floor(r/60000)+':'+pad(Math.floor(r%60000/1000));
+  const c=Energy.cur(S.user);
+  $('starTop').textContent=fmt(S.user.stars||0);
 }
 
-async function loadSocialTasks(force){
-  if(!db) return;
-  if(!force && Date.now()-S.socialTasksAt < 30000 && S.socialTasks.length) return;
-  try{
-    const snap = await db.collection(CONFIG.socialTasksCol).orderBy('createdAt','desc').limit(50).get();
-    S.socialTasks = snap.docs.map(d=>({id:d.id, ...d.data()}));
-    S.socialTasksAt = Date.now();
-    renderMissions();
-  }catch(e){
-    console.warn('loadSocialTasks', e);
-  }
-}
-
+// ========== عرض الصفحات ==========
 function renderAll(){
   const u=S.user;if(!u)return;
-  $('gemTop').textContent=fmt(u.gems);$('gemUsd').textContent='$'+usd(u.gems||0);
-  $('coinTop').textContent=fmt(u.coins);$('homeLevel').textContent=u.level||1;
-  $('profName').textContent=u.name||'لاعب';$('profId').textContent=u.telegramId;
-  $('profCoins').textContent=fmt(u.coins);$('profGems').textContent=fmt(u.gems);$('profLevel').textContent=u.level||1;$('profRefs').textContent=u.referralCount||0;
+  const activeCount = (u.collectibles||[]).filter(c=>!c.sold).length;
+
+  $('gemTop').textContent=fmt(u.gems);
+  $('gemUsd').textContent='$'+usd(u.gems||0);
+  $('coinTop').textContent=fmt(u.coins);
+  $('starTop').textContent=fmt(u.stars||0);
+  $('homeGems').textContent=fmt(u.gems);
+  $('homeUsd').textContent='$'+usd(u.gems||0);
+
+  // بروفايل
+  $('profName').textContent=u.name||'لاعب';
+  $('profId').textContent=u.telegramId;
+  $('profCoins').textContent=fmt(u.coins);
+  $('profGems').textContent=fmt(u.gems);
+  $('profCollectibles').textContent=fmt(activeCount);
+  $('profRefs').textContent=u.referralCount||0;
   $('profAvatar').innerHTML=u.photoUrl?'<img src="'+esc(u.photoUrl)+'" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-dog\\\'></i>\'">':'<i class="fas fa-dog"></i>';
-  $('wdGems').textContent=fmt(u.gems);$('wdUsd').textContent='$'+usd(u.gems||0);
-  $('refLink').textContent='https://t.me/'+CONFIG.bot.username+'/'+CONFIG.bot.appName+'?startapp=ref_'+(u.referralCode||TG.id);
+
+  // السحب
+  $('wdGems').textContent=fmt(u.gems);
+  $('wdUsd').textContent='$'+usd(u.gems||0);
+
+  // التبديل
   $('exBal').textContent=fmt(u.coins)+' 🪙';
-  $('refCount').textContent=u.referralCount||0;$('refEarn').textContent=fmt(u.referralEarnings||0);$('refCode').textContent=u.referralCode||TG.id;
+
+  // الإحالة
+  $('refLink').textContent='https://t.me/'+CONFIG.bot.username+'/'+CONFIG.bot.appName+'?startapp=ref_'+(u.referralCode||TG.id);
+  $('refCount').textContent=u.referralCount||0;
+  $('refEarn').textContent=fmt(u.referralEarnings||0);
+  $('refCode').textContent=u.referralCode||TG.id;
   $('enterCard').style.display=u.referralUsed?'none':'block';
-  $('wheelBadge').style.display=spinsLeft()>0?'inline-block':'none';
-  renderEnergy();renderMissions();renderWheel();updateEx();updateWd();renderAdminPanel();
-  if($('screen-deposit').classList.contains('active'))updateStarsUI();
-  if($('screen-invest').classList.contains('active'))renderInvestments();
+
+  // طاقة / نجوم
+  renderEnergy();
+
+  // تحديثات أخرى حسب الصفحة
+  updateEx();updateWd();
+  if($('screen-deposit').classList.contains('active')) updateStarsUI();
+  if($('screen-store').classList.contains('active')) renderCollectibles();
   updatePendingBanner();
 }
-function showScreen(name){
-  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-  const el=$('screen-'+name);
-  if(el) el.classList.add('active');
-}
+
 function go(s){
   const el=$('screen-'+s);if(!el)return;
-  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));el.classList.add('active');
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
   document.querySelectorAll('.dock button').forEach(b=>b.classList.toggle('on',b.dataset.nav===s));
   $('mainScroll').scrollTop=0;
-  if(s==='withdraw')loadWdHistory();
-  if(s==='deposit'){setDepTab('stars');updateStarsUI();}
-  if(s==='invest')renderInvestments();
-  if(s==='wheel'){S.busy=false;renderWheel();}
-  if(s==='missions'){loadSocialTasks(true);renderMissions();}
-  if(s==='fly'){FlyGame.enter();return;}
-  if(s !== 'deposit' && cryptoPollTimer){ stopPaymentPolling(); }
+  if(s==='withdraw') loadWdHistory();
+  if(s==='deposit'){ setDepTab('stars'); updateStarsUI(); }
+  if(s==='store') renderCollectibles();
+  if(s!=='deposit' && cryptoPollTimer) stopPaymentPolling();
 }
 
-const TILES=['fa-cat','fa-dog','fa-frog','fa-dove','fa-fish','fa-horse'];
-const Game={size:6,board:[],els:[],score:0,moves:0,target:0,level:1,sel:null,busy:false,ended:false,
-  async start(n){
-    this.level=n;this.target=100+(n-1)*50;this.moves=Math.ceil(this.target/30)+2;
-    this.score=0;this.sel=null;this.busy=false;this.ended=false;
-    $('gameLevel').textContent=n;$('gameTarget').textContent=fmt(this.target);$('gameScore').textContent=0;$('gameMoves').textContent=this.moves;
-    $('boardTarget').textContent='الهدف: '+fmt(this.target)+' نقطة';
-    this.build();this.render();
-  },
-  build(){
-    this.board=[];
-    for(let r=0;r<this.size;r++){this.board[r]=[];for(let c=0;c<this.size;c++){let t,g=0;do{t=Math.floor(Math.random()*6);g++}while(this.would(r,c,t)&&g<50);this.board[r][c]=t}}
-    if(!this.findMove())this.build();
-  },
-  findMove(){const b=this.board,n=this.size;
-    for(let r=0;r<n;r++)for(let c=0;c<n;c++)for(const[dr,dc]of[[0,1],[1,0]]){const r2=r+dr,c2=c+dc;if(r2>=n||c2>=n)continue;
-      [b[r][c],b[r2][c2]]=[b[r2][c2],b[r][c]];const ok=this.matches().length>0;[b[r][c],b[r2][c2]]=[b[r2][c2],b[r][c]];if(ok)return[r,c,r2,c2]}
-    return null},
-  would(r,c,t){const b=this.board;return(c>=2&&b[r][c-1]===t&&b[r][c-2]===t)||(r>=2&&b[r-1][c]===t&&b[r-2][c]===t)},
-  render(){
-    const el=$('board');el.innerHTML='';this.els=[];
-    for(let r=0;r<this.size;r++){this.els[r]=[];for(let c=0;c<this.size;c++){const d=document.createElement('div');d.dataset.r=r;d.dataset.c=c;el.appendChild(d);this.els[r][c]=d;this.paint(r,c)}}
-  },
-  paint(r,c){const t=this.board[r][c];this.els[r][c].className='tile t'+t;this.els[r][c].innerHTML='<i class="fas '+TILES[t]+'"></i>'},
-  async select(r,c){
-    if(this.busy||this.ended)return;
-    if(this.sel){
-      const p=this.sel;this.els[p.r][p.c].classList.remove('sel');
-      if(Math.abs(p.r-r)+Math.abs(p.c-c)===1){this.sel=null;await this.swap(p.r,p.c,r,c);return}
-      if(p.r===r&&p.c===c){this.sel=null;return}
-    }
-    this.sel={r,c};this.els[r][c].classList.add('sel');SFX.play('select');
-  },
-  async swap(r1,c1,r2,c2){
-    this.busy=true;const b=this.board;
-    [b[r1][c1],b[r2][c2]]=[b[r2][c2],b[r1][c1]];this.paint(r1,c1);this.paint(r2,c2);SFX.play('tap');
-    await sleep(150);
-    this.moves--;$('gameMoves').textContent=this.moves;
-    if(!this.matches().length){
-      [b[r1][c1],b[r2][c2]]=[b[r2][c2],b[r1][c1]];this.paint(r1,c1);this.paint(r2,c2);
-      [this.els[r1][c1],this.els[r2][c2]].forEach(e=>{e.classList.add('bad');setTimeout(()=>e.classList.remove('bad'),400)});
-      SFX.play('invalid');
-    }else await this.resolve();
-    this.busy=false;this.check();
-  },
-  matches(){
-    const m=new Set(),b=this.board,n=this.size;
-    for(let r=0;r<n;r++){let run=1;for(let c=1;c<=n;c++){if(c<n&&b[r][c]===b[r][c-1])run++;else{if(run>=3)for(let k=c-run;k<c;k++)m.add(r+','+k);run=1}}}
-    for(let c=0;c<n;c++){let run=1;for(let r=1;r<=n;r++){if(r<n&&b[r][c]===b[r-1][c])run++;else{if(run>=3)for(let k=r-run;k<r;k++)m.add(k+','+c);run=1}}}
-    return[...m].map(s=>s.split(',').map(Number));
-  },
-  async resolve(){
-    let cas=0,m;
-    while((m=this.matches()).length){
-      cas++;this.score+=m.length*10*cas;$('gameScore').textContent=fmt(this.score);SFX.play('match');
-      m.forEach(([r,c])=>this.els[r][c].classList.add('pop'));await sleep(280);
-      m.forEach(([r,c])=>this.board[r][c]=-1);this.drop();
-      for(let r=0;r<this.size;r++)for(let c=0;c<this.size;c++)this.paint(r,c);
-      await sleep(250);
-    }
-  },
-  drop(){
-    const b=this.board;
-    for(let c=0;c<this.size;c++){let w=this.size-1;
-      for(let r=this.size-1;r>=0;r--)if(b[r][c]!==-1){b[w][c]=b[r][c];if(w!==r)b[r][c]=-1;w--}
-      for(let r=w;r>=0;r--)b[r][c]=Math.floor(Math.random()*6)}
-  },
-  check(){if(this.ended)return;if(this.score>=this.target)this.win();else if(this.moves<=0)this.lose();else if(!this.findMove()){this.build();this.render();toast('تم خلط اللوحة تلقائياً','info')}},
-  async win(){
-    this.ended=true;
-    const u=S.user;if(!Array.isArray(u.completedLevels))u.completedLevels=[];
-    const firstCompletion=!u.completedLevels.includes(this.level);
-    const coinReward = CONFIG.gameWin.coinsPerLevel;
-    const gemReward = (this.level % 10 === 0 && firstCompletion) ? CONFIG.gameWin.gemsEvery10 : 0;
-    u.coins = Number(u.coins || 0) + coinReward;
-    u.gems = Number(u.gems || 0) + gemReward;
-    u.totalScore=(u.totalScore||0)+this.score;
-    if(firstCompletion)u.completedLevels.push(this.level);
-    const next=this.level+1;if(next>(u.level||1))u.level=next;
-    await save({totalScore:u.totalScore,completedLevels:u.completedLevels,level:u.level});
-    SFX.play('win');renderAll();
-    checkReferralMilestones(TG.id, next).catch(e=>console.warn(e));
-    const rewardLines = `+${coinReward} 🪙` + (gemReward ? ` +${gemReward} 💎` : '');
-    showModal({icon:gemReward?'fa-gem':'fa-trophy',title:gemReward?'🎉 مستوى مميز!':'المستوى '+this.level,sub:rewardLines,amount:'',btn:'التالي',
-      onClose:()=>{
-        if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-        Game.start(next);
-      }});
-  },
-  async lose(){
-    this.ended=true;SFX.play('lose');
-    renderAll();
-    showModal({type:'lose',icon:'fa-face-frown',title:'انتهت الحركات!',sub:fmt(this.score)+' من '+fmt(this.target),btn:'حاول مجدداً',
-      onClose:()=>{
-        if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-        Game.start(this.level);
-      }});
-  },
-  async hint(){
-    if(this.busy||this.ended)return;
-    if(S.user.coins<CONFIG.hintPrice)return toast('تحتاج '+CONFIG.hintPrice+' عملة','err');
-    const b=this.board,n=this.size,tmp=(a,b2,c,d)=>{[b[a][b2],b[c][d]]=[b[c][d],b[a][b2]]};
-    for(let r=0;r<n;r++)for(let c=0;c<n;c++)for(const[dr,dc]of[[0,1],[1,0]]){
-      const r2=r+dr,c2=c+dc;if(r2>=n||c2>=n)continue;
-      tmp(r,c,r2,c2);const ok=this.matches().length>0;tmp(r,c,r2,c2);
-      if(ok){[this.els[r][c],this.els[r2][c2]].forEach(e=>{e.style.transform='scale(1.15)';setTimeout(()=>e.style.transform='',800)});
-        S.user.coins-=CONFIG.hintPrice;await save();renderAll();SFX.play('reward');return}
-    }
-    toast('لا يوجد تلميح متاح','info');
-  },
-  async shuffle(){
-    if(this.busy||this.ended)return;
-    if(S.user.coins<CONFIG.shufflePrice)return toast('تحتاج '+CONFIG.shufflePrice+' عملة','err');
-    S.user.coins-=CONFIG.shufflePrice;await save();this.build();this.render();renderAll();SFX.play('reward');toast('تم خلط اللوحة!');
-  }
-};
+// ========== المقتنيات (الميزة الجديدة) ==========
+function renderCollectibles(){
+  const el = $('collectiblesList');
+  if(!el) return;
+  if(!S.user){ el.innerHTML=''; return; }
 
-function showNoEnergy(){
-  showModal({
-    type:'info',
-    icon:'fa-battery-empty',
-    title:'نفدت الطاقة!',
-    sub:'انتظر تجديد الطاقة أو اشترِ طاقة إضافية',
-    btn:'خروج',
-    onClose:()=>{ go('home'); }
-  });
-}
+  const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
+  const active = items.filter(c=>!c.sold);
+  const sold = items.filter(c=>c.sold);
 
-let rot=0;
-function spinsLeft(){const u=S.user;return u.wheelLastDate===today()?(u.wheelSpins||0):CONFIG.spins}
-function wheelAdStatus(){
-  const u=S.user;
-  if(!u) return {available:false, remain:0, used:0};
-  if(!Array.isArray(u.wheelAdTimes)) u.wheelAdTimes = [];
-  const now=TIME.now();
-  const times = u.wheelAdTimes.filter(t=>now-t<3600000);
-  if(times.length>=3){
-    const oldest=Math.min(...times);
-    return {available:false, remain:3600000-(now-oldest), used:3};
-  }
-  return {available:true, remain:0, used:times.length};
-}
-function buildWheel(){
-  const svg=$('wheelSvg');if(svg.dataset.ok)return;svg.dataset.ok=1;
-  const N=CONFIG.prizes.length,A=360/N,P=(d,r)=>{const a=(d-90)*Math.PI/180;return[100+r*Math.cos(a),100+r*Math.sin(a)]};
-  svg.innerHTML=CONFIG.prizes.map((p,i)=>{
-    const[x1,y1]=P(i*A,100),[x2,y2]=P((i+1)*A,100),mid=i*A+A/2,[tx,ty]=P(mid,70);
-    return'<path d="M100 100L'+x1+' '+y1+'A100 100 0 0 1 '+x2+' '+y2+'Z" fill="'+p[2]+'" stroke="#fff" stroke-width="1.5"/>'+
-      '<text x="'+tx+'" y="'+ty+'" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="800" fill="#fff" transform="rotate('+mid+' '+tx+' '+ty+')" style="paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px">'+p[1]+'</text>';
-  }).join('');
-}
-function renderWheel(){
-  buildWheel();
-  const n=spinsLeft();
-  $('spinsLeft').textContent=n;
-  $('wheelSpinBtn').disabled=n<=0||S.busy;
-  wheelTimer();
-}
-function wheelTimer(){
-  if(!S.user)return;
-  const n=spinsLeft();
-  const btn=$('wheelSpinBtn');
-  if(n>0){
-    const el=btn.querySelector('.next-day-timer');
-    if(el) el.remove();
-  } else {
-    const now=TIME.now(),d=new Date(now),midnight=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+1),remain=Math.max(0,midnight-now);
-    const timerStr=pad(Math.floor(remain/3600000))+':'+pad(Math.floor(remain%3600000/60000))+':'+pad(Math.floor(remain%60000/1000));
-    let el=btn.querySelector('.next-day-timer');
-    if(!el){
-      el=document.createElement('span');
-      el.className='next-day-timer';
-      el.style.cssText='font-size:11px;font-weight:800;margin-top:2px;display:block';
-      btn.appendChild(el);
-    }
-    el.innerHTML='<i class="fas fa-clock"></i> '+timerStr;
-  }
-  const status=wheelAdStatus(),ab=$('wheelAdBtn');
-  if(ab){
-    ab.disabled=S.busy||!status.available;
-    if(!status.available){
-      $('wheelAdTimer').textContent=pad(Math.floor(status.remain/3600000))+':'+pad(Math.floor(status.remain%3600000/60000))+':'+pad(Math.floor(status.remain%60000/1000));
-    }else{
-      $('wheelAdTimer').textContent='متاح ('+(3-status.used)+'/3)';
-    }
-  }
-}
-function trustedTimeReady(){if(!TIME.synced)return toast('تعذر التحقق من الوقت، تحقق من الاتصال ثم أعد المحاولة','err'),false;if(Math.abs(TIME.now()-Date.now())>60000)TIME.locked=true;if(TIME.locked)return toast('اضبط ساعة الجهاز تلقائياً لإكمال اللعب','err'),false;return true}
-async function performWheelSpin(fromAd=false){
-  const u=S.user,t=today(),n=spinsLeft();
-  const i=Math.floor(Math.random()*CONFIG.prizes.length),A=360/CONFIG.prizes.length,[type,val]=CONFIG.prizes[i];
-  if(!fromAd){u.wheelSpins=n-1;u.wheelLastDate=t}
-  u[type]=Number(u[type]||0)+val;u.wheelSpinCount=(u.wheelSpinCount||0)+1;
-  const patch={wheelSpinCount:u.wheelSpinCount};
-  if(!fromAd){patch.wheelSpins=u.wheelSpins;patch.wheelLastDate=t}
-  if(fromAd){
-    u.wheelAdTimes=((u.wheelAdTimes||[]).filter(x=>TIME.now()-x<3600000)).concat(TIME.now());
-    patch.wheelAdTimes=u.wheelAdTimes;
-  }
-  await save(patch);
-  SFX.play('wheel');rot=Math.ceil(rot/360)*360+360*6+(360-(i*A+A/2));$('wheel').style.transform='rotate('+rot+'deg)';
-  await sleep(5100);
-  SFX.play('win');S.busy=false;renderAll();
-  showModal({icon:type==='gems'?'fa-gem':'fa-coins',title:'+'+fmt(val)+(type==='gems'?' 💎':' 🪙'),sub:'',amount:'',btn:'موافق'});
-}
-async function spinWheel(){
-  if(S.busy)return;
-  if(!trustedTimeReady())return;
-  const n=spinsLeft();if(n<=0)return toast('لا توجد لفات — عد غداً','err');
-  S.busy=true;renderWheel();
-  try{await performWheelSpin(false)}catch(e){S.busy=false;renderAll();toast('تعذر تدوير العجلة، حاول مجدداً','err')}
-}
-async function watchWheelAd(){
-  if(S.busy)return;
-  if(!trustedTimeReady())return;
-  const status=wheelAdStatus();
-  if(!status.available)return toast('استنفدت 3 إعلانات لهذه الساعة','err');
-  if(typeof window.show_12008608!=='function')return toast('الإعلان غير متاح حالياً، حاول لاحقاً','err');
-  S.busy=true;renderWheel();const started=performance.now();
-  try{
-    await window.show_12008608();
-    const elapsed=performance.now()-started;
-    if(elapsed<15000){S.busy=false;renderAll();return toast('لم تُحتسب المكافأة لأن مشاهدة الإعلان أقل من 15 ثانية','err')}
-    await performWheelSpin(true);
-  }catch(e){S.busy=false;renderAll();toast('لم تكتمل مشاهدة الإعلان','err')}
-}
-
-const LEVEL_M = (() => {
-  const arr = [];
-  for (let level = 10; level <= 100; level += 10) {
-    arr.push({id:'lvl'+level, level:level, reward:{coins: level * 100}});
-  }
-  for (let level = 110; level <= 500; level += 10) {
-    arr.push({id:'lvl'+level, level:level, reward:{coins: 2000}});
-  }
-  return arr;
-})();
-
-const INVITE_M=[[1,5],[3,15],[5,30],[10,60],[20,100]].map(([n,g])=>({id:'inv'+n,count:n,reward:{gems:g}}));
-
-function mCard(icon,cls,title,desc,reward,btn,prog){
-  return'<div class="card m-card"><span class="ico '+cls+'"><i class="fas '+icon+'"></i></span><div class="grow"><div class="ttl">'+title+'</div><div class="sub">'+desc+'</div><div>'+reward+'</div>'+
-    (prog?'<div class="prog">'+prog[0]+' / '+prog[1]+'<span class="bar"><i style="width:'+Math.min(100,prog[0]/prog[1]*100)+'%"></i></span></div>':'')+'</div>'+btn+'</div>';
-}
-const bDone='<button class="btn b-sm b-off" disabled><i class="fas fa-check"></i> تم</button>';
-const bLock='<button class="btn b-sm b-off" disabled><i class="fas fa-lock"></i></button>';
-const bClaim=a=>'<button class="btn b-sm b-g" '+a+'><i class="fas fa-hand-holding-heart"></i> استلم</button>';
-
-function socialTaskCard(t){
-  const u = S.user;
-  const claimed = !!(u.socialClaimed||{})[t.id];
-  const p = socialPlatformOf(t.platform);
-  const btn = claimed
-    ? '<button class="btn b-sm b-off" disabled><i class="fas fa-check"></i> تم</button>'
-    : '<button class="btn b-sm b-s" data-social="'+t.id+'"><i class="fas fa-external-link-alt"></i> انضم</button>';
-  return '<div class="card m-card"><span class="ico" style="background:'+p.color+';color:#fff;width:50px;height:50px"><i class="'+p.icon+'"></i></span><div class="grow"><div class="ttl">'+esc(t.name||p.label)+'</div><div class="sub">تابع الرابط لاستلام المكافأة</div><div><span class="rw"><i class="fas fa-gem"></i> '+fmt(t.reward)+'</span></div></div>'+btn+'</div>';
-}
-
-function renderMissions(){
-  const u=S.user,t=today(),dl=u.dailyLogin||{streak:0,lastClaimDate:null},can=dl.lastClaimDate!==t,next=dl.streak>=7?0:dl.streak;
-  $('dailyGrid').innerHTML=CONFIG.daily.map((d,i)=>'<div class="day'+(i<dl.streak?' done':i===next&&can?' claim':'')+'" data-d="'+i+'">يوم '+(i+1)+'<i class="fas fa-gift"></i>+'+d[0]+'</div>').join('');
-  $('dailyGrid').querySelectorAll('.claim').forEach(e=>e.onclick=()=>claimDaily(+e.dataset.d));
-
-  const socTasks = S.socialTasks || [];
-  $('missionsDaily').innerHTML = (socTasks.length
-    ? socTasks.map(t => socialTaskCard(t)).join('')
-    : '<div class="card" style="text-align:center;color:var(--ink2);font-size:13px"><i class="fas fa-info-circle"></i> لا توجد مهام تواصل اجتماعي حالياً</div>');
-  $('missionsDaily').querySelectorAll('[data-social]').forEach(b => b.onclick = () => startSocialTask(b.dataset.social));
-
-  const lv=u.level||1,ld=u.levelMissions||{};
-  $('missionsLevel').innerHTML=LEVEL_M.filter(m=>!ld[m.id]).slice(0,5).map(m=>mCard('fa-trophy','i-gold','أوصل المستوى '+m.level,'مكافأة فورية عند الوصول',rewardHtml(m.reward),
-    ld[m.id]?bDone:lv>=m.level?bClaim('data-lm="'+m.id+'"'):bLock,[Math.min(lv,m.level),m.level])).join('');
-  $('missionsLevel').querySelectorAll('[data-lm]').forEach(b=>b.onclick=()=>claimLevel(b.dataset.lm));
-
-  const idn=u.inviteMissions||{},prog=(u.referralCount||0)-(u.inviteBase||0),im=INVITE_M.find(x=>!idn[x.id]);
-  $('missionsInvite').innerHTML=im?mCard('fa-user-plus','i-gold','ادعُ '+im.count+(im.count===1?' صديق':' أصدقاء'),'مكافأة عند إتمام العدد',rewardHtml(im.reward),
-    prog>=im.count?bClaim('data-im="'+im.id+'"'):'<button class="btn b-sm b-s" data-go="referral"><i class="fas fa-user-plus"></i> ادعُ</button>',[Math.min(prog,im.count),im.count]):'<div class="card empty">أكملت كل مهام الدعوات</div>';
-  $('missionsInvite').querySelectorAll('[data-im]').forEach(b=>b.onclick=()=>claimInvite(b.dataset.im));
-  $('missionsInvite').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go('referral'));
-}
-
-async function startSocialTask(taskId){
-  if(S.busy || !S.user) return;
-  const t = (S.socialTasks||[]).find(x=>x.id===taskId);
-  if(!t) return toast('المهمة غير متاحة','err');
-  if((S.user.socialClaimed||{})[taskId]) return toast('استلمت المكافأة سابقاً','info');
-
-  S.busy = true;
-  if(t.url) TG.open(t.url);
-  toast('انتظر 5 ثوانٍ لاستلام المكافأة...','info');
-  await sleep(5000);
-
-  try{
-    const claimed = S.user.socialClaimed || {};
-    claimed[taskId] = true;
-    S.user.gems = Number(S.user.gems||0) + Number(t.reward||0);
-    S.user.socialClaimed = claimed;
-    await FB.set({ gems: S.user.gems, socialClaimed: claimed });
-    SFX.play('reward');
-    toast('🎉 +'+fmt(t.reward)+' 💎');
-    renderAll();
-  }catch(e){
-    toast('فشل استلام المكافأة','err');
-  }finally{
-    S.busy = false;
-  }
-}
-
-async function grant(r,patch,modal){
-  const u=S.user;u.coins+=r.coins||0;u.gems+=r.gems||0;
-  await save(patch);SFX.play('reward');renderAll();
-  modal&&showModal(Object.assign({amount:rewardTxt(r),btn:'رائع'},modal));
-}
-async function claimDaily(i){
-  if(S.busy)return;const u=S.user,dl=u.dailyLogin||{streak:0,lastClaimDate:null},t=today();
-  if(dl.lastClaimDate===t)return toast('استلمت مكافأة اليوم','info');
-  if(i!==(dl.streak>=7?0:dl.streak))return toast('استلم المكافآت بالترتيب','err');
-  S.busy=true;const[c,g]=CONFIG.daily[i];dl.streak=i===6?0:i+1;dl.lastClaimDate=t;u.dailyLogin=dl;
-  await grant({coins:c,gems:g},{dailyLogin:dl},{icon:'fa-calendar-check',title:'مكافأة اليوم '+(i+1),sub:i===6?'أكملت الأسبوع! تسلسل جديد غداً':'عد غداً لمكافأة أكبر'});
-  S.busy=false;
-  showRewardedAd();
-}
-async function claimLevel(id){
-  const m=LEVEL_M.find(x=>x.id===id),u=S.user;if(!m||S.busy||(u.level||1)<m.level)return;
-  const d=u.levelMissions||{};if(d[id])return;
-  S.busy=true;d[id]=true;u.levelMissions=d;
-  await grant(m.reward,{levelMissions:d},{icon:'fa-medal',title:'مكافأة المستوى '+m.level,sub:'استلمت مكافأة إنجاز'});
-  S.busy=false;
-  showRewardedAd();
-}
-async function claimInvite(id){
-  const m=INVITE_M.find(x=>x.id===id),u=S.user;if(!m||S.busy)return;
-  const d=u.inviteMissions||{};if(d[id])return;
-  if((u.referralCount||0)-(u.inviteBase||0)<m.count)return toast('لم تكمل الدعوات','err');
-  S.busy=true;d[id]=true;u.inviteMissions=d;u.inviteBase=u.referralCount||0;
-  await grant(m.reward,{inviteMissions:d,inviteBase:u.inviteBase},{icon:'fa-user-plus',title:'مكافأة الدعوات',sub:'شكراً لدعوة '+m.count+(m.count===1?' صديق':' أصدقاء')});
-  S.busy=false;
-  showRewardedAd();
-}
-
-function renderAdminPanel(){
-  const panel = $('adminMissionsPanel');
-  if(!panel) return;
-  if(!TG.isAdmin){ panel.style.display='none'; return; }
-  panel.style.display='block';
-  const tasks = S.socialTasks || [];
-  panel.innerHTML = `
-    <div class="adm-panel">
-      <div class="ttl" style="margin-bottom:10px"><i class="fas fa-user-shield"></i> إدارة المهام (أدمن فقط)</div>
-      <div class="adm-field">
-        <label>المنصة</label>
-        <select id="admPlatform">
-          ${Object.entries(SOCIAL_PLATFORMS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}
-        </select>
-      </div>
-      <div class="adm-field">
-        <label>اسم المهمة</label>
-        <input type="text" id="admName" placeholder="مثال: قناة PuppyMerge" maxlength="50">
-      </div>
-      <div class="adm-field">
-        <label>الرابط (https)</label>
-        <input type="url" id="admUrl" placeholder="https://t.me/..." dir="ltr">
-      </div>
-      <div class="adm-field">
-        <label>المكافأة (💎)</label>
-        <input type="number" id="admReward" placeholder="10" min="1" max="100000" dir="ltr">
-      </div>
-      <button class="btn b-g" id="admAddBtn" style="height:46px;margin-bottom:12px"><i class="fas fa-plus"></i> إضافة المهمة</button>
-      <div style="font-size:12px;font-weight:800;margin:8px 0 6px"><i class="fas fa-list"></i> المهام الحالية (${tasks.length})</div>
-      <div>
-        ${tasks.length ? tasks.map(t=>{
-          const p = socialPlatformOf(t.platform);
-          return `<div class="adm-task-row">
-            <span class="social-platform-badge" style="background:${p.color === '#000000' || p.color === '#010101' ? '#333' : p.color};color:#fff;width:28px;height:28px;font-size:13px"><i class="${p.icon}"></i></span>
-            <div class="grow"><div class="ttl">${esc(t.name||p.label)}</div><div class="sub">+${fmt(t.reward)} 💎</div></div>
-            <button class="adm-del" data-adm-del="${t.id}"><i class="fas fa-trash"></i></button>
-          </div>`;
-        }).join('') : '<div style="text-align:center;color:var(--ink2);font-size:12px;padding:10px">لا توجد مهام</div>'}
-      </div>
+  if(active.length===0 && sold.length===0){
+    el.innerHTML = `<div class="card empty">
+      <i class="fas fa-box-open"></i>
+      لا توجد مقتنيات حالياً
+      <div class="sub" style="margin-top:8px">اشترِ بطاقة من الرئيسية لتضيفها إلى مقتنياتك</div>
     </div>`;
-
-  const addBtn = panel.querySelector('#admAddBtn');
-  if(addBtn) addBtn.onclick = adminAddTask;
-  panel.querySelectorAll('[data-adm-del]').forEach(b=>b.onclick = ()=>adminDeleteTask(b.dataset.admDel));
-}
-
-async function adminAddTask(){
-  if(!TG.isAdmin) return;
-  const platform = $('admPlatform').value;
-  const name = ($('admName').value||'').trim();
-  const url = ($('admUrl').value||'').trim();
-  const reward = Math.floor(Number($('admReward').value));
-  if(name.length < 2) return toast('اكتب اسم المهمة (2 أحرف على الأقل)','err');
-  if(!/^https:\/\//i.test(url)) return toast('الرابط يجب أن يبدأ بـ https://','err');
-  if(!(reward > 0 && reward <= 100000)) return toast('اكتب مكافأة صحيحة','err');
-  const btn = $('admAddBtn');
-  if(btn){ btn.disabled = true; btn.innerHTML = '<span class="spn"></span> جاري الإضافة...'; }
-  try{
-    await db.collection(CONFIG.socialTasksCol).add({
-      platform, name, url, reward,
-      createdBy: TG.id, createdAt: Date.now(), active: true
-    });
-    toast('✅ تمت إضافة المهمة','ok');
-    await loadSocialTasks(true);
-    renderAdminPanel();
-  }catch(e){
-    console.warn(e);
-    toast('فشلت الإضافة — تحقق من صلاحيات قاعدة البيانات','err');
-  }finally{
-    if(btn){ btn.disabled = false; btn.innerHTML = '<i class="fas fa-plus"></i> إضافة المهمة'; }
-  }
-}
-
-async function adminDeleteTask(id){
-  if(!TG.isAdmin) return;
-  if(!confirm('حذف هذه المهمة؟')) return;
-  try{
-    await db.collection(CONFIG.socialTasksCol).doc(id).delete();
-    toast('تم حذف المهمة','info');
-    await loadSocialTasks(true);
-    renderAdminPanel();
-  }catch(e){
-    toast('فشل الحذف — تحقق من صلاحيات قاعدة البيانات','err');
-  }
-}
-
-function getPlanById(id){return CONFIG.investPlans.find(p=>p.id===id)}
-function isInvestmentActive(inv){
-  const plan=getPlanById(inv.planId);
-  if(!plan)return false;
-  const endAt = inv.startedAt + plan.days * 86400 * 1000;
-  return Date.now() < endAt || inv.collected < plan.totalReturn;
-}
-function getPending(inv, plan){
-  const now = Date.now();
-  const endAt = inv.startedAt + plan.days * 86400 * 1000;
-  const effectiveNow = Math.min(now, endAt);
-  const elapsedMs = Math.max(0, effectiveNow - inv.startedAt);
-  const totalMined = (plan.totalReturn / (plan.days * 24 * 3600)) * (elapsedMs / 1000);
-  return Math.max(0, Math.floor(totalMined) - inv.collected);
-}
-function isPlanActive(planId){
-  const u=S.user;
-  const investments = Array.isArray(u.investments) ? u.investments : [];
-  return investments.some(inv => inv.planId === planId && isInvestmentActive(inv));
-}
-
-function renderInvestments(){
-  const u=S.user;if(!u)return;
-  const investments = Array.isArray(u.investments) ? u.investments : [];
-  const active = investments.map(inv=>{
-    const plan=getPlanById(inv.planId);
-    if(!plan)return null;
-    const pending=getPending(inv,plan);
-    const isDone = !isInvestmentActive(inv);
-    return {inv,plan,pending,isDone};
-  }).filter(x=>x!==null);
-
-  const totalPending = active.reduce((s,x)=>s+x.pending,0);
-  const banner = $('investBanner');
-  if (active.length > 0) {
-    banner.style.display = 'block';
-    $('investTotalPending').textContent = fmt(totalPending);
-    const collectBtn = $('investCollectAllBtn');
-    collectBtn.disabled = totalPending <= 0;
-  } else {
-    banner.style.display = 'none';
+    return;
   }
 
-  const activeEl = $('investActiveList');
-  if (active.length === 0) {
-    activeEl.innerHTML = '';
-  } else {
-    activeEl.innerHTML = '<div class="sec"><span class="ico i-green"><i class="fas fa-paw"></i></span> استثماراتي النشطة</div>' +
-      active.map(({inv,plan,pending,isDone})=>{
-        const now = Date.now();
-        const endAt = inv.startedAt + plan.days * 86400 * 1000;
-        const effectiveNow = Math.min(now, endAt);
-        const elapsedMs = effectiveNow - inv.startedAt;
-        const daysElapsed = (elapsedMs / 86400000).toFixed(1);
-        const collectedPct = Math.min(100, (inv.collected / plan.totalReturn) * 100);
-
-        return `<div class="card invest-active-card">
-          <div class="row" style="margin-bottom:10px">
-            <span class="ico" style="background:radial-gradient(circle at 30% 25%,${plan.color},${plan.color}bb);width:50px;height:50px;font-size:22px"><i class="fas ${plan.icon}"></i></span>
-            <div class="grow">
-              <div class="ttl">${esc(plan.name)}</div>
-              <div class="sub">${daysElapsed} / ${plan.days} يوم ${isDone ? '· <span style="color:var(--green-d);font-weight:800">اكتمل</span>' : ''}</div>
-            </div>
-            <div style="text-align:center;min-width:60px">
-              <div style="font-size:22px;font-weight:900;color:var(--green-d);direction:ltr" data-invest-pending="${inv.id}">${fmt(pending)}</div>
-              <div style="font-size:9.5px;font-weight:800;color:var(--ink2)">💎 متاح</div>
-            </div>
-          </div>
-          <div class="bar" style="height:8px;margin-bottom:6px"><i style="width:${collectedPct}%;background:linear-gradient(180deg,${plan.color},${plan.color}cc)"></i></div>
-          <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:800;color:var(--ink2);margin-bottom:8px">
-            <span>تم جمع: ${fmt(inv.collected)} / ${fmt(plan.totalReturn)}</span>
-            <span>${collectedPct.toFixed(0)}%</span>
-          </div>
-          ${isDone && inv.collected >= plan.totalReturn ?
-            '<div style="text-align:center;font-size:12px;font-weight:800;color:var(--ink2);padding:10px"><i class="fas fa-check-circle" style="color:var(--green-d)"></i> اكتمل الاستثمار — يمكنك شراء الخطة مرة أخرى</div>' :
-            `<div style="text-align:center;font-size:11.5px;font-weight:800;color:var(--ink2);padding:8px"><i class="fas fa-hand-holding-heart" style="color:var(--green-d)"></i> استخدم زر "جمع الكل" بالأعلى لسحب الأرباح</div>`
-          }
-        </div>`;
-      }).join('');
+  let html = '';
+  if(active.length > 0){
+    html += '<div style="display:flex;align-items:center;gap:8px;margin:4px 4px 10px;font-weight:800"><span class="ico i-gold" style="width:28px;height:28px;font-size:12px"><i class="fas fa-gem"></i></span> مقتنياتي النشطة</div>';
+    html += active.map(c => renderCollectibleItem(c)).join('');
   }
+  if(sold.length > 0){
+    html += '<div style="display:flex;align-items:center;gap:8px;margin:16px 4px 10px;font-weight:800"><span class="ico i-sky" style="width:28px;height:28px;font-size:12px"><i class="fas fa-clock-rotate-left"></i></span> مقتنيات مبيعة</div>';
+    html += sold.slice(-10).reverse().map(c => renderSoldItem(c)).join('');
+  }
+  el.innerHTML = html;
 
-  const plansEl = $('investPlansList');
-  plansEl.innerHTML = CONFIG.investPlans.map(plan=>{
-    const isActive = isPlanActive(plan.id);
-    const canAfford = u.gems >= plan.price;
-    const profit = plan.totalReturn - plan.price;
-    const profitPct = ((profit / plan.price) * 100).toFixed(0);
-
-    let btnHTML;
-    if(isActive){
-      btnHTML = '<button class="btn b-off" disabled style="height:48px"><i class="fas fa-lock"></i> الخطة نشطة حالياً</button>';
-    } else if(!canAfford){
-      btnHTML = '<button class="btn b-off" disabled style="height:48px"><i class="fas fa-ban"></i> رصيد غير كافٍ</button>';
-    } else {
-      btnHTML = `<button class="btn b-g" data-invest-buy="${plan.id}" style="height:48px"><i class="fas fa-shopping-cart"></i> شراء الخطة</button>`;
-    }
-
-    return `<div class="card ${isActive ? 'invest-locked' : ''}" style="margin-bottom:10px">
-      <div class="row" style="margin-bottom:10px">
-        <span class="ico" style="background:radial-gradient(circle at 30% 25%,${plan.color},${plan.color}bb);width:50px;height:50px;font-size:22px"><i class="fas ${plan.icon}"></i></span>
-        <div class="grow">
-          <div class="ttl">${esc(plan.name)}</div>
-          <div class="sub">${plan.days} أيام · ربح ${profitPct}%</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:18px;font-weight:900;color:var(--gold-d);direction:ltr">${fmt(plan.price)}</div>
-          <div style="font-size:10px;font-weight:800;color:var(--ink2)">💎 سعر</div>
-        </div>
-      </div>
-      <div class="info" style="margin-bottom:10px">
-        <div>الربح الصافي<b>+${fmt(profit)} 💎</b></div>
-        <div>إجمالي الاسترداد<b>${fmt(plan.totalReturn)} 💎</b></div>
-      </div>
-      ${btnHTML}
-    </div>`;
-  }).join('');
-
-  plansEl.querySelectorAll('[data-invest-buy]').forEach(b=>{
-    b.onclick=()=>buyPlan(b.dataset.investBuy);
+  el.querySelectorAll('[data-sell]').forEach(b=>{
+    b.onclick = () => sellCollectible(b.dataset.sell);
   });
 }
 
-function updateInvestmentsUI(){
-  if(!$('screen-invest').classList.contains('active'))return;
-  const u=S.user;if(!u)return;
-  const investments = Array.isArray(u.investments) ? u.investments : [];
-  let totalPending = 0;
-  let needsRerender = false;
-  investments.forEach(inv=>{
-    const plan = getPlanById(inv.planId);
-    if(!plan)return;
-    const oldPending = parseInt(document.querySelector(`[data-invest-pending="${inv.id}"]`)?.textContent?.replace(/,/g,'') || '0', 10);
-    const pending = getPending(inv, plan);
-    totalPending += pending;
-    if(pending !== oldPending){
-      const el = document.querySelector(`[data-invest-pending="${inv.id}"]`);
-      if(el) el.textContent = fmt(pending);
-      if ((pending > 0 && oldPending === 0) || (pending === 0 && oldPending > 0)) {
-        needsRerender = true;
-      }
-    }
-  });
-  const totalEl = $('investTotalPending');
-  if(totalEl) totalEl.textContent = fmt(totalPending);
-  const collectBtn = $('investCollectAllBtn');
-  if(collectBtn) collectBtn.disabled = totalPending <= 0;
-  if(needsRerender) renderInvestments();
+function renderCollectibleItem(c){
+  const elapsed = Date.now() - c.purchasedAt;
+  const remain = Math.max(0, CONFIG.collectibles.holdMs - elapsed);
+  const canSell = remain <= 0;
+  const sellValue = Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate));
+  const bundleInfo = getBundleByStars(c.bundleStars);
+  const progressPct = Math.min(100, (elapsed / CONFIG.collectibles.holdMs) * 100);
+
+  let timerHtml = '';
+  if(!canSell){
+    const days = Math.floor(remain / 86400000);
+    const hours = Math.floor((remain % 86400000) / 3600000);
+    const mins = Math.floor((remain % 3600000) / 60000);
+    timerHtml = `<div style="text-align:center;font-size:11px;font-weight:800;color:var(--ink2);margin-top:8px"><i class="fas fa-clock" style="color:var(--gold-d)"></i> متاح للبيع خلال ${days}ي ${hours}س ${mins}د</div>`;
+  }
+
+  return `<div class="card collectible-card ${canSell?'ready':''}">
+    <div class="row" style="margin-bottom:10px">
+      <div style="width:64px;height:64px;position:relative;background:#FFF9E8;border-radius:14px;display:flex;align-items:center;justify-content:center;border:2px solid var(--edge);overflow:hidden;flex-shrink:0">
+        <video src="${bundleInfo?.webm || ''}" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:contain"></video>
+      </div>
+      <div class="grow">
+        <div class="ttl">بطاقة ${c.bundleStars} ⭐</div>
+        <div class="sub">اشتُريت: ${new Date(c.purchasedAt).toLocaleDateString('ar-EG',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+    </div>
+    <div class="progress-lbl"><span>فترة الاحتجاز</span><span>${progressPct.toFixed(0)}%</span></div>
+    <div class="bar hold" style="margin-bottom:10px"><i style="width:${progressPct}%"></i></div>
+    <div class="info" style="margin-bottom:10px">
+      <div>القيمة الأساسية<b>${fmt(c.gemsValue)} 💎</b></div>
+      <div style="color:var(--green-d)">قيمة البيع (+5%)<b style="color:var(--green-d)">${fmt(sellValue)} 💎</b></div>
+      <div style="color:var(--green-d)">الربح<b style="color:var(--green-d)">+${fmt(sellValue - c.gemsValue)} 💎</b></div>
+    </div>
+    ${canSell
+      ? `<button class="btn b-g" data-sell="${c.id}" style="height:48px"><i class="fas fa-hand-holding-dollar"></i> بيع الآن مقابل ${fmt(sellValue)} 💎</button>`
+      : `<button class="btn b-off" disabled style="height:48px"><i class="fas fa-lock"></i> غير متاح للبيع بعد</button>`}
+    ${timerHtml}
+  </div>`;
 }
 
-async function buyPlan(planId){
-  if(S.busy)return;
-  const plan = getPlanById(planId);
-  if(!plan)return;
-  const u = S.user;
-  if(isPlanActive(planId)){
-    return toast('هذه الخطة نشطة حالياً — انتظر انتهاءها','err');
+function renderSoldItem(c){
+  const sellValue = c.sellValue || Math.floor(c.gemsValue * (1 + CONFIG.collectibles.profitRate));
+  return `<div class="card" style="opacity:.75;margin-bottom:8px;padding:10px;border-width:2px">
+    <div class="row">
+      <div class="ico i-green" style="width:36px;height:36px;font-size:14px"><i class="fas fa-check"></i></div>
+      <div class="grow">
+        <div class="ttl" style="font-size:13px">بطاقة ${c.bundleStars} ⭐</div>
+        <div class="sub">مبيعة بـ ${fmt(sellValue)} 💎</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function sellCollectible(id){
+  if(S.busy) return;
+  const items = S.user.collectibles || [];
+  const item = items.find(c => c.id === id);
+  if(!item || item.sold) return;
+
+  const elapsed = Date.now() - item.purchasedAt;
+  if(elapsed < CONFIG.collectibles.holdMs){
+    return toast('لم يمر 7 أيام بعد — لا يمكن البيع','err');
   }
-  if(u.gems < plan.price) return toast('رصيد الجواهر غير كافٍ','err');
+
   S.busy = true;
   SFX.play('tap');
   try{
-    u.gems -= plan.price;
-    u.investments = Array.isArray(u.investments) ? u.investments : [];
-    u.investments.push({
-      id: 'inv_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
-      planId: plan.id,
-      startedAt: Date.now(),
-      collected: 0,
-    });
-    await FB.set({gems: u.gems, investments: u.investments});
+    const sellValue = Math.floor(item.gemsValue * (1 + CONFIG.collectibles.profitRate));
+    item.sold = true;
+    item.soldAt = Date.now();
+    item.sellValue = sellValue;
+    S.user.gems = Number(S.user.gems||0) + sellValue;
+    await FB.set({ gems: S.user.gems, collectibles: items });
     SFX.play('reward');
     renderAll();
+    renderCollectibles();
     showModal({
-      icon:'fa-paw',
-      title:'✅ تم شراء الخطة!',
-      sub: plan.name + ' · ' + plan.days + ' أيام',
-      amount: '-' + fmt(plan.price) + ' 💎',
-      btn:'رائع',
+      icon:'fa-gem',
+      title:'✅ تم بيع المقتنى!',
+      sub:'تمت إضافة الجواهر لحسابك',
+      amount:'+'+fmt(sellValue)+' 💎',
+      btn:'رائع'
     });
   }catch(e){
     console.error(e);
+    item.sold = false;
     toast('حدثت مشكلة، حاول مجدداً','err');
   }finally{
     S.busy = false;
   }
 }
 
-async function collectAllInvestments(){
-  if(S.busy)return;
-  const u = S.user;
-  const investments = u.investments || [];
-  let total = 0;
-  for(const inv of investments){
-    const plan = getPlanById(inv.planId);
-    if(!plan) continue;
-    const pending = getPending(inv, plan);
-    if(pending > 0){
-      inv.collected += pending;
-      total += pending;
-    }
-  }
-  if(total <= 0) return toast('لا يوجد شيء للجمع','info');
+// ========== بطاقات الشراء (نجوم) ==========
+let currentSelectedBundle = null;
+
+function initStarBundles(){
+  const container = $('bundleContainer');
+  if(!container) return;
+  container.innerHTML = '';
+  CONFIG.collectibles.bundles.forEach(b=>{
+    const card = document.createElement('div');
+    card.className = 'bundle-card';
+    card.onclick = () => openBundleModal(b);
+
+    const webmBox = document.createElement('div');
+    webmBox.className = 'webm-box';
+
+    const video = document.createElement('video');
+    video.src = b.webm;
+    video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
+    video.style.visibility='hidden'; video.style.opacity='0'; video.style.transition='opacity .3s';
+    video.oncanplaythrough = () => { video.style.visibility='visible'; video.style.opacity='1'; video.play().catch(()=>{}); };
+    video.onerror = () => { webmBox.style.display='none'; };
+    webmBox.appendChild(video);
+
+    const priceTag = document.createElement('div');
+    priceTag.className = 'price-tag';
+    priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt="star"> <span>${b.stars}</span>`;
+
+    card.appendChild(webmBox);
+    card.appendChild(priceTag);
+    container.appendChild(card);
+  });
+}
+
+function openBundleModal(bundle){
+  currentSelectedBundle = bundle;
+  const modal = $('bundleConfirmModal');
+  const webmBox = $('bcWebmBox');
+  webmBox.innerHTML = '';
+  const video = document.createElement('video');
+  video.src = bundle.webm;
+  video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
+  video.style.visibility='hidden'; video.style.opacity='0'; video.style.transition='opacity .3s';
+  video.oncanplaythrough = () => { video.style.visibility='visible'; video.style.opacity='1'; video.play().catch(()=>{}); };
+  webmBox.appendChild(video);
+
+  const sellValue = Math.floor(bundle.gems * (1 + CONFIG.collectibles.profitRate));
+  $('bcStars').innerHTML = `${bundle.stars} <img src="https://up6.cc/2026/10/17926810487851.png">`;
+  $('bcGems').innerHTML = `${fmt(bundle.gems)} <i class="fas fa-gem" style="color:var(--sky-d)"></i>`;
+  $('bcSellValue').innerHTML = `${fmt(sellValue)} <i class="fas fa-gem"></i>`;
+
+  modal.classList.add('show');
+}
+
+function closeBundleModal(){
+  $('bundleConfirmModal').classList.remove('show');
+  $('bcWebmBox').innerHTML = '';
+  currentSelectedBundle = null;
+}
+
+async function buyStarsBundle(stars){
+  if(S.busy) return;
+  if(!TG.app || !TG.app.openInvoice) return toast('يجب فتح التطبيق داخل تلغرام','err');
+
   S.busy = true;
+  SFX.play('tap');
+
   try{
-    u.gems += total;
-    await FB.set({gems: u.gems, investments: u.investments});
-    SFX.play('reward');
-    renderAll();
-    toast('+' + fmt(total) + ' 💎');
+    const resp = await fetch(CONFIG.api.base+'/api/create-invoice',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ userId:TG.id, stars: stars })
+    });
+    const data = await resp.json();
+    if(!data.ok || !data.invoiceLink) throw new Error(data.error||'فشل إنشاء الفاتورة');
+
+    TG.app.openInvoice(data.invoiceLink, async (status)=>{
+      S.busy = false;
+      if(status === 'paid'){
+        try{
+          const bundleInfo = getBundleByStars(stars);
+          if(!bundleInfo){ toast('خطأ في بيانات البطاقة','err'); return; }
+
+          // === الميزة الجديدة: إضافة المقتنى بدل الجواهر ===
+          const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
+          items.push({
+            id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+            bundleStars: stars,
+            gemsValue: bundleInfo.gems,
+            purchasedAt: Date.now(),
+            sold: false
+          });
+          S.user.collectibles = items;
+          await FB.set({ collectibles: items });
+
+          closeBundleModal();
+          SFX.play('reward');
+          showModal({
+            icon:'fa-box-open',
+            title:'✅ تم شراء المقتنى!',
+            sub:'تمت إضافته إلى متجر المقتنيات — يمكن بيعه بعد 7 أيام بربح 5%',
+            amount: fmt(bundleInfo.gems) + ' 💎 قيمة',
+            btn:'عرض المتجر',
+            onClose: ()=>{
+              renderAll();
+              go('store');
+            }
+          });
+        }catch(e){
+          console.error(e);
+          toast('فشل تسجيل المقتنى — تواصل مع الدعم','err');
+        }
+      }else if(status === 'cancelled'){
+        toast('تم إلغاء الدفع','info');
+      }else if(status === 'failed'){
+        toast('فشل الدفع، حاول مجدداً','err');
+      }
+    });
   }catch(e){
     console.error(e);
-    toast('حدثت مشكلة، حاول مجدداً','err');
-  }finally{
+    toast(e.message||'تعذر بدء الدفع','err');
     S.busy = false;
   }
 }
 
+// ========== التبديل ==========
 function pick(sel,key,cb){
   document.querySelectorAll(sel+' .amt').forEach(b=>b.onclick=()=>{
     document.querySelectorAll(sel+' .amt').forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -1771,6 +975,26 @@ function pick(sel,key,cb){
 function clearPick(sel){document.querySelectorAll(sel+' .amt').forEach(x=>x.classList.remove('on'))}
 function updateEx(){$('exChosen').textContent=fmt(S.ex)+' 🪙';$('exReceive').textContent=fmt(Math.floor(S.ex*CONFIG.ex.rate))+' 💎'}
 
+async function withBtn(btn,html,fn){
+  if(S.busy)return;S.busy=true;const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spn"></span> '+html;
+  try{await fn()}catch(e){console.warn(e);toast('حدثت مشكلة، حاول مجدداً','err')}
+  finally{S.busy=false;btn.disabled=false;btn.innerHTML=old}
+}
+
+async function doExchange(){
+  const a=S.ex,u=S.user;
+  if(!a||a<CONFIG.ex.min)return toast('الحد الأدنى '+fmt(CONFIG.ex.min)+' عملة','err');
+  if(a>u.coins)return toast('رصيد العملات غير كافٍ','err');
+  const g=Math.floor(a*CONFIG.ex.rate);
+  await withBtn($('exSubmit'),'جاري التحويل...',async()=>{
+    u.coins-=a;u.gems+=g;await save();
+    await db.collection(CONFIG.txCol).add({userId:TG.id,type:'exchange',amount:-a,currency:'coins',meta:{toGems:g},createdAt:Date.now()});
+    SFX.play('reward');S.ex=0;clearPick('#exAmounts');renderAll();
+    showModal({icon:'fa-right-left',title:'تم التبديل!',sub:'حوّلت '+fmt(a)+' عملة إلى جواهر',amount:'+'+fmt(g)+' 💎',btn:'رائع'});
+  });
+}
+
+// ========== السحب ==========
 function updateWd(){
   const chosen = $('wdChosen');
   const grossRow = $('wdGrossRow');
@@ -1779,43 +1003,27 @@ function updateWd(){
   const receiveRow = $('wdReceiveRow');
   const receive = $('wdReceive');
   chosen.textContent = fmt(S.wd) + ' 💎';
-  grossRow.style.display = 'none';
-  feeRow.style.display = 'none';
-  netRow.style.display = 'none';
-  receiveRow.style.display = 'flex';
-  if(!S.wd){
-    receive.textContent = '—';
-    return;
-  }
+  grossRow.style.display='none'; feeRow.style.display='none'; netRow.style.display='none'; receiveRow.style.display='flex';
+  if(!S.wd){ receive.textContent='—'; return; }
+
   if(S.wdMethod === 'sham_cash'){
-    receiveRow.style.display = 'none';
-    netRow.style.display = 'flex';
+    receiveRow.style.display='none';
+    netRow.style.display='flex';
     $('wdNet').textContent = fmt(Math.round(S.wd * CONFIG.wd.shamSypPerGem)) + ' SYP';
     netRow.childNodes[0].textContent = 'الصافي للاستلام (بدون عمولة)';
-  }
-  else if(S.wdMethod === 'binance'){
-    const gross = usd(S.wd);
-    const fee = usdBinanceFee(S.wd);
-    const net = usdBinanceNet(S.wd);
-    grossRow.style.display = 'flex';
-    feeRow.style.display = 'flex';
-    netRow.style.display = 'flex';
-    receiveRow.style.display = 'none';
-    $('wdGross').textContent = '$' + gross;
-    $('wdFee').textContent = '-$' + fee;
-    $('wdNet').textContent = '$' + net;
+  }else if(S.wdMethod === 'binance'){
+    grossRow.style.display='flex'; feeRow.style.display='flex'; netRow.style.display='flex'; receiveRow.style.display='none';
+    $('wdGross').textContent = '$' + usd(S.wd);
+    $('wdFee').textContent = '-$' + usdBinanceFee(S.wd);
+    $('wdNet').textContent = '$' + usdBinanceNet(S.wd);
     netRow.childNodes[0].textContent = 'الصافي للاستلام';
-  }
-  else {
+  }else{
     receive.textContent = '$' + usd(S.wd);
   }
 }
 
 function setWdMethod(method){
-  if(method==='usdt_crypto'){
-    toast('السحب التلقائي عبر USDT قريباً','info');
-    return;
-  }
+  if(method==='usdt_crypto'){ toast('السحب التلقائي عبر USDT قريباً','info'); return; }
   S.wdMethod=method;S.wd=0;clearPick('#wdAmounts');
   document.querySelectorAll('.wd-method').forEach(el=>{
     const on=el.dataset.method===method;el.classList.toggle('selected',on);
@@ -1832,30 +1040,13 @@ function setWdMethod(method){
     wdTitle.textContent='معرّف شام كاش';
     wdHelp.textContent='أدخل معرّف شام كاش لاستلام السحب';
     wdInput.placeholder='معرّف شام كاش';
-  } else {
+  }else{
     amountBox.innerHTML='<button class="amt" data-amt="5000">5,000 💎</button><button class="amt" data-amt="10000">10,000 💎</button><button class="amt" data-amt="50000">50,000 💎</button><button class="amt" data-amt="100000">100,000 💎</button>';
     wdTitle.textContent='معرّف Binance Pay';
-    wdHelp.textContent='أدخل معرّف Binance Pay أو البريد الإلكتروني لاستلام السحب';
+    wdHelp.textContent='أدخل معرّف Binance Pay أو البريد الإلكتروني';
     wdInput.placeholder='Binance Pay ID أو البريد الإلكتروني';
   }
   pick('#wdAmounts','wd',updateWd);updateWd();
-}
-async function withBtn(btn,html,fn){
-  if(S.busy)return;S.busy=true;const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spn"></span> '+html;
-  try{await fn()}catch(e){console.warn(e);toast('حدثت مشكلة، حاول مجدداً','err')}
-  finally{S.busy=false;btn.disabled=false;btn.innerHTML=old}
-}
-async function doExchange(){
-  const a=S.ex,u=S.user;
-  if(!a||a<CONFIG.ex.min)return toast('الحد الأدنى '+fmt(CONFIG.ex.min)+' عملة','err');
-  if(a>u.coins)return toast('رصيد العملات غير كافٍ','err');
-  const g=Math.floor(a*CONFIG.ex.rate);
-  await withBtn($('exSubmit'),'جاري التحويل...',async()=>{
-    u.coins-=a;u.gems+=g;await save();
-    await db.collection(CONFIG.txCol).add({userId:TG.id,type:'exchange',amount:-a,currency:'coins',meta:{toGems:g},createdAt:Date.now()});
-    SFX.play('reward');S.ex=0;clearPick('#exAmounts');renderAll();
-    showModal({icon:'fa-right-left',title:'تم التبديل!',sub:'حوّلت '+fmt(a)+' عملة إلى جواهر',amount:'+'+fmt(g)+' 💎',btn:'رائع'});
-  });
 }
 
 async function doWithdraw(){
@@ -1864,16 +1055,16 @@ async function doWithdraw(){
   const min=method==='sham_cash'?CONFIG.wd.shamMin:CONFIG.wd.min;
   if(!a||a<min)return toast('الحد الأدنى '+fmt(min)+' جوهرة','err');
   if(a>u.gems)return toast('رصيد الجواهر غير كافٍ','err');
-  if(acc.length<4)return toast(method==='sham_cash'?'أدخل معرّف شام كاش صحيح':'أدخل معرّف Binance صحيح','err');
+  if(acc.length<4)return toast('أدخل معرّفاً صحيحاً','err');
   await withBtn($('wdSubmit'),'جاري الإرسال...',async()=>{
     let payout,modalSub='سيتم معالجة طلبك خلال 24-72 ساعة';
     if(method==='sham_cash'){
       payout=fmt(Math.round(a*CONFIG.wd.shamSypPerGem))+' SYP';
-    } else if(method==='binance'){
+    }else if(method==='binance'){
       const gross=usd(a),fee=usdBinanceFee(a),net=usdBinanceNet(a);
       payout='$'+net;
-      modalSub='الإجمالي: $'+gross+' — العمولة (20%): -$'+fee+' — الصافي: $'+net;
-    } else {
+      modalSub='الإجمالي: $'+gross+' — العمولة: -$'+fee+' — الصافي: $'+net;
+    }else{
       payout='$'+usd(a);
     }
     u.gems-=a;await save();
@@ -1895,7 +1086,7 @@ async function loadWdHistory(){
   const l=$('wdHistory');if(!db)return;l.innerHTML='<div class="empty">...</div>';
   try{
     const q=await db.collection(CONFIG.wdCol).where('userId','==',TG.id).limit(50).get();
-    if(q.empty){l.innerHTML='<div class="empty"><i class="fas fa-inbox"></i><br>لا يوجد سجل سحب بعد</div>';return}
+    if(q.empty){l.innerHTML='<div class="empty"><i class="fas fa-inbox"></i>لا يوجد سجل سحب بعد</div>';return}
     const it=[];q.forEach(d=>it.push(d.data()));it.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
     const map={pending:'قيد المراجعة',approved:'مقبول',processing:'قيد التنفيذ',completed:'مكتمل',rejected:'مرفوض'};
     const methodNames={usdt_crypto:'USDT Crypto',sham_cash:'شام كاش',binance:'Binance'};
@@ -1904,6 +1095,7 @@ async function loadWdHistory(){
   }catch(e){l.innerHTML='<div class="empty">تعذر التحميل</div>'}
 }
 
+// ========== النجوم ==========
 function updateStarsUI(){
   if(!$('starsCustomInput')) return;
   const val = S.starsInput || 0;
@@ -1917,21 +1109,17 @@ function updateStarsUI(){
 async function startStarPayment(){
   if(S.busy) return;
   const stars = S.starsInput || 0;
-  if(!Number.isInteger(stars)){
-    return toast('عدد النجوم يجب أن يكون رقماً صحيحاً','err');
-  }
-  if(stars < CONFIG.stars.min || stars > CONFIG.stars.max){
-    return toast('عدد النجوم يجب أن يكون بين '+CONFIG.stars.min+' و '+CONFIG.stars.max,'err');
-  }
-  if(!TG.app || !TG.app.openInvoice){
-    return toast('يجب فتح التطبيق داخل تلغرام','err');
-  }
+  if(!Number.isInteger(stars)) return toast('عدد النجوم يجب أن يكون رقماً صحيحاً','err');
+  if(stars < CONFIG.stars.min || stars > CONFIG.stars.max) return toast('عدد النجوم غير صالح','err');
+  if(!TG.app || !TG.app.openInvoice) return toast('يجب فتح التطبيق داخل تلغرام','err');
+
   S.busy = true;
   SFX.play('tap');
   const btn = $('starsPayBtn');
   const old = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<span class="spn"></span> جاري إنشاء الفاتورة...';
+
   try{
     const resp = await fetch(CONFIG.api.base+'/api/create-invoice',{
       method:'POST',
@@ -1940,6 +1128,7 @@ async function startStarPayment(){
     });
     const data = await resp.json();
     if(!data.ok || !data.invoiceLink) throw new Error(data.error||'فشل إنشاء الفاتورة');
+
     TG.app.openInvoice(data.invoiceLink,(status)=>{
       S.busy = false;
       btn.disabled = false;
@@ -1953,12 +1142,8 @@ async function startStarPayment(){
           amount:'+'+fmt(data.gems)+' 💎',
           btn:'رائع',
           onClose:async()=>{
-            try{
-              const fresh = await FB.get();
-              if(fresh) S.user = Object.assign(S.user, fresh);
-            }catch(e){}
-            renderAll();
-            updateStarsUI();
+            try{ const fresh = await FB.get(); if(fresh) S.user = Object.assign(S.user, fresh); }catch(e){}
+            renderAll(); updateStarsUI();
           }
         });
       }else if(status === 'cancelled'){
@@ -1976,6 +1161,7 @@ async function startStarPayment(){
   }
 }
 
+// ========== الكريبتو ==========
 let cryptoUsd = 0;
 let cryptoPollTimer = null;
 let cryptoPendingTimer = null;
@@ -1999,198 +1185,152 @@ function updateCryptoAmounts(){
 }
 
 function pickCryptoAmount(el){
-  document.querySelectorAll('#cryptoAmounts .amt').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('#cryptoAmounts .amt').forEach(b=>b.classList.remove('on'));
   el.classList.add('on');
   cryptoUsd = parseFloat(el.dataset.usd) || 0;
   $('cryptoCustomUsd').value = '';
-  updateCryptoAmounts();
-  SFX.play('tap');
+  updateCryptoAmounts(); SFX.play('tap');
 }
 
 function updatePendingBanner(){
   const banner = $('cryptoPendingBanner');
-  if (!banner) return;
-  if (cryptoPendingInvoice && cryptoPendingInvoice.id) {
-    banner.classList.add('show');
-    startPendingTimer();
-  } else {
-    banner.classList.remove('show');
-    stopPendingTimer();
-  }
+  if(!banner) return;
+  if(cryptoPendingInvoice && cryptoPendingInvoice.id){ banner.classList.add('show'); startPendingTimer(); }
+  else{ banner.classList.remove('show'); stopPendingTimer(); }
 }
 
 function startPendingTimer(){
-  if (cryptoPendingTimer) clearInterval(cryptoPendingTimer);
+  if(cryptoPendingTimer) clearInterval(cryptoPendingTimer);
   const tick = () => {
-    if (!cryptoPendingInvoice) { stopPendingTimer(); return; }
+    if(!cryptoPendingInvoice){ stopPendingTimer(); return; }
     const elapsed = Date.now() - cryptoPendingInvoice.createdAt;
     const remain = Math.max(0, CONFIG.shieldz.pendingTimeoutMs - elapsed);
-    if (remain <= 0) {
-      const el = $('cryptoPendingTimer');
-      if (el) el.textContent = '00:00';
-      cryptoPendingInvoice = null;
-      updatePendingBanner();
-      toast('انتهت صلاحية الفاتورة', 'info');
-      return;
+    if(remain <= 0){
+      const el = $('cryptoPendingTimer'); if(el) el.textContent='00:00';
+      cryptoPendingInvoice = null; updatePendingBanner();
+      toast('انتهت صلاحية الفاتورة','info'); return;
     }
-    const mins = Math.floor(remain / 60000);
-    const secs = Math.floor((remain % 60000) / 1000);
-    const el = $('cryptoPendingTimer');
-    if (el) el.textContent = pad(mins) + ':' + pad(secs);
+    const mins = Math.floor(remain/60000), secs = Math.floor((remain%60000)/1000);
+    const el = $('cryptoPendingTimer'); if(el) el.textContent = pad(mins)+':'+pad(secs);
   };
   tick();
   cryptoPendingTimer = setInterval(tick, 1000);
 }
 
 function stopPendingTimer(){
-  if (cryptoPendingTimer) { clearInterval(cryptoPendingTimer); cryptoPendingTimer = null; }
-  const el = $('cryptoPendingTimer');
-  if (el) el.textContent = '--:--';
+  if(cryptoPendingTimer){ clearInterval(cryptoPendingTimer); cryptoPendingTimer=null; }
+  const el = $('cryptoPendingTimer'); if(el) el.textContent='--:--';
 }
 
 function stopPaymentPolling(){
-  if (cryptoPollTimer) { clearInterval(cryptoPollTimer); cryptoPollTimer = null; }
+  if(cryptoPollTimer){ clearInterval(cryptoPollTimer); cryptoPollTimer=null; }
   S.busy = false;
   const btn = $('cryptoPayBtn');
-  if (btn) {
-    btn.innerHTML = '<i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو';
-    btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd;
-  }
+  if(btn){ btn.innerHTML = '<i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
 }
 
 function cancelPendingInvoice(){
-  if (!cryptoPendingInvoice) return;
-  cryptoPendingInvoice = null;
-  stopPaymentPolling();
-  updatePendingBanner();
-  toast('تم إلغاء الطلب. لن يتم إنشاء طلبات جديدة.', 'info');
-  SFX.play('tap');
+  if(!cryptoPendingInvoice) return;
+  cryptoPendingInvoice = null; stopPaymentPolling(); updatePendingBanner();
+  toast('تم إلغاء الطلب','info'); SFX.play('tap');
 }
 
 async function checkPendingInvoiceNow(){
-  if (!cryptoPendingInvoice || !cryptoPendingInvoice.id) return;
+  if(!cryptoPendingInvoice || !cryptoPendingInvoice.id) return;
   const btn = $('cryptoCheckBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spn"></span> جاري التحقق...'; }
-  try {
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="spn"></span> جاري التحقق...'; }
+  try{
     const resp = await fetch(CONFIG.api.base + '/api/shieldz/invoice/' + encodeURIComponent(cryptoPendingInvoice.id));
-    const data = await resp.json().catch(() => ({}));
-    if (data.status === 'paid') {
+    const data = await resp.json().catch(()=>({}));
+    if(data.status === 'paid'){
       const gems = cryptoPendingInvoice.gems;
-      cryptoPendingInvoice = null;
-      stopPaymentPolling();
-      updatePendingBanner();
+      cryptoPendingInvoice = null; stopPaymentPolling(); updatePendingBanner();
       SFX.play('reward');
-      try {
-        const fresh = await FB.get();
-        if (fresh) S.user = Object.assign(S.user, fresh);
-      } catch (e) {}
+      try{ const fresh = await FB.get(); if(fresh) S.user = Object.assign(S.user, fresh); }catch(e){}
       renderAll();
-      showModal({ icon: 'fa-coins', title: '✅ تم استلام الدفع!', sub: 'تمت إضافة الجواهر لحسابك', amount: '+' + fmt(gems) + ' 💎', btn: 'رائع' });
-    } else if (data.status === 'expired' || data.status === 'failed') {
-      cryptoPendingInvoice = null;
-      stopPaymentPolling();
-      updatePendingBanner();
-      toast('انتهت صلاحية الفاتورة أو فشل الدفع', 'err');
-    } else {
-      toast('الفاتورة لا تزال قيد الانتظار', 'info');
+      showModal({icon:'fa-coins',title:'✅ تم استلام الدفع!',sub:'تمت إضافة الجواهر لحسابك',amount:'+'+fmt(gems)+' 💎',btn:'رائع'});
+    }else if(data.status === 'expired' || data.status === 'failed'){
+      cryptoPendingInvoice = null; stopPaymentPolling(); updatePendingBanner();
+      toast('انتهت صلاحية الفاتورة','err');
+    }else{
+      toast('الفاتورة لا تزال قيد الانتظار','info');
     }
-  } catch (e) {
-    toast('تعذر التحقق، حاول مجدداً', 'err');
-  } finally {
-    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-rotate"></i> تحقق الآن'; }
-  }
+  }catch(e){ toast('تعذر التحقق','err'); }
+  finally{ if(btn){ btn.disabled=false; btn.innerHTML='<i class="fas fa-rotate"></i> تحقق الآن'; } }
 }
 
 async function startCryptoPayment(){
-  if (S.busy) return;
-  if (cryptoUsd < CONFIG.shieldz.minUsd) return toast('الحد الأدنى للدفع $' + CONFIG.shieldz.minUsd, 'err');
-  if (cryptoUsd > CONFIG.shieldz.maxUsd) return toast('الحد الأعلى للدفع $' + CONFIG.shieldz.maxUsd, 'err');
-  S.busy = true;
-  SFX.play('tap');
+  if(S.busy) return;
+  if(cryptoUsd < CONFIG.shieldz.minUsd) return toast('الحد الأدنى $'+CONFIG.shieldz.minUsd,'err');
+  if(cryptoUsd > CONFIG.shieldz.maxUsd) return toast('الحد الأعلى $'+CONFIG.shieldz.maxUsd,'err');
+  S.busy = true; SFX.play('tap');
   const btn = $('cryptoPayBtn');
   const oldHtml = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<span class="spn"></span> جاري إنشاء الفاتورة...';
-  try {
+  try{
     const gems = Math.floor(cryptoUsd * CONFIG.shieldz.gemsPerUsd);
     const amountCents = Math.round(cryptoUsd * 100);
     const idempotencyKey = 'pm_' + TG.id + '_' + Date.now();
-    const resp = await fetch(CONFIG.api.base + '/api/shieldz/create-invoice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: TG.id, amount_usd_cents: amountCents, gems: gems, idempotency_key: idempotencyKey }),
+    const resp = await fetch(CONFIG.api.base + '/api/shieldz/create-invoice',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userId:TG.id, amount_usd_cents:amountCents, gems:gems, idempotency_key:idempotencyKey})
     });
-    const data = await resp.json().catch(() => ({}));
-    if (!resp.ok || !data.ok || !data.pay_url) {
-      throw new Error(data.error || data.message || 'فشل إنشاء الفاتورة');
-    }
-    cryptoPendingInvoice = { id: data.invoice_id, gems: gems, createdAt: Date.now() };
+    const data = await resp.json().catch(()=>({}));
+    if(!resp.ok || !data.ok || !data.pay_url) throw new Error(data.error||'فشل إنشاء الفاتورة');
+    cryptoPendingInvoice = { id:data.invoice_id, gems:gems, createdAt:Date.now() };
     updatePendingBanner();
     TG.openExternal(data.pay_url);
     startPaymentPolling(data.invoice_id, gems);
-  } catch (e) {
-    console.error('Crypto payment error:', e);
-    toast(e.message || 'تعذر بدء الدفع، حاول مجدداً', 'err');
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = oldHtml;
+  }catch(e){
+    console.error(e);
+    toast(e.message||'تعذر بدء الدفع','err');
+    S.busy = false; btn.disabled = false; btn.innerHTML = oldHtml;
   }
 }
 
 function startPaymentPolling(invoiceId, gems){
-  if (cryptoPollTimer) clearInterval(cryptoPollTimer);
+  if(cryptoPollTimer) clearInterval(cryptoPollTimer);
   let attempts = 0;
-  const finish = (success) => {
-    clearInterval(cryptoPollTimer); cryptoPollTimer = null;
+  const finish = (success)=>{
+    clearInterval(cryptoPollTimer); cryptoPollTimer=null;
     S.busy = false;
     cryptoPendingInvoice = null;
     updatePendingBanner();
     const btn = $('cryptoPayBtn');
-    if (btn) {
-      btn.innerHTML = '<i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو';
-      btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd;
-    }
-    if (success) {
+    if(btn){ btn.innerHTML = '<i class="fas fa-credit-card"></i> إكمال الدفع بالكريبتو'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
+    if(success){
       SFX.play('reward');
-      FB.get().then(fresh => {
-        if (fresh) S.user = Object.assign(S.user, fresh);
-        renderAll();
-      }).catch(() => { renderAll(); });
-      showModal({ icon: 'fa-coins', title: '✅ تم استلام الدفع!', sub: 'تمت إضافة الجواهر لحسابك', amount: '+' + fmt(gems) + ' 💎', btn: 'رائع' });
+      FB.get().then(fresh => { if(fresh) S.user = Object.assign(S.user, fresh); renderAll(); }).catch(()=>{ renderAll(); });
+      showModal({icon:'fa-coins',title:'✅ تم استلام الدفع!',sub:'تمت إضافة الجواهر لحسابك',amount:'+'+fmt(gems)+' 💎',btn:'رائع'});
     }
   };
-  cryptoPollTimer = setInterval(async () => {
+  cryptoPollTimer = setInterval(async ()=>{
     attempts++;
-    if (cryptoPendingInvoice && (Date.now() - cryptoPendingInvoice.createdAt) > CONFIG.shieldz.pendingTimeoutMs) {
-      finish(false); cryptoPendingInvoice = null; updatePendingBanner();
-      toast('انتهت صلاحية الفاتورة. يمكنك البدء من جديد.', 'info');
-      return;
+    if(cryptoPendingInvoice && (Date.now()-cryptoPendingInvoice.createdAt) > CONFIG.shieldz.pendingTimeoutMs){
+      finish(false); cryptoPendingInvoice = null; updatePendingBanner(); return;
     }
-    if (attempts > CONFIG.shieldz.pollMaxAttempts) {
+    if(attempts > CONFIG.shieldz.pollMaxAttempts){
       finish(false);
-      cryptoPendingInvoice = { id: invoiceId, gems: gems, createdAt: cryptoPendingInvoice ? cryptoPendingInvoice.createdAt : Date.now() };
+      cryptoPendingInvoice = { id:invoiceId, gems:gems, createdAt:cryptoPendingInvoice?cryptoPendingInvoice.createdAt:Date.now() };
       updatePendingBanner();
-      toast('انتهى وقت المراقبة التلقائية. اضغط "تحقق الآن" متى أردت.', 'info');
       return;
     }
-    try {
-      const resp = await fetch(CONFIG.api.base + '/api/shieldz/invoice/' + encodeURIComponent(invoiceId), { method: 'GET' });
-      const data = await resp.json().catch(() => ({}));
-      if (data.status === 'paid') { finish(true); }
-      else if (data.status === 'expired' || data.status === 'failed') {
-        finish(false); cryptoPendingInvoice = null; updatePendingBanner();
-        toast('انتهت صلاحية الفاتورة أو فشل الدفع', 'err');
-      }
-    } catch (e) {}
+    try{
+      const resp = await fetch(CONFIG.api.base + '/api/shieldz/invoice/' + encodeURIComponent(invoiceId));
+      const data = await resp.json().catch(()=>({}));
+      if(data.status === 'paid') finish(true);
+      else if(data.status === 'expired' || data.status === 'failed'){ finish(false); cryptoPendingInvoice=null; updatePendingBanner(); }
+    }catch(e){}
   }, CONFIG.shieldz.pollIntervalMs);
 }
 
+// ========== طرق الإيداع MD ==========
 const MD={
-  binance:{K:'Binance',acc:'1121748571',minTxt:'الحد الأدنى للتحويل $0.50',cls:'i-gold',icon:'fa-wallet',logo:'https://up6.cc/2026/09/178982889076391.png',
-    title:'الإيداع عبر Binance Pay',accLbl:'معرّف Binance Pay'},
-  sham:{K:'Sham',acc:'334a08ea2d1bbed05f214a7f08e37ae4',minTxt:'الحد الأدنى للتحويل 50 ليرة',cls:'i-green',icon:'fa-money-bill-wave',logo:'https://up6.cc/2026/09/178975725154411.png',
-    title:'الإيداع عبر شام كاش',accLbl:'معرّف شام كاش'}
+  binance:{K:'Binance',acc:'1121748571',minTxt:'الحد الأدنى $0.50',cls:'i-gold',icon:'fa-wallet',logo:'https://up6.cc/2026/09/178982889076391.png',title:'الإيداع عبر Binance Pay',accLbl:'معرّف Binance Pay'},
+  sham:{K:'Sham',acc:'334a08ea2d1bbed05f214a7f08e37ae4',minTxt:'الحد الأدنى 50 ليرة',cls:'i-green',icon:'fa-money-bill-wave',logo:'https://up6.cc/2026/09/178975725154411.png',title:'الإيداع عبر شام كاش',accLbl:'معرّف شام كاش'}
 };
+
 function buildMd(){
   Object.keys(MD).forEach(k=>{
     const m=MD[k],K=m.K;
@@ -2204,18 +1344,19 @@ function buildMd(){
     '<div class="codebox"><b id="mdAcc'+K+'" style="font-size:13px;letter-spacing:0;word-break:break-all">'+m.acc+'</b>'+
     '<button class="btn b-y b-sm" data-copy="mdAcc'+K+'"><i class="fas fa-copy"></i> نسخ</button></div></div>'+
     '<div class="card" style="border-color:var(--red)"><div class="ttl">مهم: أضف معرّف حسابك في الملاحظة</div>'+
-    '<div class="sub" style="margin:4px 0 10px">انسخ معرّفك والصقه في خانة الملاحظة (Note) عند التحويل حتى يمكن التعرّف على حسابك.</div>'+
+    '<div class="sub" style="margin:4px 0 10px">انسخ معرّفك والصقه في الملاحظة (Note) عند التحويل.</div>'+
     '<div class="codebox"><b id="mdUid'+K+'" style="direction:ltr">'+esc(TG.id)+'</b>'+
-    '<button class="btn b-y b-sm" data-copy="mdUid'+K+'"><i class="fas fa-copy"></i> نسخ المعرّف</button></div></div>'+
-    '<div class="card" style="text-align:center;font-size:12px;color:var(--ink2);margin-top:12px"><i class="fas fa-shield-halved" style="color:var(--sky-d)"></i> بعد إتمام التحويل، تُراجع الدفعة وتُضاف الجواهر إلى حسابك بعد التحقق.</div>';
+    '<button class="btn b-y b-sm" data-copy="mdUid'+K+'"><i class="fas fa-copy"></i> نسخ المعرّف</button></div></div>';
   });
 }
+
 function copyText(t){
   const ok=()=>toast('تم النسخ ✅');
   const fb=()=>{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){toast('تعذر النسخ','err')}a.remove()};
   navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t).then(ok).catch(fb):fb();
 }
 
+// ========== الإحالة ==========
 async function applyCode(code){
   const u=S.user;if(u.referralUsed)return false;
   if(!/^\d{6,15}$/.test(code)||code===TG.id){toast('معرّف غير صالح','err');return false}
@@ -2225,935 +1366,65 @@ async function applyCode(code){
     const rid=q.docs[0].id;
     u.referralUsed=true;u.referredBy=rid;
     u.gems += CONFIG.ref.newUser;
-    u.referralMilestones = u.referralMilestones || {};
-    await FB.set({ referralUsed:true, referredBy:rid, gems:u.gems, referralMilestones:u.referralMilestones });
+    await FB.set({ referralUsed:true, referredBy:rid, gems:u.gems });
     const inc=firebase.firestore.FieldValue.increment;
     await db.collection(CONFIG.col).doc(rid).update({ referralCount:inc(1), updatedAt:Date.now() });
-    SFX.play('reward');toast('🎉 +'+CONFIG.ref.newUser+' جوهرة من الإحالة!');renderAll();return true;
-  }catch(e){u.referralUsed=false;toast('تعذر التحقق من الكود','err');return false}
-}
-
-async function checkReferralMilestones(telegramId, newLevel) {
-  try {
-    const userDoc = await db.collection(CONFIG.col).doc(telegramId).get();
-    if (!userDoc.exists) return;
-    const userData = userDoc.data();
-    const referredBy = userData.referredBy;
-    if (!referredBy) return;
-    const milestones = userData.referralMilestones || {};
-    const newMilestones = {};
-    let updated = false;
-    for (const milestone of CONFIG.ref.milestones) {
-      const key = 'lvl' + milestone.level;
-      if (newLevel >= milestone.level && !milestones[key]) {
-        newMilestones[key] = true;
-        updated = true;
-        try {
-          await db.collection(CONFIG.col).doc(referredBy).update({
-            gems: firebase.firestore.FieldValue.increment(milestone.reward),
-            referralEarnings: firebase.firestore.FieldValue.increment(milestone.reward),
-            updatedAt: Date.now()
-          });
-          await db.collection(CONFIG.txCol).add({
-            userId: referredBy, type: 'referral_milestone', fromUser: telegramId,
-            level: milestone.level, amount: milestone.reward, currency: 'gems', createdAt: Date.now()
-          });
-        } catch (e) { console.warn('Failed to grant referral milestone:', e); }
-      }
-    }
-    if (updated) {
-      const mergedMilestones = Object.assign({}, milestones, newMilestones);
-      await db.collection(CONFIG.col).doc(telegramId).update({ referralMilestones: mergedMilestones });
-    }
-  } catch(e) { console.warn('Referral milestone check error:', e); }
+    SFX.play('reward');toast('🎉 +'+CONFIG.ref.newUser+' جوهرة!');renderAll();return true;
+  }catch(e){u.referralUsed=false;toast('تعذر التحقق','err');return false}
 }
 
 async function checkReferral(){const sp=TG.start;if(sp&&sp.startsWith('ref_'))await applyCode(sp.slice(4))}
 
-function initLang(){document.documentElement.lang='ar';document.documentElement.dir='rtl';try{localStorage.setItem('pm_lang','ar')}catch(e){}}
-
-async function watchEnergyAd(){
-  const btn=$('energyAdBtn');if(S.busy)return;
-  if(Energy.cur(S.user)>=CONFIG.energyMax)return toast('الطاقة ممتلئة بالفعل','info');
-  if(typeof window.show_12008608!=='function')return toast('الإعلان غير متاح حالياً، حاول لاحقاً','err');
-  S.busy=true;btn.disabled=true;const original=btn.innerHTML;btn.innerHTML='<span class="spn"></span> جاري مشاهدة الإعلان';
-  const started=performance.now();
-  try{
-    await window.show_12008608();
-    const elapsed=performance.now()-started;
-    if(elapsed<15000){toast('لم تُحتسب الطاقة لأن مشاهدة الإعلان أقل من 15 ثانية','err');return}
-    const u=S.user,now=TIME.now(),current=Energy.cur(u),last=u.energyUpdatedAt||now;
-    if(current>=CONFIG.energyMax)return toast('الطاقة ممتلئة بالفعل','info');
-    u.energy=current+1;
-    if(u.energy>=CONFIG.energyMax)u.energyUpdatedAt=now;
-    else u.energyUpdatedAt=last+Math.floor((now-last)/(CONFIG.regenMs||600000))*(CONFIG.regenMs||600000);
-    await FB.set({energy:u.energy,energyUpdatedAt:u.energyUpdatedAt});renderEnergy();toast('+1 ⚡');SFX.play('reward');
-  }catch(e){toast('لم تكتمل مشاهدة الإعلان','err')}
-  finally{S.busy=false;btn.disabled=false;btn.innerHTML=original;renderWheel()}
-}
-
-async function buyEnergy(){
-  if(S.busy)return;
-  if(Energy.cur(S.user)>=CONFIG.energyMax)return toast('الطاقة ممتلئة بالفعل','info');
-  if((S.user.gems||0)<10)return toast('تحتاج 10 جواهر','err');
-  S.busy=true;
-  try{
-    S.user.gems-=10;
-    await FB.set({gems:S.user.gems});
-    await Energy.add(1);
-    renderAll();
-    toast('+1 ⚡');
-    SFX.play('reward');
-  }catch(e){
-    toast('حدثت مشكلة، حاول مجدداً','err');
-  }finally{
-    S.busy=false;
-  }
-}
-
+// ========== محتوى المساعدة ==========
 function openContentModal(kind){
   const policy=kind==='policy';
   $('contentIcon').className='ico '+(policy?'i-sky':'i-green');
   $('contentIcon').innerHTML='<i class="fas '+(policy?'fa-shield-halved':'fa-circle-question')+'"></i>';
-  $('contentTitle').textContent=policy?'معلومات التطبيق وسياسة الخصوصية':'مركز المساعدة';
+  $('contentTitle').textContent=policy?'سياسة الخصوصية':'مركز المساعدة';
   if(policy){
     $('contentBody').innerHTML=
-      '<div class="policy-box"><h4>عن Puppy Merge</h4><p>لعبة دمج وترفيه تجمع فيها العملات والجواهر وتتقدم عبر المستويات والمهام والإحالات.</p></div><div class="policy-box"><h4>المعلومات المستخدمة</h4><p>يستخدم التطبيق معرّف حساب تيليجرام واسم العرض وصورة الحساب إن توفرت، إضافةً إلى الرصيد والطاقة وتقدم اللعب والإحالات وبيانات السحب التي تدخلها.</p></div><div class="policy-box"><h4>الخصوصية</h4><p>قد تتم معالجة البيانات عبر الخدمات اللازمة لتشغيل التطبيق مثل تيليجرام وفايربيس.</p></div>';
+      '<div class="policy-box"><h4>عن التطبيق</h4><p>Puppy Merge — منصة ترفيهية لشراء المقتنيات الرقمية وبيعها بعد 7 أيام بربح 5%، مع نظام إحالة ومكافآت.</p></div>'+
+      '<div class="policy-box"><h4>المعلومات المستخدمة</h4><p>يُستخدم معرّف تيليجرام واسم العرض وصورة الحساب إن وُجدت، إضافة إلى رصيد الجواهر والعملات والمقتنيات وبيانات السحب.</p></div>'+
+      '<div class="policy-box"><h4>الخصوصية</h4><p>تُعالج البيانات عبر تيليجرام وفايربيس لتشغيل التطبيق فقط.</p></div>';
   }else{
     $('contentBody').innerHTML=
-      '<div class="policy-box"><h4>كيف تلعب؟</h4><p>بدّل أماكن القطع المتجاورة لتكوين ثلاثة حيوانات متشابهة أو أكثر. كل مستوى تكمله يمنحك +100 عملة، وكل 10 مستويات تحصل على +10 جواهر إضافية.</p></div><div class="policy-box"><h4>لعبة الطيران</h4><p>اضغط لترتفع، تجنب الصبّار، واجمع العملات والجواهر. كل عبور موفق للعائق يمنحك +5 عملات، والفقاعات تعطي 1-10 جواهر.</p></div><div class="policy-box"><h4>شراء الجواهر</h4><p>اختر تبويب النجوم أو الكريبتو أو Binance Pay أو شام كاش. عند التحويل اليدوي ضع معرّفك في الملاحظة.</p></div><div class="policy-box"><h4>سحب الأموال</h4><p>سعر الجوهرة: 100 💎 = $0.01. سحب Binance Pay يتضمن عمولة 20% (5000 💎 = $0.40 صافي). شام كاش بدون عمولة. USDT Crypto قريباً.</p></div>';
+      '<div class="policy-box"><h4>كيف أشتري مقتنى؟</h4><p>من الصفحة الرئيسية اختر بطاقة (200 / 500 / 700 ⭐). بعد الدفع تُضاف البطاقة إلى متجر المقتنيات ولا تُحوَّل إلى جواهر.</p></div>'+
+      '<div class="policy-box"><h4>متى أستطيع بيع المقتنى؟</h4><p>بعد مرور 7 أيام من الشراء. ستظهر لك زر "بيع الآن" بقيمة المقتنى الأساسية + 5% ربح.</p></div>'+
+      '<div class="policy-box"><h4>شراء الجواهر</h4><p>من صفحة شراء الجواهر يمكنك الشراء بالنجوم أو الكريبتو أو Binance أو شام كاش، وتُضاف الجواهر مباشرة.</p></div>'+
+      '<div class="policy-box"><h4>سحب الأموال</h4><p>سعر الجوهرة: 100 💎 = $0.01. Binance Pay بعمولة 20%، شام كاش بدون عمولة.</p></div>';
   }
   $('contentModal').classList.add('show');
 }
 function closeContentModal(){$('contentModal').classList.remove('show')}
 
-const FlyGame = (() => {
-  const cvs = document.getElementById('flyCanvas');
-  const ctx = cvs.getContext('2d');
-  let VW=0, VH=0, DPR=1, SZ={};
-  const CFG = CONFIG.fly;
-  const st={mode:'idle',raf:0,lastT:0,acc:0,p:{x:0,y:0,vy:0,rot:0,r:20},readyY:0,readyT:0,
-    worldX:0,obs:[],bub:[],par:[],stars:[],clouds:[],
-    dist:0,rC:0,rD:0,pairs:0,nextB:8,img:null,imgOk:false,returnTo:'menu',committed:false,prevMode:'idle'};
-
-  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-
-  function resize(){
-    const r=cvs.parentElement.getBoundingClientRect();
-    VW=r.width;VH=r.height;if(VW<=0||VH<=0){setTimeout(resize,50);return}
-    DPR=Math.min(window.devicePixelRatio||1,2);
-    cvs.width=Math.round(VW*DPR);cvs.height=Math.round(VH*DPR);
-    cvs.style.width=VW+'px';cvs.style.height=VH+'px';
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-    SZ.pR=clamp(VH*0.033,CFG.pRMin,CFG.pRMax);
-    SZ.oW=clamp(VW*CFG.oWR,CFG.oWMin,CFG.oWMax);
-    SZ.gap=clamp(VH*CFG.gapR,CFG.gapMin,CFG.gapMax);
-    SZ.sp=clamp(VW*CFG.spR,CFG.spMin,CFG.spMax);
-    SZ.gr=clamp(VH*CFG.grR,CFG.grMin,CFG.grMax);
-  }
-
-  let imgUrl=null;
-  function loadImg(){
-    const url=(S.user&&S.user.photoUrl)||(TG.user&&TG.user.photo_url)||null;
-    if(!url){st.img=null;st.imgOk=false;imgUrl=null;return}
-    if(url===imgUrl&&st.imgOk)return;
-    imgUrl=url;st.imgOk=false;st.img=null;
-    const im=new Image();
-    im.referrerPolicy='no-referrer';
-    im.onload=()=>{if(imgUrl===url){st.img=im;st.imgOk=true}};
-    im.onerror=()=>{if(imgUrl===url)st.imgOk=false};
-    im.src=url;
-  }
-
-  function reset(){
-    st.p.x=VW*0.28;st.p.y=VH*0.45;st.p.vy=0;st.p.rot=0;st.p.r=SZ.pR;
-    st.readyY=VH*0.45;st.readyT=0;st.worldX=0;
-    st.obs=[];st.bub=[];st.par=[];
-    st.dist=0;st.rC=0;st.rD=0;st.pairs=0;st.committed=false;
-    st.nextB=CFG.bubbleIntervalMin+Math.floor(Math.random()*(CFG.bubbleIntervalMax-CFG.bubbleIntervalMin+1));
-    buildStars();buildClouds();
-    let x=VW+100;for(let i=0;i<3;i++){spawnObs(x);x+=SZ.sp}
-    hud();
-  }
-  function buildStars(){
-    st.stars=[];const n=Math.round((VW*VH*0.5)/20000),rng=mulberry32(99);
-    for(let i=0;i<n;i++)st.stars.push({x:rng()*VW,y:rng()*VH*0.45,r:.5+rng()*1.1,tw:rng()*Math.PI*2,sp:.6+rng()*1.2});
-  }
-  function buildClouds(){
-    st.clouds=[{x:.10,y:.15,s:1.1},{x:.45,y:.28,s:.8},{x:.78,y:.12,s:1},{x:1.15,y:.22,s:.9},{x:1.55,y:.18,s:1.2},{x:1.9,y:.30,s:.75}];
-  }
-  function spawnObs(x){
-    const g=SZ.gap,gY=VH-SZ.gr,minT=60,maxT=gY-60-g,r=Math.max(20,maxT-minT),gapY=minT+Math.random()*r;
-    st.obs.push({x,w:SZ.oW,gapY,gapH:g,passed:false,seed:Math.random()*9999|0});
-  }
-  function spawnBub(x){
-    const gY=VH-SZ.gr,m=90,y=m+Math.random()*Math.max(40,gY-m*2);
-    st.bub.push({x,y,r:Math.max(22,VH*0.034),seed:Math.random()*Math.PI*2,collected:false});
-  }
-  function hud(){
-    $('flyHudCoins').textContent=fmt(st.rC);
-    $('flyHudDiamonds').textContent=fmt(st.rD);
-    $('flyHudDist').textContent=fmt(Math.floor(st.dist));
-  }
-  function floater(text,x,y,type){
-    const el=document.createElement('div');
-    el.className='fly-floater'+(type==='gem'?' gem':'');
-    el.textContent=text;
-    el.style.left=clamp(x,30,VW-30)+'px';
-    el.style.top=clamp(y,60,VH-60)+'px';
-    $('flyFloaters').appendChild(el);
-    setTimeout(()=>el.remove(),1250);
-  }
-  function spawnBurst(x,y){
-    const rng=mulberry32((x*31+y*17)|0);
-    for(let i=0;i<8;i++){
-      const a=(Math.PI*2*i)/8+rng()*0.5,sp=90+rng()*120;
-      st.par.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-60,life:.55+rng()*.35,max:.9,
-        col:i%3===0?'#fff':(i%2===0?'#8CEBFF':'#59D7F2'),r:2+rng()*2.5});
-    }
-  }
-
-  function step(dt){
-    st.p.vy+=CFG.gravity*dt;
-    if(st.p.vy>CFG.maxFall)st.p.vy=CFG.maxFall;
-    st.p.y+=st.p.vy*dt;
-    const targetRot=clamp((st.p.vy/CFG.maxFall)*1.15,-.52,1.15);
-    st.p.rot+=(targetRot-st.p.rot)*Math.min(1,dt*11);
-    const dx=CFG.scroll*dt;
-    st.worldX+=dx;
-    st.dist=st.worldX/CFG.pxPerM;
-    for(const o of st.obs)o.x-=dx;
-    for(const b of st.bub)b.x-=dx;
-    if(st.obs.length&&st.obs[0].x+st.obs[0].w<-60)st.obs.shift();
-    const last=st.obs[st.obs.length-1];
-    if(!last||last.x<VW-SZ.sp)spawnObs(last?last.x+SZ.sp:VW+80);
-    for(const o of st.obs){
-      if(!o.passed&&o.x+o.w<st.p.x-st.p.r){
-        o.passed=true;st.pairs++;
-        st.rC+=CFG.coinPerPair;
-        floater('+'+CFG.coinPerPair,st.p.x+st.p.r*1.2,st.p.y-st.p.r*1.6,'coin');
-        hud();
-        if(st.pairs>=st.nextB){
-          spawnBub(VW+60);
-          st.nextB=st.pairs+CFG.bubbleIntervalMin+Math.floor(Math.random()*(CFG.bubbleIntervalMax-CFG.bubbleIntervalMin+1));
-        }
-      }
-    }
-    const gY=VH-SZ.gr;
-    const pr=st.p.r*0.88;
-    for(const o of st.obs){
-      if(st.p.x+pr<o.x||st.p.x-pr>o.x+o.w)continue;
-      if(circleRect(st.p.x,st.p.y,pr,o.x,0,o.w,o.gapY)||
-         circleRect(st.p.x,st.p.y,pr,o.x,o.gapY+o.gapH,o.w,gY-(o.gapY+o.gapH))){over();return}
-    }
-    if(st.p.y+st.p.r>=gY){st.p.y=gY-st.p.r;over();return}
-    if(st.p.y-st.p.r<0){st.p.y=st.p.r;if(st.p.vy<0)st.p.vy=0}
-    for(const b of st.bub){
-      if(b.collected)continue;
-      const ddx=b.x-st.p.x,ddy=b.y-st.p.y,rr=b.r+st.p.r*0.95;
-      if(ddx*ddx+ddy*ddy<rr*rr){
-        b.collected=true;
-        const reward=CFG.dMin+Math.floor(Math.random()*(CFG.dMax-CFG.dMin+1));
-        st.rD+=reward;
-        floater('+'+reward,b.x,b.y-12,'gem');
-        spawnBurst(b.x,b.y);
-        hud();
-      }
-    }
-    if(st.bub.length)st.bub=st.bub.filter(b=>!b.collected&&b.x+b.r>-60);
-    if(st.par.length){
-      for(const pa of st.par){pa.vy+=420*dt;pa.x+=pa.vx*dt;pa.y+=pa.vy*dt;pa.life-=dt}
-      st.par=st.par.filter(p=>p.life>0);
-    }
-  }
-
-  function circleRect(cx,cy,r,rx,ry,rw,rh){
-    if(rw<=0||rh<=0)return false;
-    const nx=Math.max(rx,Math.min(cx,rx+rw));
-    const ny=Math.max(ry,Math.min(cy,ry+rh));
-    const dx=cx-nx,dy=cy-ny;
-    return dx*dx+dy*dy<r*r;
-  }
-
-  function render(){
-    const g=ctx;
-    g.clearRect(0,0,VW,VH);
-    drawSky(g);drawStars(g);drawSun(g);drawPyramids(g);drawClouds(g);drawDunes(g);
-    drawGround(g);drawObs(g);drawBubbles(g);drawParticles(g);drawPlayer(g);
-  }
-
-  function drawSky(g){
-    const gr=g.createLinearGradient(0,0,0,VH);
-    gr.addColorStop(0,'#7EC8E3');gr.addColorStop(0.35,'#A8DCF0');
-    gr.addColorStop(0.65,'#C9EDF7');gr.addColorStop(0.85,'#F2E5B8');
-    gr.addColorStop(1,'#FFE8B8');
-    g.fillStyle=gr;g.fillRect(0,0,VW,VH);
-  }
-  function drawStars(g){
-    const t=performance.now()/1000;
-    for(const s of st.stars){
-      const a=0.20+0.35*(0.5+0.5*Math.sin(t*s.sp+s.tw));
-      g.globalAlpha=a;g.fillStyle='#fff';
-      g.beginPath();g.arc(s.x,s.y,s.r,0,Math.PI*2);g.fill();
-    }
-    g.globalAlpha=1;
-  }
-  function drawSun(g){
-    const x=VW*0.74,y=VH*0.20,r=Math.min(VW,VH)*0.055;
-    const rg=g.createRadialGradient(x,y,r*0.4,x,y,r*3.2);
-    rg.addColorStop(0,'rgba(255,240,200,.95)');
-    rg.addColorStop(0.5,'rgba(255,215,150,.4)');
-    rg.addColorStop(1,'rgba(255,215,150,0)');
-    g.fillStyle=rg;g.beginPath();g.arc(x,y,r*3.2,0,Math.PI*2);g.fill();
-    g.fillStyle='rgba(255,250,220,.98)';
-    g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill();
-  }
-  function drawPyramids(g){
-    const gY=VH-SZ.gr,f=0.10,tw=VW*1.5,off=-((st.worldX*f)%tw);
-    const pats=[{x:.18,w:210,h:230,c:'rgba(232,200,150,.55)'},{x:.55,w:270,h:290,c:'rgba(220,185,130,.6)'},{x:1.02,w:170,h:190,c:'rgba(240,210,160,.55)'}];
-    for(let rep=0;rep<2;rep++){const ox=off+rep*tw;
-      for(const py of pats){const cx=ox+py.x*VW;if(cx<-400||cx>VW+400)continue;drawPyr(g,cx,gY,py.w,py.h,py.c)}
-    }
-  }
-  function drawPyr(g,cx,by,w,h,col){
-    g.fillStyle=col;g.beginPath();g.moveTo(cx-w/2,by);g.lineTo(cx,by-h);g.lineTo(cx+w/2,by);g.closePath();g.fill();
-    g.fillStyle='rgba(255,220,170,.28)';
-    g.beginPath();g.moveTo(cx,by-h);g.lineTo(cx+w/2,by);g.lineTo(cx+w*0.14,by);g.closePath();g.fill();
-  }
-  function drawClouds(g){
-    const f=0.28,tw=VW*2.2,off=-((st.worldX*f)%tw);
-    g.fillStyle='rgba(255,255,255,.7)';
-    for(let rep=0;rep<2;rep++){const ox=off+rep*tw;
-      for(const c of st.clouds){const cx=ox+c.x*VW,cy=c.y*VH;if(cx<-220||cx>VW+220)continue;drawCloudShape(g,cx,cy,56*c.s)}
-    }
-  }
-  function drawCloudShape(g,x,y,s){
-    g.beginPath();g.arc(x,y,s,0,Math.PI*2);g.arc(x+s*0.9,y+s*0.15,s*0.75,0,Math.PI*2);
-    g.arc(x-s*0.9,y+s*0.2,s*0.7,0,Math.PI*2);g.arc(x+s*0.25,y-s*0.42,s*0.6,0,Math.PI*2);g.fill();
-  }
-  function drawDunes(g){
-    const gY=VH-SZ.gr,f=0.55,tw=VW*1.15,off=-((st.worldX*f)%tw);
-    g.fillStyle='rgba(230,195,140,.7)';
-    for(let rep=0;rep<2;rep++){const ox=off+rep*tw;
-      g.beginPath();g.moveTo(ox,gY);const steps=26;
-      for(let i=0;i<=steps;i++){const t=i/steps;const x=ox+t*tw;const y=gY-28-Math.sin(t*Math.PI*2)*18-Math.sin(t*Math.PI*5.3)*7;g.lineTo(x,y)}
-      g.lineTo(ox+tw,gY);g.closePath();g.fill();
-    }
-  }
-  function drawGround(g){
-    const gY=VH-SZ.gr;
-    const gr=g.createLinearGradient(0,gY,0,VH);
-    gr.addColorStop(0,'#F5D6A0');gr.addColorStop(0.5,'#E0B87A');gr.addColorStop(1,'#B58447');
-    g.fillStyle=gr;g.fillRect(0,gY,VW,SZ.gr);
-    g.fillStyle='#FFF6DC';g.fillRect(0,gY,VW,3);
-    g.fillStyle='rgba(160,120,60,.35)';g.fillRect(0,gY+3,VW,2);
-    const off=-((st.worldX)%46);
-    g.strokeStyle='rgba(160,120,60,.28)';g.lineWidth=1.5;
-    for(let x=off-46;x<VW+46;x+=46){
-      g.beginPath();
-      g.moveTo(x,gY+14);g.lineTo(x+14,gY+14);
-      g.moveTo(x+22,gY+34);g.lineTo(x+38,gY+34);
-      g.moveTo(x+8,gY+54);g.lineTo(x+22,gY+54);
-      g.stroke();
-    }
-  }
-  function drawObs(g){
-    const gY=VH-SZ.gr;
-    for(const o of st.obs){
-      drawCactus(g,o.x,0,o.w,o.gapY,o.seed,true);
-      const by=o.gapY+o.gapH;
-      drawCactus(g,o.x,by,o.w,gY-by,o.seed+100,false);
-    }
-  }
-  function roundRectPath(g,x,y,w,h,r){
-    r=Math.min(r,w/2,h/2);
-    g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);
-    g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();
-  }
-  function drawCactus(g,x,y,w,h,seed,isTop){
-    if(h<=4)return;
-    const dirtH=Math.min(26,h*0.32);
-    const bodyY=isTop?y+dirtH:y;
-    const bodyH=h-dirtH;
-    const grad=g.createLinearGradient(x,0,x+w,0);
-    grad.addColorStop(0,'#3F9142');grad.addColorStop(0.35,'#5FB863');
-    grad.addColorStop(0.65,'#4CAF50');grad.addColorStop(1,'#235C25');
-    g.fillStyle=grad;roundRectPath(g,x+3,bodyY,w-6,bodyH,9);g.fill();
-    g.strokeStyle='rgba(20,60,20,.55)';g.lineWidth=1.5;
-    roundRectPath(g,x+3,bodyY,w-6,bodyH,9);g.stroke();
-    g.strokeStyle='rgba(0,60,10,.35)';g.lineWidth=1.4;
-    for(let i=1;i<=3;i++){const lx=x+3+(w-6)*(i/4);g.beginPath();g.moveTo(lx,bodyY+5);g.lineTo(lx,bodyY+bodyH-5);g.stroke()}
-    g.strokeStyle='rgba(255,255,255,.2)';g.lineWidth=2;
-    g.beginPath();g.moveTo(x+w*0.32,bodyY+8);g.lineTo(x+w*0.32,bodyY+bodyH-8);g.stroke();
-    const rng=mulberry32(seed);g.fillStyle='#FFF3D0';g.strokeStyle='rgba(120,80,30,.7)';g.lineWidth=0.8;
-    const step=22,count=Math.max(1,Math.floor(bodyH/step));
-    for(let i=0;i<count;i++){const sy=bodyY+14+i*step;if(sy>bodyY+bodyH-6)break;
-      g.beginPath();g.moveTo(x+3,sy);g.lineTo(x-4,sy+2);g.lineTo(x+3,sy+5);g.closePath();g.fill();g.stroke();
-      g.beginPath();g.moveTo(x+w-3,sy);g.lineTo(x+w+4,sy+2);g.lineTo(x+w-3,sy+5);g.closePath();g.fill();g.stroke();
-    }
-    const dy=isTop?y:y+h-dirtH;
-    const dg=g.createLinearGradient(0,dy,0,dy+dirtH);
-    dg.addColorStop(0,'#A8876A');dg.addColorStop(1,'#6B4A2A');
-    g.fillStyle=dg;roundRectPath(g,x-2,dy,w+4,dirtH,8);g.fill();
-    const rng2=mulberry32(seed+7);g.fillStyle='rgba(40,25,10,.5)';
-    for(let i=0;i<10;i++){const dx=x+rng2()*w,dyy=dy+3+rng2()*(dirtH-6);g.beginPath();g.arc(dx,dyy,0.8+rng2()*1.6,0,Math.PI*2);g.fill()}
-    g.strokeStyle='rgba(255,220,180,.35)';g.lineWidth=1.5;
-    g.beginPath();g.moveTo(x+4,dy+3);g.lineTo(x+w-4,dy+3);g.stroke();
-  }
-  function drawBubbles(g){
-    const t=performance.now()/1000;
-    for(const b of st.bub){
-      if(b.collected)continue;
-      const bob=Math.sin(t*2.4+b.seed)*4,cy=b.y+bob;
-      const rg=g.createRadialGradient(b.x,cy,b.r*0.3,b.x,cy,b.r*1.9);
-      rg.addColorStop(0,'rgba(140,235,255,.75)');rg.addColorStop(1,'rgba(140,235,255,0)');
-      g.fillStyle=rg;g.beginPath();g.arc(b.x,cy,b.r*1.9,0,Math.PI*2);g.fill();
-      const bg=g.createRadialGradient(b.x-b.r*0.32,cy-b.r*0.32,b.r*0.1,b.x,cy,b.r);
-      bg.addColorStop(0,'rgba(255,255,255,.95)');bg.addColorStop(0.55,'rgba(140,235,255,.6)');
-      bg.addColorStop(1,'rgba(70,180,225,.5)');
-      g.fillStyle=bg;g.beginPath();g.arc(b.x,cy,b.r,0,Math.PI*2);g.fill();
-      g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=2;
-      g.beginPath();g.arc(b.x,cy,b.r,0,Math.PI*2);g.stroke();
-      drawDiamond(g,b.x,cy,b.r*0.6);
-      for(let i=0;i<4;i++){
-        const sa=t*2+i*1.6+b.seed,sr=b.r*1.35;
-        const sx=b.x+Math.cos(sa)*sr,sy=cy+Math.sin(sa)*sr;
-        const aa=0.35+0.65*Math.abs(Math.sin(sa*3));
-        g.fillStyle='rgba(255,255,255,'+aa.toFixed(2)+')';
-        g.beginPath();g.arc(sx,sy,1.6,0,Math.PI*2);g.fill();
-      }
-    }
-  }
-  function drawDiamond(g,x,y,s){
-    g.save();g.translate(x,y);
-    const gr=g.createLinearGradient(0,-s,0,s);
-    gr.addColorStop(0,'#E8FBFF');gr.addColorStop(.5,'#8CEBFF');gr.addColorStop(1,'#1B7FA8');
-    g.fillStyle=gr;
-    g.beginPath();g.moveTo(0,-s);g.lineTo(s*0.85,-s*0.15);g.lineTo(0,s);g.lineTo(-s*0.85,-s*0.15);g.closePath();
-    g.fill();g.strokeStyle='#fff';g.lineWidth=1.5;g.stroke();
-    g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=1;
-    g.beginPath();g.moveTo(0,-s);g.lineTo(-s*0.28,-s*0.15);g.lineTo(0,s);
-    g.moveTo(0,-s);g.lineTo(s*0.28,-s*0.15);g.lineTo(0,s);
-    g.moveTo(-s*0.85,-s*0.15);g.lineTo(s*0.85,-s*0.15);
-    g.stroke();g.restore();
-  }
-  function drawParticles(g){
-    for(const p of st.par){
-      const a=clamp(p.life/p.max,0,1);
-      g.globalAlpha=a;g.fillStyle=p.col;
-      g.beginPath();g.arc(p.x,p.y,p.r*(0.5+a*0.5),0,Math.PI*2);g.fill();
-    }
-    g.globalAlpha=1;
-  }
-  function drawPlayer(g){
-    const p=st.p,r=p.r;
-    const gY=VH-SZ.gr;
-    const ss=clamp(1-(gY-p.y)/(VH*0.8),0.15,0.7);
-    g.save();g.globalAlpha=0.22*ss;g.fillStyle='#000';
-    g.beginPath();g.ellipse(p.x+4,gY-4,r*0.9*ss,r*0.28*ss,0,0,Math.PI*2);g.fill();g.restore();
-
-    g.save();g.translate(p.x,p.y);g.rotate(p.rot);
-    const gl=g.createRadialGradient(0,0,r*0.85,0,0,r*1.7);
-    gl.addColorStop(0,'rgba(255,213,46,.55)');gl.addColorStop(1,'rgba(255,213,46,0)');
-    g.fillStyle=gl;g.beginPath();g.arc(0,0,r*1.7,0,Math.PI*2);g.fill();
-
-    g.save();g.translate(r*0.1,r*0.14);g.fillStyle='rgba(0,0,0,.28)';
-    g.beginPath();g.arc(0,0,r*1.02,0,Math.PI*2);g.fill();g.restore();
-
-    if(st.imgOk&&st.img&&st.img.naturalWidth>0){
-      g.save();
-      g.beginPath();g.arc(0,0,r,0,Math.PI*2);g.clip();
-      g.drawImage(st.img,-r,-r,r*2,r*2);
-      g.restore();
-      g.strokeStyle='#fff';g.lineWidth=Math.max(2,r*0.1);
-      g.beginPath();g.arc(0,0,r-g.lineWidth/2,0,Math.PI*2);g.stroke();
-      g.strokeStyle='rgba(255,213,46,.7)';g.lineWidth=Math.max(1,r*0.05);
-      g.beginPath();g.arc(0,0,r,0,Math.PI*2);g.stroke();
-    } else {
-      drawInitialAvatar(g,0,0,r);
-    }
-    g.restore();
-  }
-
-  function drawInitialAvatar(g,cx,cy,r){
-    const gr=g.createRadialGradient(cx-r*.3,cy-r*.3,r*.15,cx,cy,r);
-    gr.addColorStop(0,'#FFF3A8');gr.addColorStop(.55,'#FFD52E');gr.addColorStop(1,'#B97A00');
-    g.fillStyle=gr;g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.fill();
-    const nm=((S.user&&S.user.name)||'').trim(),ch=nm?Array.from(nm)[0].toUpperCase():'?';
-    g.fillStyle='#5A3A00';g.font='900 '+Math.round(r*1.1)+'px "Baloo Bhaijaan 2",sans-serif';
-    g.textAlign='center';g.textBaseline='middle';g.fillText(ch,cx,cy+r*.06);
-    g.strokeStyle='#fff';g.lineWidth=Math.max(2,r*.1);
-    g.beginPath();g.arc(cx,cy,r-g.lineWidth/2,0,Math.PI*2);g.stroke();
-  }
-
-  function flap(){st.p.vy=CFG.flap}
-
-  function tick(now){
-    if(st.mode!=='playing'&&st.mode!=='ready'){st.raf=0;return}
-    st.raf=requestAnimationFrame(tick);
-    const dt=Math.min(0.1,Math.max(0,(now-st.lastT)/1000));
-    st.lastT=now;
-    if(st.mode==='playing'){
-      st.acc+=dt;let it=0;
-      while(st.acc>=CFG.fixedDt&&it<400){step(CFG.fixedDt);st.acc-=CFG.fixedDt;it++;if(st.mode!=='playing')break}
-      if(it>=400)st.acc=0;
-      $('flyHudDist').textContent=fmt(Math.floor(st.dist));
-    } else if(st.mode==='ready'){
-      st.readyT+=dt;st.p.y=st.readyY+Math.sin(st.readyT*3)*8;st.p.rot=Math.sin(st.readyT*3)*0.10;
-    }
-    render();
-  }
-  function startLoop(){stopLoop();st.lastT=performance.now();st.acc=0;st.raf=requestAnimationFrame(tick)}
-  function stopLoop(){if(st.raf){cancelAnimationFrame(st.raf);st.raf=0}}
-
-  function begin(){
-    if(st.mode!=='ready')return;
-    if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-    st.mode='playing';
-    $('flyReadyOverlay').classList.remove('show');
-    st.lastT=performance.now();st.acc=0;
-    flap();SFX.play('flap');
-  }
-  function onDown(e){
-    if(st.mode==='playing'){flap();SFX.play('flap');e.preventDefault()}
-  }
-
-  function commit(dist){
-    if(st.committed)return false;
-    st.committed=true;
-    const u=S.user;if(!u)return false;
-    const rec=dist>(u.flyBest||0);
-    if(rec)u.flyBest=dist;
-    u.coins=(u.coins||0)+st.rC;u.gems=(u.gems||0)+st.rD;
-    u.flyCoins=(u.flyCoins||0)+st.rC;u.flyGems=(u.flyGems||0)+st.rD;
-    u.flyTotal=(u.flyTotal||0)+dist;
-    FB.set({flyBest:u.flyBest,flyCoins:u.flyCoins,flyGems:u.flyGems,flyTotal:u.flyTotal,coins:u.coins,gems:u.gems,updatedAt:Date.now()}).catch(()=>{});
-    try{
-      if(db&&dist>0)db.collection(CONFIG.flyCol).doc(TG.id).set({
-        userId:TG.id,name:u.name||'لاعب',photoUrl:u.photoUrl||null,
-        best:u.flyBest,updatedAt:Date.now()
-      },{merge:true}).catch(()=>{});
-    }catch(e){}
-    return rec;
-  }
-
-  function over(){
-    if(st.mode==='over')return;
-    st.mode='over';
-    const dist=Math.floor(st.dist),rec=commit(dist);
-    Energy.use(1).catch(()=>{});
-    $('flyOverDist').textContent=fmt(dist);
-    $('flyOverCoins').textContent='+'+fmt(st.rC);
-    $('flyOverGems').textContent='+'+fmt(st.rD);
-    $('flyOverBest').textContent=(rec&&dist>0)?'رقم قياسي جديد':'أفضل مسافة: '+fmt((S.user&&S.user.flyBest)||dist)+' م';
-    $('flyOverOverlay').classList.add('show');
-    renderAll();
-  }
-
-  function enter(){
-    showScreen('fly');
-    st.returnTo='menu';
-    loadImg();
-    requestAnimationFrame(()=>{
-      if(!$('screen-fly').classList.contains('active'))return;
-      resize();
-      reset();
-      st.mode='ready';
-      $('flyReadyOverlay').classList.add('show');
-      $('flyPauseOverlay').classList.remove('show');
-      $('flyOverOverlay').classList.remove('show');
-      $('flyFloaters').innerHTML='';
-      startLoop();
-    });
-  }
-
-  function pause(){
-    if(st.mode!=='playing'&&st.mode!=='ready')return;
-    st.prevMode=st.mode;
-    st.mode='paused';
-    stopLoop();
-    $('flyPauseOverlay').classList.add('show');
-    $('flyReadyOverlay').classList.remove('show');
-  }
-  function resume(){
-    if(st.mode!=='paused')return;
-    $('flyPauseOverlay').classList.remove('show');
-    if(st.prevMode==='ready'){
-      st.mode='ready';
-      $('flyReadyOverlay').classList.add('show');
-    }else{
-      st.mode='playing';
-      st.lastT=performance.now();
-      st.acc=0;
-    }
-    startLoop();
-  }
-  function quit(){
-    stopLoop();
-    st.mode='idle';
-    $('flyPauseOverlay').classList.remove('show');
-    $('flyReadyOverlay').classList.remove('show');
-    $('flyOverOverlay').classList.remove('show');
-    go('home');
-  }
-
-  function exit(target){
-    stopLoop();
-    if(st.mode==='playing'){commit(Math.floor(st.dist));renderAll()}
-    st.mode='idle';
-    $('flyOverOverlay').classList.remove('show');
-    go(target||'home');
-  }
-
-  function replay(){
-    if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-    $('flyOverOverlay').classList.remove('show');
-    $('flyPauseOverlay').classList.remove('show');
-    resize();
-    reset();
-    st.mode='ready';
-    $('flyReadyOverlay').classList.add('show');
-    $('flyFloaters').innerHTML='';
-    startLoop();
-  }
-
-  function bind(){
-    const wrap=cvs.parentElement;
-    wrap.style.touchAction='none';
-    wrap.addEventListener('pointerdown',e=>{
-      if(e.target.closest('button'))return;
-      if(st.mode!=='playing')return;
-      onDown(e);
-    },{passive:false});
-    wrap.addEventListener('contextmenu',e=>e.preventDefault());
-    $('flyPause').addEventListener('pointerdown',e=>{e.stopPropagation()});
-    $('flyPause').addEventListener('click',e=>{e.stopPropagation();pause()});
-    $('flyResume').addEventListener('click',e=>{e.stopPropagation();resume()});
-    $('flyQuit').addEventListener('click',e=>{e.stopPropagation();quit()});
-    $('flyBtnStart').addEventListener('click',e=>{e.stopPropagation();begin()});
-    $('flyBtnReplay').addEventListener('click',e=>{e.stopPropagation();replay()});
-    $('flyBtnHome').addEventListener('click',e=>{e.stopPropagation();exit('home')});
-    $('flyBtnBoard').addEventListener('click',e=>{e.stopPropagation();FlyBoard.open('fly')});
-    $('flyBoardBack').addEventListener('click',()=>FlyBoard.close());
-
-    window.addEventListener('keydown',e=>{
-      if(!$('screen-fly').classList.contains('active'))return;
-      if(e.code==='Space'||e.code==='ArrowUp'){
-        if(st.mode==='ready'){e.preventDefault();begin()}else if(st.mode==='playing'){e.preventDefault();onDown(e)}
-      }
-    });
-    window.addEventListener('resize',()=>{if($('screen-fly').classList.contains('active'))resize()});
-    window.addEventListener('orientationchange',()=>{if($('screen-fly').classList.contains('active'))setTimeout(resize,150)});
-    document.addEventListener('visibilitychange',()=>{st.lastT=performance.now();});
-  }
-
-  return {enter,exit,replay,bind,resize,st,preload:loadImg,pause,resume,quit};
-})();
-
-const FlyBoard = {
-  open(returnTo){
-    FlyGame.st.returnTo=returnTo||'menu';
-    showScreen('flyboard');
-    this.render();
-  },
-  close(){
-    const back=FlyGame.st.returnTo||'menu';
-    if(back==='fly'){showScreen('fly');FlyGame.replay();}
-    else{go('home');}
-  },
-  async render(){
-    const el=$('flyBoardScroll');
-    el.innerHTML='<div class="fly-board-empty">جاري التحميل...</div>';
-    let entries=[];
-    try{
-      if(db){
-        const snap=await db.collection(CONFIG.flyCol).orderBy('best','desc').limit(50).get();
-        snap.forEach(d=>{
-          const x=d.data();
-          entries.push({id:d.id,name:x.name||'لاعب',best:Number(x.best||0),photoUrl:x.photoUrl||null});
-        });
-      }
-    }catch(e){console.warn(e)}
-    const u=S.user;
-    const myId=TG.id;
-    const meIdx=entries.findIndex(e=>e.id===myId);
-    if(meIdx===-1&&u&&u.flyBest>0){
-      entries.push({id:myId,name:u.name||'لاعب',best:Number(u.flyBest||0),photoUrl:u.photoUrl||null,isMe:true});
-    } else if(meIdx>=0){
-      entries[meIdx].isMe=true;
-      entries[meIdx].best=Math.max(entries[meIdx].best,Number(u.flyBest||0));
-    }
-    entries.sort((a,b)=>b.best-a.best);
-    const top=entries.slice(0,50);
-    if(top.length===0){el.innerHTML='<div class="fly-board-empty">لا يوجد سجل بعد — كن أول المتصدرين!</div>';return;}
-    const me=top.find(e=>e.isMe);
-    const myRank=me?top.findIndex(e=>e.isMe)+1:0;
-    const first=top[0];
-    let html='';
-    html+=`<div class="fly-featured">
-      <div class="fly-featured-avatar">
-        <div class="fly-featured-crown">👑</div>
-        ${myRank===1?'<div class="fly-featured-medal">أنت!</div>':''}
-        <div class="inner">
-          ${first.photoUrl?`<img src="${esc(first.photoUrl)}" referrerpolicy="no-referrer" onerror="this.outerHTML='<canvas width=200 height=200></canvas>'">`:'<canvas width="200" height="200"></canvas>'}
-        </div>
-      </div>
-      <div class="fly-featured-dist">${fmt(first.best)}</div>
-      <div class="fly-featured-name">${esc(first.name)}</div>
-    </div>`;
-    html+='<div class="fly-board-rows">';
-    top.forEach((e,i)=>{
-      const r=i+1;
-      let rkCls='';
-      if(r===1)rkCls='gold';else if(r===2)rkCls='silver';else if(r===3)rkCls='bronze';
-      const rowPhoto=e.photoUrl
-        ?`<img src="${esc(e.photoUrl)}" referrerpolicy="no-referrer" onerror="this.outerHTML='<canvas width=100 height=100></canvas>'">`
-        :'<canvas width="100" height="100"></canvas>';
-      html+=`<div class="fly-board-row${e.isMe?' me':''}">
-        <div class="rk ${rkCls}">${r}</div>
-        <div class="av">${rowPhoto}</div>
-        <div class="nm">${esc(e.name)}${e.isMe?' <span style="background:#FFD52E;color:#5A3A00;font-size:10px;padding:1px 6px;border-radius:6px;margin-inline-start:4px;font-weight:900">أنت</span>':''}</div>
-        <div class="dist">${fmt(e.best)} م</div>
-      </div>`;
-    });
-    html+='</div>';
-    html+='<div class="fly-board-note">يتم تحديث القائمة تلقائياً بعد كل جولة</div>';
-    el.innerHTML=html;
-    el.querySelectorAll('canvas').forEach(cv=>{
-      const c=cv.getContext('2d');const w=cv.width;
-      const row=cv.closest('.fly-board-row, .fly-featured-avatar');
-      let variant=0;
-      if(row){
-        const nm=row.querySelector('.nm, .fly-featured-name');
-        if(nm){let h=0;const s=nm.textContent;for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0}variant=Math.abs(h)%5}
-      }
-      c.clearRect(0,0,w,w);
-      drawAvatarHelper(c,w/2,w/2,w/2-4,variant);
-    });
-  }
-};
-
-function drawAvatarHelper(g,cx,cy,r,variant){
-  variant=variant||0;
-  const c1=['#FFF3A8','#D9F6FF','#FFD9E8','#E8FFD9','#FFE8D9'][variant%5];
-  const c2=['#FFD52E','#59D7F2','#FF8FB5','#7FE05A','#FFA95C'][variant%5];
-  const c3=['#B97A00','#1B7FA8','#B8356A','#3E8A12','#B95A00'][variant%5];
-  const gr=g.createRadialGradient(cx-r*0.3,cy-r*0.3,r*0.15,cx,cy,r);
-  gr.addColorStop(0,c1);gr.addColorStop(0.55,c2);gr.addColorStop(1,c3);
-  g.fillStyle=gr;g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.fill();
-  g.save();g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.clip();
-  g.fillStyle='#6B4200';
-  g.beginPath();g.moveTo(cx-r*0.72,cy-r*0.30);g.lineTo(cx-r*0.50,cy-r*0.92);g.lineTo(cx-r*0.12,cy-r*0.46);g.closePath();g.fill();
-  g.beginPath();g.moveTo(cx+r*0.72,cy-r*0.30);g.lineTo(cx+r*0.50,cy-r*0.92);g.lineTo(cx+r*0.12,cy-r*0.46);g.closePath();g.fill();
-  g.fillStyle='#E8B866';g.beginPath();g.ellipse(cx,cy+r*0.06,r*0.72,r*0.68,0,0,Math.PI*2);g.fill();
-  g.fillStyle='#FFF3D0';g.beginPath();g.ellipse(cx,cy+r*0.36,r*0.42,r*0.32,0,0,Math.PI*2);g.fill();
-  g.fillStyle='#2A1B00';g.beginPath();g.arc(cx-r*0.28,cy-r*0.04,r*0.11,0,Math.PI*2);g.arc(cx+r*0.28,cy-r*0.04,r*0.11,0,Math.PI*2);g.fill();
-  g.fillStyle='#fff';g.beginPath();g.arc(cx-r*0.25,cy-r*0.08,r*0.04,0,Math.PI*2);g.arc(cx+r*0.31,cy-r*0.08,r*0.04,0,Math.PI*2);g.fill();
-  g.fillStyle='#2A1B00';g.beginPath();g.ellipse(cx,cy+r*0.20,r*0.10,r*0.08,0,0,Math.PI*2);g.fill();
-  g.strokeStyle='#2A1B00';g.lineWidth=Math.max(1.5,r*0.06);g.lineCap='round';
-  g.beginPath();g.arc(cx-r*0.11,cy+r*0.30,r*0.13,0,Math.PI);g.stroke();
-  g.beginPath();g.arc(cx+r*0.11,cy+r*0.30,r*0.13,0,Math.PI);g.stroke();
-  g.fillStyle='#FF6B7E';g.beginPath();g.ellipse(cx,cy+r*0.50,r*0.11,r*0.09,0,0,Math.PI);g.fill();
-  g.restore();
-  g.strokeStyle='#fff';g.lineWidth=Math.max(2,r*0.10);
-  g.beginPath();g.arc(cx,cy,r-g.lineWidth/2,0,Math.PI*2);g.stroke();
-}
-
-// --- Star Bundles Logic ---
-let currentSelectedBundle = null;
-
-function initStarBundles() {
-    const container = $('bundleContainer');
-    if (!container) return;
-
-    const bundles = [
-        { stars: 500, gems: 45000, webm: 'gifts_by_StickerEmojiRobot-069.webm' },
-        { stars: 700, gems: 63000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
-        { stars: 200, gems: 9000,  webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
-    ];
-
-    container.innerHTML = '';
-    
-    bundles.forEach(b => {
-        const card = document.createElement('div');
-        card.className = 'bundle-card';
-        // التغيير هنا: فتح النافذة المنبثقة بدلاً من الشراء المباشر
-        card.onclick = () => openBundleModal(b);
-
-        const webmBox = document.createElement('div');
-        webmBox.className = 'webm-box';
-        
-        const video = document.createElement('video');
-        video.src = b.webm;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-        
-        video.style.visibility = 'hidden';
-        video.style.opacity = '0';
-        video.style.transition = 'opacity 0.3s';
-        
-        video.oncanplaythrough = () => {
-            video.style.visibility = 'visible';
-            video.style.opacity = '1';
-            video.play().catch(() => {});
-        };
-
-        video.onerror = () => {
-            // إخفاء إذا فشل التحميل لتجنب كسر التصميم
-            webmBox.style.display = 'none';
-            console.warn('Failed to load:', b.webm);
-        };
-        
-        webmBox.appendChild(video);
-        
-        const priceTag = document.createElement('div');
-        priceTag.className = 'price-tag';
-        priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt="star"> <span>${b.stars}</span>`;
-
-        card.appendChild(webmBox);
-        card.appendChild(priceTag);
-        container.appendChild(card);
-    });
-}
-
-function openBundleModal(bundle) {
-    currentSelectedBundle = bundle;
-    const modal = $('bundleConfirmModal');
-    const webmBox = $('bcWebmBox');
-    
-    // مسح المحتوى القديم
-    webmBox.innerHTML = '';
-    
-    // إنشاء فيديو جديد للنافذة المنبثقة
-    const video = document.createElement('video');
-    video.src = bundle.webm;
-    video.autoplay = true;
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    
-    video.style.visibility = 'hidden';
-    video.style.opacity = '0';
-    video.style.transition = 'opacity 0.3s';
-    
-    video.oncanplaythrough = () => {
-        video.style.visibility = 'visible';
-        video.style.opacity = '1';
-        video.play().catch(() => {});
-    };
-    
-    webmBox.appendChild(video);
-
-    // تحديث النصوص
-    $('bcStars').innerHTML = `${bundle.stars} <img src="https://up6.cc/2026/10/17926810487851.png">`;
-    $('bcGems').innerHTML = `${fmt(bundle.gems)} <i class="fas fa-gem" style="color:var(--sky-d)"></i>`;
-
-    modal.classList.add('show');
-}
-
-function closeBundleModal() {
-    $('bundleConfirmModal').classList.remove('show');
-    // مسح الفيديو لإيقاف التشغيل وتخفيف الذاكرة
-    $('bcWebmBox').innerHTML = '';
-    currentSelectedBundle = null;
-}
-
-async function buyStarsBundle(stars) {
-    if(S.busy) return;
-    if(!TG.app || !TG.app.openInvoice){
-        return toast('يجب فتح التطبيق داخل تلغرام','err');
-    }
-    S.busy = true;
-    SFX.play('tap');
-    
-    try {
-        const resp = await fetch(CONFIG.api.base+'/api/create-invoice',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({userId:TG.id, stars: stars})
-        });
-        
-        const data = await resp.json();
-        if(!data.ok || !data.invoiceLink) throw new Error(data.error||'فشل إنشاء الفاتورة');
-        
-        TG.app.openInvoice(data.invoiceLink, (status) => {
-            S.busy = false;
-            if(status === 'paid'){
-                closeBundleModal(); // إغلاق النافذة عند النجاح
-                SFX.play('reward');
-                showModal({
-                    icon:'fa-star',
-                    title:'✅ تم الدفع بنجاح!',
-                    sub:`حصلت على ${fmt(data.gems)} جوهرة`,
-                    amount:'+'+fmt(data.gems)+' 💎',
-                    btn:'رائع',
-                    onClose: async () => {
-                        try {
-                            const fresh = await FB.get();
-                            if(fresh) S.user = Object.assign(S.user, fresh);
-                        } catch(e) {}
-                        renderAll();
-                    }
-                });
-            } else if(status === 'cancelled'){
-                toast('تم إلغاء الدفع','info');
-            } else if(status === 'failed'){
-                toast('فشل الدفع، حاول مجدداً','err');
-            }
-        });
-    } catch(e) {
-        console.error(e);
-        toast(e.message||'تعذر بدء الدفع','err');
-        S.busy = false;
-    }
-}
-
+// ========== ربط الأحداث ==========
 function bind(){
   document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));
   document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
-  $('playBtn').onclick=async()=>{
-    SFX.play('tap');
-    if(TIME.locked)return toast('اللعب مجمد — وقت الجهاز غير صحيح','err');
-    if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-    go('game');
-    await Game.start(S.user.level||1);
-  };
-
-  $('board').onclick=e=>{const t=e.target.closest('.tile');if(t)Game.select(+t.dataset.r,+t.dataset.c)};
-  $('gameBack').onclick=()=>go('home');
-  $('gameRestart').onclick=()=>{
-    if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-    Game.start(Game.level);
-  };
-  $('hintBtn').onclick=()=>Game.hint();
-  $('shuffleBtn').onclick=()=>Game.shuffle();
-  $('wheelSpinBtn').onclick=spinWheel;
-  $('wheelAdBtn').onclick=watchWheelAd;
-  $('energyAdBtn').onclick=watchEnergyAd;
-  $('energyBuyBtn').onclick=buyEnergy;
-  $('openPolicy').onclick=()=>openContentModal('policy');$('openHelp').onclick=()=>openContentModal('help');
+  $('openPolicy').onclick=()=>openContentModal('policy');
+  $('openHelp').onclick=()=>openContentModal('help');
   $('contentClose').onclick=closeContentModal;$('contentDone').onclick=closeContentModal;
   $('contentModal').onclick=e=>{if(e.target.id==='contentModal')closeContentModal()};
+
   pick('#exAmounts','ex',updateEx);pick('#wdAmounts','wd',updateWd);
-  document.querySelectorAll('.wd-method').forEach(el=>{el.onclick=()=>setWdMethod(el.dataset.method);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setWdMethod(el.dataset.method)}}});
+  document.querySelectorAll('.wd-method').forEach(el=>{
+    el.onclick=()=>setWdMethod(el.dataset.method);
+    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setWdMethod(el.dataset.method)}};
+  });
   $('exSubmit').onclick=doExchange;$('wdSubmit').onclick=doWithdraw;
+
   const link=()=>$('refLink').textContent;
   $('refShare').onclick=()=>TG.share(link(),'🐾 انضم إلى Puppy Merge واربح الجواهر!');
   $('codeCopy').onclick=()=>navigator.clipboard?navigator.clipboard.writeText($('refCode').textContent).then(()=>toast('تم نسخ المعرّف')):toast('تعذر النسخ','err');
-  $('codeSubmit').onclick=()=>withBtn($('codeSubmit'),'جاري التحقق...',()=>applyCode($('codeInput').value.trim().replace(/^ref_/,'')));
-  document.addEventListener('click',e=>{if(e.target.closest('.btn,.amt,.g-btn,.dock button,.quick .card,.dep-tab,.game-card,.bundle-card'))SFX.play('tap')});
   $('refCopy').onclick=()=>navigator.clipboard?navigator.clipboard.writeText(link()).then(()=>toast('تم نسخ الرابط')):toast('تعذر النسخ','err');
+  $('codeSubmit').onclick=()=>withBtn($('codeSubmit'),'جاري التحقق...',()=>applyCode($('codeInput').value.trim().replace(/^ref_/,'')));
 
-  // مستمعو أحداث نافذة تأكيد البطاقات
+  document.addEventListener('click',e=>{if(e.target.closest('.btn,.amt,.g-btn,.dock button,.bundle-card'))SFX.play('tap')});
+
+  // البطاقات
   $('bcCancelBtn').onclick = closeBundleModal;
-  $('bcConfirmBtn').onclick = () => {
-      if(currentSelectedBundle) {
-          buyStarsBundle(currentSelectedBundle.stars);
-      }
-  };
+  $('bcConfirmBtn').onclick = () => { if(currentSelectedBundle) buyStarsBundle(currentSelectedBundle.stars); };
   $('bundleConfirmModal').onclick = (e) => { if(e.target.id === 'bundleConfirmModal') closeBundleModal(); };
 
   buildMd();
@@ -3165,27 +1436,12 @@ function bind(){
     starsInput.addEventListener('input', e=>{
       let v = e.target.value.replace(/[^\d]/g, '');
       if(v.length > 0){
-        let num = parseInt(v, 10);
-        if(num > CONFIG.stars.max){
-          num = CONFIG.stars.max;
-          v = String(num);
-        }
+        let num = parseInt(v,10);
+        if(num > CONFIG.stars.max){ num = CONFIG.stars.max; v = String(num); }
       }
       e.target.value = v;
-      S.starsInput = v.length > 0 ? parseInt(v, 10) : 0;
+      S.starsInput = v.length > 0 ? parseInt(v,10) : 0;
       updateStarsUI();
-    });
-    starsInput.addEventListener('paste', e=>{
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text');
-      const digits = pasted.replace(/[^\d]/g, '');
-      if(digits){
-        let num = parseInt(digits, 10);
-        if(num > CONFIG.stars.max) num = CONFIG.stars.max;
-        starsInput.value = String(num);
-        S.starsInput = num;
-        updateStarsUI();
-      }
     });
   }
   $('starsPayBtn').onclick = startStarPayment;
@@ -3203,24 +1459,15 @@ function bind(){
   $('cryptoCheckBtn').onclick=checkPendingInvoiceNow;
   $('cryptoCancelBtn').onclick=cancelPendingInvoice;
 
-  $('investCollectAllBtn').onclick=collectAllInvestments;
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      TIME.sync().then(() => { try { renderAll(); } catch (e) {} });
-      if (cryptoPendingInvoice && cryptoPendingInvoice.id) checkPendingInvoiceNow();
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState === 'visible'){
+      TIME.sync().then(()=>{ try{ renderAll(); }catch(e){} });
+      if(cryptoPendingInvoice && cryptoPendingInvoice.id) checkPendingInvoiceNow();
     }
   });
-
-  $('flyPlayBtn').onclick=async()=>{
-    SFX.play('tap');
-    if(TIME.locked)return toast('اللعب مجمد — وقت الجهاز غير صحيح','err');
-    if(Energy.cur(S.user)<=0){showNoEnergy();return;}
-    go('fly');
-  };
-  FlyGame.bind();
 }
 
+// ========== بدء التطبيق ==========
 async function boot(){
   if(!TG.init()){
     $('loader').innerHTML='<div style="padding:30px"><div class="ico i-gold" style="margin:0 auto 16px;width:100px;height:100px;font-size:46px"><i class="fas fa-paw"></i></div><h2>Puppy Merge</h2><p style="margin:10px 0 20px">هذا التطبيق يعمل فقط داخل تليجرام.</p><a href="https://t.me/'+CONFIG.bot.username+'/'+CONFIG.bot.appName+'" class="btn b-y" style="text-decoration:none">افتح البوت</a></div>';
@@ -3228,53 +1475,38 @@ async function boot(){
   }
 
   const safetyTimer = setTimeout(()=>{
-    try { $('loader').classList.add('hide'); $('app').style.display='flex'; } catch(e){}
+    try{ $('loader').classList.add('hide'); $('app').style.display='flex'; }catch(e){}
   }, 4000);
 
-  try { FB.init(); } catch(e){ console.warn('FB init:', e); }
+  try{ FB.init(); }catch(e){ console.warn('FB init:',e); }
+  try{ await Promise.race([TIME.sync(), new Promise(r=>setTimeout(r,3000))]); }catch(e){}
 
-  try { await Promise.race([TIME.sync(), new Promise(r => setTimeout(r, 3000))]); }
-  catch(e){ console.warn('TIME.sync:', e); }
-
-  try {
-    const ex = await Promise.race([FB.get(), new Promise(r => setTimeout(() => r(null), 5000))]);
+  try{
+    const ex = await Promise.race([FB.get(), new Promise(r=>setTimeout(()=>r(null),5000))]);
     if(ex){
       S.user = Object.assign(newUser(), ex);
-      if(!Array.isArray(S.user.investments)) S.user.investments = [];
-      if(!Array.isArray(S.user.wheelAdTimes)) S.user.wheelAdTimes = [];
-      if(!S.user.socialClaimed) S.user.socialClaimed = {};
-      S.user.energy = Number(S.user.energy ?? CONFIG.energyMax);
+      if(!Array.isArray(S.user.collectibles)) S.user.collectibles = [];
+      S.user.energy = Number(S.user.energy ?? 25);
       S.user.energyUpdatedAt = Number(S.user.energyUpdatedAt || TIME.now());
-    } else {
+    }else{
       S.user = newUser();
-      try { await FB.set(S.user, false); } catch(e){}
+      try{ await FB.set(S.user, false); }catch(e){}
     }
-  } catch(e){
-    console.warn('User load:', e);
-    S.user = newUser();
-  }
+  }catch(e){ console.warn('User load:',e); S.user = newUser(); }
 
-  try { await Promise.race([checkReferral(), new Promise(r => setTimeout(r, 2000))]); }
-  catch(e){ console.warn('Referral:', e); }
+  try{ await Promise.race([checkReferral(), new Promise(r=>setTimeout(r,2000))]); }catch(e){}
 
   clearTimeout(safetyTimer);
   $('loader').classList.add('hide');
   $('app').style.display='flex';
 
-  try { bind(); } catch(e){ console.warn('Bind:', e); }
-  try { renderAll(); } catch(e){ console.warn('Render:', e); }
-  try { FlyGame.preload(); } catch(e){}
-  try { initLang(); } catch(e){ console.warn('Lang:', e); }
-  try { loadSocialTasks(true); } catch(e){ console.warn('SocialTasks:', e); }
-  
-  // توليد البطاقات الجديدة
-  try { initStarBundles(); } catch(e){ console.warn('StarBundles:', e); }
+  try{ bind(); }catch(e){ console.warn('Bind:',e); }
+  try{ renderAll(); }catch(e){ console.warn('Render:',e); }
+  try{ initStarBundles(); }catch(e){ console.warn('Bundles:',e); }
+  try{ renderCollectibles(); }catch(e){ console.warn('Collectibles:',e); }
 
-  setInterval(()=>{ 
-    try { renderEnergy(); wheelTimer(); updateInvestmentsUI(); } catch(e){}
-  }, 1000);
+  setInterval(()=>{ try{ renderEnergy(); if($('screen-store').classList.contains('active')) renderCollectibles(); }catch(e){} }, 1000);
   setInterval(()=>TIME.sync(), 300000);
-  setInterval(()=>loadSocialTasks(false), 60000);
 }
 document.addEventListener('DOMContentLoaded',boot);
 </script>
