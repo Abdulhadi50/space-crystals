@@ -2981,7 +2981,7 @@ function drawAvatarHelper(g,cx,cy,r,variant){
 }
 
 // --- دالة إنشاء بطاقات النجوم ---
-// --- دالة إنشاء بطاقات النجوم (طريقة التحميل المسبق المضمونة) ---
+// --- دالة إنشاء بطاقات النجوم (تحميل مباشر بدون تأخير) ---
 function initStarBundles() {
     const container = $('bundleContainer');
     if (!container) return;
@@ -2994,26 +2994,52 @@ function initStarBundles() {
     
     container.innerHTML = '';
     
-    bundles.forEach((b, index) => {
+    bundles.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'bundle-card';
         card.onclick = () => buyStarsBundle(b.stars);
         
         const webmBox = document.createElement('div');
         webmBox.className = 'webm-box';
-        // إخفاء الحاوية بالكامل حتى يتم التحميل (لا يوجد هدية ولا مساحة فارغة)
-        webmBox.style.opacity = '0';
-        webmBox.style.transition = 'opacity 0.4s ease';
+        // إزالة أي إخفاء، العنصر مرئي من البداية
         
         const video = document.createElement('video');
+        video.src = b.webm;
+        
+        // إعدادات التشغيل المباشر
+        video.autoplay = true;
         video.loop = true;
         video.muted = true;
-        video.autoplay = true;
         video.playsInline = true;
         video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('x5-playsinline', 'true');
+        
+        // إجبار المتصفح على تحميل البيانات فوراً
+        video.preload = 'auto';
+        
+        // تعيين ستايل الفيديو ليملأ المساحة
         video.style.width = '100%';
         video.style.height = '100%';
         video.style.objectFit = 'contain';
+        
+        // محاولة التشغيل بمجرد أن يبدأ المتصفح بتحميل البيانات
+        video.addEventListener('loadeddata', () => {
+            let playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch((error) => {
+                    console.log("Autoplay prevented:", error);
+                });
+            }
+        });
+        
+        // في حال حدوث خطأ، نخفي الفيديو المكسور ونحاول مجدداً بصمت
+        video.addEventListener('error', () => {
+            video.style.display = 'none';
+            setTimeout(() => {
+                video.style.display = 'block';
+                video.load(); // إعادة المحاولة
+            }, 2000);
+        });
         
         webmBox.appendChild(video);
         
@@ -3025,50 +3051,8 @@ function initStarBundles() {
         card.appendChild(priceTag);
         container.appendChild(card);
         
-        // --- آلية التحميل المسبق المضمونة ---
-        let retryCount = 0;
-        const maxRetries = 5; // محاولة التحميل 5 مرات كحد أقصى
-        
-        const loadVideoAsBlob = async () => {
-            try {
-                // إضافة طابع زمني لتجاوز الكاش التالف
-                const url = b.webm + '?t=' + Date.now();
-                
-                // تنزيل الملف في الخلفية
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                // تحويله إلى Blob
-                const blob = await response.blob();
-                const blobUrl = URL.createObjectURL(blob);
-                
-                // تعيين الرابط الجديد وتشغيل الفيديو
-                video.src = blobUrl;
-                video.load();
-                
-                // عند جاهزية الفيديو، نعرضه بسلاسة
-                video.oncanplay = () => {
-                    // إظهار الحاوية
-                    webmBox.style.opacity = '1';
-                    
-                    // تشغيل الفيديو (سيعمل لأننا استخدمنا Blob وتم التحميل بالكامل)
-                    let playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(e => console.log('Autoplay blocked:', e));
-                    }
-                };
-                
-            } catch (error) {
-                console.warn(`فشل تحميل الفيديو ${index + 1}، جاري المحاولة مجدداً...`, error);
-                if (retryCount < maxRetries) {
-                    retryCount++;
-                    setTimeout(loadVideoAsBlob, 2000); // إعادة المحاولة بعد ثانيتين
-                }
-            }
-        };
-        
-        // تأخير بسيط بين كل فيديو لتخفيف الضغط على الشبكة
-        setTimeout(loadVideoAsBlob, index * 300);
+        // أمر المتصفح ببدء التحميل فوراً
+        video.load();
     });
 }
 
