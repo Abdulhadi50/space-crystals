@@ -2,21 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171821">
+
   <title>مكتبة الملصقات المتحركة</title>
 
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      padding: 25px 15px;
+      padding: 24px 14px 35px;
       background: #171821;
       font-family: Arial, sans-serif;
-      color: white;
+      color: #fff;
     }
 
     .container {
@@ -28,52 +31,93 @@
 
     h2 {
       font-size: 21px;
-      margin-bottom: 25px;
+      margin: 0 0 24px;
+      color: #f1e6cc;
     }
 
     .stickers {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
+      gap: 13px;
     }
 
     .sticker-card {
       min-width: 0;
-      padding: 12px;
+      padding: 10px;
       border: 1px solid #343541;
-      border-radius: 16px;
+      border-radius: 15px;
       background: #20212d;
+      contain: layout paint;
     }
 
     .sticker-box {
+      position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      background: transparent;
+      border-radius: 10px;
+      background: #1b1c26;
+      contain: strict;
     }
 
-    video {
+    .sticker {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: transparent;
+      border: 0;
+      outline: none;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .15s ease;
+    }
+
+    .sticker.ready {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loader {
+      position: absolute;
+      width: 23px;
+      height: 23px;
+      border: 2px solid #393b4b;
+      border-top-color: #bea97c;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    .loader.hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .sticker-name {
       min-height: 35px;
       margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 12px;
       color: #d5d5df;
       overflow-wrap: anywhere;
       direction: ltr;
     }
 
-    button {
+    .replay-button {
       width: 100%;
-      padding: 10px 8px;
+      min-height: 38px;
+      padding: 9px 7px;
       border: 0;
       border-radius: 9px;
       background: #bea97c;
@@ -81,21 +125,43 @@
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
-    button:active {
-      transform: scale(0.97);
+    .replay-button:active {
+      transform: scale(.97);
     }
 
     .error {
-      color: #ff8585;
-      font-size: 12px;
+      min-height: 15px;
       margin-top: 8px;
+      color: #ff8585;
+      font-size: 11px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
     @media (max-width: 350px) {
+      body {
+        padding: 20px 9px;
+      }
+
       .stickers {
-        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+
+      .sticker-card {
+        padding: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sticker {
+        transition: none;
+      }
+
+      .loader {
+        animation-duration: 1.5s;
       }
     }
   </style>
@@ -103,83 +169,222 @@
 
 <body>
 
-  <div class="container">
+  <main class="container">
     <h2>مكتبة الملصقات المتحركة</h2>
-
-    <div class="stickers">
-
-      <!-- الملصق الأول -->
-      <div class="sticker-card">
-        <div class="sticker-box">
-          <video class="sticker" autoplay loop muted playsinline>
-            <source src="stickerget.webm" type="video/webm">
-          </video>
-        </div>
-
-        <div class="sticker-name">stickerget.webm</div>
-
-        <button onclick="replaySticker(this)">إعادة الحركة</button>
-        <div class="error"></div>
-      </div>
-
-      <!-- الملصق الثاني -->
-      <div class="sticker-card">
-        <div class="sticker-box">
-          <video class="sticker" autoplay loop muted playsinline>
-            <source src="HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm"
-                   type="video/webm">
-          </video>
-        </div>
-
-        <div class="sticker-name">
-          HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm
-        </div>
-
-        <button onclick="replaySticker(this)">إعادة الحركة</button>
-        <div class="error"></div>
-      </div>
-
-      <!-- الملصق الثالث -->
-      <div class="sticker-card">
-        <div class="sticker-box">
-          <video class="sticker" autoplay loop muted playsinline>
-            <source src="Brooch_9f32_by_StickerEmojiRobot-002.webm"
-                   type="video/webm">
-          </video>
-        </div>
-
-        <div class="sticker-name">
-          Brooch_9f32_by_StickerEmojiRobot-002.webm
-        </div>
-
-        <button onclick="replaySticker(this)">إعادة الحركة</button>
-        <div class="error"></div>
-      </div>
-
-    </div>
-  </div>
+    <section class="stickers" id="stickers"></section>
+  </main>
 
   <script>
-    function replaySticker(button) {
-      const card = button.closest(".sticker-card");
-      const video = card.querySelector("video");
+    "use strict";
 
-      video.currentTime = 0;
-      video.play().catch(() => {
-        card.querySelector(".error").textContent =
-          "تعذر التشغيل. تحقق من وجود الملف وصيغته.";
-      });
-    }
+    // مسار مجلد الملصقات داخل GitHub Pages
+    const STICKER_FOLDER = "./stickers/";
 
-    document.querySelectorAll(".sticker").forEach(video => {
-      video.play().catch(() => {
-        // يمكن تشغيل الملصق باستخدام زر إعادة الحركة.
-      });
+    // أسماء الملفات الأصلية دون تغيير
+    const STICKERS = [
+      {
+        file: "stickerget.webm",
+        name: "stickerget.webm"
+      },
+      {
+        file: "HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm",
+        name: "HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm"
+      },
+      {
+        file: "Brooch_9f32_by_StickerEmojiRobot-002.webm",
+        name: "Brooch_9f32_by_StickerEmojiRobot-002.webm"
+      }
+    ];
+
+    const container = document.getElementById("stickers");
+    const states = new Map();
+
+    function createSticker(item) {
+      const card = document.createElement("article");
+      card.className = "sticker-card";
+
+      const box = document.createElement("div");
+      box.className = "sticker-box";
+
+      const loader = document.createElement("div");
+      loader.className = "loader";
+
+      const video = document.createElement("video");
+      video.className = "sticker";
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.autoplay = true;
+      video.controls = false;
+      video.preload = "none";
+
+      video.setAttribute("muted", "");
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("disablepictureinpicture", "");
+      video.setAttribute(
+        "controlslist",
+        "nodownload nofullscreen noremoteplayback"
+      );
+
+      // تحميل الملفات من مجلد stickers
+      video.dataset.src =
+        STICKER_FOLDER + encodeURIComponent(item.file);
+
+      const name = document.createElement("div");
+      name.className = "sticker-name";
+      name.textContent = item.name;
+
+      const button = document.createElement("button");
+      button.className = "replay-button";
+      button.type = "button";
+      button.textContent = "إعادة الحركة";
+
+      const error = document.createElement("div");
+      error.className = "error";
+
+      const state = {
+        video,
+        loader,
+        error,
+        visible: false,
+        loaded: false,
+        loading: false,
+        failed: false
+      };
+
+      states.set(video, state);
+
+      function showVideo() {
+        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+          video.classList.add("ready");
+          loader.classList.add("hidden");
+          error.textContent = "";
+          state.loading = false;
+          state.failed = false;
+        }
+      }
+
+      video.addEventListener("loadeddata", showVideo);
+      video.addEventListener("canplay", showVideo);
+      video.addEventListener("playing", showVideo);
 
       video.addEventListener("error", () => {
-        video.closest(".sticker-card")
-          .querySelector(".error").textContent =
-          "تعذر تحميل الملف. تحقق من اسم الملف ومكانه.";
+        state.loading = false;
+        state.failed = true;
+
+        video.classList.remove("ready");
+        loader.classList.add("hidden");
+
+        error.textContent =
+          "تعذر تحميل الملف. تحقق من وجوده داخل مجلد stickers.";
+      });
+
+      video.addEventListener("waiting", () => {
+        if (!video.classList.contains("ready")) {
+          loader.classList.remove("hidden");
+        }
+      });
+
+      button.addEventListener("click", async () => {
+        error.textContent = "";
+
+        if (!state.loaded || state.failed) {
+          state.failed = false;
+          loadSticker(state);
+        }
+
+        try {
+          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+            video.currentTime = 0;
+            await video.play();
+          }
+        } catch (e) {
+          error.textContent = "تعذر التشغيل. حاول مرة أخرى.";
+        }
+      });
+
+      box.appendChild(loader);
+      box.appendChild(video);
+
+      card.appendChild(box);
+      card.appendChild(name);
+      card.appendChild(button);
+      card.appendChild(error);
+
+      container.appendChild(card);
+    }
+
+    function loadSticker(state) {
+      const video = state.video;
+
+      if (state.loading) return;
+
+      if (state.loaded && !state.failed) {
+        if (state.visible) {
+          video.play().catch(() => {});
+        }
+        return;
+      }
+
+      state.loaded = true;
+      state.loading = true;
+      state.failed = false;
+
+      state.loader.classList.remove("hidden");
+      state.error.textContent = "";
+
+      video.src = video.dataset.src;
+      video.load();
+    }
+
+    // تحميل الملصقات عند الاقتراب من الشاشة
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const state = states.get(entry.target);
+        if (!state) return;
+
+        const video = state.video;
+
+        if (entry.isIntersecting) {
+          state.visible = true;
+          loadSticker(state);
+        } else {
+          state.visible = false;
+          video.pause();
+        }
+      });
+    }, {
+      rootMargin: "40px 0px",
+      threshold: 0.1
+    });
+
+    STICKERS.forEach(createSticker);
+
+    states.forEach((state) => {
+      observer.observe(state.video);
+
+      state.video.addEventListener("canplay", () => {
+        if (state.visible) {
+          state.video.play().catch(() => {});
+        }
+      });
+    });
+
+    // إيقاف جميع الحركات عند إخفاء الصفحة
+    document.addEventListener("visibilitychange", () => {
+      states.forEach((state) => {
+        const video = state.video;
+
+        if (document.hidden) {
+          video.pause();
+        } else if (
+          state.visible &&
+          video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
+        ) {
+          video.play().catch(() => {});
+        }
       });
     });
   </script>
