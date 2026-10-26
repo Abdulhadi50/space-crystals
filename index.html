@@ -2981,54 +2981,98 @@ function drawAvatarHelper(g,cx,cy,r,variant){
 }
 
 // --- دالة إنشاء بطاقات النجوم ---
+// --- دالة إنشاء بطاقات النجوم مع نظام إعادة المحاولة ---
 function initStarBundles() {
     const container = $('bundleContainer');
     if (!container) return;
-
+    
+    const baseUrl = ''; // اتركه فارغاً لأن الملفات في نفس المجلد
+    
     const bundles = [
-        { stars: 500, gems: 45000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
-        { stars: 700, gems: 63000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
-        { stars: 200, gems: 9000,  webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
+        { stars: 500, gems: 45000, webm: baseUrl + 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
+        { stars: 700, gems: 63000, webm: baseUrl + 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
+        { stars: 200, gems: 9000, webm: baseUrl + 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
     ];
-
+    
     container.innerHTML = '';
     
-    bundles.forEach(b => {
+    bundles.forEach((b, index) => {
         const card = document.createElement('div');
         card.className = 'bundle-card';
         card.onclick = () => buyStarsBundle(b.stars);
-
-        // حاوية الفيديو
+        
         const webmBox = document.createElement('div');
         webmBox.className = 'webm-box';
         
-        const video = document.createElement('video');
-        video.src = b.webm;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
+        // أيقونة احتياطية
+        const fallbackIcon = document.createElement('div');
+        fallbackIcon.style.cssText = 'position:absolute; font-size:24px; color:var(--gold-d);';
+        fallbackIcon.innerHTML = '<i class="fas fa-gift"></i>';
+        webmBox.appendChild(fallbackIcon);
         
-        // إخفاء الفيديو حتى يصبح جاهزاً للتشغيل لضمان عدم وجود تقطيع
-        video.oncanplaythrough = () => {
-            video.style.opacity = '1';
-            video.play().catch(()=>{});
+        const video = document.createElement('video');
+        // إضافة طابع زمني (Timestamp) لمنع المتصفح من استخدام نسخة تالفة من الذاكرة المؤقتة
+        video.src = b.webm + '?v=' + Date.now();
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('x5-playsinline', 'true');
+        
+        video.style.opacity = '0';
+        video.style.transition = 'opacity 0.5s ease';
+        
+        let isLoaded = false;
+        let retryCount = 0;
+        const maxRetries = 10; // عدد محاولات التحميل القصوى
+        
+        // دالة المحاولة
+        const attemptLoad = () => {
+            if (isLoaded) return;
+            
+            console.log(`Trying to load video ${index + 1}, attempt: ${retryCount + 1}`);
+            video.load(); // إجبار المتصفح على إعادة قراءة الملف من جديد
+            
+            // إذا مرت 3 ثوانٍ ولم يتحمل، أعد المحاولة
+            if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(attemptLoad, 3000);
+            }
         };
-        // إخفاء الفيديو كلياً إذا فشل التحميل
-        video.onerror = () => {
-            webmBox.style.display = 'none';
-        };
+        
+        // عند نجاح تحميل البيانات
+        video.addEventListener('loadeddata', () => {
+            isLoaded = true; // إيقاف حلقة إعادة المحاولة
+            video.style.opacity = '1'; // إظهار الفيديو
+            fallbackIcon.style.display = 'none'; // إخفاء الأيقونة الاحتياطية
+            
+            let playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch((e) => {
+                    console.warn("Autoplay prevented, showing first frame", e);
+                });
+            }
+        });
+        
+        // عند حدوث خطأ (مثلاً الملف غير موجود، سيحاول مجدداً بلا فائدة بعد 10 محاولات)
+        video.addEventListener('error', () => {
+            if (!isLoaded) {
+                console.warn(`Error loading video ${index + 1}, will retry...`);
+            }
+        });
         
         webmBox.appendChild(video);
         
-        // السعر
         const priceTag = document.createElement('div');
         priceTag.className = 'price-tag';
         priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt="star"> <span>${b.stars}</span>`;
-
+        
         card.appendChild(webmBox);
         card.appendChild(priceTag);
         container.appendChild(card);
+        
+        // بدء المحاولة الأولى بعد إضافة العنصر للصفحة
+        setTimeout(attemptLoad, 100 * index); // تأخير بسيط بين كل فيديو لتخفيف الضغط على الشبكة
     });
 }
 
