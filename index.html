@@ -94,39 +94,52 @@ input { font: inherit; color: inherit; }
   position: relative; max-width: 480px; margin: 0 auto; overflow: hidden;
 }
 
-/* ============ TOP BAR (GLASS) — 11% من أعلى الشاشة ============ */
+/* ============ TOP BAR (GLASS) — أعرض + شفافية أكثر ============ */
 .top-bar {
   position: absolute;
   top: calc(var(--safe-top) + var(--top-offset));
-  left: 14px; right: 14px;
+  left: 6px; right: 6px;
   padding: 6px 8px;
   display: flex; justify-content: space-between; align-items: center;
+  gap: 6px;
   z-index: 50;
-  background: rgba(255, 252, 245, 0.78);
-  border: 1px solid rgba(237, 227, 208, 0.78);
+  background: rgba(255, 252, 245, 0.55);
+  border: 1px solid rgba(237, 227, 208, 0.55);
   border-radius: 18px;
   box-shadow: var(--shadow-sm);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(165%);
+  backdrop-filter: blur(24px) saturate(165%);
+}
+.top-user-info {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0; flex: 1;
 }
 .top-profile {
-  width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+  width: 34px; height: 34px; border-radius: 50%; overflow: hidden;
   background: var(--bg-soft);
   display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--gold-light);
   color: var(--gold-dark); font-size: 13px; flex-shrink: 0;
 }
 .top-profile img { width: 100%; height: 100%; object-fit: cover; }
-.balances { display: flex; gap: 8px; align-items: center; }
+.top-username {
+  font-size: 13px; font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+.balances { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
 .balance-chip {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--bg-soft); border: 1px solid var(--border);
-  padding: 4px 10px 4px 5px; border-radius: 20px;
-  font-weight: 800; font-size: 13px; color: var(--text-primary);
-  direction: ltr; font-variant-numeric: tabular-nums; height: 32px;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(247, 241, 229, 0.82);
+  border: 1px solid var(--border);
+  padding: 3px 8px 3px 4px; border-radius: 20px;
+  font-weight: 800; font-size: 12px; color: var(--text-primary);
+  direction: ltr; font-variant-numeric: tabular-nums; height: 30px;
 }
 .chip-icon {
-  width: 22px; height: 22px; border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 50%;
   object-fit: cover; flex-shrink: 0; border: 0;
 }
 
@@ -140,7 +153,7 @@ input { font: inherit; color: inherit; }
 .view.active { display: block; animation: viewIn 0.25s ease-out; }
 @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-/* ============ HOME HERO ============ */
+/* ============ HOME HERO (بدون اسم) ============ */
 .home-hero {
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px;
@@ -158,15 +171,14 @@ input { font: inherit; color: inherit; }
   background: radial-gradient(circle, rgba(232,213,166,0.35), transparent 70%);
   border-radius: 50%; pointer-events: none;
 }
-.greeting-row {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 18px; position: relative; z-index: 1;
+.hero-tagline {
+  font-size: 12px; font-weight: 700;
+  color: var(--gold-dark);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 6px;
+  position: relative; z-index: 1;
 }
-.greeting-text { flex: 1; min-width: 0; }
-.greeting-hello { font-size: 15px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px; }
-.greeting-hello span { color: var(--gold-dark); }
-.greeting-sub { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
-
+.hero-tagline i { font-size: 13px; }
 .big-balance {
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 18px; position: relative; z-index: 1;
@@ -627,7 +639,10 @@ input { font: inherit; color: inherit; }
   border: 1px solid var(--border); border-radius: 13px;
   background: rgba(255,255,255,0.78); color: var(--gold-dark);
   font-size: 12px; font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
 }
+.wd-history-more:active { transform: scale(0.98); }
 .wd-history-more[hidden] { display: none; }
 .wd-history-more:disabled { opacity: 0.5; }
 
@@ -950,7 +965,6 @@ input { font: inherit; color: inherit; }
   display: none; align-items: center; justify-content: center;
   padding: 0 4px; z-index: 2;
 }
-/* === صورة البروفايل السفلية: أصغر + إطار ذهبي دائم === */
 .nav-profile {
   width: 52px; height: 52px;
   padding: 3px;
@@ -1148,9 +1162,12 @@ input { font: inherit; color: inherit; }
 .mb-3 { margin-bottom: 16px; }
 
 @media (max-width: 360px) {
-  .top-bar { left: 10px; right: 10px; padding: 6px; }
+  .top-bar { left: 4px; right: 4px; padding: 5px 6px; }
   .balances { gap: 4px; }
-  .balance-chip { padding-inline: 6px; font-size: 12px; height: 30px; }
+  .balance-chip { padding-inline: 5px; font-size: 11px; height: 28px; }
+  .chip-icon { width: 18px; height: 18px; }
+  .top-username { font-size: 12px; max-width: 70px; }
+  .top-profile { width: 30px; height: 30px; }
   .main-scroll { padding-right: 12px; padding-left: 12px; }
   .stars-input-wrap { gap: 7px; }
   .stars-input-icon { width: 38px; height: 38px; flex-basis: 38px; }
@@ -1171,9 +1188,12 @@ input { font: inherit; color: inherit; }
 
 <div class="app-container" id="app" style="display:none">
 
-  <!-- TOP BAR -->
+  <!-- TOP BAR: Avatar + Name | Balances -->
   <div class="top-bar">
-    <div class="top-profile" id="topProfile"><i class="fas fa-user"></i></div>
+    <div class="top-user-info">
+      <div class="top-profile" id="topProfile"><i class="fas fa-user"></i></div>
+      <span class="top-username" id="topUserName">لاعب</span>
+    </div>
     <div class="balances">
       <div class="balance-chip">
         <img src="https://up6.cc/2026/10/179267515752371.jpg" class="chip-icon" alt="">
@@ -1192,11 +1212,9 @@ input { font: inherit; color: inherit; }
     <!-- HOME -->
     <div class="view active" id="view-home">
       <div class="home-hero">
-        <div class="greeting-row">
-          <div class="greeting-text">
-            <div class="greeting-hello">مرحباً <span id="greetName">لاعب</span></div>
-            <div class="greeting-sub">متجر المقتنيات الذكية</div>
-          </div>
+        <div class="hero-tagline">
+          <i class="fas fa-gem"></i>
+          <span>متجر المقتنيات الذكية</span>
         </div>
         <div class="big-balance">
           <img src="https://up6.cc/2026/10/179267515752371.jpg" class="balance-icon-big" alt="">
@@ -1224,7 +1242,7 @@ input { font: inherit; color: inherit; }
           <div class="action-card-desc">اعرض وبِع مقتنياتك</div>
         </div>
         <div class="action-card" data-view="catalog">
-          <div class="action-card-icon blue"><i class="fas fa-layer-group"></i></div>
+          <div class="action-card-icon gold"><i class="fas fa-layer-group"></i></div>
           <div class="action-card-title">البطاقات</div>
           <div class="action-card-desc">تصفح جميع البطاقات</div>
         </div>
@@ -1513,7 +1531,7 @@ input { font: inherit; color: inherit; }
         <div class="section-title">سجل السحوبات</div>
       </div>
       <div class="wd-history-list" id="wdHistory"></div>
-      <button class="wd-history-more" id="wdHistoryMore" type="button" hidden>عرض المزيد</button>
+      <button class="wd-history-more" id="wdHistoryMore" type="button" hidden>عرض 5+ أخرى</button>
     </div>
 
     <!-- PROFILE -->
@@ -1782,7 +1800,8 @@ const CONFIG = {
     holdMs: 7 * 24 * 60 * 60 * 1000,
     profitRate: 0.05,
     bundles: [
-      { id: 'gift-free', title: 'هدية مجانية', category: 'gifts', stars: 150, gems: 150, webm: 'gifts_by_StickerEmojiRobot-078.webm', free: true },
+      // ✅ الهدية المجانية = 1500 ماسة
+      { id: 'gift-free', title: 'هدية مجانية', category: 'gifts', stars: 150, gems: 1500, webm: 'gifts_by_StickerEmojiRobot-078.webm', free: true },
       { id: 'heart-locket', title: 'بطاقة 200 نجمة', category: 'gifts', stars: 200, gems: 9000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
       { id: 'gift-500', title: 'بطاقة 500 نجمة', category: 'gifts', stars: 500, gems: 45000, webm: 'gifts_by_StickerEmojiRobot-069.webm' },
       { id: 'artisan-brick', title: 'بطاقة 700 نجمة', category: 'gifts', stars: 700, gems: 63000, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
@@ -1882,11 +1901,11 @@ const TIME = {
 const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', starsInput: 0 };
 let catalogCategory = 'gifts';
 let referralPanel = 'invites';
-let wdHistoryRows = [];
+let wdAllRows = [];       // السجل الكامل
+let wdDisplayCount = 5;   // كم معروض حالياً
 let wdHistoryLoading = false;
 let wdHistoryError = false;
 let rankingLoaded = false;
-// ✅ الهدية المجانية مفعلة (بدون تحقق خادم)
 const DAILY_FREE_GIFT_SERVER_ENFORCED = true;
 
 const newUser = () => ({
@@ -1953,13 +1972,13 @@ function renderAll() {
 
   $('gemTop').textContent = fmt(u.gems);
   $('starTop').textContent = fmt(u.stars || 0);
+  $('topUserName').textContent = (u.name || 'لاعب').split(' ')[0];
 
   if (u.photoUrl) {
     $('topProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
     $('navProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
   }
 
-  $('greetName').textContent = (u.name || 'لاعب').split(' ')[0];
   $('homeGemCount').textContent = fmt(u.gems);
   $('homeGemUsd').textContent = '$' + usd(u.gems);
 
@@ -2780,41 +2799,71 @@ async function doWithdraw() {
   finally { S.busy = false; btn.disabled = false; btn.innerHTML = old; }
 }
 
+// ✅ سجل السحوبات: عرض 5 + زر "عرض 5+ أخرى"
+function renderWdHistory() {
+  const list = $('wdHistory');
+  const more = $('wdHistoryMore');
+  if (!list) return;
+
+  if (wdHistoryError) {
+    list.innerHTML = '<div class="empty-state">تعذر تحميل السجل</div>';
+    if (more) more.hidden = true;
+    return;
+  }
+
+  if (!wdAllRows.length) {
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل سحب بعد</div>';
+    if (more) more.hidden = true;
+    return;
+  }
+
+  const slice = wdAllRows.slice(0, wdDisplayCount);
+  const map = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
+  const methodNames = { sham_cash: 'شام كاش', binance: 'Binance' };
+
+  list.innerHTML = slice.map(w => {
+    const statusClass = w.status === 'completed' || w.status === 'approved' ? 'st-completed' : w.status === 'rejected' ? 'st-rejected' : w.status === 'processing' ? 'st-processing' : 'st-pending';
+    return `<div class="wd-history-row">
+      <div class="wd-history-left">
+        <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '$0')}</div>
+        <div class="wd-history-date">${new Date(w.createdAt || Date.now()).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' })} • ${methodNames[w.method] || 'Binance'}</div>
+      </div>
+      <div class="wd-history-status ${statusClass}">${map[w.status] || 'قيد المراجعة'}</div>
+    </div>`;
+  }).join('');
+
+  if (more) {
+    const remaining = wdAllRows.length - wdDisplayCount;
+    if (remaining > 0) {
+      more.hidden = false;
+      more.textContent = `عرض 5+ أخرى (${remaining} متبقية)`;
+    } else {
+      more.hidden = true;
+    }
+  }
+}
+
 async function loadWdHistory() {
   const l = $('wdHistory');
+  if (!l) return;
   if (!db) { l.innerHTML = '<div class="empty-state">تعذر الاتصال</div>'; return; }
   if (wdHistoryLoading) return;
   wdHistoryLoading = true;
   wdHistoryError = false;
+  wdAllRows = [];
+  wdDisplayCount = 5;
   l.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fas fa-spinner fa-spin"></i></div>';
+  $('wdHistoryMore').hidden = true;
   try {
-    const q = await db.collection(CONFIG.wdCol).where('userId', '==', TG.id).limit(50).get();
+    const q = await db.collection(CONFIG.wdCol).where('userId', '==', TG.id).limit(100).get();
     const it = [];
     q.forEach(d => it.push(d.data()));
     it.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    wdHistoryRows = it;
-    if (!it.length) {
-      l.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل سحب بعد</div>';
-      $('wdHistoryMore').hidden = true;
-      return;
-    }
-    const map = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
-    const methodNames = { sham_cash: 'شام كاش', binance: 'Binance' };
-    l.innerHTML = it.slice(0, 15).map(w => {
-      const statusClass = w.status === 'completed' || w.status === 'approved' ? 'st-completed' : w.status === 'rejected' ? 'st-rejected' : w.status === 'processing' ? 'st-processing' : 'st-pending';
-      return `<div class="wd-history-row">
-        <div class="wd-history-left">
-          <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '$0')}</div>
-          <div class="wd-history-date">${new Date(w.createdAt || Date.now()).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' })} • ${methodNames[w.method] || 'Binance'}</div>
-        </div>
-        <div class="wd-history-status ${statusClass}">${map[w.status] || 'قيد المراجعة'}</div>
-      </div>`;
-    }).join('');
-    $('wdHistoryMore').hidden = it.length <= 15;
+    wdAllRows = it;
+    renderWdHistory();
   } catch (e) {
     wdHistoryError = true;
-    l.innerHTML = '<div class="empty-state">تعذر تحميل السجل</div>';
-    $('wdHistoryMore').hidden = true;
+    renderWdHistory();
   } finally {
     wdHistoryLoading = false;
   }
@@ -2883,7 +2932,7 @@ function openContentModal(kind) {
     $('contentBody').innerHTML = `
       <p style="margin-bottom:12px"><strong>كيف أشتري مقتنى؟</strong> من الرئيسية أو صفحة البطاقات اختر البطاقة. إذا كان لديك رصيد نجوم كافٍ، ستُخصم منه مباشرة. إذا لم يكن كافياً، يمكنك الشراء المباشر.</p>
       <p style="margin-bottom:12px"><strong>رصيد النجوم:</strong> يمكن تعبئته من صفحة الإيداع — كل نجمة تدفعها تساوي نجمة في رصيدك.</p>
-      <p style="margin-bottom:12px"><strong>الهدية المجانية:</strong> استلم بطاقة مجانية مرة واحدة فقط من الرئيسية أو صفحة البطاقات.</p>
+      <p style="margin-bottom:12px"><strong>الهدية المجانية:</strong> استلم بطاقة مجانية مرة واحدة فقط من الرئيسية أو صفحة البطاقات — قيمتها 1500 ماسة.</p>
       <p style="margin-bottom:12px"><strong>متى أستطيع بيع المقتنى؟</strong> بعد 7 أيام — ستظهر قيمة المقتنى + 5% ربح.</p>
       <p style="margin-bottom:12px"><strong>الإيداع اليدوي:</strong> اختر Binance أو شام كاش، انسخ معرّف الاستلام ومعرّفك، حوّل المبلغ وأضف معرّفك في الملاحظة. ستتم المراجعة خلال 24 ساعة.</p>
       <p style="margin-bottom:12px"><strong>الإيداع بالكريبتو:</strong> اختر USDT، أدخل المبلغ، واتبع رابط الدفع. تُضاف الماسات تلقائياً بعد التأكيد.</p>
@@ -2925,6 +2974,12 @@ function bind() {
   bindWdAmounts();
 
   $('wdSubmit').onclick = doWithdraw;
+
+  // ✅ زر "عرض 5+ أخرى"
+  $('wdHistoryMore').onclick = () => {
+    wdDisplayCount += 5;
+    renderWdHistory();
+  };
 
   const starsInput = $('starsCustomInput');
   if (starsInput) {
