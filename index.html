@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#FFFCF5">
-<title>Puppy vip</title>
+<title>Puppy VIP</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='12008608' data-sdk='show_12008608'></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -34,44 +34,71 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
 html, body { height: 100%; overflow: hidden; }
-
 body {
   font-family: 'IBM Plex Sans Arabic', sans-serif;
-  background: var(--bg-main);
-  color: var(--text-primary);
-  font-size: 15px;
-  line-height: 1.5;
-  overscroll-behavior: none;
-  user-select: none;
-  direction: rtl;
+  background: var(--bg-main); color: var(--text-primary);
+  font-size: 15px; line-height: 1.5;
+  overscroll-behavior: none; user-select: none; direction: rtl;
 }
-
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input { font: inherit; color: inherit; }
 ::-webkit-scrollbar { display: none; }
 
+/* ============ SPLASH ============ */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #FFFCF5 0%, #F7F1E5 55%, #E8D5A6 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; text-align: center; transition: opacity 0.55s ease;
+}
+.splash.hide { opacity: 0; pointer-events: none; }
+.splash-logo {
+  width: 130px; height: 130px; border-radius: 50%;
+  background: linear-gradient(135deg, #E8D5A6, #C6A15B 55%, #A6813F);
+  display: grid; place-items: center;
+  font-size: 60px; color: #FFFCF5;
+  box-shadow: 0 10px 40px rgba(198, 161, 91, 0.45), inset 0 -6px 0 rgba(0,0,0,0.12);
+  animation: splashPulse 1.8s ease-in-out infinite;
+  margin-bottom: 24px;
+}
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(198,161,91,0.45), inset 0 -6px 0 rgba(0,0,0,0.12); }
+  50% { transform: scale(1.06); box-shadow: 0 18px 60px rgba(198,161,91,0.65), inset 0 -6px 0 rgba(0,0,0,0.12); }
+}
+.splash-title {
+  font-size: 30px; font-weight: 800; letter-spacing: 1px;
+  background: linear-gradient(135deg, #A6813F, #C6A15B 55%, #E8D5A6);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.splash-tagline { font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; }
+.splash-dots { display: flex; gap: 8px; margin-top: 30px; }
+.splash-dots span {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold); opacity: 0.35;
+  animation: splashDots 1.2s ease-in-out infinite;
+}
+.splash-dots span:nth-child(2) { animation-delay: 0.2s; }
+.splash-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes splashDots {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ============ APP ============ */
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  position: relative;
-  max-width: 480px;
-  margin: 0 auto;
-  overflow: hidden;
+  display: flex; flex-direction: column; height: 100dvh;
+  position: relative; max-width: 480px; margin: 0 auto; overflow: hidden;
 }
 
 /* ============ TOP BAR (GLASS) ============ */
 .top-bar {
   position: absolute;
   top: calc(var(--safe-top) + 8px);
-  left: 14px;
-  right: 14px;
+  left: 14px; right: 14px;
   padding: 8px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; justify-content: space-between; align-items: center;
   z-index: 50;
   background: rgba(255, 252, 245, 0.78);
   border: 1px solid rgba(237, 227, 208, 0.78);
@@ -80,847 +107,437 @@ input { font: inherit; color: inherit; }
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
 }
-
 .top-profile {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
+  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;
   background: var(--bg-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--gold-light);
-  color: var(--gold-dark);
-  font-size: 16px;
-  flex-shrink: 0;
+  color: var(--gold-dark); font-size: 16px; flex-shrink: 0;
 }
 .top-profile img { width: 100%; height: 100%; object-fit: cover; }
-
 .balances { display: flex; gap: 8px; align-items: center; }
-
 .balance-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  padding: 4px 10px 4px 5px;
-  border-radius: 20px;
-  font-weight: 800;
-  font-size: 13px;
-  color: var(--text-primary);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  height: 34px;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  padding: 4px 10px 4px 5px; border-radius: 20px;
+  font-weight: 800; font-size: 13px; color: var(--text-primary);
+  direction: ltr; font-variant-numeric: tabular-nums; height: 34px;
 }
-
 .chip-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  border: 1.5px solid var(--border);
+  width: 24px; height: 24px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0; border: 0;
 }
 
 /* ============ MAIN SCROLL ============ */
 .main-scroll {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex: 1; overflow-y: auto; overflow-x: hidden;
   padding: calc(var(--safe-top) + 76px) 16px calc(var(--dock-height) + 50px + var(--safe-bottom));
   -webkit-overflow-scrolling: touch;
 }
-
 .view { display: none; }
 .view.active { display: block; animation: viewIn 0.25s ease-out; }
 @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ============ HOME HERO ============ */
 .home-hero {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 20px;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow);
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px;
+  position: relative; overflow: hidden; box-shadow: var(--shadow);
 }
-
 .home-hero::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 65%);
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(15px);
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 65%);
+  border-radius: 50%; pointer-events: none; filter: blur(15px);
 }
-
 .home-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -60px;
-  left: -60px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(232, 213, 166, 0.35), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+  content: ''; position: absolute; bottom: -60px; left: -60px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(232,213,166,0.35), transparent 70%);
+  border-radius: 50%; pointer-events: none;
 }
-
 .greeting-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px; position: relative; z-index: 1;
 }
 .greeting-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #fff;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(198, 161, 91, 0.25);
-  overflow: hidden;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff; border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(198,161,91,0.25); overflow: hidden; flex-shrink: 0;
 }
 .greeting-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .greeting-text { flex: 1; min-width: 0; }
-.greeting-hello {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 2px;
-}
+.greeting-hello { font-size: 15px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px; }
 .greeting-hello span { color: var(--gold-dark); }
-.greeting-sub {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
+.greeting-sub { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 
 .big-balance {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px; position: relative; z-index: 1;
 }
 .balance-icon-big {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--gold-light);
-  box-shadow: 0 3px 10px rgba(198, 161, 91, 0.25);
-  flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
+  border: 0; box-shadow: none; flex-shrink: 0;
 }
-.balance-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
+.balance-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
 .balance-value-big {
-  font-size: 34px;
-  font-weight: 800;
-  color: var(--text-primary);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  font-size: 34px; font-weight: 800; color: var(--text-primary);
+  direction: ltr; font-variant-numeric: tabular-nums; line-height: 1;
 }
 .balance-usd-small {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  direction: ltr;
-  margin-left: 0;
+  font-size: 13px; font-weight: 700; color: var(--text-secondary);
+  direction: ltr; margin-left: 0;
 }
-
-.hero-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  position: relative;
-  z-index: 1;
-}
+.hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: relative; z-index: 1; }
 .hero-action-btn {
-  padding: 12px;
-  border-radius: var(--radius-button);
-  font-weight: 800;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: transform 0.1s;
-  cursor: pointer;
+  padding: 12px; border-radius: var(--radius-button);
+  font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform 0.1s; cursor: pointer;
 }
 .hero-action-btn:active { transform: scale(0.97); }
 .hero-action-btn.primary {
-  background: var(--gradient-gold);
-  color: #382810;
-  box-shadow: 0 4px 12px rgba(198, 161, 91, 0.3);
+  background: var(--gradient-gold); color: #382810;
+  box-shadow: 0 4px 12px rgba(198,161,91,0.3);
 }
 .hero-action-btn.secondary {
-  background: var(--bg-soft);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
+  background: var(--bg-soft); color: var(--text-primary); border: 1px solid var(--border);
 }
 
 /* ============ ACTION GRID ============ */
-.action-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 .action-card {
-  padding: 16px;
-  cursor: pointer;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.15s;
-  text-align: right;
+  padding: 16px; cursor: pointer; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm); transition: transform 0.15s; text-align: right;
 }
 .action-card:active { transform: scale(0.97); }
 .action-card-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #fff;
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 10px; color: #fff;
 }
 .action-card-icon.gold { background: var(--gradient-gold); color: #382810; }
 .action-card-icon.blue { background: linear-gradient(135deg, #7EC8E3, #4A90E2); }
-.action-card-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 2px;
-}
-.action-card-desc {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
+.action-card-title { font-size: 14px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px; }
+.action-card-desc { font-size: 11px; font-weight: 600; color: var(--text-secondary); line-height: 1.4; }
 
 /* ============ SECTIONS ============ */
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  margin-top: 4px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; margin-top: 4px;
 }
 .section-title { font-size: 16px; font-weight: 800; color: var(--text-primary); }
 .section-hint {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
+  font-size: 12px; font-weight: 700; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 4px; cursor: pointer;
 }
 
 /* ============ BUNDLES ============ */
 .bundles-row {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 0 12px;
-  margin: 0 -16px 12px;
-  padding-left: 16px;
-  padding-right: 16px;
+  display: flex; gap: 10px; overflow-x: auto;
+  padding: 4px 0 12px; margin: 0 -16px 12px;
+  padding-left: 16px; padding-right: 16px;
   scroll-snap-type: x mandatory;
 }
 .bundle-card {
-  flex: 0 0 148px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 12px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  scroll-snap-align: start;
-  transition: transform 0.15s;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
+  flex: 0 0 148px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
+  padding: 12px 10px; display: flex; flex-direction: column; align-items: center;
+  gap: 6px; cursor: pointer; scroll-snap-align: start;
+  transition: transform 0.15s; box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
 }
 .bundle-card:active { transform: translateY(2px); }
 .bundle-card.free {
   background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
   border: 1.5px solid var(--gold);
-  box-shadow: 0 4px 18px rgba(198, 161, 91, 0.15);
+  box-shadow: 0 4px 18px rgba(198,161,91,0.15);
 }
-.bundle-card.claimed {
-  opacity: 0.55;
-  pointer-events: none;
+.bundle-card.claimed { opacity: 0.55; pointer-events: none; }
+.bundle-card.unavailable { opacity: 0.76; cursor: not-allowed; }
+
+.catalog-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px; padding-bottom: 14px;
 }
-.bundle-card.unavailable {
-  opacity: 0.76;
-  cursor: not-allowed;
+.catalog-grid .bundle-card { width: 100%; min-width: 0; flex: initial; }
+.catalog-tabs {
+  display: flex; gap: 8px; margin: 14px 0; padding: 4px;
+  border: 1px solid var(--border); border-radius: 14px; background: var(--bg-soft);
+}
+.catalog-tab {
+  flex: 1; padding: 10px 8px; border-radius: 10px; text-align: center;
+  color: var(--text-secondary); font-size: 12px; font-weight: 800; cursor: pointer;
+}
+.catalog-tab.active {
+  color: var(--text-primary); background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
 }
 
 .free-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: var(--gradient-gold);
-  color: #382810;
-  font-size: 9.5px;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 8px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 3px;
+  position: absolute; top: 8px; left: 8px;
+  background: var(--gradient-gold); color: #382810;
+  font-size: 9.5px; font-weight: 800; padding: 3px 8px;
+  border-radius: 8px; z-index: 2;
+  display: flex; align-items: center; gap: 3px;
 }
-
 .bundle-video {
-  width: 76px;
-  height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-top: 4px;
+  width: 90px; height: 90px; display: flex;
+  align-items: center; justify-content: center;
+  position: relative; margin-top: 4px;
 }
 .bundle-video video { width: 100%; height: 100%; object-fit: contain; }
-
 .bundle-price {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  padding: 4px 12px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 12.5px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 10px;
+  font-weight: 800; font-size: 12.5px;
+  display: flex; align-items: center; gap: 4px;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
 }
 .bundle-price img { width: 14px; height: 14px; border-radius: 50%; }
 .bundle-price.gift {
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  border-color: var(--gold);
-  color: #382810;
+  border-color: var(--gold); color: #382810;
 }
-
 .bundle-label {
-  font-size: 10px;
-  color: var(--text-secondary);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 3px;
+  font-size: 10px; color: var(--text-secondary); font-weight: 700;
+  display: flex; align-items: center; gap: 3px;
 }
 .bundle-label img { width: 11px; height: 11px; border-radius: 50%; }
 
-/* ============ CATALOG ============ */
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  padding-bottom: 14px;
-}
-.catalog-grid .bundle-card {
-  width: 100%;
-  min-width: 0;
-  flex: initial;
-}
-.catalog-tabs {
-  display: flex;
-  gap: 8px;
-  margin: 14px 0;
-  padding: 4px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--bg-soft);
-}
-.catalog-tab {
-  flex: 1;
-  padding: 10px 8px;
-  border-radius: 10px;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.catalog-tab.active {
-  color: var(--text-primary);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
-}
-
 /* ============ STORE ============ */
-.page-title {
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 6px;
-  margin-top: 4px;
-  color: var(--text-primary);
-}
+.page-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; margin-top: 4px; color: var(--text-primary); }
 .page-subtitle {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-  line-height: 1.6;
+  font-size: 12.5px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 16px; line-height: 1.6;
 }
-
-.store-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.store-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .store-stat {
-  padding: 14px;
-  text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  padding: 14px; text-align: center; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
 .store-stat-val {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text-primary);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 3px;
-  line-height: 1;
+  font-size: 22px; font-weight: 800; color: var(--text-primary);
+  direction: ltr; font-variant-numeric: tabular-nums;
+  margin-bottom: 3px; line-height: 1;
 }
-.store-stat-lbl {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
-
+.store-stat-lbl { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
 .ready-banner {
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  padding: 14px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
   background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
-  border: 1px solid var(--gold);
-  border-radius: var(--radius-card);
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gold); border-radius: var(--radius-card);
+  cursor: pointer; box-shadow: var(--shadow-sm);
 }
 .ready-banner-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--gradient-gold);
-  color: #382810;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--gradient-gold); color: #382810;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
 }
 .ready-banner-text { flex: 1; }
-.ready-banner-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--gold-dark);
-  margin-bottom: 2px;
-}
-.ready-banner-sub {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
+.ready-banner-title { font-size: 13px; font-weight: 800; color: var(--gold-dark); margin-bottom: 2px; }
+.ready-banner-sub { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
 
 .collectible-item {
-  padding: 14px;
-  margin-bottom: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  padding: 14px; margin-bottom: 12px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
 .collectible-item.ready {
   border-color: var(--gold);
   background: linear-gradient(135deg, #FFFFFF, #FFFCF5);
 }
-.collectible-item.free-item {
-  background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
-}
+.collectible-item.free-item { background: linear-gradient(135deg, #FFFCF5, #F7F1E5); }
 
-.collectible-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
+.collectible-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .collectible-thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-  background: var(--bg-soft);
-  flex-shrink: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 92px; height: 92px; border-radius: 14px;
+  background: var(--bg-soft); flex-shrink: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
   border: 1px solid var(--border);
 }
 .collectible-thumb video { width: 100%; height: 100%; object-fit: contain; }
 .collectible-info { flex: 1; min-width: 0; }
 .collectible-title {
-  font-size: 14px;
-  font-weight: 800;
-  margin-bottom: 3px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--text-primary);
+  font-size: 14px; font-weight: 800; margin-bottom: 3px;
+  display: flex; align-items: center; gap: 4px; color: var(--text-primary);
 }
 .collectible-title img { width: 14px; height: 14px; border-radius: 50%; }
-.collectible-date {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
+.collectible-date { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 .collectible-value {
-  text-align: left;
-  font-weight: 800;
-  font-size: 15px;
-  color: var(--gold-dark);
-  direction: ltr;
-  display: flex;
-  align-items: center;
-  gap: 3px;
+  text-align: left; font-weight: 800; font-size: 15px; color: var(--gold-dark);
+  direction: ltr; display: flex; align-items: center; gap: 3px;
   font-variant-numeric: tabular-nums;
 }
 .collectible-value img { width: 14px; height: 14px; border-radius: 50%; }
 
 .collectible-progress { margin-bottom: 10px; }
 .collectible-progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 5px;
+  display: flex; justify-content: space-between;
+  font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;
 }
 .progress-bar-bg {
-  height: 6px;
-  background: var(--bg-soft);
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  height: 6px; background: var(--bg-soft); border-radius: 4px;
+  overflow: hidden; border: 1px solid var(--border);
 }
-.progress-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.4s ease;
-}
+.progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 
 .collectible-calc {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 12px; margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-weight: 700; color: var(--text-secondary);
 }
 .collectible-calc .sell-value {
-  color: var(--text-primary);
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  direction: ltr;
+  color: var(--text-primary); font-weight: 800;
+  display: flex; align-items: center; gap: 3px; direction: ltr;
 }
 .collectible-calc .profit { color: var(--success); font-weight: 800; }
 
 .collectible-btn {
-  width: 100%;
-  padding: 12px;
-  border-radius: var(--radius-button);
-  border: none;
-  font-family: inherit;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  transition: transform 0.1s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  width: 100%; padding: 12px; border-radius: var(--radius-button);
+  border: none; font-family: inherit; font-weight: 800; font-size: 13px;
+  cursor: pointer; transition: transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .collectible-btn:active { transform: scale(0.97); }
 .collectible-btn.sell {
-  background: var(--gradient-gold);
-  color: #382810;
-  box-shadow: 0 4px 12px rgba(198, 161, 91, 0.3);
+  background: var(--gradient-gold); color: #382810;
+  box-shadow: 0 4px 12px rgba(198,161,91,0.3);
 }
 .collectible-btn.locked {
-  background: var(--bg-soft);
-  color: var(--text-secondary);
-  cursor: not-allowed;
+  background: var(--bg-soft); color: var(--text-secondary); cursor: not-allowed;
 }
 
 .sold-collectible {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 10px 14px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0.7;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 10px 14px;
+  margin-bottom: 8px; display: flex; align-items: center;
+  gap: 10px; opacity: 0.7;
 }
 .sold-collectible-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--gradient-gold);
-  color: #382810;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--gradient-gold); color: #382810;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
 }
 .sold-collectible-info { flex: 1; }
 .sold-collectible-title { font-size: 13px; font-weight: 800; }
 .sold-collectible-sub { font-size: 11px; color: var(--text-secondary); }
-.sold-collectible-amount {
-  font-weight: 800;
-  color: var(--success);
-  font-size: 13px;
-  direction: ltr;
-}
+.sold-collectible-amount { font-weight: 800; color: var(--success); font-size: 13px; direction: ltr; }
 
 .empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 1.7;
+  text-align: center; padding: 40px 20px;
+  color: var(--text-secondary); font-weight: 600;
+  font-size: 13px; line-height: 1.7;
 }
-.empty-state i {
-  font-size: 40px;
-  display: block;
-  margin-bottom: 12px;
-  opacity: 0.3;
-}
+.empty-state i { font-size: 40px; display: block; margin-bottom: 12px; opacity: 0.3; }
 
 /* ============ BALANCE CARD (DARK) ============ */
 .wallet-balance-card {
-  padding: 20px;
-  margin-bottom: 16px;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
+  padding: 20px; margin-bottom: 16px; color: #fff;
+  position: relative; overflow: hidden;
   background: linear-gradient(135deg, #49371F 0%, #2A1F10 100%);
   border-radius: var(--radius-card);
-  box-shadow: 0 8px 25px rgba(73, 55, 31, 0.25);
+  box-shadow: 0 8px 25px rgba(73,55,31,0.25);
 }
 .wallet-balance-card::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, rgba(198, 161, 91, 0.35), transparent 60%);
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(198,161,91,0.35), transparent 60%);
   border-radius: 50%;
 }
 .wallet-balance-card::after {
-  content: '';
-  position: absolute;
-  bottom: -40px;
-  left: -40px;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, rgba(232, 213, 166, 0.2), transparent 60%);
+  content: ''; position: absolute; bottom: -40px; left: -40px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(232,213,166,0.2), transparent 60%);
   border-radius: 50%;
 }
 .wallet-balance-label {
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.85;
-  margin-bottom: 6px;
-  position: relative;
-  z-index: 1;
-  color: var(--gold-light);
+  font-size: 12px; font-weight: 600; opacity: 0.85;
+  margin-bottom: 6px; position: relative; z-index: 1; color: var(--gold-light);
 }
 .wallet-balance-val {
-  font-size: 30px;
-  font-weight: 800;
-  direction: ltr;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.1;
+  font-size: 30px; font-weight: 800; direction: ltr;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+  font-variant-numeric: tabular-nums; line-height: 1.1;
 }
 .wallet-balance-val img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 0; box-shadow: none;
 }
 .wallet-balance-sub {
-  font-size: 13px;
-  opacity: 0.75;
-  margin-top: 6px;
-  direction: ltr;
-  position: relative;
-  z-index: 1;
-  font-weight: 600;
-  color: var(--gold-light);
+  font-size: 13px; opacity: 0.75; margin-top: 6px;
+  direction: ltr; position: relative; z-index: 1;
+  font-weight: 600; color: var(--gold-light);
 }
 
 /* ============ WALLET TABS ============ */
 .wallet-tabs {
-  display: flex;
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-button);
-  padding: 4px;
-  margin-bottom: 16px;
-  gap: 4px;
-  overflow-x: auto;
+  display: flex; background: var(--bg-soft);
+  border: 1px solid var(--border); border-radius: var(--radius-button);
+  padding: 4px; margin-bottom: 16px; gap: 4px; overflow-x: auto;
 }
 .wallet-tab {
-  flex: 1;
-  min-width: 76px;
-  text-align: center;
-  padding: 9px 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  flex: 1; min-width: 76px; text-align: center;
+  padding: 9px 8px; font-size: 12px; font-weight: 700;
+  color: var(--text-secondary); border-radius: 10px;
+  cursor: pointer; transition: all 0.2s;
+  white-space: nowrap; display: flex;
+  align-items: center; justify-content: center; gap: 4px;
 }
 .wallet-tab.active {
-  background: var(--bg-card);
-  color: var(--text-primary);
+  background: var(--bg-card); color: var(--text-primary);
   box-shadow: var(--shadow-sm);
 }
 .wallet-tab img { width: 14px; height: 14px; border-radius: 50%; }
 
 /* ============ STARS INPUT ============ */
 .stars-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; width: 100%; min-width: 0; overflow: hidden;
 }
 .stars-input-wrap input {
-  flex: 1;
-  height: 52px;
-  padding: 0 16px;
-  border-radius: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 800;
-  outline: none;
-  color: var(--text-primary);
-  direction: ltr;
-  text-align: left;
+  flex: 1; width: 100%; min-width: 0; max-width: 100%;
+  box-sizing: border-box;
+  height: 52px; padding: 0 16px; border-radius: 12px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  font-family: inherit; font-size: 16px; font-weight: 800;
+  outline: none; color: var(--text-primary);
+  direction: ltr; text-align: left;
 }
 .stars-input-wrap input:focus {
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(198, 161, 91, 0.12);
+  box-shadow: 0 0 0 3px rgba(198,161,91,0.12);
 }
 .stars-input-wrap input::placeholder {
-  color: var(--text-secondary);
-  font-weight: 500;
-  direction: rtl;
-  text-align: right;
+  color: var(--text-secondary); font-weight: 500;
+  direction: rtl; text-align: right;
 }
 .stars-input-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--border);
-  flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%;
+  flex: 0 0 44px; object-fit: cover;
+  border: 0; flex-shrink: 0;
 }
 
 /* ============ WITHDRAW ============ */
-.withdraw-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .withdraw-method {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 12px 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  box-shadow: var(--shadow-sm);
+  background: var(--bg-card); border: 2px solid var(--border);
+  border-radius: var(--radius-card); padding: 12px 10px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; box-shadow: var(--shadow-sm);
 }
 .withdraw-method img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: contain;
-  background: #fff;
-  padding: 2px;
+  width: 32px; height: 32px; border-radius: 50%;
+  object-fit: contain; background: #fff; padding: 2px;
 }
 .withdraw-method.active {
   border-color: var(--gold);
@@ -928,510 +545,256 @@ input { font: inherit; color: inherit; }
 }
 
 /* ============ AMOUNT CHIPS ============ */
-.amount-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
-}
+.amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
 .amount-chip {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 4px;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  transition: all 0.2s;
-  font-variant-numeric: tabular-nums;
-  user-select: none;
+  background: var(--bg-card); border: 2px solid var(--border);
+  border-radius: 10px; padding: 12px 4px; text-align: center;
+  font-size: 13px; font-weight: 800; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  gap: 4px; transition: all 0.2s;
+  font-variant-numeric: tabular-nums; user-select: none;
 }
 .amount-chip:active { transform: scale(0.96); }
 .amount-chip.active {
   border-color: var(--gold);
   background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
-  box-shadow: 0 0 0 3px rgba(198, 161, 91, 0.12);
+  box-shadow: 0 0 0 3px rgba(198,161,91,0.12);
 }
 
 /* ============ CALC BOX ============ */
 .calc-box {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-button);
-  padding: 14px 16px;
-  margin-bottom: 16px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: var(--radius-button); padding: 14px 16px; margin-bottom: 16px;
 }
 .calc-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-secondary);
 }
 .calc-row:last-child {
-  margin-bottom: 0;
-  padding-top: 8px;
-  border-top: 1px dashed var(--border);
+  margin-bottom: 0; padding-top: 8px; border-top: 1px dashed var(--border);
 }
 .calc-val {
-  font-weight: 800;
-  color: var(--text-primary);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  font-weight: 800; color: var(--text-primary);
+  direction: ltr; font-variant-numeric: tabular-nums;
+  display: flex; align-items: center; gap: 4px;
 }
 
 /* ============ INPUTS ============ */
 .pro-input-group { margin-bottom: 12px; }
 .pro-input-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-  padding-right: 4px;
+  display: block; font-size: 12px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 6px; padding-right: 4px;
 }
 .pro-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  font-family: inherit;
-  font-size: 15px;
-  color: var(--text-primary);
-  outline: none;
-  transition: border-color 0.2s;
-  font-weight: 600;
+  width: 100%; height: 48px; padding: 0 16px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--bg-card);
+  font-family: inherit; font-size: 15px; color: var(--text-primary);
+  outline: none; transition: border-color 0.2s; font-weight: 600;
 }
 .pro-input::placeholder { color: var(--text-secondary); font-weight: 500; }
-.pro-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(198, 161, 91, 0.12);
-}
+.pro-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(198,161,91,0.12); }
 
-/* ============ PRIMARY BUTTON ============ */
+/* ============ BUTTONS ============ */
 .btn-primary {
-  width: 100%;
-  padding: 14px;
-  border-radius: var(--radius-button);
-  background: var(--gradient-gold);
-  color: #382810;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.1s;
-  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  width: 100%; padding: 14px; border-radius: var(--radius-button);
+  background: var(--gradient-gold); color: #382810;
+  font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: transform 0.1s;
+  box-shadow: 0 4px 14px rgba(198,161,91,0.3);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .btn-primary:active { transform: scale(0.97); }
 .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
 
 /* ============ WD HISTORY ============ */
 .wd-history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
-  padding-bottom: 4px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 16px; padding-bottom: 4px;
 }
 .wd-history-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  padding: 12px 14px;
-  border-radius: var(--radius-card);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 12px 14px; border-radius: var(--radius-card);
 }
 .wd-history-left { display: flex; flex-direction: column; gap: 4px; }
 .wd-history-amount {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-primary);
-  direction: ltr;
+  font-size: 14px; font-weight: 800; color: var(--text-primary); direction: ltr;
 }
 .wd-history-date { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 .wd-history-status {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 800;
+  padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800;
 }
 .st-pending { background: #FFF3E0; color: #FF9800; }
 .st-completed { background: #E8F5E9; color: #34C759; }
 .st-rejected { background: #FFEBEE; color: #FF3B30; }
 .st-processing { background: #E3F2FD; color: #007AFF; }
 .wd-history-more {
-  width: 100%;
-  margin: 8px 0 16px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  background: rgba(255, 255, 255, .78);
-  color: var(--gold-dark);
-  font-size: 12px;
-  font-weight: 800;
+  width: 100%; margin: 8px 0 16px; padding: 12px;
+  border: 1px solid var(--border); border-radius: 13px;
+  background: rgba(255,255,255,0.78); color: var(--gold-dark);
+  font-size: 12px; font-weight: 800;
 }
 .wd-history-more[hidden] { display: none; }
-.wd-history-more:disabled { opacity: .5; }
+.wd-history-more:disabled { opacity: 0.5; }
 
 /* ============ REFERRAL ============ */
 .ref-hero {
-  padding: 24px 20px;
-  margin-bottom: 16px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  padding: 24px 20px; margin-bottom: 16px; text-align: center;
+  position: relative; overflow: hidden; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow);
 }
 .ref-hero::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 65%);
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(15px);
+  content: ''; position: absolute; top: -80px; right: -80px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 65%);
+  border-radius: 50%; pointer-events: none; filter: blur(15px);
 }
 .ref-hero::after {
-  content: '';
-  position: absolute;
-  bottom: -60px;
-  left: -60px;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, rgba(232, 213, 166, 0.4), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+  content: ''; position: absolute; bottom: -60px; left: -60px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(232,213,166,0.4), transparent 70%);
+  border-radius: 50%; pointer-events: none;
 }
 .ref-hero-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  width: 56px; height: 56px; border-radius: 16px;
   background: var(--gradient-gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #382810;
-  margin: 0 auto 12px;
-  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.35);
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #382810; margin: 0 auto 12px;
+  box-shadow: 0 4px 14px rgba(198,161,91,0.35);
+  position: relative; z-index: 1;
 }
-.ref-hero-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  position: relative;
-  z-index: 1;
-}
-.ref-hero-sub {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  position: relative;
-  z-index: 1;
-  line-height: 1.6;
-}
+.ref-hero-title { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; position: relative; z-index: 1; }
+.ref-hero-sub { font-size: 12px; font-weight: 600; color: var(--text-secondary); position: relative; z-index: 1; line-height: 1.6; }
 .ref-hero-earnings {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-  position: relative;
-  z-index: 1;
+  margin-top: 18px; padding-top: 18px;
+  border-top: 1px solid var(--border); position: relative; z-index: 1;
 }
-.ref-hero-earnings-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
+.ref-hero-earnings-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
 .ref-hero-earnings-value {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--gold-dark);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  line-height: 1;
+  font-size: 32px; font-weight: 800; color: var(--gold-dark);
+  direction: ltr; font-variant-numeric: tabular-nums;
+  display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1;
 }
-.ref-hero-earnings-value img {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--gold-light);
-}
+.ref-hero-earnings-value img { width: 26px; height: 26px; border-radius: 50%; border: 0; }
 
-.ref-rewards-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.ref-rewards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .ref-reward-card {
-  padding: 16px 12px;
-  text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  overflow: hidden;
+  padding: 16px 12px; text-align: center; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 20px;
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
 }
 .ref-reward-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  margin: 0 auto 8px;
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; margin: 0 auto 8px;
 }
 .ref-reward-icon.you { background: var(--gradient-gold); color: #382810; }
 .ref-reward-icon.friend { background: linear-gradient(135deg, var(--gold-light), #D4C08C); color: var(--gold-dark); }
 .ref-reward-value {
-  font-size: 22px;
-  font-weight: 800;
-  direction: ltr;
-  margin-bottom: 3px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  color: var(--gold-dark);
+  font-size: 22px; font-weight: 800; direction: ltr;
+  margin-bottom: 3px; font-variant-numeric: tabular-nums;
+  line-height: 1; color: var(--gold-dark);
 }
-.ref-reward-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
+.ref-reward-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
 
 .link-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow-sm);
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px; display: flex;
+  align-items: center; margin-bottom: 10px; box-shadow: var(--shadow-sm);
 }
 .link-box-code {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-primary);
-  padding: 8px 12px;
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 1px;
+  flex: 1; font-size: 15px; font-weight: 800; color: var(--text-primary);
+  padding: 8px 12px; direction: ltr; font-variant-numeric: tabular-nums; letter-spacing: 1px;
 }
 .link-box-text {
-  flex: 1;
-  font-size: 12px;
-  color: var(--text-secondary);
-  padding: 8px 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  direction: ltr;
-  text-align: left;
-  font-weight: 600;
+  flex: 1; font-size: 12px; color: var(--text-secondary); padding: 8px 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  direction: ltr; text-align: left; font-weight: 600;
 }
 .btn-copy {
-  background: var(--gradient-gold);
-  color: #382810;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-family: inherit;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: transform 0.1s;
-  flex-shrink: 0;
+  background: var(--gradient-gold); color: #382810;
+  border: none; padding: 10px 14px; border-radius: 10px;
+  font-weight: 800; font-family: inherit; font-size: 12px;
+  cursor: pointer; display: flex; align-items: center; gap: 5px;
+  transition: transform 0.1s; flex-shrink: 0;
 }
 .btn-copy:active { transform: scale(0.96); }
 
-.ref-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.ref-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .btn-ref-share {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px;
-  border-radius: var(--radius-button);
-  border: none;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.1s;
-  background: var(--gradient-gold);
-  color: #382810;
-  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.35);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px; border-radius: var(--radius-button); border: none;
+  font-family: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: transform 0.1s;
+  background: var(--gradient-gold); color: #382810;
+  box-shadow: 0 4px 14px rgba(198,161,91,0.35);
 }
 .btn-ref-share:active { transform: scale(0.96); }
 .btn-ref-store {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px;
-  border-radius: var(--radius-button);
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.1s;
-  color: var(--text-primary);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px; border-radius: var(--radius-button);
+  border: 1px solid var(--border); background: var(--bg-card);
+  font-family: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: transform 0.1s; color: var(--text-primary);
 }
 .btn-ref-store:active { transform: scale(0.96); }
 
-.ref-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.ref-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .ref-stat-box {
-  padding: 16px;
-  text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 16px; text-align: center; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-sm);
 }
 .ref-stat-val {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--gold-dark);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 4px;
-  line-height: 1;
+  font-size: 24px; font-weight: 800; color: var(--gold-dark);
+  direction: ltr; font-variant-numeric: tabular-nums;
+  margin-bottom: 4px; line-height: 1;
 }
-.ref-stat-lbl {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 700;
-}
+.ref-stat-lbl { font-size: 11px; color: var(--text-secondary); font-weight: 700; }
 
 .ref-milestone-card {
-  padding: 16px;
-  margin-bottom: 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow-sm);
+  padding: 16px; margin-bottom: 16px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-sm);
 }
 .ref-milestone-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 13px; font-weight: 800; color: var(--text-primary);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
 }
 .ref-milestone-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; font-size: 12px; font-weight: 700; color: var(--text-secondary);
   border-bottom: 1px dashed var(--border);
 }
 .ref-milestone-row:last-child { border-bottom: none; }
 .ref-milestone-reward {
-  color: var(--gold-dark);
-  font-weight: 800;
-  direction: ltr;
-  display: flex;
-  align-items: center;
-  gap: 3px;
+  color: var(--gold-dark); font-weight: 800; direction: ltr;
+  display: flex; align-items: center; gap: 3px;
 }
 
 /* Referral Tabs */
 .ref-switch {
-  display: flex;
-  gap: 6px;
-  padding: 5px;
-  margin: 4px 0 16px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: rgba(247, 241, 229, .82);
+  display: flex; gap: 6px; padding: 5px; margin: 4px 0 16px;
+  border: 1px solid var(--border); border-radius: 16px;
+  background: rgba(247,241,229,0.82);
 }
 .ref-switch-tab {
-  flex: 1;
-  min-height: 42px;
-  border-radius: 12px;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 800;
-  transition: color .2s ease, background .25s ease;
+  flex: 1; min-height: 42px; border-radius: 12px;
+  color: var(--text-secondary); font-size: 13px; font-weight: 800;
+  transition: color 0.2s, background 0.25s;
 }
 .ref-switch-tab.active {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, .86);
-  box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(198, 161, 91, .16);
+  color: var(--text-primary); background: rgba(255,255,255,0.86);
+  box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(198,161,91,0.16);
 }
-.ref-panel { animation: viewIn .28s ease-out; }
+.ref-panel { animation: viewIn 0.28s ease-out; }
 .ref-panel[hidden] { display: none; }
 
 /* Ranking */
-.ranking-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 20px;
-}
+.ranking-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; }
 .ranking-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
 .ranking-row.me {
@@ -1439,195 +802,98 @@ input { font: inherit; color: inherit; }
   background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
 }
 .ranking-rank {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--bg-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  color: var(--gold-dark);
-  flex-shrink: 0;
-  font-size: 13px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg-soft); display: flex;
+  align-items: center; justify-content: center;
+  font-weight: 800; color: var(--gold-dark);
+  flex-shrink: 0; font-size: 13px;
 }
 .ranking-rank.top1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #382810; }
 .ranking-rank.top2 { background: linear-gradient(135deg, #E8E8E8, #A8A8A8); color: #382810; }
 .ranking-rank.top3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
 .ranking-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--bg-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold-dark);
-  flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
+  background: var(--bg-soft); display: flex;
+  align-items: center; justify-content: center;
+  color: var(--gold-dark); flex-shrink: 0;
   border: 1px solid var(--border);
 }
 .ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ranking-info { flex: 1; min-width: 0; }
 .ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
 .ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.ranking-loading { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+.ranking-loading i { font-size: 24px; opacity: 0.5; }
 .ranking-unavailable {
-  margin-top: 4px;
-  padding: 24px 18px;
-  text-align: center;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: rgba(255,255,255,.88);
-  box-shadow: var(--shadow-sm);
+  padding: 24px 18px; text-align: center;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: rgba(255,255,255,0.88); box-shadow: var(--shadow-sm);
 }
 .ranking-unavailable-icon {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  margin: 0 auto 14px;
-  border-radius: 18px;
-  color: var(--gold-dark);
-  background: rgba(232, 213, 166, .34);
+  width: 54px; height: 54px; display: grid; place-items: center;
+  margin: 0 auto 14px; border-radius: 18px;
+  color: var(--gold-dark); background: rgba(232,213,166,0.34);
   font-size: 22px;
 }
-.ranking-unavailable .ref-card-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
 .ranking-unavailable p {
-  color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.8;
-  font-weight: 600;
+  color: var(--text-secondary); font-size: 12px; line-height: 1.8; font-weight: 600;
 }
-.ranking-loading {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-}
-.ranking-loading i { font-size: 24px; opacity: .5; }
 
 /* ============ PROFILE ============ */
 .profile-hero {
-  text-align: center;
-  padding: 28px 20px 22px;
-  margin-bottom: 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
+  text-align: center; padding: 28px 20px 22px; margin-bottom: 16px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-card); box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
 }
 .profile-hero::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 65%);
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(12px);
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 65%);
+  border-radius: 50%; pointer-events: none; filter: blur(12px);
 }
 .profile-avatar {
-  width: 82px;
-  height: 82px;
-  border-radius: 50%;
-  margin: 0 auto 12px;
-  overflow: hidden;
+  width: 82px; height: 82px; border-radius: 50%;
+  margin: 0 auto 12px; overflow: hidden;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  color: #fff;
-  border: 3px solid #fff;
-  box-shadow: 0 6px 20px rgba(198, 161, 91, 0.3);
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; color: #fff; border: 3px solid #fff;
+  box-shadow: 0 6px 20px rgba(198,161,91,0.3);
+  position: relative; z-index: 1;
 }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-name {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  position: relative;
-  z-index: 1;
-}
+.profile-name { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; position: relative; z-index: 1; }
 .profile-id {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  font-size: 12px; color: var(--text-secondary); font-weight: 600;
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
 }
 
-.profile-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .profile-stat {
-  padding: 14px;
-  text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  padding: 14px; text-align: center; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
 .profile-stat-val {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--gold-dark);
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 3px;
-  line-height: 1;
+  font-size: 22px; font-weight: 800; color: var(--gold-dark);
+  direction: ltr; font-variant-numeric: tabular-nums;
+  margin-bottom: 3px; line-height: 1;
 }
-.profile-stat-lbl {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 700;
-}
+.profile-stat-lbl { font-size: 11px; color: var(--text-secondary); font-weight: 700; }
 
-.profile-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.profile-menu { display: flex; flex-direction: column; gap: 8px; }
 .menu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  cursor: pointer;
-  transition: transform 0.15s;
-  box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-card);
+  cursor: pointer; transition: transform 0.15s; box-shadow: var(--shadow-sm);
 }
 .menu-item:active { transform: scale(0.98); }
 .menu-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
 }
 .menu-icon.gold { background: var(--gradient-gold); color: #382810; }
 .menu-icon.blue { background: linear-gradient(135deg, #7EC8E3, #4A90E2); color: #fff; }
@@ -1638,48 +904,32 @@ input { font: inherit; color: inherit; }
 .menu-desc { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 .menu-arrow { color: var(--text-secondary); font-size: 12px; }
 
-/* ============ DOCK (نسخة عادية + مؤشر منزلق) ============ */
+/* ============ DOCK (5 أزرار + مؤشر متحرك) ============ */
 .dock {
-  position: absolute;
-  bottom: calc(14px + var(--safe-bottom));
-  left: 14px;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 100;
-  transition: transform .28s ease, opacity .2s ease;
+  position: absolute; bottom: calc(14px + var(--safe-bottom));
+  left: 14px; right: 14px;
+  display: flex; align-items: center; gap: 10px; z-index: 100;
+  transition: transform 0.28s ease, opacity 0.2s ease;
 }
 .dock-nav {
-  flex: 1;
-  height: var(--dock-height);
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  --nav-index: 0;
-  background: rgba(255, 255, 255, 0.70);
-  border: 1px solid rgba(237, 227, 208, 0.76);
+  flex: 1; height: var(--dock-height); position: relative;
+  isolation: isolate; overflow: hidden; --nav-index: 0;
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(237,227,208,0.76);
   border-radius: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px;
-  box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px; box-shadow: var(--shadow);
   -webkit-backdrop-filter: blur(18px) saturate(155%);
   backdrop-filter: blur(18px) saturate(155%);
 }
 .dock-nav::before {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  top: 6px;
-  bottom: 6px;
-  right: 6px;
+  content: ''; position: absolute; z-index: 0;
+  top: 6px; bottom: 6px; right: 6px;
   width: calc((100% - 14px) / 4);
-  border: 1px solid rgba(198, 161, 91, 0.34);
+  border: 1px solid rgba(198,161,91,0.34);
   border-radius: 26px;
-  background: rgba(232, 213, 166, 0.34);
-  box-shadow: 0 3px 12px rgba(120, 91, 42, 0.08), inset 0 1px rgba(255, 255, 255, 0.72);
+  background: rgba(232,213,166,0.34);
+  box-shadow: 0 3px 12px rgba(120,91,42,0.08), inset 0 1px rgba(255,255,255,0.72);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transform: translateX(calc(var(--nav-index) * -100%));
@@ -1687,289 +937,181 @@ input { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .nav-item {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  color: var(--text-secondary);
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 26px;
-  transition: color 0.25s;
-  cursor: pointer;
-  position: relative;
-  z-index: 1;
-  background: transparent;
+  flex: 1; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; color: var(--text-secondary);
+  font-size: 10px; font-weight: 700;
+  border-radius: 26px; transition: color 0.25s;
+  cursor: pointer; position: relative;
+  z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 17px; }
-.nav-item.active {
-  color: #6F5427;
-  background: transparent;
-  box-shadow: none;
-}
-
+.nav-item.active { color: #6F5427; background: transparent; box-shadow: none; }
 .nav-badge {
-  position: absolute;
-  top: 6px;
-  right: calc(50% - 18px);
-  min-width: 16px;
-  height: 16px;
-  border-radius: 8px;
-  background: var(--danger);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 800;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-  z-index: 2;
+  position: absolute; top: 6px; right: calc(50% - 18px);
+  min-width: 16px; height: 16px; border-radius: 8px;
+  background: var(--danger); color: #fff;
+  font-size: 9px; font-weight: 800;
+  display: none; align-items: center; justify-content: center;
+  padding: 0 4px; z-index: 2;
 }
-
 .nav-profile {
-  width: var(--dock-height);
-  height: var(--dock-height);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: all 0.25s;
-  color: var(--gold-dark);
-  font-size: 18px;
-  overflow: hidden;
+  width: var(--dock-height); height: var(--dock-height);
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: all 0.25s; color: var(--gold-dark);
+  font-size: 18px; overflow: hidden;
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.nav-profile.active {
-  border-color: var(--gold);
-  box-shadow: 0 4px 20px rgba(198, 161, 91, 0.35);
-}
+.nav-profile.active { border-color: var(--gold); box-shadow: 0 4px 20px rgba(198,161,91,0.35); }
 
-/* إخفاء الدوك عند فتح لوحة المفاتيح */
 .keyboard-open .dock {
   transform: translateY(calc(100% + 24px));
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
 }
 
 /* ============ MODALS ============ */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(73, 55, 31, 0.4);
+  position: fixed; inset: 0;
+  background: rgba(73,55,31,0.4);
   backdrop-filter: blur(6px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 20px;
+  display: none; align-items: center; justify-content: center;
+  z-index: 9999; padding: 20px;
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
 .modal-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 24px;
-  width: 100%;
-  max-width: 340px;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(73, 55, 31, 0.2);
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 24px; padding: 24px; width: 100%;
+  max-width: 340px; text-align: center;
+  box-shadow: 0 20px 60px rgba(73,55,31,0.2);
   animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   color: var(--text-primary);
 }
-@keyframes popIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .modal-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  width: 64px; height: 64px; border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #382810;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 14px;
-  box-shadow: 0 4px 16px rgba(198, 161, 91, 0.3);
+  color: #382810; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 28px; margin: 0 auto 14px;
+  box-shadow: 0 4px 16px rgba(198,161,91,0.3);
 }
-.modal-title {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-}
+.modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
 .modal-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 18px;
-  font-weight: 600;
-  line-height: 1.6;
+  font-size: 13px; color: var(--text-secondary);
+  margin-bottom: 18px; font-weight: 600; line-height: 1.6;
 }
-
 .modal-details {
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 18px;
-  text-align: right;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px; margin-bottom: 18px; text-align: right;
 }
 .modal-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;
 }
 .modal-row:last-child { margin-bottom: 0; }
 .modal-row span:last-child {
-  font-weight: 800;
-  color: var(--text-primary);
-  direction: ltr;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  font-weight: 800; color: var(--text-primary);
+  direction: ltr; display: flex; align-items: center; gap: 4px;
 }
 .modal-row img { width: 14px; height: 14px; border-radius: 50%; }
-
 .btn-modal {
-  background: var(--gradient-gold);
-  color: #382810;
-  border: none;
-  padding: 13px;
-  border-radius: var(--radius-button);
-  font-weight: 800;
-  font-family: inherit;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  transition: transform 0.1s;
-  box-shadow: 0 4px 14px rgba(198, 161, 91, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  background: var(--gradient-gold); color: #382810;
+  border: none; padding: 13px; border-radius: var(--radius-button);
+  font-weight: 800; font-family: inherit; font-size: 14px;
+  cursor: pointer; width: 100%; transition: transform 0.1s;
+  box-shadow: 0 4px 14px rgba(198,161,91,0.3);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .btn-modal:active { transform: scale(0.97); }
 .btn-modal.secondary {
-  background: var(--bg-soft);
-  color: var(--text-primary);
-  box-shadow: none;
-  border: 1px solid var(--border);
+  background: var(--bg-soft); color: var(--text-primary);
+  box-shadow: none; border: 1px solid var(--border);
 }
 .btn-modal:disabled { opacity: 0.5; }
-
 .bc-webm {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 14px;
-  background: var(--bg-soft);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  width: 90px; height: 90px; margin: 0 auto 14px;
+  background: var(--bg-soft); border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border: 1px solid var(--border);
 }
 .bc-webm video { width: 100%; height: 100%; object-fit: contain; }
 
 /* ============ TOAST ============ */
 .toast {
-  position: fixed;
-  top: calc(16px + var(--safe-top));
-  left: 50%;
-  transform: translateX(-50%) translateY(-150px);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(73, 55, 31, 0.15);
-  color: var(--text-primary);
-  padding: 10px 18px;
-  border-radius: 24px;
-  font-size: 13.5px;
-  font-weight: 700;
-  z-index: 9999;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 90%;
+  position: fixed; top: calc(16px + var(--safe-top));
+  left: 50%; transform: translateX(-50%) translateY(-150px);
+  background: var(--bg-card); border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(73,55,31,0.15);
+  color: var(--text-primary); padding: 10px 18px;
+  border-radius: 24px; font-size: 13.5px; font-weight: 700;
+  z-index: 9999; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none; display: flex; align-items: center;
+  gap: 8px; max-width: 90%;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
-.toast.err { border-color: rgba(255, 59, 48, 0.4); }
+.toast.err { border-color: rgba(255,59,48,0.4); }
 
-/* ============ BOOT STATE ============ */
-.boot-state {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: var(--bg-main);
+/* ============ DEPOSIT MANUAL ============ */
+.manual-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px; margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
 }
-.boot-state[hidden] { display: none; }
-.boot-card {
-  width: min(100%, 360px);
-  padding: 24px 20px;
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, .82);
-  box-shadow: var(--shadow);
-  text-align: center;
+.manual-step {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px;
 }
-.boot-spinner {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 14px;
-  border: 3px solid var(--border);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: bootSpin .8s linear infinite;
+.manual-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--gradient-gold); color: #382810;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; flex-shrink: 0;
 }
-@keyframes bootSpin { to { transform: rotate(360deg); } }
-.boot-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: var(--text-primary); }
-.boot-message { color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
-.boot-retry {
-  display: none;
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px;
-  border-radius: 13px;
-  background: var(--gradient-gold);
-  color: #382810;
-  font-weight: 800;
-  cursor: pointer;
+.manual-step-text { flex: 1; font-size: 12.5px; font-weight: 700; color: var(--text-primary); line-height: 1.5; }
+.manual-code-box {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
 }
-.boot-state.error .boot-spinner { display: none; }
-.boot-state.error .boot-retry { display: block; }
+.manual-code-box .code {
+  flex: 1; font-family: 'Courier New', monospace;
+  font-size: 12.5px; font-weight: 800;
+  color: var(--text-primary); direction: ltr;
+  text-align: right; word-break: break-all;
+}
+.manual-code-box .btn-copy-mini {
+  background: var(--gradient-gold); color: #382810;
+  border: none; padding: 8px 12px; border-radius: 10px;
+  font-weight: 800; font-size: 11px;
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; flex-shrink: 0;
+}
+.manual-code-box .btn-copy-mini:active { transform: scale(0.96); }
+.manual-warn {
+  background: linear-gradient(135deg, #FFF3E0, #FFECB3);
+  border: 1px solid #FFB74D; border-radius: 12px;
+  padding: 10px 12px; font-size: 12px;
+  font-weight: 700; color: #8B5A00;
+  line-height: 1.6; display: flex; align-items: flex-start; gap: 8px;
+}
+.manual-warn i { color: #FF9800; flex-shrink: 0; margin-top: 2px; }
 
-/* Utilities */
 .mb-2 { margin-bottom: 12px; }
 .mb-3 { margin-bottom: 16px; }
 
-/* Media Query */
 @media (max-width: 360px) {
   .top-bar { left: 10px; right: 10px; padding: 8px; }
   .balances { gap: 4px; }
   .balance-chip { padding-inline: 6px; font-size: 12px; }
   .main-scroll { padding-right: 12px; padding-left: 12px; }
   .stars-input-wrap { gap: 7px; }
-  .stars-input-icon { width: 38px; height: 38px; }
+  .stars-input-icon { width: 38px; height: 38px; flex-basis: 38px; }
   .nav-item { font-size: 9px; }
   .nav-item i { font-size: 16px; }
 }
@@ -1977,14 +1119,12 @@ input { font: inherit; color: inherit; }
 </head>
 <body>
 
-<!-- BOOT STATE -->
-<div class="boot-state" id="bootState" role="status" aria-live="polite">
-  <div class="boot-card">
-    <div class="boot-spinner"></div>
-    <div class="boot-title" id="bootTitle">جارٍ تحميل الحساب</div>
-    <div class="boot-message" id="bootMessage">يتم الاتصال بمصدر بيانات الرصيد…</div>
-    <button class="boot-retry" id="bootRetry" type="button" onclick="location.reload()">إعادة المحاولة</button>
-  </div>
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo"><i class="fas fa-gem"></i></div>
+  <div class="splash-title">Puppy VIP</div>
+  <div class="splash-tagline">متجر المقتنيات الذكية</div>
+  <div class="splash-dots"><span></span><span></span><span></span></div>
 </div>
 
 <div class="app-container" id="app" style="display:none">
@@ -2053,7 +1193,6 @@ input { font: inherit; color: inherit; }
         <div class="section-title">بطاقات الشراء</div>
         <div class="section-hint" data-view="catalog">عرض جميع البطاقات <i class="fas fa-arrow-left"></i></div>
       </div>
-
       <div class="bundles-row" id="bundleContainer"></div>
 
       <div class="section-header">
@@ -2068,9 +1207,8 @@ input { font: inherit; color: inherit; }
       <div class="page-title">جميع البطاقات</div>
       <div class="page-subtitle">اختر بطاقة لعرض التفاصيل والشراء</div>
       <div class="catalog-tabs" role="tablist">
-        <button class="catalog-tab active" type="button" role="tab" data-catalog-category="all">الكل</button>
-        <button class="catalog-tab" type="button" role="tab" data-catalog-category="gifts">الهدايا</button>
-        <button class="catalog-tab" type="button" role="tab" data-catalog-category="cars">Cars</button>
+        <button class="catalog-tab active" type="button" data-catalog-category="gifts">الهدايا</button>
+        <button class="catalog-tab" type="button" data-catalog-category="cars">Cars</button>
       </div>
       <div class="catalog-grid" id="catalogList"></div>
     </div>
@@ -2113,10 +1251,6 @@ input { font: inherit; color: inherit; }
           <i class="fas fa-star"></i>
           <span>النجوم</span>
         </div>
-        <div class="wallet-tab" data-deptab="crypto">
-          <i class="fas fa-coins"></i>
-          <span>USDT</span>
-        </div>
         <div class="wallet-tab" data-deptab="binance">
           <i class="fas fa-wallet"></i>
           <span>Binance</span>
@@ -2127,6 +1261,7 @@ input { font: inherit; color: inherit; }
         </div>
       </div>
 
+      <!-- STARS TAB -->
       <div id="dep-tab-stars">
         <div class="section-hint mb-2">كل نجمة = نجمة واحدة في رصيدك</div>
         <div class="stars-input-wrap">
@@ -2153,90 +1288,69 @@ input { font: inherit; color: inherit; }
         </button>
       </div>
 
-      <div id="dep-tab-crypto" style="display:none">
-        <div id="cryptoPendingBanner" style="display:none;margin-bottom:16px;padding:14px;background:var(--bg-soft);border-radius:14px;border:1px solid var(--border)">
-          <div style="font-weight:800;font-size:13px;margin-bottom:8px;color:var(--text-primary)">لديك فاتورة معلقة <span id="cryptoPendingTimer" style="float:left;direction:ltr;font-family:monospace;color:var(--text-secondary)">--:--</span></div>
-          <div style="display:flex;gap:8px">
-            <button class="btn-primary" id="cryptoCheckBtn" style="flex:1;padding:10px;font-size:13px">تحقق</button>
-            <button id="cryptoCancelBtn" style="flex:1;padding:10px;border-radius:12px;border:1px solid var(--border);background:var(--bg-card);font-family:inherit;font-weight:800;font-size:13px;color:var(--text-primary);cursor:pointer">إلغاء</button>
+      <!-- BINANCE MANUAL -->
+      <div id="dep-tab-binance" style="display:none">
+        <div class="manual-card">
+          <div class="manual-step">
+            <div class="manual-step-num">1</div>
+            <div class="manual-step-text">
+              <strong>حوّل المبلغ إلى معرّف Binance Pay التالي:</strong>
+            </div>
+          </div>
+          <div class="manual-code-box">
+            <span class="code" id="binanceReceiveId">1121748571</span>
+            <button class="btn-copy-mini" data-copy="binanceReceiveId"><i class="fas fa-copy"></i> نسخ</button>
+          </div>
+
+          <div class="manual-step">
+            <div class="manual-step-num">2</div>
+            <div class="manual-step-text">
+              <strong>انسخ معرّف حسابك والصقه في خانة "Note" عند التحويل:</strong>
+            </div>
+          </div>
+          <div class="manual-code-box">
+            <span class="code" id="binanceUserId">----</span>
+            <button class="btn-copy-mini" data-copy="binanceUserId"><i class="fas fa-copy"></i> نسخ</button>
+          </div>
+
+          <div class="manual-warn">
+            <i class="fas fa-shield-halved"></i>
+            <span>بعد إتمام التحويل، تقوم الإدارة بالتحقق من الحوالة وإضافة الماسات إلى حسابك خلال 24 ساعة.</span>
           </div>
         </div>
+      </div>
 
-        <div class="section-hint mb-2">ادفع بالكريبتو — USDC / USDT / BTC / ZEC</div>
-
-        <div class="amount-grid" id="cryptoAmounts">
-          <div class="amount-chip" data-usd="1">$1</div>
-          <div class="amount-chip" data-usd="5">$5</div>
-          <div class="amount-chip" data-usd="10">$10</div>
-          <div class="amount-chip" data-usd="25">$25</div>
-          <div class="amount-chip" data-usd="50">$50</div>
-          <div class="amount-chip" data-usd="100">$100</div>
-        </div>
-
-        <div class="pro-input-group">
-          <label>أو أدخل مبلغاً مخصصاً ($1 - $1000)</label>
-          <input class="pro-input" id="cryptoCustomUsd" type="number" min="1" max="1000" step="1" placeholder="$1 - $1000" inputmode="decimal">
-        </div>
-
-        <div class="calc-box">
-          <div class="calc-row">
-            <span>مبلغ الشراء</span>
-            <span class="calc-val" id="cryptoChosenUsd">$0.00</span>
+      <!-- SHAM CASH MANUAL -->
+      <div id="dep-tab-sham" style="display:none">
+        <div class="manual-card">
+          <div class="manual-step">
+            <div class="manual-step-num">1</div>
+            <div class="manual-step-text">
+              <strong>حوّل المبلغ إلى معرّف شام كاش التالي:</strong>
+            </div>
           </div>
-          <div class="calc-row">
-            <span>الماسات المستقبلة</span>
-            <span class="calc-val" id="cryptoReceiveGems">0</span>
+          <div class="manual-code-box">
+            <span class="code" id="shamReceiveId" style="font-size:11px">334a08ea2d1bbed05f214a7f08e37ae4</span>
+            <button class="btn-copy-mini" data-copy="shamReceiveId"><i class="fas fa-copy"></i> نسخ</button>
+          </div>
+
+          <div class="manual-step">
+            <div class="manual-step-num">2</div>
+            <div class="manual-step-text">
+              <strong>انسخ معرّف حسابك والصقه في خانة "الملاحظة" عند التحويل:</strong>
+            </div>
+          </div>
+          <div class="manual-code-box">
+            <span class="code" id="shamUserId">----</span>
+            <button class="btn-copy-mini" data-copy="shamUserId"><i class="fas fa-copy"></i> نسخ</button>
+          </div>
+
+          <div class="manual-warn">
+            <i class="fas fa-shield-halved"></i>
+            <span>بعد إتمام التحويل، تقوم الإدارة بالتحقق من الحوالة وإضافة الماسات إلى حسابك خلال 24 ساعة.</span>
           </div>
         </div>
-
-        <button class="btn-primary" id="cryptoPayBtn" disabled>
-          <i class="fas fa-credit-card"></i>
-          <span>إكمال الدفع</span>
-        </button>
       </div>
-
-      <div id="dep-tab-binance" style="display:none"></div>
-      <div id="dep-tab-sham" style="display:none"></div>
-    </div>
-
-    <!-- EXCHANGE -->
-    <div class="view" id="view-exchange">
-      <div class="page-title">تبديل العملات</div>
-      <div class="page-subtitle">1000 عملة = 10 ماسات — الحد الأدنى 10,000 عملة</div>
-
-      <div class="amount-grid" id="exAmounts">
-        <div class="amount-chip" data-examt="10000">10K</div>
-        <div class="amount-chip" data-examt="50000">50K</div>
-        <div class="amount-chip" data-examt="100000">100K</div>
-        <div class="amount-chip" data-examt="250000">250K</div>
-        <div class="amount-chip" data-examt="500000">500K</div>
-        <div class="amount-chip" data-examt="1000000">1M</div>
-      </div>
-
-      <div class="pro-input-group">
-        <label>أو أدخل عدد العملات</label>
-        <input class="pro-input" id="exInput" type="number" min="10000" step="1000" placeholder="10000">
-      </div>
-
-      <div class="calc-box">
-        <div class="calc-row">
-          <span>العملات المحوّلة</span>
-          <span class="calc-val" id="exChosen">0</span>
-        </div>
-        <div class="calc-row">
-          <span>الماسات المستقبلة</span>
-          <span class="calc-val" id="exReceive">0</span>
-        </div>
-        <div class="calc-row">
-          <span>رصيدك</span>
-          <span class="calc-val" id="exBal">0</span>
-        </div>
-      </div>
-
-      <button class="btn-primary" id="exSubmit">
-        <i class="fas fa-right-left"></i>
-        <span>تبديل الآن</span>
-      </button>
     </div>
 
     <!-- WITHDRAW -->
@@ -2359,14 +1473,6 @@ input { font: inherit; color: inherit; }
           </div>
           <i class="fas fa-chevron-left menu-arrow"></i>
         </div>
-        <div class="menu-item" data-view="exchange">
-          <div class="menu-icon blue"><i class="fas fa-right-left"></i></div>
-          <div class="menu-text">
-            <div class="menu-title">تبديل العملات</div>
-            <div class="menu-desc">1000 عملة = 10 ماسات</div>
-          </div>
-          <i class="fas fa-chevron-left menu-arrow"></i>
-        </div>
         <div class="menu-item" data-view="withdraw">
           <div class="menu-icon gold"><i class="fas fa-money-bill-transfer"></i></div>
           <div class="menu-text">
@@ -2399,12 +1505,12 @@ input { font: inherit; color: inherit; }
       <div class="page-title">الإحالات والتصنيف</div>
       <div class="page-subtitle">ادعُ أصدقاءك وتابع ترتيبك</div>
 
-      <div class="ref-switch" role="tablist" aria-label="الإحالات والتصنيف">
-        <button class="ref-switch-tab active" type="button" role="tab" aria-selected="true" data-ref-tab="invites">إحالاتي</button>
-        <button class="ref-switch-tab" type="button" role="tab" aria-selected="false" data-ref-tab="ranking">التصنيف</button>
+      <div class="ref-switch" role="tablist">
+        <button class="ref-switch-tab active" type="button" data-ref-tab="invites">إحالاتي</button>
+        <button class="ref-switch-tab" type="button" data-ref-tab="ranking">التصنيف</button>
       </div>
 
-      <section class="ref-panel active" id="refPanelInvites" role="tabpanel">
+      <section class="ref-panel active" id="refPanelInvites">
         <div class="ref-hero">
           <div class="ref-hero-icon"><i class="fas fa-user-plus"></i></div>
           <div class="ref-hero-title">دعوة الأصدقاء</div>
@@ -2444,14 +1550,8 @@ input { font: inherit; color: inherit; }
         </div>
 
         <div class="ref-actions">
-          <button class="btn-ref-share" id="refShare">
-            <i class="fas fa-paper-plane"></i>
-            <span>مشاركة</span>
-          </button>
-          <button class="btn-ref-store" data-view="store">
-            <i class="fas fa-box-open"></i>
-            <span>المتجر</span>
-          </button>
+          <button class="btn-ref-share" id="refShare"><i class="fas fa-paper-plane"></i><span>مشاركة</span></button>
+          <button class="btn-ref-store" data-view="store"><i class="fas fa-box-open"></i><span>المتجر</span></button>
         </div>
 
         <div class="ref-stats-grid">
@@ -2488,14 +1588,14 @@ input { font: inherit; color: inherit; }
         </div>
       </section>
 
-      <section class="ref-panel" id="refPanelRanking" role="tabpanel" hidden>
+      <section class="ref-panel" id="refPanelRanking" hidden>
         <div id="rankingList"><div class="ranking-loading"><i class="fas fa-spinner fa-spin"></i></div></div>
       </section>
     </div>
 
   </div>
 
-  <!-- DOCK (نسخة مطابقة للنسخة العادية) -->
+  <!-- DOCK (5 أزرار + مؤشر متحرك) -->
   <div class="dock">
     <div class="dock-nav">
       <div class="nav-item active" data-view="home">
@@ -2513,7 +1613,7 @@ input { font: inherit; color: inherit; }
       </div>
       <div class="nav-item" data-view="referral">
         <i class="fas fa-user-group"></i>
-        <span>الإحالات</span>
+        <span>الإحالة</span>
       </div>
     </div>
     <div class="nav-profile" data-view="profile" id="navProfile">
@@ -2528,26 +1628,12 @@ input { font: inherit; color: inherit; }
     <div id="bcWebmBox" class="bc-webm"></div>
     <div class="modal-title" id="bcTitle">تأكيد الشراء</div>
     <div class="modal-desc" id="bcDesc">سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح 5%</div>
-
     <div class="modal-details">
-      <div class="modal-row">
-        <span>السعر</span>
-        <span id="bcPrice">0</span>
-      </div>
-      <div class="modal-row">
-        <span>القيمة (ماسات)</span>
-        <span id="bcGems">0</span>
-      </div>
-      <div class="modal-row">
-        <span>قيمة البيع (+5%)</span>
-        <span id="bcSellValue" style="color:#34C759">0</span>
-      </div>
-      <div class="modal-row">
-        <span>رصيد النجوم</span>
-        <span id="bcCurrentStars">0</span>
-      </div>
+      <div class="modal-row"><span>السعر</span><span id="bcPrice">0</span></div>
+      <div class="modal-row"><span>القيمة (ماسات)</span><span id="bcGems">0</span></div>
+      <div class="modal-row"><span>قيمة البيع (+5%)</span><span id="bcSellValue" style="color:#34C759">0</span></div>
+      <div class="modal-row"><span>رصيد النجوم</span><span id="bcCurrentStars">0</span></div>
     </div>
-
     <div id="bcActions" style="display:flex;gap:10px"></div>
   </div>
 </div>
@@ -2593,10 +1679,8 @@ const CONFIG = {
   col: 'puppy_users', wdCol: 'puppy_withdrawals', txCol: 'puppy_transactions', timeCol: '_puppy_time',
   admin: { telegram: 'qo_ij2' },
   ref: { newUser: 20 },
-  ex: { min: 10000, rate: 0.01 },
   wd: { min: 5000, binanceFee: 0, shamMin: 1000, shamSypPerGem: 0.01 },
   api: { base: 'https://puppy-merge-api.starlimitedcom.workers.dev' },
-  shieldz: { gemsPerUsd: 10000, minUsd: 1, maxUsd: 1000, pollIntervalMs: 5000, pollMaxAttempts: 60, pendingTimeoutMs: 30 * 60 * 1000 },
   stars: { min: 1, max: 100000 },
   collectibles: {
     holdMs: 7 * 24 * 60 * 60 * 1000,
@@ -2614,11 +1698,7 @@ const CONFIG = {
       { id: 'car-043', title: 'سيارة 850 نجمة', category: 'cars', stars: 850, gems: 76500, webm: 'Cars_by_StickerEmojiRobot-043.webm' }
     ],
     missionGift: {
-      id: 'mission-gift-041',
-      title: 'هدية المهام',
-      stars: 100,
-      gems: 9000,
-      webm: 'gifts_by_StickerEmojiRobot-041.webm'
+      id: 'mission-gift-041', title: 'هدية المهام', stars: 100, gems: 9000, webm: 'gifts_by_StickerEmojiRobot-041.webm'
     }
   }
 };
@@ -2627,19 +1707,15 @@ const CONFIG = {
 const $ = id => document.getElementById(id);
 const fmt = n => Number(n || 0).toLocaleString('en-US');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad = n => String(n).padStart(2, '0');
-const validStoredNumber = value => value !== null && value !== undefined && !(typeof value === 'string' && value.trim() === '') && Number.isFinite(Number(value));
+const validStoredNumber = v => v !== null && v !== undefined && !(typeof v === 'string' && v.trim() === '') && Number.isFinite(Number(v));
 const usd = g => { const n = Math.floor(Number(g || 0)); return (Math.floor(n / 100) * 0.01).toFixed(2); };
 const usdBinanceFee = g => (parseFloat(usd(g)) * CONFIG.wd.binanceFee).toFixed(2);
 const usdBinanceNet = g => (parseFloat(usd(g)) * (1 - CONFIG.wd.binanceFee)).toFixed(2);
-const getBundleByStars = stars =>
-  CONFIG.collectibles.bundles.find(b => b.stars === stars) ||
-  (CONFIG.collectibles.missionGift.stars === stars ? CONFIG.collectibles.missionGift : null);
+const getBundleByStars = stars => CONFIG.collectibles.bundles.find(b => b.stars === stars) || (CONFIG.collectibles.missionGift.stars === stars ? CONFIG.collectibles.missionGift : null);
+const getBundleById = id => CONFIG.collectibles.bundles.find(b => b.id === id);
 const cardTitle = item => item.title || (getBundleByStars(item.bundleStars)?.title) || `بطاقة ${item.bundleStars}`;
-const cardProfitRate = item => item.profitRate != null && Number.isFinite(Number(item.profitRate))
-  ? Number(item.profitRate)
-  : CONFIG.collectibles.profitRate;
+const cardProfitRate = item => item.profitRate != null && Number.isFinite(Number(item.profitRate)) ? Number(item.profitRate) : CONFIG.collectibles.profitRate;
 const cardProfit = item => Math.floor(Number(item.gemsValue || 0) * cardProfitRate(item));
 const cardSellValue = item => Math.floor(Number(item.gemsValue || 0) + cardProfit(item));
 
@@ -2674,22 +1750,22 @@ const FB = {
       firebase.apps.length || firebase.initializeApp(CONFIG.firebase);
       db = firebase.firestore();
       return !!db;
-    } catch (e) {
-      db = null;
-      return false;
-    }
+    } catch (e) { db = null; return false; }
   },
   ref() { return db.collection(CONFIG.col).doc(TG.id); },
   async get() { const s = await this.ref().get({ source: 'server' }); return s.exists ? s.data() : null; },
   async set(d, merge = true) { if (db) await this.ref().set(d, { merge }); }
 };
-const save = (extra = {}) => FB.set(Object.assign({
-  coins: S.user.coins, gems: S.user.gems, stars: S.user.stars || 0,
-  collectibles: S.user.collectibles,
-  referralCount: S.user.referralCount, referralEarnings: S.user.referralEarnings,
-  freeClaimed: S.user.freeClaimed || false,
-  updatedAt: Date.now()
-}, extra));
+const save = (extra = {}) => {
+  if (!S.user || !db) return Promise.resolve();
+  return FB.set(Object.assign({
+    coins: S.user.coins, gems: S.user.gems, stars: S.user.stars || 0,
+    collectibles: S.user.collectibles,
+    referralCount: S.user.referralCount, referralEarnings: S.user.referralEarnings,
+    freeClaimed: S.user.freeClaimed || false,
+    updatedAt: Date.now()
+  }, extra));
+};
 
 // ===================== TIME =====================
 const TIME = {
@@ -2707,13 +1783,10 @@ const TIME = {
 };
 
 // ===================== STATE =====================
-const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', ex: 0, starsInput: 0 };
-let catalogCategory = 'all';
+const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', starsInput: 0 };
+let catalogCategory = 'gifts';
 let referralPanel = 'invites';
 let wdHistoryRows = [];
-let wdHistoryCursor = null;
-let wdHistorySeen = new Set();
-let wdHistoryHasMore = false;
 let wdHistoryLoading = false;
 let wdHistoryError = false;
 let rankingLoaded = false;
@@ -2734,15 +1807,10 @@ const newUser = () => ({
 // ===================== TOAST & MODAL =====================
 let tt;
 function toast(msg, type = 'ok') {
-  const e = $('toast');
-  e.textContent = msg;
-  e.className = 'toast ' + type;
-  void e.offsetWidth;
-  e.classList.add('show');
-  clearTimeout(tt);
-  tt = setTimeout(() => e.classList.remove('show'), 2600);
+  const e = $('toast'); e.textContent = msg; e.className = 'toast ' + type;
+  void e.offsetWidth; e.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => e.classList.remove('show'), 2600);
 }
-
 function showModal(o) {
   $('mIcon').innerHTML = '<i class="fas ' + (o.icon || 'fa-check') + '"></i>';
   $('mTitle').textContent = o.title || '';
@@ -2765,7 +1833,6 @@ function go(viewName) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
 
-  // مؤشر الدوك المنزلق
   const dockNav = document.querySelector('.dock-nav');
   const dockItems = Array.from(document.querySelectorAll('.dock-nav .nav-item'));
   const activeDockIndex = dockItems.findIndex(n => n.dataset.view === viewName);
@@ -2773,19 +1840,17 @@ function go(viewName) {
 
   $('mainScroll').scrollTop = 0;
 
-  if (viewName === 'withdraw') loadWdHistory(true);
+  if (viewName === 'withdraw') loadWdHistory();
   if (viewName === 'deposit') { setDepTab('stars'); updateStarsUI(); }
   if (viewName === 'store') renderCollectibles();
   if (viewName === 'catalog') renderCatalog();
   if (viewName === 'referral') { renderReferral(); if (referralPanel === 'ranking') loadRanking(); }
-  if (viewName !== 'deposit' && cryptoPollTimer) stopPaymentPolling();
 }
 
 // ===================== RENDER =====================
 function renderAll() {
   const u = S.user;
   if (!u) return;
-
   const activeCount = (u.collectibles || []).filter(c => !c.sold).length;
 
   $('gemTop').textContent = fmt(u.gems);
@@ -2804,6 +1869,8 @@ function renderAll() {
   $('depositGemBalance').textContent = fmt(u.gems);
   $('depositUsdBalance').textContent = '$' + usd(u.gems);
   if ($('starsCurrentBalance')) $('starsCurrentBalance').textContent = fmt(u.stars || 0);
+  if ($('binanceUserId')) $('binanceUserId').textContent = u.telegramId;
+  if ($('shamUserId')) $('shamUserId').textContent = u.telegramId;
 
   $('profName').textContent = u.name || 'لاعب';
   $('profId').textContent = u.telegramId;
@@ -2818,8 +1885,6 @@ function renderAll() {
   $('wdGems').textContent = fmt(u.gems);
   $('wdUsd').textContent = '$' + usd(u.gems);
 
-  $('exBal').textContent = fmt(u.coins);
-
   $('refLink').textContent = 'https://t.me/' + CONFIG.bot.username + '/' + CONFIG.bot.appName + '?startapp=ref_' + (u.referralCode || TG.id);
   $('refCount').textContent = u.referralCount || 0;
   $('refEarn').textContent = fmt(u.referralEarnings || 0);
@@ -2827,9 +1892,7 @@ function renderAll() {
   $('refPending').textContent = fmt((u.referralCount || 0) * 50);
   $('enterCard').style.display = u.referralUsed ? 'none' : 'block';
 
-  updateEx();
   updateWd();
-  updatePendingBanner();
   updateStoreBadge();
 
   if ($('view-home').classList.contains('active')) renderHomeCollectiblesPreview();
@@ -2841,12 +1904,11 @@ function setReferralPanel(panelName) {
   document.querySelectorAll('[data-ref-tab]').forEach(tab => {
     const active = tab.dataset.refTab === referralPanel;
     tab.classList.toggle('active', active);
-    tab.setAttribute('aria-selected', active ? 'true' : 'false');
   });
   const invites = $('refPanelInvites');
   const ranking = $('refPanelRanking');
-  if (invites) { invites.hidden = referralPanel !== 'invites'; invites.classList.toggle('active', referralPanel === 'invites'); }
-  if (ranking) { ranking.hidden = referralPanel !== 'ranking'; ranking.classList.toggle('active', referralPanel === 'ranking'); }
+  if (invites) invites.hidden = referralPanel !== 'invites';
+  if (ranking) ranking.hidden = referralPanel !== 'ranking';
   if (referralPanel === 'ranking') loadRanking();
 }
 
@@ -2864,7 +1926,7 @@ async function loadRanking() {
   if (rankingLoaded) return;
   el.innerHTML = '<div class="ranking-loading"><i class="fas fa-spinner fa-spin"></i></div>';
   if (!db) {
-    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><div class="ref-card-title">التصنيف غير متوفر</div><p>تعذر الاتصال بقاعدة البيانات.</p></div>';
+    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><p>تعذر الاتصال بقاعدة البيانات.</p></div>';
     return;
   }
   try {
@@ -2876,14 +1938,14 @@ async function loadRanking() {
       if (c > 0) rows.push({ id: doc.id, name: d.name || 'لاعب', count: c, photo: d.photoUrl, isMe: doc.id === TG.id });
     });
     if (!rows.length) {
-      el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-trophy"></i></div><div class="ref-card-title">لا توجد تصنيفات بعد</div><p>كن أول من يدعو أصدقاءه ليظهر في القائمة.</p></div>';
+      el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-trophy"></i></div><p>لا توجد تصنيفات بعد. كن أول من يدعو أصدقاءه.</p></div>';
       rankingLoaded = true;
       return;
     }
     el.innerHTML = '<div class="ranking-list">' + rows.map((r, i) => {
       const rankClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
       const avatar = r.photo
-        ? `<img src="${esc(r.photo)}" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-user&quot;></i>'">`
+        ? `<img src="${esc(r.photo)}" referrerpolicy="no-referrer" onerror="this.outerHTML='<i class=&quot;fas fa-user&quot;></i>'">`
         : '<i class="fas fa-user"></i>';
       return `<div class="ranking-row ${r.isMe ? 'me' : ''}">
         <div class="ranking-rank ${rankClass}">${i + 1}</div>
@@ -2896,7 +1958,7 @@ async function loadRanking() {
     }).join('') + '</div>';
     rankingLoaded = true;
   } catch (e) {
-    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><div class="ref-card-title">تعذر تحميل التصنيف</div><p>قد تحتاج قواعد Firestore صلاحية قراءة القائمة العامة. تحقق من إعدادات المشروع.</p></div>';
+    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><p>تعذر تحميل التصنيف. تحقق من صلاحيات القراءة.</p></div>';
   }
 }
 
@@ -2917,11 +1979,8 @@ function scheduleCarVideoPrefetch() {
     CONFIG.collectibles.bundles.filter(b => b.category === 'cars').forEach(b => {
       if (document.querySelector(`link[data-car-prefetch="${b.id}"]`)) return;
       const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.as = 'video';
-      link.href = b.webm;
-      link.setAttribute('fetchpriority', 'low');
-      link.dataset.carPrefetch = b.id;
+      link.rel = 'prefetch'; link.as = 'video'; link.href = b.webm;
+      link.setAttribute('fetchpriority', 'low'); link.dataset.carPrefetch = b.id;
       document.head.appendChild(link);
     });
   };
@@ -2935,18 +1994,17 @@ function renderHomeCollectiblesPreview() {
   if (!el) return;
   const items = (S.user.collectibles || []).filter(c => !c.sold).slice(-3).reverse();
   if (items.length === 0) {
-    el.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i>لا توجد مقتنيات بعد<br><span style="font-size:11px;opacity:.7">اشترِ بطاقة من الأعلى أو استلم المجانية</span></div>';
+    el.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i>لا توجد مقتنيات بعد<br><span style="font-size:11px;opacity:.7">اشترِ بطاقة من الأعلى</span></div>';
     return;
   }
   el.innerHTML = items.map(c => {
     const bundleInfo = getBundleByStars(c.bundleStars);
-    const elapsed = Date.now() - c.purchasedAt;
-    const canSell = elapsed >= CONFIG.collectibles.holdMs;
+    const canSell = (Date.now() - c.purchasedAt) >= CONFIG.collectibles.holdMs;
     const sellValue = cardSellValue(c);
     const webm = c.webm || (bundleInfo ? bundleInfo.webm : '');
     return `<div class="menu-item" data-view="store">
-      <div class="collectible-thumb" style="width:44px;height:44px;border-radius:11px">
-        <video src="${esc(webm)}" autoplay loop muted playsinline></video>
+      <div class="collectible-thumb" style="width:64px;height:64px;border-radius:11px">
+        <video src="${esc(webm)}" autoplay loop muted playsinline preload="auto"></video>
       </div>
       <div class="menu-text">
         <div class="menu-title">${c.isFree ? '<img src="https://up6.cc/2026/10/179267967675431.jpg" style="width:14px;height:14px;border-radius:50%;vertical-align:middle;margin-left:4px">' : ''}${esc(cardTitle(c))}</div>
@@ -2958,6 +2016,7 @@ function renderHomeCollectiblesPreview() {
       </div>
     </div>`;
   }).join('');
+  el.querySelectorAll('[data-view]').forEach(e => e.onclick = () => go(e.dataset.view));
 }
 
 // ===================== COLLECTIBLES =====================
@@ -2965,11 +2024,9 @@ function renderCollectibles() {
   const el = $('collectiblesList');
   if (!el) return;
   if (!S.user) { el.innerHTML = ''; return; }
-
   const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
   const active = items.filter(c => !c.sold);
   const sold = items.filter(c => c.sold);
-
   const readyItems = active.filter(c => (Date.now() - c.purchasedAt) >= CONFIG.collectibles.holdMs);
   const totalValue = active.reduce((s, c) => s + cardSellValue(c), 0);
 
@@ -2983,7 +2040,7 @@ function renderCollectibles() {
       <div class="ready-banner-icon"><i class="fas fa-hand-holding-dollar"></i></div>
       <div class="ready-banner-text">
         <div class="ready-banner-title">${readyItems.length} مقتنى جاهز للبيع</div>
-        <div class="ready-banner-sub">القيمة الإجمالية: ${fmt(totalReadyValue)} ماسة</div>
+        <div class="ready-banner-sub">القيمة: ${fmt(totalReadyValue)} ماسة</div>
       </div>
       <i class="fas fa-chevron-left" style="color:var(--gold-dark)"></i>
     </div>`;
@@ -2992,12 +2049,11 @@ function renderCollectibles() {
   }
 
   if (active.length === 0 && sold.length === 0) {
-    el.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i>لا توجد مقتنيات حالياً<br><span style="font-size:11px;opacity:.7;margin-top:8px;display:block">اشترِ بطاقة أو استلم البطاقة المجانية</span></div>`;
+    el.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i>لا توجد مقتنيات حالياً<br><span style="font-size:11px;opacity:.7;margin-top:8px;display:block">اشترِ بطاقة من صفحة البطاقات</span></div>';
     return;
   }
 
   let html = '';
-
   if (active.length > 0) {
     const sorted = [...active].sort((a, b) => {
       const aReady = (Date.now() - a.purchasedAt) >= CONFIG.collectibles.holdMs;
@@ -3008,16 +2064,12 @@ function renderCollectibles() {
     html += '<div class="section-header"><div class="section-title" style="font-size:14px">مقتنياتي النشطة</div><div class="section-hint">' + active.length + '</div></div>';
     html += sorted.map(c => renderCollectibleItem(c)).join('');
   }
-
   if (sold.length > 0) {
     html += '<div class="section-header" style="margin-top:20px"><div class="section-title" style="font-size:14px">مقتنيات مبيعة</div><div class="section-hint">' + sold.length + '</div></div>';
     html += sold.slice(-10).reverse().map(c => renderSoldItem(c)).join('');
   }
-
   el.innerHTML = html;
-  el.querySelectorAll('[data-sell]').forEach(b => {
-    b.onclick = () => sellCollectible(b.dataset.sell);
-  });
+  el.querySelectorAll('[data-sell]').forEach(b => b.onclick = () => sellCollectible(b.dataset.sell));
 }
 
 function renderCollectibleItem(c) {
@@ -3034,8 +2086,7 @@ function renderCollectibleItem(c) {
   if (!canSell) {
     const days = Math.floor(remain / 86400000);
     const hours = Math.floor((remain % 86400000) / 3600000);
-    if (days > 0) timerText = `متاح بعد ${days} يوم و ${hours} ساعة`;
-    else timerText = `متاح بعد ${hours} ساعة`;
+    timerText = days > 0 ? `متاح بعد ${days} يوم و ${hours} ساعة` : `متاح بعد ${hours} ساعة`;
   } else {
     timerText = 'جاهزة للبيع الآن';
   }
@@ -3046,7 +2097,7 @@ function renderCollectibleItem(c) {
   return `<div class="collectible-item ${canSell ? 'ready' : ''} ${c.isFree ? 'free-item' : ''}">
     <div class="collectible-header">
       <div class="collectible-thumb">
-        <video src="${esc(webm)}" autoplay loop muted playsinline></video>
+        <video src="${esc(webm)}" autoplay loop muted playsinline preload="auto"></video>
       </div>
       <div class="collectible-info">
         <div class="collectible-title">
@@ -3097,25 +2148,18 @@ async function sellCollectible(id) {
   const items = S.user.collectibles || [];
   const item = items.find(c => c.id === id);
   if (!item || item.sold) return;
-  const elapsed = Date.now() - item.purchasedAt;
-  if (elapsed < CONFIG.collectibles.holdMs) return toast('لم يمر 7 أيام بعد', 'err');
-
+  if ((Date.now() - item.purchasedAt) < CONFIG.collectibles.holdMs) return toast('لم يمر 7 أيام بعد', 'err');
   S.busy = true;
   try {
     const sellValue = cardSellValue(item);
-    item.sold = true;
-    item.soldAt = Date.now();
-    item.sellValue = sellValue;
+    item.sold = true; item.soldAt = Date.now(); item.sellValue = sellValue;
     S.user.gems = Number(S.user.gems || 0) + sellValue;
     await FB.set({ gems: S.user.gems, collectibles: items });
     renderAll();
     showModal({ icon: 'fa-gem', title: 'تم البيع', sub: 'أُضيفت الماسات لرصيدك', amount: '+' + fmt(sellValue) + ' ماسة', btn: 'رائع' });
   } catch (e) {
-    item.sold = false;
-    toast('حدثت مشكلة', 'err');
-  } finally {
-    S.busy = false;
-  }
+    item.sold = false; toast('حدثت مشكلة', 'err');
+  } finally { S.busy = false; }
 }
 
 // ===================== BUNDLES =====================
@@ -3125,39 +2169,28 @@ function initStarBundles() {
   const container = $('bundleContainer');
   if (!container) return;
   container.innerHTML = '';
-
   CONFIG.collectibles.bundles.filter(b => b.category !== 'cars').forEach(b => {
     const isClaimed = b.free && S.user.freeClaimed;
     const isUnavailable = b.free && !DAILY_FREE_GIFT_SERVER_ENFORCED;
     const card = document.createElement('div');
     card.className = 'bundle-card' + (b.free ? ' free' : '') + (isClaimed ? ' claimed' : '') + (isUnavailable ? ' unavailable' : '');
     if (!isClaimed && !isUnavailable) card.onclick = () => openBundleModal(b);
-
     if (b.free && !isClaimed) {
-      const badge = document.createElement('div');
-      badge.className = 'free-badge';
-      badge.innerHTML = isUnavailable
-        ? '<i class="fas fa-lock"></i> بانتظار التحقق'
-        : '<i class="fas fa-gift"></i> مجاناً';
+      const badge = document.createElement('div'); badge.className = 'free-badge';
+      badge.innerHTML = isUnavailable ? '<i class="fas fa-lock"></i> بانتظار التحقق' : '<i class="fas fa-gift"></i> مجاناً';
       card.appendChild(badge);
     }
     if (isClaimed) {
-      const badge = document.createElement('div');
-      badge.className = 'free-badge';
-      badge.style.background = 'var(--bg-soft)';
-      badge.style.color = 'var(--text-secondary)';
+      const badge = document.createElement('div'); badge.className = 'free-badge';
+      badge.style.background = 'var(--bg-soft)'; badge.style.color = 'var(--text-secondary)';
       badge.innerHTML = '<i class="fas fa-check"></i> مستلمة';
       card.appendChild(badge);
     }
-
-    const videoWrap = document.createElement('div');
-    videoWrap.className = 'bundle-video';
+    const videoWrap = document.createElement('div'); videoWrap.className = 'bundle-video';
     const video = document.createElement('video');
-    video.src = b.webm;
-    video.preload = 'metadata';
+    video.src = b.webm; video.preload = 'metadata';
     video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
-    video.style.opacity = '0';
-    video.style.transition = 'opacity .3s';
+    video.style.opacity = '0'; video.style.transition = 'opacity .3s';
     video.oncanplaythrough = () => { video.style.opacity = '1'; video.play().catch(() => {}); };
     video.onerror = () => { videoWrap.innerHTML = '<i class="fas fa-gift" style="font-size:32px;color:var(--gold)"></i>'; };
     videoWrap.appendChild(video);
@@ -3165,13 +2198,10 @@ function initStarBundles() {
     const priceTag = document.createElement('div');
     priceTag.className = 'bundle-price' + (b.free ? ' gift' : '');
     if (b.free) {
-      priceTag.innerHTML = isUnavailable
-        ? '<i class="fas fa-lock"></i> <span>غير متاحة</span>'
-        : '<i class="fas fa-gift"></i> <span>مجاناً</span>';
+      priceTag.innerHTML = isUnavailable ? '<i class="fas fa-lock"></i> <span>غير متاحة</span>' : '<i class="fas fa-gift"></i> <span>مجاناً</span>';
     } else {
       priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${b.stars}</span>`;
     }
-
     const label = document.createElement('div');
     label.className = 'bundle-label';
     label.innerHTML = `<img src="https://up6.cc/2026/10/179267515752371.jpg" alt=""> ${fmt(b.gems)}`;
@@ -3186,54 +2216,42 @@ function initStarBundles() {
 function renderCatalog() {
   const el = $('catalogList');
   if (!el) return;
-  const cards = CONFIG.collectibles.bundles.filter(b =>
-    catalogCategory === 'all' || b.category === catalogCategory
-  );
+  const cards = CONFIG.collectibles.bundles.filter(b => b.category === catalogCategory);
   document.querySelectorAll('[data-catalog-category]').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.catalogCategory === catalogCategory);
-    tab.setAttribute('aria-selected', tab.dataset.catalogCategory === catalogCategory ? 'true' : 'false');
   });
   el.innerHTML = cards.map(b => {
     const claimed = !!(b.free && S.user && S.user.freeClaimed);
     const unavailable = !!(b.free && !DAILY_FREE_GIFT_SERVER_ENFORCED);
     const sellValue = Math.floor(b.gems * (1 + CONFIG.collectibles.profitRate));
     const profitValue = sellValue - b.gems;
-    return `<div class="bundle-card ${b.free ? 'free' : ''} ${claimed ? 'claimed' : ''} ${unavailable ? 'unavailable' : ''}" data-catalog-bundle="${esc(b.id)}" role="button" tabindex="${claimed || unavailable ? '-1' : '0'}" aria-disabled="${claimed || unavailable}" aria-label="${esc(b.title)}">
+    return `<div class="bundle-card ${b.free ? 'free' : ''} ${claimed ? 'claimed' : ''} ${unavailable ? 'unavailable' : ''}" data-catalog-bundle="${esc(b.id)}" role="button" tabindex="${claimed || unavailable ? '-1' : '0'}">
       ${b.free ? `<div class="free-badge">${claimed ? '<i class="fas fa-check"></i> مستلمة' : unavailable ? '<i class="fas fa-lock"></i> بانتظار التحقق' : '<i class="fas fa-gift"></i> مجاناً'}</div>` : ''}
-      <div class="bundle-video"><video src="${esc(b.webm)}" muted loop playsinline preload="metadata" aria-hidden="true"></video></div>
-      <div class="bundle-label">${esc(b.title)}</div>
-      <div class="bundle-price ${b.free ? 'gift' : ''}">${b.free ? unavailable ? '<i class="fas fa-lock"></i> غير متاحة حالياً' : '<i class="fas fa-gift"></i> مجاناً' : `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${fmt(b.stars)}</span>`}</div>
+      <div class="bundle-video"><video src="${esc(b.webm)}" muted loop playsinline preload="metadata"></video></div>
+      <div class="bundle-label" style="color:var(--text-primary);font-size:11px">${esc(b.title)}</div>
+      <div class="bundle-price ${b.free ? 'gift' : ''}">${b.free ? unavailable ? '<i class="fas fa-lock"></i> غير متاحة' : '<i class="fas fa-gift"></i> مجاناً' : `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${fmt(b.stars)}</span>`}</div>
       <div class="bundle-label"><img src="https://up6.cc/2026/10/179267515752371.jpg" alt=""> ${fmt(b.gems)} ماسة</div>
-      <div class="bundle-label" style="color:var(--success)">قيمة البيع: ${fmt(sellValue)} ماسة</div>
-      <div class="bundle-label" style="color:var(--success)">الربح: +${fmt(profitValue)} ماسة</div>
+      <div class="bundle-label" style="color:var(--success)">بيع: ${fmt(sellValue)} ماسة</div>
+      <div class="bundle-label" style="color:var(--success)">ربح: +${fmt(profitValue)}</div>
     </div>`;
   }).join('');
 
   el.querySelectorAll('[data-catalog-bundle]').forEach(card => {
-    const bundle = CONFIG.collectibles.bundles.find(b => b.id === card.dataset.catalogBundle);
+    const bundle = getBundleById(card.dataset.catalogBundle);
     if (!bundle || (bundle.free && (S.user.freeClaimed || !DAILY_FREE_GIFT_SERVER_ENFORCED))) return;
     card.onclick = () => openBundleModal(bundle);
-    card.onkeydown = e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBundleModal(bundle); }
-    };
     const video = card.querySelector('video');
     if (video) video.play().catch(() => {});
   });
 }
 
 function openBundleModal(bundle) {
-  if (bundle.free && !DAILY_FREE_GIFT_SERVER_ENFORCED) {
-    toast('استلام الهدية المجانية يحتاج إلى تحقق آمن من الخادم', 'info');
-    return;
-  }
+  if (bundle.free && !DAILY_FREE_GIFT_SERVER_ENFORCED) return toast('الهدية المجانية تتطلب تحققاً آمناً', 'info');
   currentSelectedBundle = bundle;
-  const modal = $('bundleConfirmModal');
   const webmBox = $('bcWebmBox');
   webmBox.innerHTML = '';
-
   const video = document.createElement('video');
-  video.src = bundle.webm;
-  video.preload = 'auto';
+  video.src = bundle.webm; video.preload = 'auto';
   video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
   webmBox.appendChild(video);
 
@@ -3241,43 +2259,26 @@ function openBundleModal(bundle) {
   const currentStars = S.user.stars || 0;
 
   $('bcTitle').textContent = bundle.free ? 'بطاقة مجانية' : `تأكيد شراء ${bundle.title || 'البطاقة'}`;
-  $('bcDesc').textContent = bundle.free
-    ? 'استلام الهدية المجانية يتطلب تحققاً آمناً من الخادم'
-    : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح 5%';
-
-  if (bundle.free) {
-    $('bcPrice').innerHTML = '<span style="color:var(--success);font-weight:800">مجاناً</span>';
-  } else {
-    $('bcPrice').innerHTML = `${bundle.stars} <img src="https://up6.cc/2026/10/17926810487851.png" alt="">`;
-  }
+  $('bcDesc').textContent = bundle.free ? 'استلام الهدية يتطلب تحققاً آمناً' : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام';
+  $('bcPrice').innerHTML = bundle.free ? '<span style="color:var(--success);font-weight:800">مجاناً</span>' : `${bundle.stars} <img src="https://up6.cc/2026/10/17926810487851.png" alt="">`;
   $('bcGems').innerHTML = `${fmt(bundle.gems)} <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">`;
   $('bcSellValue').innerHTML = `${fmt(sellValue)} <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">`;
   $('bcCurrentStars').innerHTML = `${fmt(currentStars)} <img src="https://up6.cc/2026/10/17926810487851.png" alt="">`;
 
   const actionsEl = $('bcActions');
   let primaryBtnHtml = '';
+  if (bundle.free) primaryBtnHtml = '<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-gift"></i> استلام</button>';
+  else if (currentStars >= bundle.stars) primaryBtnHtml = '<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-check"></i> شراء من الرصيد</button>';
+  else primaryBtnHtml = '<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-shopping-cart"></i> شراء مباشر</button>';
 
-  if (bundle.free) {
-    primaryBtnHtml = '<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-gift"></i> استلام مجاناً</button>';
-  } else if (currentStars >= bundle.stars) {
-    primaryBtnHtml = `<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-check"></i> شراء من الرصيد</button>`;
-  } else {
-    primaryBtnHtml = `<button class="btn-modal" id="bcConfirmBtn"><i class="fas fa-shopping-cart"></i> شراء مباشر</button>`;
-  }
-
-  actionsEl.innerHTML = `
-    <button class="btn-modal secondary" id="bcCancelBtn">إلغاء</button>
-    ${primaryBtnHtml}
-  `;
-
+  actionsEl.innerHTML = `<button class="btn-modal secondary" id="bcCancelBtn">إلغاء</button>${primaryBtnHtml}`;
   $('bcCancelBtn').onclick = closeBundleModal;
   $('bcConfirmBtn').onclick = () => {
     if (bundle.free) claimFreeBundle(bundle);
     else if ((S.user.stars || 0) >= bundle.stars) buyFromStarsBalance(bundle);
     else buyDirectly(bundle);
   };
-
-  modal.classList.add('show');
+  $('bundleConfirmModal').classList.add('show');
 }
 
 function closeBundleModal() {
@@ -3287,40 +2288,25 @@ function closeBundleModal() {
 }
 
 async function claimFreeBundle(bundle) {
-  if (!DAILY_FREE_GIFT_SERVER_ENFORCED) return toast('استلام الهدية المجانية غير مفعّل قبل ربط التحقق الآمن بالخادم', 'info');
-  if (S.user.freeClaimed) return toast('استلمت البطاقة المجانية مسبقاً', 'err');
+  if (!DAILY_FREE_GIFT_SERVER_ENFORCED) return toast('الهدية المجانية غير مفعلة', 'info');
+  if (S.user.freeClaimed) return toast('استلمت مسبقاً', 'err');
   S.busy = true;
   try {
     const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
     items.push({
       id: 'free_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      bundleId: bundle.id,
-      title: bundle.title || 'هدية مجانية',
-      bundleStars: bundle.stars,
-      gemsValue: bundle.gems,
+      bundleId: bundle.id, title: bundle.title || 'هدية مجانية',
+      bundleStars: bundle.stars, gemsValue: bundle.gems,
       profitRate: bundle.profitRate || CONFIG.collectibles.profitRate,
-      purchasedAt: Date.now(),
-      sold: false, isFree: true,
-      webm: bundle.webm
+      purchasedAt: Date.now(), sold: false, isFree: true, webm: bundle.webm
     });
-    S.user.collectibles = items;
-    S.user.freeClaimed = true;
+    S.user.collectibles = items; S.user.freeClaimed = true;
     await FB.set({ collectibles: items, freeClaimed: true });
     closeBundleModal();
-    showModal({
-      icon: 'fa-gift',
-      title: 'تم استلام الهدية',
-      sub: 'البطاقة المجانية الآن في متجرك — يمكن بيعها بعد 7 أيام',
-      amount: fmt(bundle.gems) + ' ماسة',
-      btn: 'عرض المتجر',
-      onClose: () => { renderAll(); initStarBundles(); go('store'); }
-    });
+    showModal({ icon: 'fa-gift', title: 'تم الاستلام', sub: 'البطاقة في متجرك', amount: '+' + fmt(bundle.gems) + ' ماسة', btn: 'عرض المتجر', onClose: () => { renderAll(); initStarBundles(); go('store'); } });
   } catch (e) {
-    toast('فشل الاستلام', 'err');
-    S.user.freeClaimed = false;
-  } finally {
-    S.busy = false;
-  }
+    toast('فشل الاستلام', 'err'); S.user.freeClaimed = false;
+  } finally { S.busy = false; }
 }
 
 async function buyFromStarsBalance(bundle) {
@@ -3331,103 +2317,59 @@ async function buyFromStarsBalance(bundle) {
     const items = Array.isArray(S.user.collectibles) ? S.user.collectibles : [];
     items.push({
       id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      bundleId: bundle.id,
-      title: bundle.title || `بطاقة ${bundle.stars} نجمة`,
-      bundleStars: bundle.stars,
-      gemsValue: bundle.gems,
+      bundleId: bundle.id, title: bundle.title || `بطاقة ${bundle.stars} نجمة`,
+      bundleStars: bundle.stars, gemsValue: bundle.gems,
       profitRate: bundle.profitRate || CONFIG.collectibles.profitRate,
-      purchasedAt: Date.now(),
-      sold: false,
-      webm: bundle.webm
+      purchasedAt: Date.now(), sold: false, webm: bundle.webm
     });
     S.user.collectibles = items;
     await FB.set({ stars: S.user.stars, collectibles: items });
     closeBundleModal();
-    showModal({
-      icon: 'fa-box-open',
-      title: 'تم الشراء',
-      sub: 'المقتنى في متجرك — يمكن بيعه بعد 7 أيام',
-      amount: fmt(bundle.gems) + ' ماسة',
-      btn: 'عرض المتجر',
-      onClose: () => { renderAll(); go('store'); }
-    });
-  } catch (e) {
-    toast('حدثت مشكلة', 'err');
-  } finally {
-    S.busy = false;
-  }
+    showModal({ icon: 'fa-box-open', title: 'تم الشراء', sub: 'المقتنى في متجرك', amount: fmt(bundle.gems) + ' ماسة', btn: 'عرض المتجر', onClose: () => { renderAll(); go('store'); } });
+  } catch (e) { toast('حدثت مشكلة', 'err'); }
+  finally { S.busy = false; }
 }
 
 async function buyDirectly(bundle) {
-  if (!TG.app || !TG.app.openInvoice) return toast('يجب فتح التطبيق داخل تلغرام', 'err');
+  if (!TG.app || !TG.app.openInvoice) return toast('افتح التطبيق داخل تلغرام', 'err');
   S.busy = true;
   const btn = $('bcConfirmBtn');
   const old = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   try {
     const resp = await fetch(CONFIG.api.base + '/api/create-invoice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: TG.id, stars: bundle.stars })
     });
     const data = await resp.json();
     if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل');
-
     TG.app.openInvoice(data.invoiceLink, async (status) => {
-      S.busy = false;
-      btn.disabled = false;
-      btn.innerHTML = old;
-
+      S.busy = false; btn.disabled = false; btn.innerHTML = old;
       if (status === 'paid') {
         try {
           const fresh = await FB.get();
           if (!fresh || !validStoredNumber(fresh.gems)) throw new Error('balance_unavailable');
-          if (Object.prototype.hasOwnProperty.call(fresh, 'stars') && !validStoredNumber(fresh.stars)) throw new Error('stars_balance_unavailable');
           const creditedGems = data.gems == null ? 0 : Number(data.gems);
-          if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
           const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
-
           const items = Array.isArray(fresh.collectibles) ? fresh.collectibles : [];
           items.push({
             id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            bundleId: bundle.id,
-            title: bundle.title || `بطاقة ${bundle.stars} نجمة`,
-            bundleStars: bundle.stars,
-            gemsValue: bundle.gems,
+            bundleId: bundle.id, title: bundle.title || `بطاقة ${bundle.stars} نجمة`,
+            bundleStars: bundle.stars, gemsValue: bundle.gems,
             profitRate: bundle.profitRate || CONFIG.collectibles.profitRate,
-            purchasedAt: Date.now(),
-            sold: false,
-            webm: bundle.webm
+            purchasedAt: Date.now(), sold: false, webm: bundle.webm
           });
-
           await FB.set({ gems: newGems, collectibles: items });
           S.user = Object.assign(S.user, fresh, { gems: newGems, collectibles: items });
-
           closeBundleModal();
-          showModal({
-            icon: 'fa-box-open',
-            title: 'تم الشراء',
-            sub: 'المقتنى في متجرك — يمكن بيعه بعد 7 أيام',
-            amount: fmt(bundle.gems) + ' ماسة',
-            btn: 'عرض المتجر',
-            onClose: () => { renderAll(); go('store'); }
-          });
-        } catch (e) {
-          toast('فشل تسجيل المقتنى', 'err');
-        }
-      } else if (status === 'cancelled') {
-        toast('تم إلغاء الدفع', 'info');
-      } else if (status === 'failed') {
-        toast('فشل الدفع', 'err');
-      }
+          showModal({ icon: 'fa-box-open', title: 'تم الشراء', sub: 'المقتنى في متجرك', amount: fmt(bundle.gems) + ' ماسة', btn: 'عرض المتجر', onClose: () => { renderAll(); go('store'); } });
+        } catch (e) { toast('فشل تسجيل المقتنى', 'err'); }
+      } else if (status === 'cancelled') toast('تم إلغاء الدفع', 'info');
+      else if (status === 'failed') toast('فشل الدفع', 'err');
     });
   } catch (e) {
     toast(e.message || 'تعذر بدء الدفع', 'err');
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = old;
+    S.busy = false; btn.disabled = false; btn.innerHTML = old;
   }
 }
 
@@ -3437,117 +2379,45 @@ function updateStarsUI() {
   const val = S.starsInput || 0;
   const current = S.user.stars || 0;
   $('starsCount').textContent = fmt(val);
-  if ($('starsCurrentBalance')) $('starsCurrentBalance').textContent = fmt(current);
-  if ($('starsBalanceAfter')) $('starsBalanceAfter').textContent = fmt(current + val);
+  $('starsCurrentBalance').textContent = fmt(current);
+  $('starsBalanceAfter').textContent = fmt(current + val);
   $('starsPayBtn').disabled = !(val >= CONFIG.stars.min && val <= CONFIG.stars.max);
 }
 
 async function startStarsTopup() {
   if (S.busy) return;
   const starsAmount = S.starsInput || 0;
-  if (!Number.isInteger(starsAmount) || starsAmount < CONFIG.stars.min || starsAmount > CONFIG.stars.max) {
-    return toast('عدد النجوم غير صالح', 'err');
-  }
-  if (!TG.app || !TG.app.openInvoice) return toast('يجب فتح التطبيق داخل تلغرام', 'err');
-
+  if (!Number.isInteger(starsAmount) || starsAmount < CONFIG.stars.min || starsAmount > CONFIG.stars.max) return toast('عدد غير صالح', 'err');
+  if (!TG.app || !TG.app.openInvoice) return toast('افتح التطبيق داخل تلغرام', 'err');
   S.busy = true;
-  const btn = $('starsPayBtn');
-  const old = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-
+  const btn = $('starsPayBtn'); const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   try {
     const resp = await fetch(CONFIG.api.base + '/api/create-invoice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: TG.id, stars: starsAmount })
     });
     const data = await resp.json();
     if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل');
-
     TG.app.openInvoice(data.invoiceLink, async (status) => {
-      S.busy = false;
-      btn.disabled = false;
-      btn.innerHTML = old;
-
+      S.busy = false; btn.disabled = false; btn.innerHTML = old;
       if (status === 'paid') {
         try {
           const fresh = await FB.get();
           if (!fresh || !validStoredNumber(fresh.gems)) throw new Error('balance_unavailable');
-          if (fresh.stars != null && !validStoredNumber(fresh.stars)) throw new Error('stars_balance_unavailable');
           const creditedGems = data.gems == null ? 0 : Number(data.gems);
-          if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
           const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
           const newStars = Number(fresh.stars || 0) + starsAmount;
-
           await FB.set({ gems: newGems, stars: newStars });
           S.user = Object.assign(S.user, fresh, { gems: newGems, stars: newStars });
-
-          showModal({
-            icon: 'fa-star',
-            title: 'تم شراء النجوم',
-            sub: 'أُضيفت النجوم لرصيدك',
-            amount: '+' + fmt(starsAmount) + ' نجمة',
-            btn: 'رائع',
-            onClose: () => {
-              S.starsInput = 0;
-              $('starsCustomInput').value = '';
-              renderAll();
-              updateStarsUI();
-            }
-          });
-        } catch (e) {
-          toast('فشل تسجيل النجوم', 'err');
-        }
-      } else if (status === 'cancelled') {
-        toast('تم الإلغاء', 'info');
-      } else if (status === 'failed') {
-        toast('فشل الدفع', 'err');
-      }
+          showModal({ icon: 'fa-star', title: 'تم شراء النجوم', sub: 'أُضيفت النجوم', amount: '+' + fmt(starsAmount) + ' نجمة', btn: 'رائع', onClose: () => { S.starsInput = 0; $('starsCustomInput').value = ''; renderAll(); updateStarsUI(); } });
+        } catch (e) { toast('فشل تسجيل النجوم', 'err'); }
+      } else if (status === 'cancelled') toast('تم الإلغاء', 'info');
+      else if (status === 'failed') toast('فشل الدفع', 'err');
     });
   } catch (e) {
     toast(e.message || 'تعذر بدء الدفع', 'err');
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = old;
-  }
-}
-
-// ===================== EXCHANGE =====================
-function updateEx() {
-  const a = S.ex || 0;
-  $('exChosen').textContent = fmt(a);
-  $('exReceive').textContent = fmt(Math.floor(a * CONFIG.ex.rate));
-}
-
-async function doExchange() {
-  if (S.busy) return;
-  const a = S.ex, u = S.user;
-  if (!a || a < CONFIG.ex.min) return toast('الحد الأدنى ' + fmt(CONFIG.ex.min) + ' عملة', 'err');
-  if (a > u.coins) return toast('رصيد غير كافٍ', 'err');
-
-  const g = Math.floor(a * CONFIG.ex.rate);
-  S.busy = true;
-  const btn = $('exSubmit');
-  const old = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحويل...';
-
-  try {
-    u.coins -= a; u.gems += g;
-    await save();
-    await db.collection(CONFIG.txCol).add({ userId: TG.id, type: 'exchange', amount: -a, currency: 'coins', meta: { toGems: g }, createdAt: Date.now() });
-    S.ex = 0;
-    $('exInput').value = '';
-    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
-    renderAll();
-    showModal({ icon: 'fa-right-left', title: 'تم التبديل', sub: 'حوّلت ' + fmt(a) + ' عملة', amount: '+' + fmt(g) + ' ماسة', btn: 'رائع' });
-  } catch (e) {
-    toast('حدثت مشكلة', 'err');
-  } finally {
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = old;
+    S.busy = false; btn.disabled = false; btn.innerHTML = old;
   }
 }
 
@@ -3566,8 +2436,7 @@ function updateWd() {
 }
 
 function setWdMethod(method) {
-  S.wdMethod = method;
-  S.wd = 0;
+  S.wdMethod = method; S.wd = 0;
   document.querySelectorAll('.withdraw-method').forEach(el => el.classList.toggle('active', el.dataset.method === method));
   document.querySelectorAll('#wdAmounts .amount-chip').forEach(c => c.classList.remove('active'));
 
@@ -3594,7 +2463,6 @@ function setWdMethod(method) {
     wdTitle.textContent = 'معرّف Binance Pay';
     wdInput.placeholder = 'Binance Pay ID أو البريد الإلكتروني';
   }
-
   bindWdAmounts();
   updateWd();
 }
@@ -3614,26 +2482,21 @@ async function doWithdraw() {
   if (S.busy) return;
   const a = S.wd, u = S.user, acc = $('wdAccount').value.trim(), method = S.wdMethod;
   const min = method === 'sham_cash' ? CONFIG.wd.shamMin : CONFIG.wd.min;
-
   if (!a || a < min) return toast('الحد الأدنى ' + fmt(min) + ' ماسة', 'err');
-  if (a > u.gems) return toast('رصيد الماسات غير كافٍ', 'err');
+  if (a > u.gems) return toast('رصيد غير كافٍ', 'err');
   if (acc.length < 4) return toast('أدخل معرّفاً صحيحاً', 'err');
 
   S.busy = true;
-  const btn = $('wdSubmit');
-  const old = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-
+  const btn = $('wdSubmit'); const old = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   try {
-    let payout, modalSub = 'سيتم معالجة طلبك خلال 24-72 ساعة';
+    let payout, modalSub = 'سيتم المعالجة خلال 24-72 ساعة';
     if (method === 'sham_cash') {
       payout = fmt(Math.round(a * CONFIG.wd.shamSypPerGem)) + ' SYP';
     } else {
       payout = '$' + usdBinanceNet(a);
-      modalSub = 'لا يخصم التطبيق عمولة على هذا المسار؛ قد يفرض مزود الخدمة رسومه.';
+      modalSub = 'لا يخصم التطبيق عمولة — قد يفرض مزود الخدمة رسومه.';
     }
-
     u.gems -= a;
     await save();
     await db.collection(CONFIG.wdCol).add({
@@ -3645,353 +2508,75 @@ async function doWithdraw() {
       createdAt: Date.now()
     });
     await db.collection(CONFIG.txCol).add({ userId: TG.id, type: 'withdraw', amount: -a, currency: 'gems', meta: { method, payout }, createdAt: Date.now() });
-
-    S.wd = 0;
-    $('wdAccount').value = '';
+    S.wd = 0; $('wdAccount').value = '';
     document.querySelectorAll('#wdAmounts .amount-chip').forEach(c => c.classList.remove('active'));
-    renderAll();
-    loadWdHistory(true);
+    renderAll(); loadWdHistory();
     showModal({ icon: 'fa-check', title: 'تم إرسال الطلب', sub: modalSub, amount: fmt(a) + ' ماسة ≈ ' + payout, btn: 'حسناً' });
-  } catch (e) {
-    toast('حدثت مشكلة', 'err');
-  } finally {
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = old;
-  }
+  } catch (e) { toast('حدثت مشكلة', 'err'); }
+  finally { S.busy = false; btn.disabled = false; btn.innerHTML = old; }
 }
 
-function renderWdHistoryRows() {
-  const list = $('wdHistory');
-  const more = $('wdHistoryMore');
-  if (!list) return;
-  if (wdHistoryError) {
-    list.innerHTML = '<div class="empty-state">تعذر تحميل السجل.</div>';
-  } else if (!wdHistoryRows.length) {
-    list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل بعد</div>';
-  } else {
-    const statusNames = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
+// ✅ إصلاح تحميل السحوبات — بدون orderBy (يتفادى فهرس Firestore)
+async function loadWdHistory() {
+  const l = $('wdHistory');
+  if (!db) { l.innerHTML = '<div class="empty-state">تعذر الاتصال</div>'; return; }
+  if (wdHistoryLoading) return;
+  wdHistoryLoading = true;
+  wdHistoryError = false;
+  l.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fas fa-spinner fa-spin"></i></div>';
+  try {
+    const q = await db.collection(CONFIG.wdCol).where('userId', '==', TG.id).limit(50).get();
+    const it = [];
+    q.forEach(d => it.push(d.data()));
+    it.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    wdHistoryRows = it;
+    if (!it.length) {
+      l.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل سحب بعد</div>';
+      $('wdHistoryMore').hidden = true;
+      return;
+    }
+    const map = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
     const methodNames = { sham_cash: 'شام كاش', binance: 'Binance' };
-    list.innerHTML = wdHistoryRows.map(({ id, data: w }) => {
+    l.innerHTML = it.slice(0, 15).map(w => {
       const statusClass = w.status === 'completed' || w.status === 'approved' ? 'st-completed' : w.status === 'rejected' ? 'st-rejected' : w.status === 'processing' ? 'st-processing' : 'st-pending';
-      const date = w.createdAt && typeof w.createdAt.toDate === 'function'
-        ? w.createdAt.toDate()
-        : new Date(Number(w.createdAt));
-      const dateLabel = Number.isNaN(date.getTime())
-        ? 'التاريخ غير متاح'
-        : date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' });
-      return `<div class="wd-history-row" data-withdrawal-id="${esc(id)}">
+      return `<div class="wd-history-row">
         <div class="wd-history-left">
-          <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '—')}</div>
-          <div class="wd-history-date">${dateLabel} • ${methodNames[w.method] || '—'}</div>
+          <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '$0')}</div>
+          <div class="wd-history-date">${new Date(w.createdAt || Date.now()).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' })} • ${methodNames[w.method] || 'Binance'}</div>
         </div>
-        <div class="wd-history-status ${statusClass}">${statusNames[w.status] || 'قيد المراجعة'}</div>
+        <div class="wd-history-status ${statusClass}">${map[w.status] || 'قيد المراجعة'}</div>
       </div>`;
     }).join('');
-  }
-  if (more) {
-    more.hidden = !wdHistoryHasMore;
-    more.disabled = wdHistoryLoading;
-    more.textContent = wdHistoryLoading ? 'جارٍ التحميل…' : 'عرض المزيد';
-  }
-}
-
-async function loadWdHistory(reset = true) {
-  const list = $('wdHistory');
-  if (!list || wdHistoryLoading) return;
-  if (!db) {
-    list.innerHTML = '<div class="empty-state">تعذر الاتصال بقاعدة البيانات</div>';
-    return;
-  }
-  if (reset) {
-    wdHistoryRows = [];
-    wdHistoryCursor = null;
-    wdHistorySeen = new Set();
-    wdHistoryHasMore = false;
-    wdHistoryError = false;
-    list.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fas fa-spinner fa-spin"></i></div>';
-  }
-
-  wdHistoryLoading = true;
-  renderWdHistoryRows();
-  try {
-    let query = db.collection(CONFIG.wdCol)
-      .where('userId', '==', TG.id)
-      .orderBy('createdAt', 'desc')
-      .limit(5);
-    if (wdHistoryCursor) query = query.startAfter(wdHistoryCursor);
-    const snapshot = await query.get();
-    const docs = snapshot.docs || [];
-    docs.forEach(doc => {
-      if (!wdHistorySeen.has(doc.id)) {
-        wdHistorySeen.add(doc.id);
-        wdHistoryRows.push({ id: doc.id, data: doc.data() || {} });
-      }
-    });
-    if (docs.length) wdHistoryCursor = docs[docs.length - 1];
-    wdHistoryHasMore = docs.length === 5;
-    renderWdHistoryRows();
+    $('wdHistoryMore').hidden = it.length <= 15;
   } catch (e) {
     wdHistoryError = true;
-    wdHistoryHasMore = false;
-    const more = $('wdHistoryMore');
-    if (more) more.hidden = true;
+    l.innerHTML = '<div class="empty-state">تعذر تحميل السجل</div>';
+    $('wdHistoryMore').hidden = true;
   } finally {
     wdHistoryLoading = false;
-    renderWdHistoryRows();
   }
 }
 
-// ===================== CRYPTO =====================
-let cryptoUsd = 0;
-let cryptoPollTimer = null;
-let cryptoPendingTimer = null;
-let cryptoPendingInvoice = null;
-
+// ===================== DEPOSIT TABS =====================
 function setDepTab(tab) {
-  ['stars', 'crypto', 'binance', 'sham'].forEach(t => {
+  ['stars', 'binance', 'sham'].forEach(t => {
     const tabEl = document.querySelector('.wallet-tab[data-deptab="' + t + '"]');
     const panel = $('dep-tab-' + t);
     if (tabEl) tabEl.classList.toggle('active', t === tab);
     if (panel) panel.style.display = t === tab ? 'block' : 'none';
   });
-  if (tab === 'crypto') updateCryptoAmounts();
 }
 
-function updateCryptoAmounts() {
-  const gems = Math.floor(cryptoUsd * CONFIG.shieldz.gemsPerUsd);
-  $('cryptoChosenUsd').textContent = '$' + cryptoUsd.toFixed(2);
-  $('cryptoReceiveGems').textContent = fmt(gems);
-  $('cryptoPayBtn').disabled = cryptoUsd < CONFIG.shieldz.minUsd || S.busy;
-}
-
-function updatePendingBanner() {
-  const banner = $('cryptoPendingBanner');
-  if (!banner) return;
-  if (cryptoPendingInvoice && cryptoPendingInvoice.id) {
-    banner.style.display = 'block';
-    startPendingTimer();
-  } else {
-    banner.style.display = 'none';
-    stopPendingTimer();
-  }
-}
-
-function startPendingTimer() {
-  if (cryptoPendingTimer) clearInterval(cryptoPendingTimer);
-  const tick = () => {
-    if (!cryptoPendingInvoice) { stopPendingTimer(); return; }
-    const elapsed = Date.now() - cryptoPendingInvoice.createdAt;
-    const remain = Math.max(0, CONFIG.shieldz.pendingTimeoutMs - elapsed);
-    if (remain <= 0) {
-      const el = $('cryptoPendingTimer');
-      if (el) el.textContent = '00:00';
-      cryptoPendingInvoice = null;
-      updatePendingBanner();
-      return;
-    }
-    const mins = Math.floor(remain / 60000);
-    const secs = Math.floor((remain % 60000) / 1000);
-    const el = $('cryptoPendingTimer');
-    if (el) el.textContent = pad(mins) + ':' + pad(secs);
-  };
-  tick();
-  cryptoPendingTimer = setInterval(tick, 1000);
-}
-
-function stopPendingTimer() {
-  if (cryptoPendingTimer) { clearInterval(cryptoPendingTimer); cryptoPendingTimer = null; }
-  const el = $('cryptoPendingTimer');
-  if (el) el.textContent = '--:--';
-}
-
-function stopPaymentPolling() {
-  if (cryptoPollTimer) { clearInterval(cryptoPollTimer); cryptoPollTimer = null; }
-  S.busy = false;
-  const btn = $('cryptoPayBtn');
-  if (btn) { btn.innerHTML = '<i class="fas fa-credit-card"></i> <span>إكمال الدفع</span>'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
-}
-
-function cancelPendingInvoice() {
-  if (!cryptoPendingInvoice) return;
-  cryptoPendingInvoice = null;
-  stopPaymentPolling();
-  updatePendingBanner();
-  toast('تم إلغاء الطلب', 'info');
-}
-
-async function checkPendingInvoiceNow() {
-  if (!cryptoPendingInvoice || !cryptoPendingInvoice.id) return;
-  const btn = $('cryptoCheckBtn');
-  if (btn) { btn.disabled = true; btn.textContent = '...'; }
-  try {
-    const resp = await fetch(CONFIG.api.base + '/api/shieldz/invoice/' + encodeURIComponent(cryptoPendingInvoice.id));
-    const data = await resp.json().catch(() => ({}));
-    if (data.status === 'paid') {
-      const gems = cryptoPendingInvoice.gems;
-      const fresh = await FB.get();
-      if (!fresh || !validStoredNumber(fresh.gems) || (fresh.stars != null && !validStoredNumber(fresh.stars))) {
-        throw new Error('balance_refresh_failed');
-      }
-      S.user = Object.assign(S.user, fresh, { gems: Number(fresh.gems) });
-      if (validStoredNumber(fresh.stars)) S.user.stars = Number(fresh.stars);
-      cryptoPendingInvoice = null;
-      stopPaymentPolling();
-      updatePendingBanner();
-      renderAll();
-      showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
-    } else if (data.status === 'expired' || data.status === 'failed') {
-      cryptoPendingInvoice = null;
-      stopPaymentPolling();
-      updatePendingBanner();
-      toast('انتهت الفاتورة', 'err');
-    } else {
-      toast('لا يزال قيد الانتظار', 'info');
-    }
-  } catch (e) {
-    toast('تعذر التحقق', 'err');
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = 'تحقق'; }
-  }
-}
-
-async function startCryptoPayment() {
-  if (S.busy) return;
-  if (cryptoUsd < CONFIG.shieldz.minUsd) return toast('الحد الأدنى $' + CONFIG.shieldz.minUsd, 'err');
-  if (cryptoUsd > CONFIG.shieldz.maxUsd) return toast('الحد الأعلى $' + CONFIG.shieldz.maxUsd, 'err');
-
-  S.busy = true;
-  const btn = $('cryptoPayBtn');
-  const old = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-
-  try {
-    const gems = Math.floor(cryptoUsd * CONFIG.shieldz.gemsPerUsd);
-    const amountCents = Math.round(cryptoUsd * 100);
-    const idempotencyKey = 'pm_' + TG.id + '_' + Date.now();
-    const resp = await fetch(CONFIG.api.base + '/api/shieldz/create-invoice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: TG.id, amount_usd_cents: amountCents, gems, idempotency_key: idempotencyKey })
-    });
-    const data = await resp.json().catch(() => ({}));
-    if (!resp.ok || !data.ok || !data.pay_url) throw new Error(data.error || 'فشل');
-    cryptoPendingInvoice = { id: data.invoice_id, gems, createdAt: Date.now() };
-    updatePendingBanner();
-    TG.openExternal(data.pay_url);
-    startPaymentPolling(data.invoice_id, gems);
-  } catch (e) {
-    toast(e.message || 'تعذر بدء الدفع', 'err');
-    S.busy = false;
-    btn.disabled = false;
-    btn.innerHTML = old;
-  }
-}
-
-async function refreshUserSnapshot() {
-  if (!db || !S.user) return false;
-  try {
-    const fresh = await FB.get();
-    if (!fresh || !validStoredNumber(fresh.gems)) return false;
-    if (fresh.stars != null && !validStoredNumber(fresh.stars)) return false;
-    S.user = Object.assign(S.user, fresh, { gems: Number(fresh.gems) });
-    if (validStoredNumber(fresh.stars)) S.user.stars = Number(fresh.stars);
-    renderAll();
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function startPaymentPolling(invoiceId, gems) {
-  if (cryptoPollTimer) clearInterval(cryptoPollTimer);
-  let attempts = 0;
-  const finish = (success) => {
-    clearInterval(cryptoPollTimer);
-    cryptoPollTimer = null;
-    S.busy = false;
-    cryptoPendingInvoice = null;
-    updatePendingBanner();
-    const btn = $('cryptoPayBtn');
-    if (btn) { btn.innerHTML = '<i class="fas fa-credit-card"></i> <span>إكمال الدفع</span>'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
-    if (success) {
-      refreshUserSnapshot().then(ok => {
-        if (ok) {
-          showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
-        } else {
-          toast('تم تأكيد الدفع، لكن تعذر تحديث الرصيد. أعد فتح التطبيق.', 'info');
-        }
-      });
-    }
-  };
-  cryptoPollTimer = setInterval(async () => {
-    attempts++;
-    if (cryptoPendingInvoice && (Date.now() - cryptoPendingInvoice.createdAt) > CONFIG.shieldz.pendingTimeoutMs) { finish(false); return; }
-    if (attempts > CONFIG.shieldz.pollMaxAttempts) { finish(false); return; }
-    try {
-      const resp = await fetch(CONFIG.api.base + '/api/shieldz/invoice/' + encodeURIComponent(invoiceId));
-      const data = await resp.json().catch(() => ({}));
-      if (data.status === 'paid') finish(true);
-      else if (data.status === 'expired' || data.status === 'failed') { finish(false); cryptoPendingInvoice = null; updatePendingBanner(); }
-    } catch (e) {}
-  }, CONFIG.shieldz.pollIntervalMs);
-}
-
-// ===================== MD =====================
-const MD = {
-  binance: { acc: 'CONFIGURE_BINANCE_RECIPIENT', minTxt: 'الحد الأدنى $0.50', logo: 'https://up6.cc/2026/09/178982889076391.png', title: 'الإيداع عبر Binance Pay', accLbl: 'معرّف Binance Pay' },
-  sham: { acc: 'CONFIGURE_SHAM_RECIPIENT', minTxt: 'الحد الأدنى 50 ليرة', logo: 'https://up6.cc/2026/09/178975725154411.png', title: 'الإيداع عبر شام كاش', accLbl: 'معرّف شام كاش' }
-};
-
-function buildMd() {
-  Object.keys(MD).forEach(k => {
-    const m = MD[k];
-    if (!m.acc || m.acc.startsWith('CONFIGURE_')) {
-      $('dep-tab-' + k).innerHTML = '<div class="empty-state"><i class="fas fa-circle-info"></i> طريقة الدفع غير مهيأة حالياً</div>';
-      return;
-    }
-    const logoHtml = m.logo
-      ? `<img src="${m.logo}" style="width:44px;height:44px;object-fit:contain;border-radius:10px;background:#fff;padding:4px;border:1px solid var(--border)" onerror="this.style.display='none'">`
-      : '';
-    $('dep-tab-' + k).innerHTML = `
-      <div class="menu-item" style="margin-bottom:16px;pointer-events:none">
-        ${logoHtml}
-        <div class="menu-text">
-          <div class="menu-title">${m.title}</div>
-          <div class="menu-desc">${m.minTxt}</div>
-        </div>
-      </div>
-      <div class="section-hint mb-2">${m.accLbl} — حوّل إليه</div>
-      <div class="link-box">
-        <div class="link-box-text" id="mdAcc${k}">${m.acc}</div>
-        <button class="btn-copy" data-copy="mdAcc${k}"><i class="fas fa-copy"></i> نسخ</button>
-      </div>
-      <div class="section-hint mb-2" style="margin-top:16px">أضف معرّف حسابك في الملاحظة</div>
-      <div class="link-box">
-        <div class="link-box-text" id="mdUid${k}">${esc(TG.id)}</div>
-        <button class="btn-copy" data-copy="mdUid${k}"><i class="fas fa-copy"></i> نسخ</button>
-      </div>
-      <div class="calc-box" style="text-align:center;font-size:12px;color:var(--text-secondary);font-weight:600">
-        بعد التحويل، سيتم مراجعة الدفعة وإضافة الماسات إلى حسابك
-      </div>`;
-  });
-}
-
+// ===================== COPY =====================
 function copyText(t) {
-  const ok = () => toast('تم النسخ');
+  const ok = () => toast('تم النسخ ✅');
   const fb = () => {
-    const a = document.createElement('textarea');
-    a.value = t;
-    a.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(a);
-    a.select();
+    const a = document.createElement('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(a); a.select();
     try { document.execCommand('copy'); ok(); } catch (e) { toast('تعذر النسخ', 'err'); }
     a.remove();
   };
-  navigator.clipboard && navigator.clipboard.writeText
-    ? navigator.clipboard.writeText(t).then(ok).catch(fb)
-    : fb();
+  navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t).then(ok).catch(fb) : fb();
 }
 
 // ===================== REFERRAL =====================
@@ -4003,8 +2588,7 @@ async function applyCode(code) {
     const q = await db.collection(CONFIG.col).where('referralCode', '==', code).limit(1).get();
     if (q.empty || q.docs[0].id === TG.id) { toast('الكود غير موجود', 'err'); return false; }
     const rid = q.docs[0].id;
-    u.referralUsed = true;
-    u.referredBy = rid;
+    u.referralUsed = true; u.referredBy = rid;
     u.gems += CONFIG.ref.newUser;
     await FB.set({ referralUsed: true, referredBy: rid, gems: u.gems });
     const inc = firebase.firestore.FieldValue.increment;
@@ -4013,9 +2597,7 @@ async function applyCode(code) {
     renderAll();
     return true;
   } catch (e) {
-    u.referralUsed = false;
-    toast('تعذر التحقق', 'err');
-    return false;
+    u.referralUsed = false; toast('تعذر التحقق', 'err'); return false;
   }
 }
 
@@ -4030,15 +2612,16 @@ function openContentModal(kind) {
   $('contentTitle').textContent = policy ? 'سياسة الخصوصية' : 'مركز المساعدة';
   if (policy) {
     $('contentBody').innerHTML = `
-      <p style="margin-bottom:12px"><strong>عن التطبيق:</strong> Puppy Merge — منصة ترفيهية لشراء المقتنيات الرقمية وبيعها بعد 7 أيام بربح 5%.</p>
+      <p style="margin-bottom:12px"><strong>عن التطبيق:</strong> Puppy VIP — منصة ترفيهية لشراء المقتنيات الرقمية وبيعها بعد 7 أيام بربح 5%.</p>
       <p style="margin-bottom:12px"><strong>المعلومات المستخدمة:</strong> معرّف تيليجرام، اسم العرض، صورة الحساب، رصيد الماسات والعملات، والمقتنيات.</p>
       <p><strong>الخصوصية:</strong> تُعالج البيانات عبر تيليجرام وفايربيس لتشغيل التطبيق فقط.</p>`;
   } else {
     $('contentBody').innerHTML = `
-      <p style="margin-bottom:12px"><strong>كيف أشتري مقتنى؟</strong> من الرئيسية أو صفحة البطاقات اختر البطاقة. إذا كان لديك رصيد نجوم كافٍ، ستُخصم منه مباشرة. إذا لم يكن كافياً، يمكنك الشراء المباشر بالنجوم.</p>
+      <p style="margin-bottom:12px"><strong>كيف أشتري مقتنى؟</strong> من الرئيسية أو صفحة البطاقات اختر البطاقة. إذا كان لديك رصيد نجوم كافٍ، ستُخصم منه مباشرة. إذا لم يكن كافياً، يمكنك الشراء المباشر.</p>
       <p style="margin-bottom:12px"><strong>رصيد النجوم:</strong> يمكن تعبئته من صفحة الإيداع — كل نجمة تدفعها تساوي نجمة في رصيدك.</p>
       <p style="margin-bottom:12px"><strong>متى أستطيع بيع المقتنى؟</strong> بعد 7 أيام — ستظهر قيمة المقتنى + 5% ربح.</p>
-      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — لا يخصم التطبيق عمولة على Binance Pay؛ قد تُطبق رسوم من مزود الخدمة. شام كاش بدون عمولة من التطبيق.</p>`;
+      <p style="margin-bottom:12px"><strong>الإيداع اليدوي:</strong> اختر Binance أو شام كاش، انسخ معرّف الاستلام ومعرّفك، حوّل المبلغ وأضف معرّفك في الملاحظة. ستتم المراجعة خلال 24 ساعة.</p>
+      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — Binance Pay بدون عمولة، شام كاش بدون عمولة.</p>`;
   }
   $('contentModal').classList.add('show');
 }
@@ -4058,6 +2641,7 @@ function bindKeyboardDock() {
 // ===================== BIND =====================
 function bind() {
   bindKeyboardDock();
+
   document.addEventListener('click', e => {
     const navEl = e.target.closest('[data-view]');
     if (navEl) go(navEl.dataset.view);
@@ -4068,47 +2652,13 @@ function bind() {
   $('contentClose').onclick = closeContentModal;
   $('contentModal').onclick = e => { if (e.target.id === 'contentModal') closeContentModal(); };
 
-  document.querySelectorAll('.wallet-tab').forEach(tab => {
-    tab.onclick = () => setDepTab(tab.dataset.deptab);
-  });
-
-  document.querySelectorAll('[data-catalog-category]').forEach(tab => {
-    tab.onclick = () => {
-      catalogCategory = tab.dataset.catalogCategory;
-      renderCatalog();
-    };
-  });
-
-  document.querySelectorAll('[data-ref-tab]').forEach(tab => {
-    tab.onclick = () => setReferralPanel(tab.dataset.refTab);
-  });
-
-  document.querySelectorAll('.withdraw-method').forEach(el => {
-    el.onclick = () => setWdMethod(el.dataset.method);
-  });
-
+  document.querySelectorAll('.wallet-tab').forEach(tab => tab.onclick = () => setDepTab(tab.dataset.deptab));
+  document.querySelectorAll('[data-catalog-category]').forEach(tab => tab.onclick = () => { catalogCategory = tab.dataset.catalogCategory; renderCatalog(); });
+  document.querySelectorAll('[data-ref-tab]').forEach(tab => tab.onclick = () => setReferralPanel(tab.dataset.refTab));
+  document.querySelectorAll('.withdraw-method').forEach(el => el.onclick = () => setWdMethod(el.dataset.method));
   bindWdAmounts();
 
-  document.querySelectorAll('#exAmounts .amount-chip').forEach(c => {
-    c.onclick = () => {
-      document.querySelectorAll('#exAmounts .amount-chip').forEach(x => x.classList.remove('active'));
-      c.classList.add('active');
-      S.ex = +c.dataset.examt;
-      $('exInput').value = c.dataset.examt;
-      updateEx();
-    };
-  });
-
-  $('exInput').oninput = e => {
-    const v = parseInt(e.target.value, 10) || 0;
-    S.ex = v;
-    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
-    updateEx();
-  };
-
-  $('exSubmit').onclick = doExchange;
   $('wdSubmit').onclick = doWithdraw;
-  $('wdHistoryMore').onclick = () => loadWdHistory(false);
 
   const starsInput = $('starsCustomInput');
   if (starsInput) {
@@ -4125,91 +2675,41 @@ function bind() {
   }
   $('starsPayBtn').onclick = startStarsTopup;
 
-  document.querySelectorAll('#cryptoAmounts .amount-chip').forEach(b => {
-    b.onclick = () => {
-      document.querySelectorAll('#cryptoAmounts .amount-chip').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      cryptoUsd = parseFloat(b.dataset.usd) || 0;
-      $('cryptoCustomUsd').value = '';
-      updateCryptoAmounts();
-    };
-  });
-  $('cryptoCustomUsd').oninput = function () {
-    const v = parseFloat(this.value);
-    if (!isNaN(v) && v >= CONFIG.shieldz.minUsd && v <= CONFIG.shieldz.maxUsd) {
-      cryptoUsd = v;
-      document.querySelectorAll('#cryptoAmounts .amount-chip').forEach(b => b.classList.remove('active'));
-      updateCryptoAmounts();
-    }
-  };
-  $('cryptoPayBtn').onclick = startCryptoPayment;
-  $('cryptoCheckBtn').onclick = checkPendingInvoiceNow;
-  $('cryptoCancelBtn').onclick = cancelPendingInvoice;
-
   const link = () => $('refLink').textContent;
-  $('refShare').onclick = () => TG.share(link(), 'انضم إلى Puppy Merge');
+  $('refShare').onclick = () => TG.share(link(), 'انضم إلى Puppy VIP');
   $('codeCopy').onclick = () => copyText($('refCode').textContent);
   $('refCopy').onclick = () => copyText(link());
   $('codeSubmit').onclick = async () => {
-    const btn = $('codeSubmit');
-    const old = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+    const btn = $('codeSubmit'); const old = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     await applyCode($('codeInput').value.trim().replace(/^ref_/, ''));
-    btn.disabled = false;
-    btn.innerHTML = old;
+    btn.disabled = false; btn.innerHTML = old;
   };
 
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-copy]');
-    if (b) copyText($(b.dataset.copy).textContent.trim());
+    if (b) { const el = $(b.dataset.copy); if (el) copyText(el.textContent.trim()); }
   });
 
-  buildMd();
-
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      TIME.sync().catch(() => {});
-      refreshUserSnapshot();
-      if (cryptoPendingInvoice && cryptoPendingInvoice.id) checkPendingInvoiceNow();
-    }
+    if (document.visibilityState === 'visible') TIME.sync().catch(() => {});
   });
 }
 
 // ===================== BOOT =====================
-function setBootState(state, message) {
-  const root = $('bootState');
-  if (!root) return;
-  root.classList.toggle('error', state === 'error');
-  $('bootTitle').textContent = state === 'error' ? 'تعذر تحميل الحساب' : 'جارٍ تحميل الحساب';
-  $('bootMessage').textContent = message;
-  root.hidden = state === 'ready';
-}
-
 async function boot() {
   if (!TG.init()) {
-    document.body.innerHTML = '<div style="padding:40px;text-align:center;font-family:sans-serif"><h2>Puppy Merge</h2><p style="margin:20px 0;color:#666">هذا التطبيق يعمل فقط داخل تلغرام.</p><a href="https://t.me/' + CONFIG.bot.username + '/' + CONFIG.bot.appName + '" style="background:#C6A15B;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block">افتح البوت</a></div>';
+    document.body.innerHTML = '<div style="padding:40px;text-align:center;font-family:sans-serif"><h2>Puppy VIP</h2><p style="margin:20px 0;color:#666">هذا التطبيق يعمل فقط داخل تلغرام.</p><a href="https://t.me/' + CONFIG.bot.username + '/' + CONFIG.bot.appName + '" style="background:#C6A15B;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block">افتح البوت</a></div>';
     return;
   }
 
-  setBootState('loading', 'يتم الاتصال بمصدر بيانات الرصيد…');
+  try { FB.init(); } catch (e) {}
+  TIME.sync().catch(() => {});
 
   try {
-    if (!FB.init()) {
-      setBootState('error', 'تعذر تهيئة الاتصال بقاعدة البيانات.');
-      return;
-    }
-
-    const ex = await Promise.race([
-      FB.get(),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('load_timeout')), 12000))
-    ]);
-
+    const ex = await Promise.race([FB.get(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 12000))]);
     if (ex) {
-      if (!validStoredNumber(ex.gems)) throw new Error('balance_field_missing');
-      if (Object.prototype.hasOwnProperty.call(ex, 'stars') && !validStoredNumber(ex.stars)) {
-        throw new Error('stars_field_invalid');
-      }
+      if (!validStoredNumber(ex.gems)) throw new Error('balance_invalid');
       S.user = Object.assign(newUser(), ex);
       S.user.gems = Number(ex.gems);
       S.user.stars = ex.stars == null ? 0 : Number(ex.stars);
@@ -4217,24 +2717,17 @@ async function boot() {
       if (typeof S.user.freeClaimed !== 'boolean') S.user.freeClaimed = false;
     } else {
       S.user = newUser();
-      await FB.set(S.user, false);
+      try { await FB.set(S.user, false); } catch (e) {}
     }
   } catch (e) {
-    const message = e && e.message === 'balance_field_missing'
-      ? 'سجل الحساب موجود، لكن حقل رصيد الماسات غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل.'
-      : e && e.message === 'stars_field_invalid'
-        ? 'سجل الحساب موجود، لكن حقل رصيد النجوم غير صالح. لم نغيّر بياناتك.'
-        : 'لم يكتمل جلب بيانات الحساب. لم يتم استبدال رصيدك بصفر. افحص الاتصال ثم أعد المحاولة.';
-    setBootState('error', message);
-    return;
+    S.user = newUser();
   }
 
-  // TIME.sync fire-and-forget (لا يعطّل الإقلاع)
-  TIME.sync().catch(() => {});
   checkReferral().catch(() => {});
 
+  $('splash').classList.add('hide');
   $('app').style.display = 'flex';
-  setBootState('ready', '');
+  setTimeout(() => { const s = $('splash'); if (s && s.parentNode) s.parentNode.removeChild(s); }, 700);
 
   try { bind(); } catch (e) { console.warn('Bind:', e); }
   try { renderAll(); } catch (e) { console.warn('Render:', e); }
