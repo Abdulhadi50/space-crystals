@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#FFFCF5">
-<title>Puppy Merge</title>
+<title>Puppy vip</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src='//libtl.com/sdk.js' data-zone='12008608' data-sdk='show_12008608'></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -55,7 +55,6 @@ input { font: inherit; color: inherit; }
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   height: 100dvh;
   position: relative;
   max-width: 480px;
@@ -63,13 +62,13 @@ input { font: inherit; color: inherit; }
   overflow: hidden;
 }
 
-/* ============ TOP BAR ============ */
+/* ============ TOP BAR (GLASS) ============ */
 .top-bar {
   position: absolute;
   top: calc(var(--safe-top) + 8px);
   left: 14px;
   right: 14px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -122,7 +121,7 @@ input { font: inherit; color: inherit; }
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 0;
+  border: 1.5px solid var(--border);
 }
 
 /* ============ MAIN SCROLL ============ */
@@ -183,6 +182,22 @@ input { font: inherit; color: inherit; }
   position: relative;
   z-index: 1;
 }
+.greeting-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(198, 161, 91, 0.25);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.greeting-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .greeting-text { flex: 1; min-width: 0; }
 .greeting-hello {
   font-size: 15px;
@@ -210,8 +225,8 @@ input { font: inherit; color: inherit; }
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
-  border: 0;
-  box-shadow: none;
+  border: 2px solid var(--gold-light);
+  box-shadow: 0 3px 10px rgba(198, 161, 91, 0.25);
   flex-shrink: 0;
 }
 .balance-stack {
@@ -359,41 +374,6 @@ input { font: inherit; color: inherit; }
   overflow: hidden;
 }
 .bundle-card:active { transform: translateY(2px); }
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  padding-bottom: 14px;
-}
-.catalog-grid .bundle-card {
-  width: 100%;
-  min-width: 0;
-  flex: initial;
-}
-.catalog-tabs {
-  display: flex;
-  gap: 8px;
-  margin: 14px 0;
-  padding: 4px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--bg-soft);
-}
-.catalog-tab {
-  flex: 1;
-  padding: 10px 8px;
-  border-radius: 10px;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.catalog-tab.active {
-  color: var(--text-primary);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
-}
 .bundle-card.free {
   background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
   border: 1.5px solid var(--gold);
@@ -464,6 +444,43 @@ input { font: inherit; color: inherit; }
   gap: 3px;
 }
 .bundle-label img { width: 11px; height: 11px; border-radius: 50%; }
+
+/* ============ CATALOG ============ */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding-bottom: 14px;
+}
+.catalog-grid .bundle-card {
+  width: 100%;
+  min-width: 0;
+  flex: initial;
+}
+.catalog-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-soft);
+}
+.catalog-tab {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 10px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.catalog-tab.active {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
 
 /* ============ STORE ============ */
 .page-title {
@@ -570,8 +587,8 @@ input { font: inherit; color: inherit; }
   margin-bottom: 12px;
 }
 .collectible-thumb {
-  width: 92px;
-  height: 92px;
+  width: 60px;
+  height: 60px;
   border-radius: 14px;
   background: var(--bg-soft);
   flex-shrink: 0;
@@ -787,8 +804,7 @@ input { font: inherit; color: inherit; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 0;
-  box-shadow: none;
+  border: 2px solid var(--gold);
 }
 .wallet-balance-sub {
   font-size: 13px;
@@ -804,15 +820,13 @@ input { font: inherit; color: inherit; }
 /* ============ WALLET TABS ============ */
 .wallet-tabs {
   display: flex;
-  background: rgba(247, 241, 229, .74);
-  border: 1px solid rgba(237, 227, 208, .82);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
   border-radius: var(--radius-button);
   padding: 4px;
   margin-bottom: 16px;
   gap: 4px;
   overflow-x: auto;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 .wallet-tab {
   flex: 1;
@@ -832,9 +846,9 @@ input { font: inherit; color: inherit; }
   gap: 4px;
 }
 .wallet-tab.active {
-  background: rgba(255, 255, 255, .82);
-  color: var(--gold-dark);
-  box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(198, 161, 91, .18);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
 }
 .wallet-tab img { width: 14px; height: 14px; border-radius: 50%; }
 
@@ -844,16 +858,9 @@ input { font: inherit; color: inherit; }
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
 }
 .stars-input-wrap input {
   flex: 1;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  box-sizing: border-box;
   height: 52px;
   padding: 0 16px;
   border-radius: 12px;
@@ -881,9 +888,8 @@ input { font: inherit; color: inherit; }
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  flex: 0 0 44px;
   object-fit: cover;
-  border: 0;
+  border: 2px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -1042,7 +1048,7 @@ input { font: inherit; color: inherit; }
   flex-direction: column;
   gap: 8px;
   margin-top: 16px;
-  padding-bottom: 20px;
+  padding-bottom: 4px;
 }
 .wd-history-row {
   display: flex;
@@ -1083,6 +1089,7 @@ input { font: inherit; color: inherit; }
   font-weight: 800;
 }
 .wd-history-more[hidden] { display: none; }
+.wd-history-more:disabled { opacity: .5; }
 
 /* ============ REFERRAL ============ */
 .ref-hero {
@@ -1179,7 +1186,50 @@ input { font: inherit; color: inherit; }
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  border: 0;
+  border: 2px solid var(--gold-light);
+}
+
+.ref-rewards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.ref-reward-card {
+  padding: 16px 12px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.ref-reward-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  margin: 0 auto 8px;
+}
+.ref-reward-icon.you { background: var(--gradient-gold); color: #382810; }
+.ref-reward-icon.friend { background: linear-gradient(135deg, var(--gold-light), #D4C08C); color: var(--gold-dark); }
+.ref-reward-value {
+  font-size: 22px;
+  font-weight: 800;
+  direction: ltr;
+  margin-bottom: 3px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--gold-dark);
+}
+.ref-reward-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
 }
 
 .link-box {
@@ -1234,7 +1284,7 @@ input { font: inherit; color: inherit; }
 
 .ref-actions {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 16px;
 }
@@ -1256,6 +1306,24 @@ input { font: inherit; color: inherit; }
   box-shadow: 0 4px 14px rgba(198, 161, 91, 0.35);
 }
 .btn-ref-share:active { transform: scale(0.96); }
+.btn-ref-store {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s;
+  color: var(--text-primary);
+}
+.btn-ref-store:active { transform: scale(0.96); }
+
 .ref-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1285,11 +1353,49 @@ input { font: inherit; color: inherit; }
   font-weight: 700;
 }
 
+.ref-milestone-card {
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.ref-milestone-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ref-milestone-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border);
+}
+.ref-milestone-row:last-child { border-bottom: none; }
+.ref-milestone-reward {
+  color: var(--gold-dark);
+  font-weight: 800;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Referral Tabs */
 .ref-switch {
   display: flex;
   gap: 6px;
   padding: 5px;
-  margin: 10px 0 16px;
+  margin: 4px 0 16px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: rgba(247, 241, 229, .82);
@@ -1301,7 +1407,7 @@ input { font: inherit; color: inherit; }
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 800;
-  transition: color .2s ease, background .25s ease, transform .25s ease;
+  transition: color .2s ease, background .25s ease;
 }
 .ref-switch-tab.active {
   color: var(--text-primary);
@@ -1310,75 +1416,69 @@ input { font: inherit; color: inherit; }
 }
 .ref-panel { animation: viewIn .28s ease-out; }
 .ref-panel[hidden] { display: none; }
-.ref-status-note {
+
+/* Ranking */
+.ranking-list {
   display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  padding: 12px;
-  margin-bottom: 14px;
-  border: 1px solid rgba(198, 161, 91, .24);
-  border-radius: 15px;
-  background: rgba(232, 213, 166, .18);
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.7;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 20px;
 }
-.ref-status-note i { color: var(--gold-dark); margin-top: 2px; }
-.ref-status-note.compact { margin: 0 0 10px; }
-.ref-panel-card, .ranking-unavailable {
-  padding: 16px;
-  margin-bottom: 16px;
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, .88);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
-.ref-card-title {
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-primary);
+.ranking-row.me {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #FFFCF5, #F7F1E5);
 }
-.ref-condition-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(237, 227, 208, .8);
-  font-size: 11px;
-  line-height: 1.6;
-}
-.ref-condition-row:last-of-type { border-bottom: 0; }
-.ref-condition-row span { color: var(--text-secondary); }
-.ref-condition-row strong { max-width: 60%; text-align: left; color: var(--text-primary); }
-.ref-progress-label {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 12px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
-.ref-progress {
-  height: 7px;
-  margin-top: 8px;
-  overflow: hidden;
-  border-radius: 99px;
+.ranking-rank {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: var(--gold-dark);
+  flex-shrink: 0;
+  font-size: 13px;
 }
-.ref-progress div {
-  width: 0;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--gradient-gold);
-  transition: width .35s ease;
+.ranking-rank.top1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #382810; }
+.ranking-rank.top2 { background: linear-gradient(135deg, #E8E8E8, #A8A8A8); color: #382810; }
+.ranking-rank.top3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
+.ranking-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dark);
+  flex-shrink: 0;
+  border: 1px solid var(--border);
 }
+.ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ranking-info { flex: 1; min-width: 0; }
+.ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
+.ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 .ranking-unavailable {
   margin-top: 4px;
   padding: 24px 18px;
   text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(255,255,255,.88);
+  box-shadow: var(--shadow-sm);
 }
 .ranking-unavailable-icon {
   width: 54px;
@@ -1391,7 +1491,24 @@ input { font: inherit; color: inherit; }
   background: rgba(232, 213, 166, .34);
   font-size: 22px;
 }
-.ranking-unavailable p { color: var(--text-secondary); font-size: 12px; line-height: 1.8; }
+.ranking-unavailable .ref-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.ranking-unavailable p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.8;
+  font-weight: 600;
+}
+.ranking-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+.ranking-loading i { font-size: 24px; opacity: .5; }
 
 /* ============ PROFILE ============ */
 .profile-hero {
@@ -1521,7 +1638,7 @@ input { font: inherit; color: inherit; }
 .menu-desc { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
 .menu-arrow { color: var(--text-secondary); font-size: 12px; }
 
-/* ============ DOCK ============ */
+/* ============ DOCK (نسخة عادية + مؤشر منزلق) ============ */
 .dock {
   position: absolute;
   bottom: calc(14px + var(--safe-bottom));
@@ -1531,6 +1648,7 @@ input { font: inherit; color: inherit; }
   align-items: center;
   gap: 10px;
   z-index: 100;
+  transition: transform .28s ease, opacity .2s ease;
 }
 .dock-nav {
   flex: 1;
@@ -1580,7 +1698,7 @@ input { font: inherit; color: inherit; }
   font-size: 10px;
   font-weight: 700;
   border-radius: 26px;
-  transition: all 0.25s;
+  transition: color 0.25s;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -1592,12 +1710,6 @@ input { font: inherit; color: inherit; }
   background: transparent;
   box-shadow: none;
 }
-.keyboard-open .dock {
-  transform: translateY(calc(100% + 24px));
-  opacity: 0;
-  pointer-events: none;
-}
-.dock { transition: transform .28s ease, opacity .2s ease; }
 
 .nav-badge {
   position: absolute;
@@ -1638,6 +1750,13 @@ input { font: inherit; color: inherit; }
 .nav-profile.active {
   border-color: var(--gold);
   box-shadow: 0 4px 20px rgba(198, 161, 91, 0.35);
+}
+
+/* إخفاء الدوك عند فتح لوحة المفاتيح */
+.keyboard-open .dock {
+  transform: translateY(calc(100% + 24px));
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ============ MODALS ============ */
@@ -1793,6 +1912,7 @@ input { font: inherit; color: inherit; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.err { border-color: rgba(255, 59, 48, 0.4); }
 
+/* ============ BOOT STATE ============ */
 .boot-state {
   position: fixed;
   inset: 0;
@@ -1822,7 +1942,7 @@ input { font: inherit; color: inherit; }
   animation: bootSpin .8s linear infinite;
 }
 @keyframes bootSpin { to { transform: rotate(360deg); } }
-.boot-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+.boot-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: var(--text-primary); }
 .boot-message { color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
 .boot-retry {
   display: none;
@@ -1833,37 +1953,39 @@ input { font: inherit; color: inherit; }
   background: var(--gradient-gold);
   color: #382810;
   font-weight: 800;
+  cursor: pointer;
 }
 .boot-state.error .boot-spinner { display: none; }
 .boot-state.error .boot-retry { display: block; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-  }
-}
+/* Utilities */
+.mb-2 { margin-bottom: 12px; }
+.mb-3 { margin-bottom: 16px; }
+
+/* Media Query */
 @media (max-width: 360px) {
   .top-bar { left: 10px; right: 10px; padding: 8px; }
   .balances { gap: 4px; }
   .balance-chip { padding-inline: 6px; font-size: 12px; }
   .main-scroll { padding-right: 12px; padding-left: 12px; }
   .stars-input-wrap { gap: 7px; }
-  .stars-input-icon { width: 38px; height: 38px; flex-basis: 38px; }
+  .stars-input-icon { width: 38px; height: 38px; }
   .nav-item { font-size: 9px; }
   .nav-item i { font-size: 16px; }
-  .ref-condition-row { flex-direction: column; gap: 3px; }
-  .ref-condition-row strong { max-width: 100%; text-align: right; }
 }
-
-/* Utilities */
-.mb-2 { margin-bottom: 12px; }
-.mb-3 { margin-bottom: 16px; }
 </style>
 </head>
 <body>
+
+<!-- BOOT STATE -->
+<div class="boot-state" id="bootState" role="status" aria-live="polite">
+  <div class="boot-card">
+    <div class="boot-spinner"></div>
+    <div class="boot-title" id="bootTitle">جارٍ تحميل الحساب</div>
+    <div class="boot-message" id="bootMessage">يتم الاتصال بمصدر بيانات الرصيد…</div>
+    <button class="boot-retry" id="bootRetry" type="button" onclick="location.reload()">إعادة المحاولة</button>
+  </div>
+</div>
 
 <div class="app-container" id="app" style="display:none">
 
@@ -1889,6 +2011,7 @@ input { font: inherit; color: inherit; }
     <div class="view active" id="view-home">
       <div class="home-hero">
         <div class="greeting-row">
+          <div class="greeting-avatar" id="greetAvatar"><i class="fas fa-user"></i></div>
           <div class="greeting-text">
             <div class="greeting-hello">مرحباً <span id="greetName">لاعب</span></div>
             <div class="greeting-sub">متجر المقتنيات الذكية</div>
@@ -1919,10 +2042,10 @@ input { font: inherit; color: inherit; }
           <div class="action-card-title">المقتنيات</div>
           <div class="action-card-desc">اعرض وبِع مقتنياتك</div>
         </div>
-        <div class="action-card" data-view="referral">
-          <div class="action-card-icon blue"><i class="fas fa-user-group"></i></div>
-          <div class="action-card-title">الإحالات</div>
-          <div class="action-card-desc">تابع دعواتك ومكافآتها</div>
+        <div class="action-card" data-view="catalog">
+          <div class="action-card-icon blue"><i class="fas fa-layer-group"></i></div>
+          <div class="action-card-title">البطاقات</div>
+          <div class="action-card-desc">تصفح جميع البطاقات</div>
         </div>
       </div>
 
@@ -1940,14 +2063,14 @@ input { font: inherit; color: inherit; }
       <div id="homeCollectiblesPreview"></div>
     </div>
 
-    <!-- FULL CARD CATALOG -->
+    <!-- CATALOG -->
     <div class="view" id="view-catalog">
       <div class="page-title">جميع البطاقات</div>
       <div class="page-subtitle">اختر بطاقة لعرض التفاصيل والشراء</div>
-      <div class="catalog-tabs" role="tablist" aria-label="تصنيفات البطاقات">
-        <button class="catalog-tab active" type="button" role="tab" aria-selected="true" data-catalog-category="all">الكل</button>
-        <button class="catalog-tab" type="button" role="tab" aria-selected="false" data-catalog-category="gifts">الهدايا</button>
-        <button class="catalog-tab" type="button" role="tab" aria-selected="false" data-catalog-category="cars">Cars</button>
+      <div class="catalog-tabs" role="tablist">
+        <button class="catalog-tab active" type="button" role="tab" data-catalog-category="all">الكل</button>
+        <button class="catalog-tab" type="button" role="tab" data-catalog-category="gifts">الهدايا</button>
+        <button class="catalog-tab" type="button" role="tab" data-catalog-category="cars">Cars</button>
       </div>
       <div class="catalog-grid" id="catalogList"></div>
     </div>
@@ -2004,7 +2127,6 @@ input { font: inherit; color: inherit; }
         </div>
       </div>
 
-      <!-- STARS TAB: TOP UP STARS BALANCE -->
       <div id="dep-tab-stars">
         <div class="section-hint mb-2">كل نجمة = نجمة واحدة في رصيدك</div>
         <div class="stars-input-wrap">
@@ -2031,7 +2153,6 @@ input { font: inherit; color: inherit; }
         </button>
       </div>
 
-      <!-- CRYPTO TAB -->
       <div id="dep-tab-crypto" style="display:none">
         <div id="cryptoPendingBanner" style="display:none;margin-bottom:16px;padding:14px;background:var(--bg-soft);border-radius:14px;border:1px solid var(--border)">
           <div style="font-weight:800;font-size:13px;margin-bottom:8px;color:var(--text-primary)">لديك فاتورة معلقة <span id="cryptoPendingTimer" style="float:left;direction:ltr;font-family:monospace;color:var(--text-secondary)">--:--</span></div>
@@ -2076,6 +2197,46 @@ input { font: inherit; color: inherit; }
 
       <div id="dep-tab-binance" style="display:none"></div>
       <div id="dep-tab-sham" style="display:none"></div>
+    </div>
+
+    <!-- EXCHANGE -->
+    <div class="view" id="view-exchange">
+      <div class="page-title">تبديل العملات</div>
+      <div class="page-subtitle">1000 عملة = 10 ماسات — الحد الأدنى 10,000 عملة</div>
+
+      <div class="amount-grid" id="exAmounts">
+        <div class="amount-chip" data-examt="10000">10K</div>
+        <div class="amount-chip" data-examt="50000">50K</div>
+        <div class="amount-chip" data-examt="100000">100K</div>
+        <div class="amount-chip" data-examt="250000">250K</div>
+        <div class="amount-chip" data-examt="500000">500K</div>
+        <div class="amount-chip" data-examt="1000000">1M</div>
+      </div>
+
+      <div class="pro-input-group">
+        <label>أو أدخل عدد العملات</label>
+        <input class="pro-input" id="exInput" type="number" min="10000" step="1000" placeholder="10000">
+      </div>
+
+      <div class="calc-box">
+        <div class="calc-row">
+          <span>العملات المحوّلة</span>
+          <span class="calc-val" id="exChosen">0</span>
+        </div>
+        <div class="calc-row">
+          <span>الماسات المستقبلة</span>
+          <span class="calc-val" id="exReceive">0</span>
+        </div>
+        <div class="calc-row">
+          <span>رصيدك</span>
+          <span class="calc-val" id="exBal">0</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="exSubmit">
+        <i class="fas fa-right-left"></i>
+        <span>تبديل الآن</span>
+      </button>
     </div>
 
     <!-- WITHDRAW -->
@@ -2125,8 +2286,8 @@ input { font: inherit; color: inherit; }
           <span class="calc-val" id="wdChosen">0</span>
         </div>
         <div class="calc-row" id="wdFeeRow" style="display:none">
-            <span>عمولة التطبيق (0%)</span>
-            <span class="calc-val" id="wdFee">$0.00</span>
+          <span>عمولة التطبيق (0%)</span>
+          <span class="calc-val" id="wdFee">$0.00</span>
         </div>
         <div class="calc-row">
           <span>الصافي للاستلام</span>
@@ -2198,11 +2359,11 @@ input { font: inherit; color: inherit; }
           </div>
           <i class="fas fa-chevron-left menu-arrow"></i>
         </div>
-        <div class="menu-item" data-view="referral">
-          <div class="menu-icon blue"><i class="fas fa-user-group"></i></div>
+        <div class="menu-item" data-view="exchange">
+          <div class="menu-icon blue"><i class="fas fa-right-left"></i></div>
           <div class="menu-text">
-            <div class="menu-title">الإحالات والتصنيف</div>
-            <div class="menu-desc">تابع دعوتك وترتيبك</div>
+            <div class="menu-title">تبديل العملات</div>
+            <div class="menu-desc">1000 عملة = 10 ماسات</div>
           </div>
           <i class="fas fa-chevron-left menu-arrow"></i>
         </div>
@@ -2233,10 +2394,11 @@ input { font: inherit; color: inherit; }
       </div>
     </div>
 
-    <!-- REFERRALS & RANKING -->
+    <!-- REFERRAL -->
     <div class="view" id="view-referral">
       <div class="page-title">الإحالات والتصنيف</div>
-      <div class="page-subtitle">بيانات الدعوات والمكافآت المرتبطة بحسابك</div>
+      <div class="page-subtitle">ادعُ أصدقاءك وتابع ترتيبك</div>
+
       <div class="ref-switch" role="tablist" aria-label="الإحالات والتصنيف">
         <button class="ref-switch-tab active" type="button" role="tab" aria-selected="true" data-ref-tab="invites">إحالاتي</button>
         <button class="ref-switch-tab" type="button" role="tab" aria-selected="false" data-ref-tab="ranking">التصنيف</button>
@@ -2244,54 +2406,29 @@ input { font: inherit; color: inherit; }
 
       <section class="ref-panel active" id="refPanelInvites" role="tabpanel">
         <div class="ref-hero">
-          <div class="ref-hero-icon"><i class="fas fa-user-group"></i></div>
+          <div class="ref-hero-icon"><i class="fas fa-user-plus"></i></div>
           <div class="ref-hero-title">دعوة الأصدقاء</div>
-          <div class="ref-hero-sub">تابع الدعوات المسجلة والمكافآت المؤكدة</div>
+          <div class="ref-hero-sub">ادعُ أصدقاءك واحصل على مكافآت</div>
           <div class="ref-hero-earnings">
-            <div class="ref-hero-earnings-label">الأرباح المسجلة في الحساب</div>
+            <div class="ref-hero-earnings-label">إجمالي أرباح الدعوات</div>
             <div class="ref-hero-earnings-value">
               <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">
-              <span id="refEarn">—</span>
+              <span id="refEarn">0</span>
             </div>
           </div>
         </div>
 
-        <div class="ref-status-note">
-          <i class="fas fa-circle-info"></i>
-          <span>المكافآت الجديدة والتحقق من أهلية الإحالات يحتاجان إلى خدمة آمنة على الخادم، وهي غير موجودة في ملف HTML الحالي. لن تُعرض أرقام تقديرية على أنها أرصدة فعلية.</span>
-        </div>
-
-        <div class="ref-stats-grid">
-          <div class="ref-stat-box">
-            <div class="ref-stat-val" id="refCount">—</div>
-            <div class="ref-stat-lbl">الإحالات المسجلة</div>
+        <div class="ref-rewards-grid">
+          <div class="ref-reward-card">
+            <div class="ref-reward-icon you"><i class="fas fa-star"></i></div>
+            <div class="ref-reward-value">+50</div>
+            <div class="ref-reward-label">مكافآتك</div>
           </div>
-          <div class="ref-stat-box">
-            <div class="ref-stat-val" id="refInitialCount">—</div>
-            <div class="ref-stat-lbl">مكافآت أولية مؤكدة</div>
+          <div class="ref-reward-card">
+            <div class="ref-reward-icon friend"><i class="fas fa-gift"></i></div>
+            <div class="ref-reward-value">+20</div>
+            <div class="ref-reward-label">هدية صديقك</div>
           </div>
-          <div class="ref-stat-box">
-            <div class="ref-stat-val" id="refQualifiedCount">—</div>
-            <div class="ref-stat-lbl">إحالات مؤهلة</div>
-          </div>
-          <div class="ref-stat-box">
-            <div class="ref-stat-val" id="refPending">—</div>
-            <div class="ref-stat-lbl">مكافآت معلقة</div>
-          </div>
-        </div>
-
-        <div class="ref-panel-card">
-          <div class="ref-card-title"><i class="fas fa-gift"></i> شروط المكافأة الجديدة</div>
-          <div class="ref-status-note compact">
-            <i class="fas fa-lock"></i>
-            <span>هذه الشروط غير مفعّلة للصرف في هذه النسخة؛ يلزم ربط التحقق الآمن قبل اعتمادها.</span>
-          </div>
-          <div class="ref-condition-row"><span>انضمام صديق عبر رابطك</span><strong>50 ماسة أولية للداعي و50 للمدعو</strong></div>
-          <div class="ref-condition-row"><span>الشرط الإضافي</span><strong>شراء المدعو بطاقة 500 نجمة أو أكثر، وامتلاك الداعي 5 إحالات</strong></div>
-          <div class="ref-condition-row"><span>المكافأة المؤجلة للداعي</span><strong>950 ماسة عند التحقق</strong></div>
-          <div class="ref-condition-row"><span>إجمالي مكافأة الداعي عند الأهلية</span><strong>1000 ماسة لكل إحالة مؤهلة</strong></div>
-          <div class="ref-progress-label"><span>التقدم إلى 5 إحالات مسجلة</span><span id="refProgressText">— / 5</span></div>
-          <div class="ref-progress"><div id="refProgressFill"></div></div>
         </div>
 
         <div class="section-header"><div class="section-title">كود الدعوة</div></div>
@@ -2299,36 +2436,66 @@ input { font: inherit; color: inherit; }
           <div class="link-box-code" id="refCode">...</div>
           <button class="btn-copy" id="codeCopy"><i class="fas fa-copy"></i> نسخ</button>
         </div>
+
         <div class="section-header"><div class="section-title">رابط الدعوة</div></div>
         <div class="link-box">
           <div class="link-box-text" id="refLink">...</div>
           <button class="btn-copy" id="refCopy"><i class="fas fa-copy"></i> نسخ</button>
         </div>
+
         <div class="ref-actions">
-          <button class="btn-ref-share" id="refShare"><i class="fas fa-paper-plane"></i><span>مشاركة الرابط</span></button>
+          <button class="btn-ref-share" id="refShare">
+            <i class="fas fa-paper-plane"></i>
+            <span>مشاركة</span>
+          </button>
+          <button class="btn-ref-store" data-view="store">
+            <i class="fas fa-box-open"></i>
+            <span>المتجر</span>
+          </button>
         </div>
+
+        <div class="ref-stats-grid">
+          <div class="ref-stat-box">
+            <div class="ref-stat-val" id="refCount">0</div>
+            <div class="ref-stat-lbl">عدد الدعوات</div>
+          </div>
+          <div class="ref-stat-box">
+            <div class="ref-stat-val" id="refPending" style="color:#FF9800">0</div>
+            <div class="ref-stat-lbl">مكافآت متوقعة</div>
+          </div>
+        </div>
+
+        <div class="ref-milestone-card">
+          <div class="ref-milestone-title"><i class="fas fa-trophy" style="color:var(--gold)"></i> إنجازات الدعوات</div>
+          <div class="ref-milestone-row"><span>3 أصدقاء</span><span class="ref-milestone-reward">+15 ماسة</span></div>
+          <div class="ref-milestone-row"><span>5 أصدقاء</span><span class="ref-milestone-reward">+30 ماسة</span></div>
+          <div class="ref-milestone-row"><span>10 أصدقاء</span><span class="ref-milestone-reward">+60 ماسة</span></div>
+          <div class="ref-milestone-row"><span>25 صديق</span><span class="ref-milestone-reward">+200 ماسة</span></div>
+        </div>
+
         <div id="enterCard" style="display:none">
-          <div class="section-header" style="margin-top:8px"><div class="section-title">هل دعاك صديق؟</div></div>
+          <div class="section-header" style="margin-top:8px">
+            <div class="section-title">هل دعاك صديق؟</div>
+          </div>
           <div class="pro-input-group">
-            <label>أدخل كود الدعوة الحالي</label>
+            <label>أدخل معرّف الدعوة لتحصل على +20 ماسة</label>
             <input class="pro-input" id="codeInput" inputmode="numeric" placeholder="معرّف الدعوة">
           </div>
-          <button class="btn-primary" id="codeSubmit"><i class="fas fa-check"></i><span>تأكيد الكود</span></button>
+          <button class="btn-primary" id="codeSubmit">
+            <i class="fas fa-check"></i>
+            <span>تأكيد الكود</span>
+          </button>
         </div>
       </section>
 
       <section class="ref-panel" id="refPanelRanking" role="tabpanel" hidden>
-        <div class="ranking-unavailable">
-          <div class="ranking-unavailable-icon"><i class="fas fa-ranking-star"></i></div>
-          <div class="ref-card-title">تصنيف أفضل 50</div>
-          <p>لا يتوفر مصدر موثوق للإحالات المؤهلة أو ترتيب المستخدمين في ملفات الواجهة الحالية. سيظهر التصنيف هنا بعد ربط خدمة الخادم، دون استخدام بيانات تجريبية.</p>
-        </div>
+        <div id="rankingList"><div class="ranking-loading"><i class="fas fa-spinner fa-spin"></i></div></div>
       </section>
     </div>
 
   </div>
 
-  <!-- DOCK -->
+  <!-- DOCK (نسخة مطابقة للنسخة العادية) -->
   <div class="dock">
     <div class="dock-nav">
       <div class="nav-item active" data-view="home">
@@ -2352,15 +2519,6 @@ input { font: inherit; color: inherit; }
     <div class="nav-profile" data-view="profile" id="navProfile">
       <i class="fas fa-user"></i>
     </div>
-  </div>
-</div>
-
-<div class="boot-state" id="bootState" role="status" aria-live="polite">
-  <div class="boot-card">
-    <div class="boot-spinner"></div>
-    <div class="boot-title" id="bootTitle">جارٍ تحميل الحساب</div>
-    <div class="boot-message" id="bootMessage">يتم الاتصال بمصدر بيانات الرصيد…</div>
-    <button class="boot-retry" id="bootRetry" type="button" onclick="location.reload()">إعادة المحاولة</button>
   </div>
 </div>
 
@@ -2423,17 +2581,19 @@ input { font: inherit; color: inherit; }
 
 // ===================== CONFIG =====================
 const CONFIG = {
-  firebase:{apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
-  authDomain: "puppy-marge.firebaseapp.com",
-  projectId: "puppy-marge",
-  storageBucket: "puppy-marge.firebasestorage.app",
-  messagingSenderId: "907422647300",
-  appId: "1:907422647300:web:efa524fcfef96288c4a151"
-},
+  firebase: {
+    apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
+    authDomain: "puppy-marge.firebaseapp.com",
+    projectId: "puppy-marge",
+    storageBucket: "puppy-marge.firebasestorage.app",
+    messagingSenderId: "907422647300",
+    appId: "1:907422647300:web:efa524fcfef96288c4a151"
+  },
   bot: { username: 'PuppyMerge_bot', appName: 'PuppyMerge' },
   col: 'puppy_users', wdCol: 'puppy_withdrawals', txCol: 'puppy_transactions', timeCol: '_puppy_time',
   admin: { telegram: 'qo_ij2' },
   ref: { newUser: 20 },
+  ex: { min: 10000, rate: 0.01 },
   wd: { min: 5000, binanceFee: 0, shamMin: 1000, shamSypPerGem: 0.01 },
   api: { base: 'https://puppy-merge-api.starlimitedcom.workers.dev' },
   shieldz: { gemsPerUsd: 10000, minUsd: 1, maxUsd: 1000, pollIntervalMs: 5000, pollMaxAttempts: 60, pendingTimeoutMs: 30 * 60 * 1000 },
@@ -2441,7 +2601,6 @@ const CONFIG = {
   collectibles: {
     holdMs: 7 * 24 * 60 * 60 * 1000,
     profitRate: 0.05,
-    gemsPerStar: 90,
     bundles: [
       { id: 'gift-free', title: 'هدية مجانية', category: 'gifts', stars: 150, gems: 150, webm: 'gifts_by_StickerEmojiRobot-078.webm', free: true },
       { id: 'heart-locket', title: 'بطاقة 200 نجمة', category: 'gifts', stars: 200, gems: 9000, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' },
@@ -2477,7 +2636,7 @@ const usdBinanceNet = g => (parseFloat(usd(g)) * (1 - CONFIG.wd.binanceFee)).toF
 const getBundleByStars = stars =>
   CONFIG.collectibles.bundles.find(b => b.stars === stars) ||
   (CONFIG.collectibles.missionGift.stars === stars ? CONFIG.collectibles.missionGift : null);
-const cardTitle = item => item.title || getBundleByStars(item.bundleStars)?.title || `بطاقة ${item.bundleStars}`;
+const cardTitle = item => item.title || (getBundleByStars(item.bundleStars)?.title) || `بطاقة ${item.bundleStars}`;
 const cardProfitRate = item => item.profitRate != null && Number.isFinite(Number(item.profitRate))
   ? Number(item.profitRate)
   : CONFIG.collectibles.profitRate;
@@ -2511,17 +2670,12 @@ const TG = {
 let db = null;
 const FB = {
   init() {
-    if (!CONFIG.firebase.apiKey || CONFIG.firebase.apiKey === 'CONFIGURE_FIREBASE_WEB_API_KEY') {
-      console.warn('Configure Firebase before enabling account storage.');
-      return false;
-    }
     try {
       firebase.apps.length || firebase.initializeApp(CONFIG.firebase);
       db = firebase.firestore();
       return !!db;
     } catch (e) {
       db = null;
-      console.warn('Firebase initialization failed.');
       return false;
     }
   },
@@ -2553,7 +2707,7 @@ const TIME = {
 };
 
 // ===================== STATE =====================
-const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', starsInput: 0, referralEarningsAvailable: false, referralCountAvailable: false };
+const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', ex: 0, starsInput: 0 };
 let catalogCategory = 'all';
 let referralPanel = 'invites';
 let wdHistoryRows = [];
@@ -2562,6 +2716,7 @@ let wdHistorySeen = new Set();
 let wdHistoryHasMore = false;
 let wdHistoryLoading = false;
 let wdHistoryError = false;
+let rankingLoaded = false;
 const DAILY_FREE_GIFT_SERVER_ENFORCED = false;
 
 const newUser = () => ({
@@ -2609,6 +2764,8 @@ function go(viewName) {
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
+
+  // مؤشر الدوك المنزلق
   const dockNav = document.querySelector('.dock-nav');
   const dockItems = Array.from(document.querySelectorAll('.dock-nav .nav-item'));
   const activeDockIndex = dockItems.findIndex(n => n.dataset.view === viewName);
@@ -2616,11 +2773,11 @@ function go(viewName) {
 
   $('mainScroll').scrollTop = 0;
 
-  if (viewName === 'withdraw') loadWdHistory();
+  if (viewName === 'withdraw') loadWdHistory(true);
   if (viewName === 'deposit') { setDepTab('stars'); updateStarsUI(); }
   if (viewName === 'store') renderCollectibles();
   if (viewName === 'catalog') renderCatalog();
-  if (viewName === 'referral') renderReferral();
+  if (viewName === 'referral') { renderReferral(); if (referralPanel === 'ranking') loadRanking(); }
   if (viewName !== 'deposit' && cryptoPollTimer) stopPaymentPolling();
 }
 
@@ -2637,6 +2794,7 @@ function renderAll() {
   if (u.photoUrl) {
     $('topProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
     $('navProfile').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\'></i>\'">';
+    $('greetAvatar').innerHTML = '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer">';
   }
 
   $('greetName').textContent = (u.name || 'لاعب').split(' ')[0];
@@ -2652,7 +2810,7 @@ function renderAll() {
   $('profGems').textContent = fmt(u.gems);
   $('profStars').textContent = fmt(u.stars || 0);
   $('profCollectibles').textContent = fmt(activeCount);
-  $('profRefs').textContent = S.referralCountAvailable ? fmt(u.referralCount) : '—';
+  $('profRefs').textContent = u.referralCount || 0;
   $('profAvatar').innerHTML = u.photoUrl
     ? '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\' style=\\\'font-size:32px\\\'></i>\'">'
     : '<i class="fas fa-user" style="font-size:32px"></i>';
@@ -2660,19 +2818,22 @@ function renderAll() {
   $('wdGems').textContent = fmt(u.gems);
   $('wdUsd').textContent = '$' + usd(u.gems);
 
+  $('exBal').textContent = fmt(u.coins);
+
   $('refLink').textContent = 'https://t.me/' + CONFIG.bot.username + '/' + CONFIG.bot.appName + '?startapp=ref_' + (u.referralCode || TG.id);
-  $('refCount').textContent = S.referralCountAvailable ? fmt(u.referralCount) : '—';
-  $('refEarn').textContent = S.referralEarningsAvailable ? fmt(u.referralEarnings) : '—';
+  $('refCount').textContent = u.referralCount || 0;
+  $('refEarn').textContent = fmt(u.referralEarnings || 0);
   $('refCode').textContent = u.referralCode || TG.id;
+  $('refPending').textContent = fmt((u.referralCount || 0) * 50);
   $('enterCard').style.display = u.referralUsed ? 'none' : 'block';
 
+  updateEx();
   updateWd();
   updatePendingBanner();
   updateStoreBadge();
 
   if ($('view-home').classList.contains('active')) renderHomeCollectiblesPreview();
   if ($('view-store').classList.contains('active')) renderCollectibles();
-  if ($('view-referral').classList.contains('active')) renderReferral();
 }
 
 function setReferralPanel(panelName) {
@@ -2686,19 +2847,57 @@ function setReferralPanel(panelName) {
   const ranking = $('refPanelRanking');
   if (invites) { invites.hidden = referralPanel !== 'invites'; invites.classList.toggle('active', referralPanel === 'invites'); }
   if (ranking) { ranking.hidden = referralPanel !== 'ranking'; ranking.classList.toggle('active', referralPanel === 'ranking'); }
+  if (referralPanel === 'ranking') loadRanking();
 }
 
 function renderReferral() {
   if (!S.user) return;
-  const count = S.referralCountAvailable ? Math.max(0, Number(S.user.referralCount) || 0) : null;
-  const progressCount = count == null ? 0 : Math.min(count, 5);
-  if ($('refCount')) $('refCount').textContent = count == null ? '—' : fmt(count);
-  if ($('refEarn')) $('refEarn').textContent = S.referralEarningsAvailable ? fmt(S.user.referralEarnings) : '—';
-  if ($('refInitialCount')) $('refInitialCount').textContent = '—';
-  if ($('refQualifiedCount')) $('refQualifiedCount').textContent = '—';
-  if ($('refPending')) $('refPending').textContent = '—';
-  if ($('refProgressText')) $('refProgressText').textContent = count == null ? '— / 5' : `${fmt(progressCount)} / 5`;
-  if ($('refProgressFill')) $('refProgressFill').style.width = count == null ? '0%' : `${progressCount / 5 * 100}%`;
+  const count = Number(S.user.referralCount) || 0;
+  if ($('refCount')) $('refCount').textContent = fmt(count);
+  if ($('refEarn')) $('refEarn').textContent = fmt(S.user.referralEarnings || 0);
+  if ($('refPending')) $('refPending').textContent = fmt(count * 50);
+}
+
+async function loadRanking() {
+  const el = $('rankingList');
+  if (!el) return;
+  if (rankingLoaded) return;
+  el.innerHTML = '<div class="ranking-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+  if (!db) {
+    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><div class="ref-card-title">التصنيف غير متوفر</div><p>تعذر الاتصال بقاعدة البيانات.</p></div>';
+    return;
+  }
+  try {
+    const q = await db.collection(CONFIG.col).orderBy('referralCount', 'desc').limit(50).get();
+    const rows = [];
+    q.forEach(doc => {
+      const d = doc.data();
+      const c = Number(d.referralCount) || 0;
+      if (c > 0) rows.push({ id: doc.id, name: d.name || 'لاعب', count: c, photo: d.photoUrl, isMe: doc.id === TG.id });
+    });
+    if (!rows.length) {
+      el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-trophy"></i></div><div class="ref-card-title">لا توجد تصنيفات بعد</div><p>كن أول من يدعو أصدقاءه ليظهر في القائمة.</p></div>';
+      rankingLoaded = true;
+      return;
+    }
+    el.innerHTML = '<div class="ranking-list">' + rows.map((r, i) => {
+      const rankClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+      const avatar = r.photo
+        ? `<img src="${esc(r.photo)}" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML='<i class=&quot;fas fa-user&quot;></i>'">`
+        : '<i class="fas fa-user"></i>';
+      return `<div class="ranking-row ${r.isMe ? 'me' : ''}">
+        <div class="ranking-rank ${rankClass}">${i + 1}</div>
+        <div class="ranking-avatar">${avatar}</div>
+        <div class="ranking-info">
+          <div class="ranking-name">${esc(r.name)}${r.isMe ? ' (أنت)' : ''}</div>
+          <div class="ranking-count">${fmt(r.count)} إحالة</div>
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+    rankingLoaded = true;
+  } catch (e) {
+    el.innerHTML = '<div class="ranking-unavailable"><div class="ranking-unavailable-icon"><i class="fas fa-triangle-exclamation"></i></div><div class="ref-card-title">تعذر تحميل التصنيف</div><p>قد تحتاج قواعد Firestore صلاحية قراءة القائمة العامة. تحقق من إعدادات المشروع.</p></div>';
+  }
 }
 
 function updateStoreBadge() {
@@ -2711,39 +2910,6 @@ function updateStoreBadge() {
   } else {
     badge.style.display = 'none';
   }
-}
-
-function updateCollectibleClocks() {
-  const now = Date.now();
-  let becameSellable = false;
-  document.querySelectorAll('.collectible-item[data-purchased-at]').forEach(card => {
-    const purchasedAt = Number(card.dataset.purchasedAt) || 0;
-    const elapsed = Math.max(0, now - purchasedAt);
-    const remain = Math.max(0, CONFIG.collectibles.holdMs - elapsed);
-    const pct = Math.min(100, elapsed / CONFIG.collectibles.holdMs * 100);
-    const timer = card.querySelector('.collectible-timer');
-    const percent = card.querySelector('.collectible-percent');
-    const fill = card.querySelector('.progress-bar-fill');
-    if (remain <= 0 && !card.classList.contains('ready')) becameSellable = true;
-    if (timer) {
-      if (remain <= 0) timer.textContent = 'جاهزة للبيع الآن';
-      else {
-        const days = Math.floor(remain / 86400000);
-        const hours = Math.floor((remain % 86400000) / 3600000);
-        timer.textContent = days > 0 ? `متاح بعد ${days} يوم و ${hours} ساعة` : `متاح بعد ${hours} ساعة`;
-      }
-    }
-    if (percent) percent.textContent = `${pct.toFixed(0)}%`;
-    if (fill) {
-      fill.style.width = `${pct}%`;
-      if (remain <= 0) fill.style.background = 'linear-gradient(90deg, #34C759, #2BA84A)';
-    }
-  });
-  document.querySelectorAll('.collectible-preview-status[data-purchased-at]').forEach(status => {
-    const purchasedAt = Number(status.dataset.purchasedAt) || 0;
-    status.textContent = now - purchasedAt >= CONFIG.collectibles.holdMs ? 'جاهزة للبيع' : 'قيد الاحتجاز';
-  });
-  if (becameSellable && $('view-store').classList.contains('active')) renderCollectibles();
 }
 
 function scheduleCarVideoPrefetch() {
@@ -2777,14 +2943,14 @@ function renderHomeCollectiblesPreview() {
     const elapsed = Date.now() - c.purchasedAt;
     const canSell = elapsed >= CONFIG.collectibles.holdMs;
     const sellValue = cardSellValue(c);
-    const webm = c.webm || bundleInfo?.webm || '';
+    const webm = c.webm || (bundleInfo ? bundleInfo.webm : '');
     return `<div class="menu-item" data-view="store">
-        <div class="collectible-thumb" style="width:64px;height:64px;border-radius:11px">
-        <video src="${esc(webm)}" autoplay loop muted playsinline preload="auto"></video>
+      <div class="collectible-thumb" style="width:44px;height:44px;border-radius:11px">
+        <video src="${esc(webm)}" autoplay loop muted playsinline></video>
       </div>
       <div class="menu-text">
         <div class="menu-title">${c.isFree ? '<img src="https://up6.cc/2026/10/179267967675431.jpg" style="width:14px;height:14px;border-radius:50%;vertical-align:middle;margin-left:4px">' : ''}${esc(cardTitle(c))}</div>
-        <div class="menu-desc collectible-preview-status" data-purchased-at="${Number(c.purchasedAt) || 0}">${canSell ? 'جاهزة للبيع' : 'قيد الاحتجاز'}</div>
+        <div class="menu-desc">${canSell ? 'جاهزة للبيع' : 'قيد الاحتجاز'}</div>
       </div>
       <div style="font-weight:800;color:var(--gold-dark);font-size:13px;direction:ltr;display:flex;align-items:center;gap:3px">
         ${fmt(sellValue)}
@@ -2862,7 +3028,7 @@ function renderCollectibleItem(c) {
   const profit = cardProfit(c);
   const bundleInfo = getBundleByStars(c.bundleStars);
   const progressPct = Math.min(100, (elapsed / CONFIG.collectibles.holdMs) * 100);
-  const webm = c.webm || bundleInfo?.webm || '';
+  const webm = c.webm || (bundleInfo ? bundleInfo.webm : '');
 
   let timerText = '';
   if (!canSell) {
@@ -2877,10 +3043,10 @@ function renderCollectibleItem(c) {
   const barColor = canSell ? 'linear-gradient(90deg, #34C759, #2BA84A)' : 'var(--gradient-gold)';
   const dateStr = new Date(c.purchasedAt).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' });
 
-  return `<div class="collectible-item ${canSell ? 'ready' : ''} ${c.isFree ? 'free-item' : ''}" data-purchased-at="${Number(c.purchasedAt) || 0}">
+  return `<div class="collectible-item ${canSell ? 'ready' : ''} ${c.isFree ? 'free-item' : ''}">
     <div class="collectible-header">
       <div class="collectible-thumb">
-        <video src="${esc(webm)}" autoplay loop muted playsinline preload="auto"></video>
+        <video src="${esc(webm)}" autoplay loop muted playsinline></video>
       </div>
       <div class="collectible-info">
         <div class="collectible-title">
@@ -2894,13 +3060,13 @@ function renderCollectibleItem(c) {
     <div class="collectible-progress">
       <div class="collectible-progress-label">
         <span>فترة الاحتجاز (7 أيام)</span>
-          <span class="collectible-percent">${progressPct.toFixed(0)}%</span>
+        <span>${progressPct.toFixed(0)}%</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" style="width:${progressPct}%;background:${barColor}"></div>
       </div>
       <div style="margin-top:6px;font-size:11px;color:var(--text-secondary);font-weight:700">
-        <i class="fas fa-clock"></i> <span class="collectible-timer">${timerText}</span>
+        <i class="fas fa-clock"></i> ${timerText}
       </div>
     </div>
     <div class="collectible-calc">
@@ -2971,7 +3137,7 @@ function initStarBundles() {
       const badge = document.createElement('div');
       badge.className = 'free-badge';
       badge.innerHTML = isUnavailable
-        ? '<i class="fas fa-lock"></i> بانتظار التحقق الآمن'
+        ? '<i class="fas fa-lock"></i> بانتظار التحقق'
         : '<i class="fas fa-gift"></i> مجاناً';
       card.appendChild(badge);
     }
@@ -3033,7 +3199,7 @@ function renderCatalog() {
     const sellValue = Math.floor(b.gems * (1 + CONFIG.collectibles.profitRate));
     const profitValue = sellValue - b.gems;
     return `<div class="bundle-card ${b.free ? 'free' : ''} ${claimed ? 'claimed' : ''} ${unavailable ? 'unavailable' : ''}" data-catalog-bundle="${esc(b.id)}" role="button" tabindex="${claimed || unavailable ? '-1' : '0'}" aria-disabled="${claimed || unavailable}" aria-label="${esc(b.title)}">
-      ${b.free ? `<div class="free-badge">${claimed ? '<i class="fas fa-check"></i> مستلمة' : unavailable ? '<i class="fas fa-lock"></i> بانتظار التحقق الآمن' : '<i class="fas fa-gift"></i> مجاناً'}</div>` : ''}
+      ${b.free ? `<div class="free-badge">${claimed ? '<i class="fas fa-check"></i> مستلمة' : unavailable ? '<i class="fas fa-lock"></i> بانتظار التحقق' : '<i class="fas fa-gift"></i> مجاناً'}</div>` : ''}
       <div class="bundle-video"><video src="${esc(b.webm)}" muted loop playsinline preload="metadata" aria-hidden="true"></video></div>
       <div class="bundle-label">${esc(b.title)}</div>
       <div class="bundle-price ${b.free ? 'gift' : ''}">${b.free ? unavailable ? '<i class="fas fa-lock"></i> غير متاحة حالياً' : '<i class="fas fa-gift"></i> مجاناً' : `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${fmt(b.stars)}</span>`}</div>
@@ -3057,7 +3223,7 @@ function renderCatalog() {
 
 function openBundleModal(bundle) {
   if (bundle.free && !DAILY_FREE_GIFT_SERVER_ENFORCED) {
-    toast('استلام الهدية كل 24 ساعة يحتاج إلى تحقق آمن من الخادم', 'info');
+    toast('استلام الهدية المجانية يحتاج إلى تحقق آمن من الخادم', 'info');
     return;
   }
   currentSelectedBundle = bundle;
@@ -3076,7 +3242,7 @@ function openBundleModal(bundle) {
 
   $('bcTitle').textContent = bundle.free ? 'بطاقة مجانية' : `تأكيد شراء ${bundle.title || 'البطاقة'}`;
   $('bcDesc').textContent = bundle.free
-    ? 'استلام الهدية كل 24 ساعة يتطلب تحققاً آمناً من الخادم'
+    ? 'استلام الهدية المجانية يتطلب تحققاً آمناً من الخادم'
     : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح 5%';
 
   if (bundle.free) {
@@ -3088,7 +3254,6 @@ function openBundleModal(bundle) {
   $('bcSellValue').innerHTML = `${fmt(sellValue)} <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">`;
   $('bcCurrentStars').innerHTML = `${fmt(currentStars)} <img src="https://up6.cc/2026/10/17926810487851.png" alt="">`;
 
-  // Render actions
   const actionsEl = $('bcActions');
   let primaryBtnHtml = '';
 
@@ -3122,7 +3287,7 @@ function closeBundleModal() {
 }
 
 async function claimFreeBundle(bundle) {
-  if (!DAILY_FREE_GIFT_SERVER_ENFORCED) return toast('استلام الهدية اليومي غير مفعّل قبل ربط التحقق الآمن بالخادم', 'info');
+  if (!DAILY_FREE_GIFT_SERVER_ENFORCED) return toast('استلام الهدية المجانية غير مفعّل قبل ربط التحقق الآمن بالخادم', 'info');
   if (S.user.freeClaimed) return toast('استلمت البطاقة المجانية مسبقاً', 'err');
   S.busy = true;
   try {
@@ -3217,14 +3382,9 @@ async function buyDirectly(bundle) {
 
       if (status === 'paid') {
         try {
-          // Revert backend-credited gems (since we want a collectible, not gems)
           const fresh = await FB.get();
-          if (!fresh || !validStoredNumber(fresh.gems)) {
-            throw new Error('balance_unavailable');
-          }
-          if (Object.prototype.hasOwnProperty.call(fresh, 'stars') && !validStoredNumber(fresh.stars)) {
-            throw new Error('stars_balance_unavailable');
-          }
+          if (!fresh || !validStoredNumber(fresh.gems)) throw new Error('balance_unavailable');
+          if (Object.prototype.hasOwnProperty.call(fresh, 'stars') && !validStoredNumber(fresh.stars)) throw new Error('stars_balance_unavailable');
           const creditedGems = data.gems == null ? 0 : Number(data.gems);
           if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
           const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
@@ -3312,14 +3472,9 @@ async function startStarsTopup() {
 
       if (status === 'paid') {
         try {
-          // Revert backend gems, add stars to balance
           const fresh = await FB.get();
-          if (!fresh || !validStoredNumber(fresh.gems)) {
-            throw new Error('balance_unavailable');
-          }
-          if (fresh.stars != null && !validStoredNumber(fresh.stars)) {
-            throw new Error('stars_balance_unavailable');
-          }
+          if (!fresh || !validStoredNumber(fresh.gems)) throw new Error('balance_unavailable');
+          if (fresh.stars != null && !validStoredNumber(fresh.stars)) throw new Error('stars_balance_unavailable');
           const creditedGems = data.gems == null ? 0 : Number(data.gems);
           if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
           const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
@@ -3352,6 +3507,44 @@ async function startStarsTopup() {
     });
   } catch (e) {
     toast(e.message || 'تعذر بدء الدفع', 'err');
+    S.busy = false;
+    btn.disabled = false;
+    btn.innerHTML = old;
+  }
+}
+
+// ===================== EXCHANGE =====================
+function updateEx() {
+  const a = S.ex || 0;
+  $('exChosen').textContent = fmt(a);
+  $('exReceive').textContent = fmt(Math.floor(a * CONFIG.ex.rate));
+}
+
+async function doExchange() {
+  if (S.busy) return;
+  const a = S.ex, u = S.user;
+  if (!a || a < CONFIG.ex.min) return toast('الحد الأدنى ' + fmt(CONFIG.ex.min) + ' عملة', 'err');
+  if (a > u.coins) return toast('رصيد غير كافٍ', 'err');
+
+  const g = Math.floor(a * CONFIG.ex.rate);
+  S.busy = true;
+  const btn = $('exSubmit');
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحويل...';
+
+  try {
+    u.coins -= a; u.gems += g;
+    await save();
+    await db.collection(CONFIG.txCol).add({ userId: TG.id, type: 'exchange', amount: -a, currency: 'coins', meta: { toGems: g }, createdAt: Date.now() });
+    S.ex = 0;
+    $('exInput').value = '';
+    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
+    renderAll();
+    showModal({ icon: 'fa-right-left', title: 'تم التبديل', sub: 'حوّلت ' + fmt(a) + ' عملة', amount: '+' + fmt(g) + ' ماسة', btn: 'رائع' });
+  } catch (e) {
+    toast('حدثت مشكلة', 'err');
+  } finally {
     S.busy = false;
     btn.disabled = false;
     btn.innerHTML = old;
@@ -3438,7 +3631,7 @@ async function doWithdraw() {
       payout = fmt(Math.round(a * CONFIG.wd.shamSypPerGem)) + ' SYP';
     } else {
       payout = '$' + usdBinanceNet(a);
-      modalSub = 'لا يخصم التطبيق عمولة من هذا المسار؛ قد يفرض مزود الخدمة رسومه الخاصة.';
+      modalSub = 'لا يخصم التطبيق عمولة على هذا المسار؛ قد يفرض مزود الخدمة رسومه.';
     }
 
     u.gems -= a;
@@ -3457,7 +3650,7 @@ async function doWithdraw() {
     $('wdAccount').value = '';
     document.querySelectorAll('#wdAmounts .amount-chip').forEach(c => c.classList.remove('active'));
     renderAll();
-    loadWdHistory();
+    loadWdHistory(true);
     showModal({ icon: 'fa-check', title: 'تم إرسال الطلب', sub: modalSub, amount: fmt(a) + ' ماسة ≈ ' + payout, btn: 'حسناً' });
   } catch (e) {
     toast('حدثت مشكلة', 'err');
@@ -3473,7 +3666,7 @@ function renderWdHistoryRows() {
   const more = $('wdHistoryMore');
   if (!list) return;
   if (wdHistoryError) {
-    list.innerHTML = '<div class="empty-state">تعذر تحميل السجل. قد يحتاج استعلام Firestore إلى فهرس.</div>';
+    list.innerHTML = '<div class="empty-state">تعذر تحميل السجل.</div>';
   } else if (!wdHistoryRows.length) {
     list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل بعد</div>';
   } else {
@@ -3637,8 +3830,7 @@ async function checkPendingInvoiceNow() {
     if (data.status === 'paid') {
       const gems = cryptoPendingInvoice.gems;
       const fresh = await FB.get();
-      if (!fresh || !validStoredNumber(fresh.gems) ||
-          (fresh.stars != null && !validStoredNumber(fresh.stars))) {
+      if (!fresh || !validStoredNumber(fresh.gems) || (fresh.stars != null && !validStoredNumber(fresh.stars))) {
         throw new Error('balance_refresh_failed');
       }
       S.user = Object.assign(S.user, fresh, { gems: Number(fresh.gems) });
@@ -3697,6 +3889,21 @@ async function startCryptoPayment() {
   }
 }
 
+async function refreshUserSnapshot() {
+  if (!db || !S.user) return false;
+  try {
+    const fresh = await FB.get();
+    if (!fresh || !validStoredNumber(fresh.gems)) return false;
+    if (fresh.stars != null && !validStoredNumber(fresh.stars)) return false;
+    S.user = Object.assign(S.user, fresh, { gems: Number(fresh.gems) });
+    if (validStoredNumber(fresh.stars)) S.user.stars = Number(fresh.stars);
+    renderAll();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function startPaymentPolling(invoiceId, gems) {
   if (cryptoPollTimer) clearInterval(cryptoPollTimer);
   let attempts = 0;
@@ -3709,11 +3916,11 @@ function startPaymentPolling(invoiceId, gems) {
     const btn = $('cryptoPayBtn');
     if (btn) { btn.innerHTML = '<i class="fas fa-credit-card"></i> <span>إكمال الدفع</span>'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
     if (success) {
-      refreshUserSnapshot().then(refreshed => {
-        if (refreshed) {
+      refreshUserSnapshot().then(ok => {
+        if (ok) {
           showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
         } else {
-          toast('تم تأكيد الدفع، لكن تعذر تحديث الرصيد. أعد فتح التطبيق للتحقق.', 'info');
+          toast('تم تأكيد الدفع، لكن تعذر تحديث الرصيد. أعد فتح التطبيق.', 'info');
         }
       });
     }
@@ -3830,33 +4037,14 @@ function openContentModal(kind) {
     $('contentBody').innerHTML = `
       <p style="margin-bottom:12px"><strong>كيف أشتري مقتنى؟</strong> من الرئيسية أو صفحة البطاقات اختر البطاقة. إذا كان لديك رصيد نجوم كافٍ، ستُخصم منه مباشرة. إذا لم يكن كافياً، يمكنك الشراء المباشر بالنجوم.</p>
       <p style="margin-bottom:12px"><strong>رصيد النجوم:</strong> يمكن تعبئته من صفحة الإيداع — كل نجمة تدفعها تساوي نجمة في رصيدك.</p>
-      <p style="margin-bottom:12px"><strong>الهدية المجانية:</strong> استلامها كل 24 ساعة غير مفعّل في هذه النسخة حتى إضافة تحقق آمن على الخادم.</p>
       <p style="margin-bottom:12px"><strong>متى أستطيع بيع المقتنى؟</strong> بعد 7 أيام — ستظهر قيمة المقتنى + 5% ربح.</p>
-      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — لا يخصم التطبيق عمولة على Binance Pay؛ وقد تُطبق رسوم خارجية من مزود الخدمة. شام كاش بدون عمولة من التطبيق.</p>`;
+      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — لا يخصم التطبيق عمولة على Binance Pay؛ قد تُطبق رسوم من مزود الخدمة. شام كاش بدون عمولة من التطبيق.</p>`;
   }
   $('contentModal').classList.add('show');
 }
 function closeContentModal() { $('contentModal').classList.remove('show'); }
 
-async function refreshUserSnapshot() {
-  if (!db || !S.user) return;
-  try {
-    const fresh = await FB.get();
-    if (!fresh || !validStoredNumber(fresh.gems)) return false;
-    if (fresh.stars != null && !validStoredNumber(fresh.stars)) return false;
-    const nextUser = Object.assign({}, S.user, fresh, { gems: Number(fresh.gems) });
-    if (validStoredNumber(fresh.stars)) nextUser.stars = Number(fresh.stars);
-    S.user = nextUser;
-    S.referralCountAvailable = typeof fresh.referralCount === 'number' && Number.isFinite(fresh.referralCount);
-    S.referralEarningsAvailable = typeof fresh.referralEarnings === 'number' && Number.isFinite(fresh.referralEarnings);
-    renderAll();
-    return true;
-  } catch (e) {
-    // Keep the last verified snapshot; a temporary refresh failure is not a zero balance.
-    return false;
-  }
-}
-
+// ===================== KEYBOARD DOCK =====================
 function bindKeyboardDock() {
   const update = () => {
     const focused = document.activeElement && document.activeElement.matches('input, textarea, select');
@@ -3901,10 +4089,27 @@ function bind() {
 
   bindWdAmounts();
 
+  document.querySelectorAll('#exAmounts .amount-chip').forEach(c => {
+    c.onclick = () => {
+      document.querySelectorAll('#exAmounts .amount-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      S.ex = +c.dataset.examt;
+      $('exInput').value = c.dataset.examt;
+      updateEx();
+    };
+  });
+
+  $('exInput').oninput = e => {
+    const v = parseInt(e.target.value, 10) || 0;
+    S.ex = v;
+    document.querySelectorAll('#exAmounts .amount-chip').forEach(c => c.classList.remove('active'));
+    updateEx();
+  };
+
+  $('exSubmit').onclick = doExchange;
   $('wdSubmit').onclick = doWithdraw;
   $('wdHistoryMore').onclick = () => loadWdHistory(false);
 
-  // Stars input
   const starsInput = $('starsCustomInput');
   if (starsInput) {
     starsInput.addEventListener('input', e => {
@@ -3988,12 +4193,10 @@ async function boot() {
   }
 
   setBootState('loading', 'يتم الاتصال بمصدر بيانات الرصيد…');
+
   try {
     if (!FB.init()) {
-      const reason = CONFIG.firebase.apiKey === 'CONFIGURE_FIREBASE_WEB_API_KEY'
-        ? 'إعداد Firebase غير مكتمل في هذه النسخة. أضف الإعداد الخاص بالتطبيق محلياً ثم أعد التحميل.'
-        : 'تعذر تهيئة الاتصال بقاعدة البيانات.';
-      setBootState('error', reason);
+      setBootState('error', 'تعذر تهيئة الاتصال بقاعدة البيانات.');
       return;
     }
 
@@ -4001,10 +4204,10 @@ async function boot() {
       FB.get(),
       new Promise((_, reject) => setTimeout(() => reject(new Error('load_timeout')), 12000))
     ]);
+
     if (ex) {
       if (!validStoredNumber(ex.gems)) throw new Error('balance_field_missing');
-      if (Object.prototype.hasOwnProperty.call(ex, 'stars') &&
-          !validStoredNumber(ex.stars)) {
+      if (Object.prototype.hasOwnProperty.call(ex, 'stars') && !validStoredNumber(ex.stars)) {
         throw new Error('stars_field_invalid');
       }
       S.user = Object.assign(newUser(), ex);
@@ -4012,24 +4215,21 @@ async function boot() {
       S.user.stars = ex.stars == null ? 0 : Number(ex.stars);
       if (!Array.isArray(S.user.collectibles)) S.user.collectibles = [];
       if (typeof S.user.freeClaimed !== 'boolean') S.user.freeClaimed = false;
-      S.referralCountAvailable = typeof ex.referralCount === 'number' && Number.isFinite(ex.referralCount);
-      S.referralEarningsAvailable = typeof ex.referralEarnings === 'number' && Number.isFinite(ex.referralEarnings);
     } else {
       S.user = newUser();
       await FB.set(S.user, false);
-      S.referralCountAvailable = true;
-      S.referralEarningsAvailable = false;
     }
   } catch (e) {
     const message = e && e.message === 'balance_field_missing'
-      ? 'وجدنا سجل الحساب، لكن حقل رصيد الماسات غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل في قاعدة البيانات.'
+      ? 'سجل الحساب موجود، لكن حقل رصيد الماسات غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل.'
       : e && e.message === 'stars_field_invalid'
-        ? 'وجدنا سجل الحساب، لكن حقل رصيد النجوم غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل في قاعدة البيانات.'
-        : 'لم يكتمل جلب بيانات الحساب. لم يتم استبدال رصيدك بصفر. افحص الاتصال وصلاحية القراءة ثم أعد المحاولة.';
+        ? 'سجل الحساب موجود، لكن حقل رصيد النجوم غير صالح. لم نغيّر بياناتك.'
+        : 'لم يكتمل جلب بيانات الحساب. لم يتم استبدال رصيدك بصفر. افحص الاتصال ثم أعد المحاولة.';
     setBootState('error', message);
     return;
   }
 
+  // TIME.sync fire-and-forget (لا يعطّل الإقلاع)
   TIME.sync().catch(() => {});
   checkReferral().catch(() => {});
 
@@ -4042,7 +4242,8 @@ async function boot() {
   scheduleCarVideoPrefetch();
 
   setInterval(() => {
-    updateCollectibleClocks();
+    if ($('view-store').classList.contains('active')) renderCollectibles();
+    if ($('view-home').classList.contains('active')) renderHomeCollectiblesPreview();
     updateStoreBadge();
   }, 1000);
   setInterval(() => TIME.sync(), 300000);
