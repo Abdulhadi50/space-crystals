@@ -403,6 +403,10 @@ input { font: inherit; color: inherit; }
   opacity: 0.55;
   pointer-events: none;
 }
+.bundle-card.unavailable {
+  opacity: 0.76;
+  cursor: not-allowed;
+}
 
 .free-badge {
   position: absolute;
@@ -783,7 +787,8 @@ input { font: inherit; color: inherit; }
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid var(--gold);
+  border: 0;
+  box-shadow: none;
 }
 .wallet-balance-sub {
   font-size: 13px;
@@ -799,13 +804,15 @@ input { font: inherit; color: inherit; }
 /* ============ WALLET TABS ============ */
 .wallet-tabs {
   display: flex;
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
+  background: rgba(247, 241, 229, .74);
+  border: 1px solid rgba(237, 227, 208, .82);
   border-radius: var(--radius-button);
   padding: 4px;
   margin-bottom: 16px;
   gap: 4px;
   overflow-x: auto;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 .wallet-tab {
   flex: 1;
@@ -825,9 +832,9 @@ input { font: inherit; color: inherit; }
   gap: 4px;
 }
 .wallet-tab.active {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, .82);
+  color: var(--gold-dark);
+  box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(198, 161, 91, .18);
 }
 .wallet-tab img { width: 14px; height: 14px; border-radius: 50%; }
 
@@ -1064,6 +1071,18 @@ input { font: inherit; color: inherit; }
 .st-completed { background: #E8F5E9; color: #34C759; }
 .st-rejected { background: #FFEBEE; color: #FF3B30; }
 .st-processing { background: #E3F2FD; color: #007AFF; }
+.wd-history-more {
+  width: 100%;
+  margin: 8px 0 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .78);
+  color: var(--gold-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+.wd-history-more[hidden] { display: none; }
 
 /* ============ REFERRAL ============ */
 .ref-hero {
@@ -1826,6 +1845,18 @@ input { font: inherit; color: inherit; }
     transition-duration: .01ms !important;
   }
 }
+@media (max-width: 360px) {
+  .top-bar { left: 10px; right: 10px; padding: 8px; }
+  .balances { gap: 4px; }
+  .balance-chip { padding-inline: 6px; font-size: 12px; }
+  .main-scroll { padding-right: 12px; padding-left: 12px; }
+  .stars-input-wrap { gap: 7px; }
+  .stars-input-icon { width: 38px; height: 38px; flex-basis: 38px; }
+  .nav-item { font-size: 9px; }
+  .nav-item i { font-size: 16px; }
+  .ref-condition-row { flex-direction: column; gap: 3px; }
+  .ref-condition-row strong { max-width: 100%; text-align: right; }
+}
 
 /* Utilities */
 .mb-2 { margin-bottom: 12px; }
@@ -2066,7 +2097,7 @@ input { font: inherit; color: inherit; }
         <div class="withdraw-method active" data-method="binance">
           <img src="https://up6.cc/2026/09/178982889076391.png" alt="Binance" onerror="this.style.display='none'">
           <div style="font-weight:800;font-size:13px">Binance Pay</div>
-          <div style="font-size:10px;color:var(--text-secondary);text-align:center;line-height:1.4">حد أدنى 5000<br>عمولة 20%</div>
+          <div style="font-size:10px;color:var(--text-secondary);text-align:center;line-height:1.4">حد أدنى 5000<br>عمولة التطبيق 0%</div>
         </div>
         <div class="withdraw-method" data-method="sham_cash">
           <img src="https://up6.cc/2026/09/178975725154411.png" alt="Sham Cash" onerror="this.style.display='none'">
@@ -2094,8 +2125,8 @@ input { font: inherit; color: inherit; }
           <span class="calc-val" id="wdChosen">0</span>
         </div>
         <div class="calc-row" id="wdFeeRow" style="display:none">
-          <span>العمولة (20%)</span>
-          <span class="calc-val" id="wdFee">-$0.00</span>
+            <span>عمولة التطبيق (0%)</span>
+            <span class="calc-val" id="wdFee">$0.00</span>
         </div>
         <div class="calc-row">
           <span>الصافي للاستلام</span>
@@ -2112,6 +2143,7 @@ input { font: inherit; color: inherit; }
         <div class="section-title">سجل السحوبات</div>
       </div>
       <div class="wd-history-list" id="wdHistory"></div>
+      <button class="wd-history-more" id="wdHistoryMore" type="button" hidden>عرض المزيد</button>
     </div>
 
     <!-- PROFILE -->
@@ -2439,6 +2471,7 @@ const fmt = n => Number(n || 0).toLocaleString('en-US');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pad = n => String(n).padStart(2, '0');
+const validStoredNumber = value => value !== null && value !== undefined && !(typeof value === 'string' && value.trim() === '') && Number.isFinite(Number(value));
 const usd = g => { const n = Math.floor(Number(g || 0)); return (Math.floor(n / 100) * 0.01).toFixed(2); };
 const usdBinanceFee = g => (parseFloat(usd(g)) * CONFIG.wd.binanceFee).toFixed(2);
 const usdBinanceNet = g => (parseFloat(usd(g)) * (1 - CONFIG.wd.binanceFee)).toFixed(2);
@@ -2525,7 +2558,11 @@ const S = { user: null, busy: false, wd: 0, wdMethod: 'binance', starsInput: 0, 
 let catalogCategory = 'all';
 let referralPanel = 'invites';
 let wdHistoryRows = [];
-let wdHistoryOffset = 0;
+let wdHistoryCursor = null;
+let wdHistorySeen = new Set();
+let wdHistoryHasMore = false;
+let wdHistoryLoading = false;
+let wdHistoryError = false;
 const DAILY_FREE_GIFT_SERVER_ENFORCED = false;
 
 const newUser = () => ({
@@ -2616,7 +2653,7 @@ function renderAll() {
   $('profGems').textContent = fmt(u.gems);
   $('profStars').textContent = fmt(u.stars || 0);
   $('profCollectibles').textContent = fmt(activeCount);
-  $('profRefs').textContent = u.referralCount || 0;
+  $('profRefs').textContent = S.referralCountAvailable ? fmt(u.referralCount) : '—';
   $('profAvatar').innerHTML = u.photoUrl
     ? '<img src="' + esc(u.photoUrl) + '" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-user\\\' style=\\\'font-size:32px\\\'></i>\'">'
     : '<i class="fas fa-user" style="font-size:32px"></i>';
@@ -2931,7 +2968,7 @@ function initStarBundles() {
     card.className = 'bundle-card' + (b.free ? ' free' : '') + (isClaimed ? ' claimed' : '') + (isUnavailable ? ' unavailable' : '');
     if (!isClaimed && !isUnavailable) card.onclick = () => openBundleModal(b);
 
-    if (b.free && (!isClaimed || isUnavailable)) {
+    if (b.free && !isClaimed) {
       const badge = document.createElement('div');
       badge.className = 'free-badge';
       badge.innerHTML = isUnavailable
@@ -2963,7 +3000,9 @@ function initStarBundles() {
     const priceTag = document.createElement('div');
     priceTag.className = 'bundle-price' + (b.free ? ' gift' : '');
     if (b.free) {
-      priceTag.innerHTML = '<i class="fas fa-gift"></i> <span>مجاناً</span>';
+      priceTag.innerHTML = isUnavailable
+        ? '<i class="fas fa-lock"></i> <span>غير متاحة</span>'
+        : '<i class="fas fa-gift"></i> <span>مجاناً</span>';
     } else {
       priceTag.innerHTML = `<img src="https://up6.cc/2026/10/17926810487851.png" alt=""> <span>${b.stars}</span>`;
     }
@@ -3038,7 +3077,7 @@ function openBundleModal(bundle) {
 
   $('bcTitle').textContent = bundle.free ? 'بطاقة مجانية' : `تأكيد شراء ${bundle.title || 'البطاقة'}`;
   $('bcDesc').textContent = bundle.free
-    ? 'احصل عليها مجاناً مرة واحدة فقط — يمكن بيعها بعد 7 أيام بربح 5%'
+    ? 'استلام الهدية كل 24 ساعة يتطلب تحققاً آمناً من الخادم'
     : 'سيُحفظ المقتنى في متجرك — يمكن بيعه بعد 7 أيام بربح 5%';
 
   if (bundle.free) {
@@ -3181,8 +3220,15 @@ async function buyDirectly(bundle) {
         try {
           // Revert backend-credited gems (since we want a collectible, not gems)
           const fresh = await FB.get();
-          const creditedGems = data.gems || 0;
-          const newGems = Math.max(0, (fresh.gems || 0) - creditedGems);
+          if (!fresh || !validStoredNumber(fresh.gems)) {
+            throw new Error('balance_unavailable');
+          }
+          if (Object.prototype.hasOwnProperty.call(fresh, 'stars') && !validStoredNumber(fresh.stars)) {
+            throw new Error('stars_balance_unavailable');
+          }
+          const creditedGems = data.gems == null ? 0 : Number(data.gems);
+          if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
+          const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
 
           const items = Array.isArray(fresh.collectibles) ? fresh.collectibles : [];
           items.push({
@@ -3269,9 +3315,16 @@ async function startStarsTopup() {
         try {
           // Revert backend gems, add stars to balance
           const fresh = await FB.get();
-          const creditedGems = data.gems || 0;
-          const newGems = Math.max(0, (fresh.gems || 0) - creditedGems);
-          const newStars = (fresh.stars || 0) + starsAmount;
+          if (!fresh || !validStoredNumber(fresh.gems)) {
+            throw new Error('balance_unavailable');
+          }
+          if (fresh.stars != null && !validStoredNumber(fresh.stars)) {
+            throw new Error('stars_balance_unavailable');
+          }
+          const creditedGems = data.gems == null ? 0 : Number(data.gems);
+          if (!validStoredNumber(creditedGems) || creditedGems < 0) throw new Error('invalid_invoice_credit');
+          const newGems = Math.max(0, Number(fresh.gems) - creditedGems);
+          const newStars = Number(fresh.stars || 0) + starsAmount;
 
           await FB.set({ gems: newGems, stars: newStars });
           S.user = Object.assign(S.user, fresh, { gems: newGems, stars: newStars });
@@ -3315,7 +3368,7 @@ function updateWd() {
     $('wdNet').textContent = fmt(Math.round(S.wd * CONFIG.wd.shamSypPerGem)) + ' SYP';
   } else {
     $('wdFeeRow').style.display = 'flex';
-    $('wdFee').textContent = '-$' + usdBinanceFee(S.wd);
+    $('wdFee').textContent = '$' + usdBinanceFee(S.wd);
     $('wdNet').textContent = '$' + usdBinanceNet(S.wd);
   }
 }
@@ -3386,7 +3439,7 @@ async function doWithdraw() {
       payout = fmt(Math.round(a * CONFIG.wd.shamSypPerGem)) + ' SYP';
     } else {
       payout = '$' + usdBinanceNet(a);
-      modalSub = 'الإجمالي: $' + usd(a) + ' • العمولة: -$' + usdBinanceFee(a);
+      modalSub = 'لا يخصم التطبيق عمولة من هذا المسار؛ قد يفرض مزود الخدمة رسومه الخاصة.';
     }
 
     u.gems -= a;
@@ -3416,33 +3469,84 @@ async function doWithdraw() {
   }
 }
 
-async function loadWdHistory() {
-  const l = $('wdHistory');
-  if (!db) return;
-  l.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fas fa-spinner fa-spin"></i></div>';
-  try {
-    const q = await db.collection(CONFIG.wdCol).where('userId', '==', TG.id).limit(50).get();
-    if (q.empty) {
-      l.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل بعد</div>';
-      return;
-    }
-    const it = [];
-    q.forEach(d => it.push(d.data()));
-    it.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    const map = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
+function renderWdHistoryRows() {
+  const list = $('wdHistory');
+  const more = $('wdHistoryMore');
+  if (!list) return;
+  if (wdHistoryError) {
+    list.innerHTML = '<div class="empty-state">تعذر تحميل السجل. قد يحتاج استعلام Firestore إلى فهرس.</div>';
+  } else if (!wdHistoryRows.length) {
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>لا يوجد سجل بعد</div>';
+  } else {
+    const statusNames = { pending: 'قيد المراجعة', approved: 'مقبول', processing: 'قيد التنفيذ', completed: 'مكتمل', rejected: 'مرفوض' };
     const methodNames = { sham_cash: 'شام كاش', binance: 'Binance' };
-    l.innerHTML = it.slice(0, 15).map(w => {
+    list.innerHTML = wdHistoryRows.map(({ id, data: w }) => {
       const statusClass = w.status === 'completed' || w.status === 'approved' ? 'st-completed' : w.status === 'rejected' ? 'st-rejected' : w.status === 'processing' ? 'st-processing' : 'st-pending';
-      return `<div class="wd-history-row">
+      const date = w.createdAt && typeof w.createdAt.toDate === 'function'
+        ? w.createdAt.toDate()
+        : new Date(Number(w.createdAt));
+      const dateLabel = Number.isNaN(date.getTime())
+        ? 'التاريخ غير متاح'
+        : date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="wd-history-row" data-withdrawal-id="${esc(id)}">
         <div class="wd-history-left">
-          <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '$0')}</div>
-          <div class="wd-history-date">${new Date(w.createdAt || Date.now()).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })} • ${methodNames[w.method] || 'Binance'}</div>
+          <div class="wd-history-amount">${fmt(w.amount)} → ${esc(w.payout || '—')}</div>
+          <div class="wd-history-date">${dateLabel} • ${methodNames[w.method] || '—'}</div>
         </div>
-        <div class="wd-history-status ${statusClass}">${map[w.status] || 'قيد المراجعة'}</div>
+        <div class="wd-history-status ${statusClass}">${statusNames[w.status] || 'قيد المراجعة'}</div>
       </div>`;
     }).join('');
+  }
+  if (more) {
+    more.hidden = !wdHistoryHasMore;
+    more.disabled = wdHistoryLoading;
+    more.textContent = wdHistoryLoading ? 'جارٍ التحميل…' : 'عرض المزيد';
+  }
+}
+
+async function loadWdHistory(reset = true) {
+  const list = $('wdHistory');
+  if (!list || wdHistoryLoading) return;
+  if (!db) {
+    list.innerHTML = '<div class="empty-state">تعذر الاتصال بقاعدة البيانات</div>';
+    return;
+  }
+  if (reset) {
+    wdHistoryRows = [];
+    wdHistoryCursor = null;
+    wdHistorySeen = new Set();
+    wdHistoryHasMore = false;
+    wdHistoryError = false;
+    list.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fas fa-spinner fa-spin"></i></div>';
+  }
+
+  wdHistoryLoading = true;
+  renderWdHistoryRows();
+  try {
+    let query = db.collection(CONFIG.wdCol)
+      .where('userId', '==', TG.id)
+      .orderBy('createdAt', 'desc')
+      .limit(5);
+    if (wdHistoryCursor) query = query.startAfter(wdHistoryCursor);
+    const snapshot = await query.get();
+    const docs = snapshot.docs || [];
+    docs.forEach(doc => {
+      if (!wdHistorySeen.has(doc.id)) {
+        wdHistorySeen.add(doc.id);
+        wdHistoryRows.push({ id: doc.id, data: doc.data() || {} });
+      }
+    });
+    if (docs.length) wdHistoryCursor = docs[docs.length - 1];
+    wdHistoryHasMore = docs.length === 5;
+    renderWdHistoryRows();
   } catch (e) {
-    l.innerHTML = '<div class="empty-state">تعذر التحميل</div>';
+    wdHistoryError = true;
+    wdHistoryHasMore = false;
+    const more = $('wdHistoryMore');
+    if (more) more.hidden = true;
+  } finally {
+    wdHistoryLoading = false;
+    renderWdHistoryRows();
   }
 }
 
@@ -3533,10 +3637,16 @@ async function checkPendingInvoiceNow() {
     const data = await resp.json().catch(() => ({}));
     if (data.status === 'paid') {
       const gems = cryptoPendingInvoice.gems;
+      const fresh = await FB.get();
+      if (!fresh || !validStoredNumber(fresh.gems) ||
+          (fresh.stars != null && !validStoredNumber(fresh.stars))) {
+        throw new Error('balance_refresh_failed');
+      }
+      S.user = Object.assign(S.user, fresh, { gems: Number(fresh.gems) });
+      if (validStoredNumber(fresh.stars)) S.user.stars = Number(fresh.stars);
       cryptoPendingInvoice = null;
       stopPaymentPolling();
       updatePendingBanner();
-      try { const fresh = await FB.get(); if (fresh) S.user = Object.assign(S.user, fresh); } catch (e) {}
       renderAll();
       showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
     } else if (data.status === 'expired' || data.status === 'failed') {
@@ -3600,8 +3710,13 @@ function startPaymentPolling(invoiceId, gems) {
     const btn = $('cryptoPayBtn');
     if (btn) { btn.innerHTML = '<i class="fas fa-credit-card"></i> <span>إكمال الدفع</span>'; btn.disabled = cryptoUsd < CONFIG.shieldz.minUsd; }
     if (success) {
-      FB.get().then(fresh => { if (fresh) S.user = Object.assign(S.user, fresh); renderAll(); }).catch(() => { renderAll(); });
-      showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
+      refreshUserSnapshot().then(refreshed => {
+        if (refreshed) {
+          showModal({ icon: 'fa-gem', title: 'تم استلام الدفع', sub: 'أُضيفت الماسات', amount: '+' + fmt(gems) + ' ماسة', btn: 'رائع' });
+        } else {
+          toast('تم تأكيد الدفع، لكن تعذر تحديث الرصيد. أعد فتح التطبيق للتحقق.', 'info');
+        }
+      });
     }
   };
   cryptoPollTimer = setInterval(async () => {
@@ -3716,16 +3831,46 @@ function openContentModal(kind) {
     $('contentBody').innerHTML = `
       <p style="margin-bottom:12px"><strong>كيف أشتري مقتنى؟</strong> من الرئيسية أو صفحة البطاقات اختر البطاقة. إذا كان لديك رصيد نجوم كافٍ، ستُخصم منه مباشرة. إذا لم يكن كافياً، يمكنك الشراء المباشر بالنجوم.</p>
       <p style="margin-bottom:12px"><strong>رصيد النجوم:</strong> يمكن تعبئته من صفحة الإيداع — كل نجمة تدفعها تساوي نجمة في رصيدك.</p>
-      <p style="margin-bottom:12px"><strong>البطاقة المجانية:</strong> استلمها مرة واحدة فقط من الرئيسية أو صفحة البطاقات.</p>
+      <p style="margin-bottom:12px"><strong>الهدية المجانية:</strong> استلامها كل 24 ساعة غير مفعّل في هذه النسخة حتى إضافة تحقق آمن على الخادم.</p>
       <p style="margin-bottom:12px"><strong>متى أستطيع بيع المقتنى؟</strong> بعد 7 أيام — ستظهر قيمة المقتنى + 5% ربح.</p>
-      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — Binance Pay بعمولة 20% أو شام كاش بدون عمولة.</p>`;
+      <p><strong>سحب الأموال:</strong> 100 ماسة = $0.01 — لا يخصم التطبيق عمولة على Binance Pay؛ وقد تُطبق رسوم خارجية من مزود الخدمة. شام كاش بدون عمولة من التطبيق.</p>`;
   }
   $('contentModal').classList.add('show');
 }
 function closeContentModal() { $('contentModal').classList.remove('show'); }
 
+async function refreshUserSnapshot() {
+  if (!db || !S.user) return;
+  try {
+    const fresh = await FB.get();
+    if (!fresh || !validStoredNumber(fresh.gems)) return false;
+    if (fresh.stars != null && !validStoredNumber(fresh.stars)) return false;
+    const nextUser = Object.assign({}, S.user, fresh, { gems: Number(fresh.gems) });
+    if (validStoredNumber(fresh.stars)) nextUser.stars = Number(fresh.stars);
+    S.user = nextUser;
+    S.referralCountAvailable = typeof fresh.referralCount === 'number' && Number.isFinite(fresh.referralCount);
+    S.referralEarningsAvailable = typeof fresh.referralEarnings === 'number' && Number.isFinite(fresh.referralEarnings);
+    renderAll();
+    return true;
+  } catch (e) {
+    // Keep the last verified snapshot; a temporary refresh failure is not a zero balance.
+    return false;
+  }
+}
+
+function bindKeyboardDock() {
+  const update = () => {
+    const focused = document.activeElement && document.activeElement.matches('input, textarea, select');
+    document.body.classList.toggle('keyboard-open', !!focused);
+  };
+  document.addEventListener('focusin', update);
+  document.addEventListener('focusout', () => setTimeout(update, 80));
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', update);
+}
+
 // ===================== BIND =====================
 function bind() {
+  bindKeyboardDock();
   document.addEventListener('click', e => {
     const navEl = e.target.closest('[data-view]');
     if (navEl) go(navEl.dataset.view);
@@ -3758,6 +3903,7 @@ function bind() {
   bindWdAmounts();
 
   $('wdSubmit').onclick = doWithdraw;
+  $('wdHistoryMore').onclick = () => loadWdHistory(false);
 
   // Stars input
   const starsInput = $('starsCustomInput');
@@ -3819,7 +3965,8 @@ function bind() {
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      TIME.sync().then(() => { try { renderAll(); } catch (e) {} });
+      TIME.sync().catch(() => {});
+      refreshUserSnapshot();
       if (cryptoPendingInvoice && cryptoPendingInvoice.id) checkPendingInvoiceNow();
     }
   });
@@ -3856,10 +4003,14 @@ async function boot() {
       new Promise((_, reject) => setTimeout(() => reject(new Error('load_timeout')), 12000))
     ]);
     if (ex) {
-      if (ex.gems == null || ex.gems === '' || !Number.isFinite(Number(ex.gems))) throw new Error('balance_field_missing');
+      if (!validStoredNumber(ex.gems)) throw new Error('balance_field_missing');
+      if (Object.prototype.hasOwnProperty.call(ex, 'stars') &&
+          !validStoredNumber(ex.stars)) {
+        throw new Error('stars_field_invalid');
+      }
       S.user = Object.assign(newUser(), ex);
       S.user.gems = Number(ex.gems);
-      S.user.stars = Number.isFinite(Number(ex.stars)) ? Number(ex.stars) : 0;
+      S.user.stars = ex.stars == null ? 0 : Number(ex.stars);
       if (!Array.isArray(S.user.collectibles)) S.user.collectibles = [];
       if (typeof S.user.freeClaimed !== 'boolean') S.user.freeClaimed = false;
       S.referralCountAvailable = typeof ex.referralCount === 'number' && Number.isFinite(ex.referralCount);
@@ -3873,7 +4024,9 @@ async function boot() {
   } catch (e) {
     const message = e && e.message === 'balance_field_missing'
       ? 'وجدنا سجل الحساب، لكن حقل رصيد الماسات غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل في قاعدة البيانات.'
-      : 'لم يكتمل جلب بيانات الحساب. لم يتم استبدال رصيدك بصفر. افحص الاتصال وصلاحية القراءة ثم أعد المحاولة.';
+      : e && e.message === 'stars_field_invalid'
+        ? 'وجدنا سجل الحساب، لكن حقل رصيد النجوم غير صالح. لم نغيّر بياناتك؛ يلزم فحص السجل في قاعدة البيانات.'
+        : 'لم يكتمل جلب بيانات الحساب. لم يتم استبدال رصيدك بصفر. افحص الاتصال وصلاحية القراءة ثم أعد المحاولة.';
     setBootState('error', message);
     return;
   }
