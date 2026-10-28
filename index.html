@@ -185,7 +185,7 @@ input { font: inherit; color: inherit; }
 .home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
 .home-card .icon { font-size: 32px; opacity: 0.9; }
 
-/* ============ SPIN GAME (STANDALONE DESIGN) ============ */
+/* ============ SPIN GAME ============ */
 #view-spin {
   background: var(--gradient-spin);
   margin: -20px -16px -40px -16px;
@@ -303,21 +303,37 @@ input { font: inherit; color: inherit; }
 .tab.active { background: var(--bg-soft); color: var(--text-primary); }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 
-.amount-display { text-align: center; margin: 20px 0 30px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.amount-display { 
+  text-align: center; 
+  margin: 20px 0 10px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  width: 100%;
+}
 .amount-display input {
-  font-size: 4.5rem; font-weight: 800; background: transparent;
+  font-size: 3.5rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
-  width: 200px; outline: none;
+  width: auto; max-width: 200px; outline: none;
+  field-sizing: content;
+  transition: width 0.1s;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display img { width: 48px; height: 48px; border-radius: 50%; }
+.amount-display .dollar-sign {
+  font-size: 3.5rem; font-weight: 800; color: var(--text-primary);
+}
+.amount-display img { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
 
-.calc-result {
-  text-align: center; font-size: 18px; font-weight: 700;
-  color: var(--success); margin-bottom: 30px;
-  background: rgba(52, 199, 89, 0.1); padding: 10px; border-radius: 12px;
-  display: inline-block; width: 100%;
+.calc-subtext {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 0px;
+  margin-bottom: 24px;
+  min-height: 22px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
@@ -340,11 +356,20 @@ input { font: inherit; color: inherit; }
 
 .manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
+
 .warning-box {
-  background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.3);
-  padding: 12px; border-radius: 12px; color: #FF3B30; font-size: 13px; font-weight: 700;
-  margin-bottom: 16px; display: flex; align-items: flex-start; gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 16px;
+  display: flex; align-items: flex-start; gap: 8px;
+  line-height: 1.5;
 }
+.warning-box i { color: var(--warning); margin-top: 3px; }
+
 .copy-box {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg-soft); padding: 12px 16px;
@@ -383,26 +408,20 @@ input { font: inherit; color: inherit; }
 }
 .wd-input:focus { border-color: var(--blue, #007AFF); }
 
-/* History Log */
-.history-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+/* History Log Modal */
+.history-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 .history-item {
-  background: var(--bg-card); padding: 16px; border-radius: 16px;
+  background: var(--bg-soft); padding: 16px; border-radius: 16px;
   display: flex; justify-content: space-between; align-items: center;
   border: 1px solid var(--border);
 }
-.history-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.history-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color:#fff;}
 .history-info p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
 .status { padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
 .st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
-.wd-history-more {
-  width: 100%; padding: 12px; margin-top: 10px;
-  border: 1px solid var(--border); border-radius: 13px;
-  background: var(--bg-card); color: var(--text-primary);
-  font-size: 13px; font-weight: 800; cursor: pointer;
-}
 
 /* ============ REFERRAL ============ */
 .referral-header { text-align: center; margin-bottom: 24px; }
@@ -609,10 +628,6 @@ input { font: inherit; color: inherit; }
   color: var(--text-primary);
   box-shadow: 0 4px 20px rgba(0, 122, 255, 0.4);
 }
-.keyboard-open .dock {
-  transform: translateY(calc(100% + 24px));
-  opacity: 0; pointer-events: none;
-}
 </style>
 </head>
 <body>
@@ -631,7 +646,7 @@ input { font: inherit; color: inherit; }
   <!-- Floating Balances -->
   <div class="floating-balances">
     <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/17926810487851.png" alt="Stars">
+      <img src="https://up6.cc/2026/10/1793229802411.jpg" alt="Stars">
       <span id="topStars">0</span>
       <button class="add-btn" onclick="go('deposit')">+</button>
     </div>
@@ -703,7 +718,7 @@ input { font: inherit; color: inherit; }
         </div>
 
         <button class="spin-btn" id="spinBtn" onclick="startSpin()">
-          Spin for <span>399</span> <img src="https://up6.cc/2026/10/17926810487851.png">
+          Spin for <span>399</span> <img src="https://up6.cc/2026/10/1793229802411.jpg">
         </button>
       </div>
     </div>
@@ -800,7 +815,7 @@ input { font: inherit; color: inherit; }
       
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)">
-          <img src="https://up6.cc/2026/10/17926810487851.png"> Stars
+          <img src="https://up6.cc/2026/10/1793229802411.jpg"> Stars
         </div>
         <div class="tab" onclick="switchDepositTab('crypto', this)"><i class="fab fa-bitcoin"></i> Crypto</div>
         <div class="tab" onclick="switchDepositTab('binance', this)">
@@ -814,8 +829,8 @@ input { font: inherit; color: inherit; }
       <!-- Stars Tab -->
       <div id="dep-tab-stars" class="dep-tab-content">
         <div class="amount-display">
-          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI()">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
+          <img src="https://up6.cc/2026/10/1793229802411.jpg">
         </div>
         <div class="quick-chips">
           <button class="chip" onclick="addChip(500)">+ 500</button>
@@ -840,10 +855,12 @@ input { font: inherit; color: inherit; }
         </div>
 
         <div class="amount-display">
-          <span style="font-size:4.5rem; font-weight:800;">$</span>
-          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI()">
+          <span class="dollar-sign">$</span>
+          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
         </div>
-        <div class="calc-result" id="cryptoCalcResult">ستحصل على 100 نجمة</div>
+        <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
+          100 <img src="https://up6.cc/2026/10/1793229802411.jpg" style="width:16px; height:16px; border-radius:50%;">
+        </div>
         <div class="quick-chips">
           <button class="chip" onclick="addCryptoChip(1)">+ $1</button>
           <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
@@ -855,10 +872,6 @@ input { font: inherit; color: inherit; }
 
       <!-- Binance Tab -->
       <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
-        <div class="warning-box">
-          <i class="fas fa-exclamation-triangle" style="margin-top:3px;"></i>
-          <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
-        </div>
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف Binance Pay التالي:</p>
           <div class="copy-box">
@@ -870,16 +883,15 @@ input { font: inherit; color: inherit; }
             <span id="binanceUserId">123456789</span>
             <button class="copy-btn" onclick="copyText(document.getElementById('binanceUserId').innerText)">نسخ</button>
           </div>
-          <p style="color:var(--warning); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
+          <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          </div>
         </div>
       </div>
 
       <!-- Sham Tab -->
       <div id="dep-tab-sham" class="dep-tab-content" style="display:none;">
-        <div class="warning-box">
-          <i class="fas fa-exclamation-triangle" style="margin-top:3px;"></i>
-          <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
-        </div>
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف شام كاش التالي:</p>
           <div class="copy-box">
@@ -891,7 +903,10 @@ input { font: inherit; color: inherit; }
             <span id="shamUserId">123456789</span>
             <button class="copy-btn" onclick="copyText(document.getElementById('shamUserId').innerText)">نسخ</button>
           </div>
-          <p style="color:var(--warning); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
+          <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -913,10 +928,10 @@ input { font: inherit; color: inherit; }
 
       <div id="wd-tab-binance" class="wd-tab-content">
         <div class="amount-display">
-          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance')">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance', this)">
+          <img src="https://up6.cc/2026/10/1793229802411.jpg">
         </div>
-        <div class="calc-result" id="wdBinanceResult">ستحصل على $0.00</div>
+        <div class="calc-subtext" id="wdBinanceResult">$0.00</div>
         
         <div class="wd-input-group">
           <label>معرّف Binance Pay</label>
@@ -929,10 +944,10 @@ input { font: inherit; color: inherit; }
 
       <div id="wd-tab-sham" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
-          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham')">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham', this)">
+          <img src="https://up6.cc/2026/10/1793229802411.jpg">
         </div>
-        <div class="calc-result" id="wdShamResult">ستحصل على 0 ل.س</div>
+        <div class="calc-subtext" id="wdShamResult">0 SYP</div>
 
         <div class="wd-input-group">
           <label>معرّف شام كاش</label>
@@ -943,9 +958,9 @@ input { font: inherit; color: inherit; }
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
 
-      <h3 style="margin-top:40px; margin-bottom:16px; font-weight:800; font-size:18px;">سجل السحوبات</h3>
-      <div class="history-list" id="withdrawHistory"></div>
-      <button class="wd-history-more" id="wdHistoryMore" type="button" style="display:none;" onclick="loadMoreHistory()">عرض المزيد</button>
+      <button class="topup-btn" style="background: var(--bg-soft); color: #fff; margin-top: 20px;" onclick="openModal('modalWithdrawHistory'); renderWithdrawHistory();">
+        <i class="fas fa-history"></i> سجل السحوبات
+      </button>
     </div>
 
     <!-- View: Referral -->
@@ -1010,7 +1025,7 @@ input { font: inherit; color: inherit; }
       
       <div class="stats-grid">
         <div class="stat-card">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+          <img src="https://up6.cc/2026/10/1793229802411.jpg">
           <div class="stat-info">
             <h3 id="statStars">0</h3>
             <p>Stars</p>
@@ -1108,6 +1123,15 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
+<!-- Modal: Withdraw History -->
+<div class="modal-overlay" id="modalWithdrawHistory">
+  <div class="modal-content" style="max-width: 400px;">
+    <h3 style="margin-bottom: 20px;">سجل السحوبات</h3>
+    <div class="history-list" id="withdrawHistoryList" style="max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
+    <button class="modal-btn" style="margin-top: 20px;" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
+  </div>
+</div>
+
 <!-- Toast Notification -->
 <div class="toast" id="toast">Message</div>
 
@@ -1116,7 +1140,7 @@ input { font: inherit; color: inherit; }
 
 // ===================== CONFIG & ASSETS =====================
 const ASSETS = {
-  star: 'https://up6.cc/2026/10/17926810487851.png',
+  star: 'https://up6.cc/2026/10/1793229802411.jpg',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
   sham: 'https://up6.cc/2026/09/178975725154411.png'
 };
@@ -1266,9 +1290,6 @@ window.onload = () => {
     renderLiveStrip();
     renderPrizesModal();
     
-    // Bind keyboard
-    document.addEventListener('focusin', () => document.body.classList.add('keyboard-open'));
-    document.addEventListener('focusout', () => document.body.classList.remove('keyboard-open'));
   }, 2000);
 };
 
@@ -1537,6 +1558,14 @@ function startSpin() {
   }, 4100);
 }
 
+// ===================== UTILS: INPUT WIDTH =====================
+function adjustInputWidth(input) {
+  input.style.width = 'auto';
+  const len = input.value.length || 1;
+  // Adjust width based on characters, roughly 0.6em per char, min 1ch
+  input.style.width = Math.max(1, len) + 'ch';
+}
+
 // ===================== DEPOSIT =====================
 function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
@@ -1546,8 +1575,9 @@ function switchDepositTab(tab, el) {
   document.getElementById('dep-tab-' + tab).style.display = 'block';
 }
 
-function updateDepositUI() {
-  const val = parseInt(document.getElementById('depositAmountInput').value) || 0;
+function updateDepositUI(input) {
+  adjustInputWidth(input);
+  const val = parseInt(input.value) || 0;
   depositAmount = val;
 }
 
@@ -1555,17 +1585,18 @@ function addChip(amount) {
   const input = document.getElementById('depositAmountInput');
   let current = parseInt(input.value) || 0;
   input.value = current + amount;
-  updateDepositUI();
+  updateDepositUI(input);
 }
 
-function updateCryptoUI() {
-  let val = parseFloat(document.getElementById('cryptoAmountInput').value) || 0;
+function updateCryptoUI(input) {
+  adjustInputWidth(input);
+  let val = parseFloat(input.value) || 0;
   if (val > 1000) {
     val = 1000;
-    document.getElementById('cryptoAmountInput').value = 1000;
+    input.value = 1000;
   }
   const stars = Math.floor(val * 100);
-  document.getElementById('cryptoCalcResult').innerText = `ستحصل على ${stars.toLocaleString()} نجمة`;
+  document.getElementById('cryptoCalcSubtext').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
 }
 
 function addCryptoChip(amount) {
@@ -1574,7 +1605,7 @@ function addCryptoChip(amount) {
   let newVal = current + amount;
   if (newVal > 1000) newVal = 1000;
   input.value = newVal;
-  updateCryptoUI();
+  updateCryptoUI(input);
 }
 
 async function processDeposit(type) {
@@ -1715,16 +1746,17 @@ function switchWithdrawTab(tab, el) {
   document.getElementById('wd-tab-' + tab).style.display = 'block';
 }
 
-function updateWdUI(method) {
+function updateWdUI(method, input) {
+  adjustInputWidth(input);
   let stars = 0;
   if (method === 'binance') {
-    stars = parseInt(document.getElementById('wdBinanceAmount').value) || 0;
+    stars = parseInt(input.value) || 0;
     const usd = (stars * 0.01).toFixed(2);
-    document.getElementById('wdBinanceResult').innerText = `ستحصل على $${usd}`;
+    document.getElementById('wdBinanceResult').innerText = `$${usd}`;
   } else {
-    stars = parseInt(document.getElementById('wdShamAmount').value) || 0;
+    stars = parseInt(input.value) || 0;
     const syp = (stars * 1).toFixed(0);
-    document.getElementById('wdShamResult').innerText = `ستحصل على ${syp} ل.س`;
+    document.getElementById('wdShamResult').innerText = `${syp} SYP`;
   }
 }
 
@@ -1747,13 +1779,11 @@ async function loadWithdrawalHistory() {
 }
 
 function renderWithdrawHistory() {
-  const list = document.getElementById('withdrawHistory');
-  const moreBtn = document.getElementById('wdHistoryMore');
+  const list = document.getElementById('withdrawHistoryList');
   list.innerHTML = '';
   
   if (withdrawalHistory.length === 0) {
     list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:20px;">لا يوجد سجل سحب بعد</p>';
-    moreBtn.style.display = 'none';
     return;
   }
 
@@ -1764,8 +1794,7 @@ function renderWithdrawHistory() {
     rejected: { text: 'مرفوض', class: 'st-rejected' }
   };
 
-  const slice = withdrawalHistory.slice(0, wdDisplayCount);
-  slice.forEach(w => {
+  withdrawalHistory.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
     const div = document.createElement('div');
@@ -1779,17 +1808,6 @@ function renderWithdrawHistory() {
     `;
     list.appendChild(div);
   });
-
-  if (withdrawalHistory.length > wdDisplayCount) {
-    moreBtn.style.display = 'block';
-  } else {
-    moreBtn.style.display = 'none';
-  }
-}
-
-function loadMoreHistory() {
-  wdDisplayCount += 5;
-  renderWithdrawHistory();
 }
 
 async function processWithdraw(method) {
@@ -1843,8 +1861,11 @@ async function processWithdraw(method) {
     document.getElementById('wdBinanceAmount').value = '';
     document.getElementById('wdShamId').value = '';
     document.getElementById('wdShamAmount').value = '';
-    updateWdUI('binance');
-    updateWdUI('sham');
+    
+    adjustInputWidth(document.getElementById('wdBinanceAmount'));
+    adjustInputWidth(document.getElementById('wdShamAmount'));
+    updateWdUI('binance', document.getElementById('wdBinanceAmount'));
+    updateWdUI('sham', document.getElementById('wdShamAmount'));
     
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
@@ -1971,6 +1992,12 @@ function completeTask(btn) {
     }, 1000);
   }
 }
+
+// Ensure correct initial width
+window.addEventListener('load', () => {
+    adjustInputWidth(document.getElementById('depositAmountInput'));
+    adjustInputWidth(document.getElementById('cryptoAmountInput'));
+});
 </script>
 
 </body>
