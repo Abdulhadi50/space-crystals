@@ -7,1546 +7,1065 @@
 <title>Cute Bee Stars</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 :root {
-  --bg-main: #0f0f11;
-  --bg-card: #1C1C1E;
-  --bg-soft: #2C2C2E;
-  --text-primary: #FFFFFF;
-  --text-secondary: #8E8E93;
-  --border: rgba(255, 255, 255, 0.08);
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --radius-card: 20px;
-  --radius-button: 16px;
-  --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
-  --gradient-purple: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%);
-  --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
-  --success: #34C759;
-  --danger: #FF3B30;
-  --warning: #FF9500;
-  --safe-bottom: env(safe-area-inset-bottom, 20px);
-  --safe-top: env(safe-area-inset-top, 20px);
-  --dock-height: 64px;
-  --top-bar-height: 10vh;
+  --bg: #0f0f11;
+  --bg2: #1C1C1E;
+  --card: rgba(28,28,30,0.92);
+  --glass: rgba(255,255,255,0.07);
+  --border: rgba(255,255,255,0.09);
+  --text: #FFFFFF;
+  --text2: #8E8E93;
+  --blue: #0A84FF;
+  --blue2: #0066CC;
+  --purple: #BF5AF2;
+  --green: #30D158;
+  --red: #FF453A;
+  --orange: #FF9F0A;
+  --gold: #FFD60A;
+  --safe-top: env(safe-area-inset-top, 16px);
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+  --dock-h: 64px;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif; }
+button { font:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+input { font:inherit; color:inherit; background:transparent; border:none; outline:none; }
+::-webkit-scrollbar { display:none; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  background: var(--bg-main); color: var(--text-primary);
-  font-size: 15px; line-height: 1.5;
-  overscroll-behavior: none; user-select: none; direction: rtl;
-}
-button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
-input { font: inherit; color: inherit; }
-::-webkit-scrollbar { display: none; }
-
-/* ============ SPLASH ============ */
+/* SPLASH */
 .splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: 10vh; transition: opacity 0.6s ease;
+  position:fixed; inset:0; z-index:99999;
+  background:#0f0f11 url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  padding-bottom:90px; transition:opacity .55s ease;
 }
-.splash.hide { opacity: 0; pointer-events: none; }
-.loader-bar {
-  width: 60%; height: 6px; background: rgba(255,255,255,0.15);
-  border-radius: 3px; overflow: hidden;
+.splash.hide { opacity:0; pointer-events:none; }
+.splash-bar {
+  width:55%; height:4px; background:rgba(255,255,255,0.18); border-radius:4px; overflow:hidden;
 }
-.loader-fill {
-  width: 0%; height: 100%; background: var(--gradient-blue);
-  border-radius: 3px; animation: load 2s forwards;
+.splash-bar i {
+  display:block; height:100%; width:0;
+  background:linear-gradient(90deg,#FFD60A,#FF9F0A);
+  border-radius:4px; animation:loadBar 1.8s ease-in-out forwards;
 }
-@keyframes load { to { width: 100%; } }
+@keyframes loadBar { to { width:100%; } }
 
-/* ============ APP CONTAINER ============ */
-.app-container {
-  display: flex; flex-direction: column; height: 100dvh;
-  position: relative; max-width: 480px; margin: 0 auto; overflow: hidden;
-  display: none;
-}
-.app-container.ready { display: flex; }
-
-/* ============ TOP APP BAR ============ */
-.top-app-bar {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: calc(var(--top-bar-height) + var(--safe-top));
-  background: rgba(28, 28, 30, 0.85);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
-  border-bottom: 1px solid var(--border);
-  z-index: 50; padding-top: var(--safe-top);
+/* APP */
+.app {
+  display:none; flex-direction:column; height:100dvh;
+  max-width:480px; margin:0 auto; position:relative; overflow:hidden;
 }
 
-/* ============ FLOATING BALANCES ============ */
-.floating-balances {
-  position: absolute;
-  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
-  left: 0; right: 0;
-  display: flex; justify-content: center; gap: 10px;
-  z-index: 51;
+/* TOP BAR */
+.top-bar {
+  position:absolute; top:0; left:0; right:0;
+  height:calc(var(--safe-top) + 10vh);
+  background:linear-gradient(180deg,rgba(15,15,17,0.97) 0%,rgba(15,15,17,0.75) 100%);
+  border-bottom-left-radius:22px; border-bottom-right-radius:22px;
+  z-index:40; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-.balance-pill {
-  background: rgba(44, 44, 46, 0.85);
-  border: 1px solid var(--border);
-  border-radius: 24px; padding: 6px 14px;
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 700; font-size: 14px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-sm);
-}
-.balance-pill img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
-.add-btn {
-  background: var(--gradient-blue); color: #fff;
-  width: 22px; height: 22px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 800; margin-right: 4px;
-  transition: transform 0.1s;
-}
-.add-btn:active { transform: scale(0.9); }
 
-/* ============ MAIN SCROLL ============ */
-.main-scroll {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: calc(var(--top-bar-height) + var(--safe-top) + 70px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
+/* BALANCES */
+.balances {
+  position:absolute; top:calc(var(--safe-top) + 10vh + 10px);
+  left:14px; right:14px; z-index:45;
+  display:flex; gap:10px; justify-content:center;
 }
-.view { display: none; }
-.view.active { display: block; animation: viewIn 0.3s var(--spring); }
-@keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.bal-chip {
+  display:flex; align-items:center; gap:6px;
+  background:var(--glass); border:1px solid var(--border);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  padding:7px 12px 7px 8px; border-radius:22px;
+  font-weight:700; font-size:14px; direction:ltr;
+}
+.bal-chip img { width:22px; height:22px; border-radius:50%; object-fit:cover; }
+.bal-plus {
+  width:22px; height:22px; border-radius:50%; background:var(--blue);
+  display:grid; place-items:center; font-size:15px; font-weight:800; line-height:1;
+}
 
-/* ============ HOME ============ */
+/* MAIN */
+.main {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:calc(var(--safe-top) + 10vh + 58px) 16px calc(var(--dock-h) + 36px + var(--safe-bottom));
+  -webkit-overflow-scrolling:touch;
+}
+.view { display:none; }
+.view.active { display:block; animation:viewIn .28s var(--spring); }
+@keyframes viewIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+/* LIVE */
 .live-strip {
-  display: flex; gap: 10px; overflow-x: auto;
-  padding: 10px; background: var(--bg-card); border-radius: 16px;
-  margin-bottom: 20px; box-shadow: var(--shadow-sm);
+  background:var(--glass); border:1px solid var(--border); border-radius:16px;
+  padding:12px 0; margin-bottom:16px; overflow:hidden; position:relative;
 }
-.live-item {
-  width: 44px; height: 44px; flex-shrink: 0;
-  background: var(--bg-soft); border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+.live-label {
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  background:#FF3B30; color:#fff; font-size:11px; font-weight:800;
+  padding:4px 9px; border-radius:7px; z-index:3;
 }
-.live-item video { width: 100%; height: 100%; object-fit: contain; }
+.live-track {
+  display:flex; gap:20px; animation:scrollLive 26s linear infinite;
+  padding-left:70px; width:max-content;
+}
+.live-track video, .live-track img { width:44px; height:44px; object-fit:contain; flex-shrink:0; }
+@keyframes scrollLive { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-.home-cards { display: flex; flex-direction: column; gap: 14px; }
-.home-card {
-  border-radius: 24px; padding: 24px;
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; transition: transform 0.2s var(--spring);
-  position: relative; overflow: hidden;
-  box-shadow: var(--shadow);
+/* ACTION CARDS */
+.action-cards { display:flex; flex-direction:column; gap:12px; }
+.action-card {
+  border-radius:18px; padding:18px 16px; display:flex; align-items:center; gap:14px;
+  cursor:pointer; transition:transform .2s var(--spring); border:1px solid var(--border);
 }
-.home-card:active { transform: scale(0.97); }
-.home-card.free { background: var(--gradient-dark); }
-.home-card.tasks { background: var(--gradient-purple); }
-.home-card.referral { background: var(--gradient-blue); }
-.home-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-.home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
-.home-card .icon { font-size: 32px; opacity: 0.9; }
+.action-card:active { transform:scale(0.97); }
+.action-card.free { background:linear-gradient(135deg,#1a1a2e,#16213e); }
+.action-card.tasks { background:linear-gradient(135deg,#2d1b4e,#1a0b2e); }
+.action-card.ref { background:linear-gradient(135deg,#0d2137,#0a1628); }
+.action-icon {
+  width:50px; height:50px; border-radius:14px; display:grid; place-items:center;
+  font-size:22px; flex-shrink:0;
+}
+.action-card.free .action-icon { background:rgba(255,214,10,0.15); color:var(--gold); }
+.action-card.tasks .action-icon { background:rgba(191,90,242,0.18); color:var(--purple); }
+.action-card.ref .action-icon { background:rgba(10,132,255,0.18); color:var(--blue); }
+.action-title { font-size:16px; font-weight:800; }
+.action-desc { font-size:12px; color:var(--text2); margin-top:3px; }
 
-/* ============ SPIN GAME ============ */
-.spin-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 20px; }
-.spin-track-wrapper {
-  width: 100%; overflow: hidden; position: relative;
-  padding: 30px 0; margin-bottom: 20px;
+/* SPIN */
+.spin-box {
+  background:var(--glass); border:1px solid var(--border); border-radius:20px;
+  padding:16px; margin-bottom:14px; position:relative;
 }
-.spin-indicator {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
-  background: var(--blue, #007AFF); transform: translateX(-50%);
-  z-index: 2; box-shadow: 0 0 12px rgba(0, 122, 255, 0.8);
+.spin-wrap {
+  height:130px; overflow:hidden; position:relative; border-radius:14px;
+  background:rgba(0,0,0,0.35);
+}
+.spin-line {
+  position:absolute; top:0; bottom:0; left:50%; width:3px;
+  background:var(--gold); z-index:5; transform:translateX(-50%);
+  box-shadow:0 0 14px var(--gold);
 }
 .spin-track {
-  display: flex; gap: 12px;
-  transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display:flex; gap:14px; height:100%; align-items:center;
+  padding:0 50%; will-change:transform;
 }
 .spin-item {
-  width: 100px; height: 120px; background: var(--bg-card);
-  border-radius: 16px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; flex-shrink: 0;
-  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  width:96px; height:96px; flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
 }
-.spin-item video { width: 64px; height: 64px; object-fit: contain; }
-.spin-item .val {
-  font-size: 13px; font-weight: 800; margin-top: 8px;
-  display: flex; align-items: center; gap: 4px;
-}
-.spin-item .val img { width: 14px; height: 14px; border-radius: 50%; }
-
+.spin-item video, .spin-item img { width:68px; height:68px; object-fit:contain; }
+.spin-item span { font-size:12px; font-weight:700; direction:ltr; }
 .spin-btn {
-  background: var(--gradient-blue); color: #fff;
-  border: none; padding: 16px 40px; border-radius: 30px;
-  font-size: 18px; font-weight: 800; cursor: pointer;
-  display: flex; align-items: center; gap: 10px;
-  transition: transform 0.1s var(--spring);
-  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+  width:100%; margin-top:16px; padding:16px; border-radius:16px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  font-weight:800; font-size:16px; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform .2s var(--spring);
 }
-.spin-btn:active { transform: scale(0.95); }
-.spin-btn img { width: 22px; height: 22px; }
-.spin-btn:disabled { opacity: 0.6; pointer-events: none; }
+.spin-btn:active { transform:scale(0.97); }
+.spin-btn:disabled { opacity:0.55; }
 
-/* ============ TASKS ============ */
-.page-header { margin-bottom: 24px; }
-.page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-.page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
-
-.tasks-list { display: flex; flex-direction: column; gap: 12px; }
-.task-item {
-  background: var(--bg-card); border-radius: 20px; padding: 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+/* TASKS */
+.task-card {
+  background:var(--glass); border:1px solid var(--border); border-radius:16px;
+  padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px;
 }
-.task-info { display: flex; align-items: center; gap: 14px; }
 .task-icon {
-  width: 48px; height: 48px; border-radius: 14px;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center; font-size: 22px;
+  width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+  font-size:18px; flex-shrink:0;
 }
-.task-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.task-reward {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--text-secondary); font-weight: 700;
+.task-info { flex:1; min-width:0; }
+.task-title { font-size:14px; font-weight:700; }
+.task-reward { font-size:12px; color:var(--text2); margin-top:3px; display:flex; align-items:center; gap:4px; }
+.task-btn {
+  padding:9px 16px; border-radius:12px; background:var(--blue); font-weight:700; font-size:13px;
+  transition:transform .2s var(--spring); white-space:nowrap;
 }
-.task-reward img { width: 14px; height: 14px; border-radius: 50%; }
-.start-btn {
-  background: var(--blue, #007AFF); color: #fff; border: none;
-  padding: 8px 18px; border-radius: 12px;
-  font-weight: 700; font-size: 13px; cursor: pointer;
-  transition: background 0.2s;
-}
+.task-btn:active { transform:scale(0.95); }
+.task-btn.done { background:rgba(255,255,255,0.1); color:var(--text2); }
 
-/* ============ DEPOSIT & WITHDRAW ============ */
-.tabs {
-  display: flex; background: var(--bg-card); border-radius: 16px;
-  padding: 4px; margin-bottom: 24px; border: 1px solid var(--border);
-  overflow-x: auto;
+/* TABS */
+.tabs-row {
+  display:flex; gap:8px; overflow-x:auto; padding:4px 0 16px;
+  margin:0 -16px; padding-left:16px; padding-right:16px;
 }
-.tab {
-  flex: 1; text-align: center; padding: 12px 8px; white-space: nowrap;
-  border-radius: 12px; color: var(--text-secondary);
-  font-weight: 700; font-size: 13px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: all 0.2s;
+.tab-pill {
+  flex-shrink:0; padding:10px 18px; border-radius:20px;
+  background:var(--glass); border:1px solid var(--border);
+  font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px;
+  transition:all .25s var(--spring);
 }
-.tab.active { background: var(--bg-soft); color: var(--text-primary); }
-.tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
+.tab-pill.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+.tab-pill img { width:16px; height:16px; border-radius:50%; }
 
-.amount-display { text-align: center; margin: 30px 0 40px; display: flex; align-items: center; justify-content: center; gap: 12px; }
-.amount-display input {
-  font-size: 4.5rem; font-weight: 800; background: transparent;
-  border: none; color: var(--text-primary); text-align: center;
-  width: 200px; outline: none;
+/* AMOUNT */
+.amount-box { text-align:center; padding:36px 0 20px; }
+.amount-box .big {
+  font-size:48px; font-weight:800; direction:ltr; line-height:1.1;
+  display:flex; align-items:center; justify-content:center; gap:10px;
 }
-.amount-display input::-webkit-outer-spin-button,
-.amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display img { width: 48px; height: 48px; border-radius: 50%; }
-
-.quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+.amount-box .big img { width:40px; height:40px; }
+.amount-box .hint { font-size:13px; color:var(--text2); margin-top:8px; }
+.chips {
+  display:flex; gap:10px; justify-content:center; margin-bottom:22px; flex-wrap:wrap;
+}
 .chip {
-  background: var(--bg-card); border: 1px solid var(--border);
-  padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
-  font-weight: 700; font-size: 15px; cursor: pointer;
-  transition: transform 0.1s;
+  padding:11px 18px; border-radius:14px; background:var(--glass);
+  border:1px solid var(--border); font-weight:700; font-size:14px;
+  transition:all .2s var(--spring);
 }
-.chip:active { transform: scale(0.95); }
-
-.topup-btn {
-  width: 100%; background: var(--gradient-blue); color: #fff;
-  border: none; padding: 18px; border-radius: 20px;
-  font-size: 18px; font-weight: 800; cursor: pointer;
-  margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
-  transition: transform 0.1s;
+.chip:active, .chip.active { background:rgba(10,132,255,0.25); border-color:var(--blue); }
+.btn-main {
+  width:100%; padding:16px; border-radius:16px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  font-weight:800; font-size:16px; transition:transform .2s var(--spring);
 }
-.topup-btn:active { transform: scale(0.97); }
-
-.manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
-.manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
-.copy-box {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg-soft); padding: 12px 16px;
-  border-radius: 14px; margin-bottom: 14px;
-}
-.copy-box span { font-family: monospace; font-size: 14px; font-weight: 700; }
-.copy-btn {
-  background: rgba(255,255,255,0.1); border: none; color: #fff;
-  padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+.btn-main:active { transform:scale(0.97); }
+.btn-main:disabled { opacity:0.5; }
+.btn-sec {
+  width:100%; padding:14px; border-radius:16px; margin-top:10px;
+  background:var(--glass); border:1px solid var(--border); font-weight:700;
 }
 
-.wd-input-group { margin-bottom: 20px; }
-.wd-input-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 600; font-size: 14px; }
-.wd-input {
-  width: 100%; padding: 16px; border-radius: 16px;
-  background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none;
+/* INPUT */
+.field {
+  background:var(--glass); border:1px solid var(--border); border-radius:14px;
+  padding:14px 16px; margin-bottom:12px; display:flex; align-items:center; gap:10px;
 }
-.wd-input:focus { border-color: var(--blue, #007AFF); }
+.field label { font-size:12px; color:var(--text2); min-width:90px; }
+.field input { flex:1; font-size:15px; font-weight:600; }
+.field button { color:var(--blue); font-weight:700; font-size:13px; }
 
-/* History Log */
-.history-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-.history-item {
-  background: var(--bg-card); padding: 16px; border-radius: 16px;
-  display: flex; justify-content: space-between; align-items: center;
-  border: 1px solid var(--border);
+/* WITHDRAW HISTORY */
+.wd-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:13px 0; border-bottom:1px solid var(--border);
 }
-.history-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.history-info p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-.status { padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
-.st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
-.st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
-.st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
-.st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
-.wd-history-more {
-  width: 100%; padding: 12px; margin-top: 10px;
-  border: 1px solid var(--border); border-radius: 13px;
-  background: var(--bg-card); color: var(--text-primary);
-  font-size: 13px; font-weight: 800; cursor: pointer;
+.wd-amt { font-weight:700; font-size:14px; direction:ltr; }
+.wd-date { font-size:11px; color:var(--text2); margin-top:3px; }
+.wd-st {
+  font-size:12px; font-weight:700; padding:5px 11px; border-radius:9px;
 }
+.st-pending { background:rgba(255,159,10,0.16); color:var(--orange); }
+.st-processing { background:rgba(10,132,255,0.16); color:var(--blue); }
+.st-completed { background:rgba(48,209,88,0.16); color:var(--green); }
+.st-rejected { background:rgba(255,69,58,0.16); color:var(--red); }
 
-/* ============ REFERRAL ============ */
-.referral-header { text-align: center; margin-bottom: 30px; }
-.referral-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-.referral-header p { color: var(--text-secondary); font-size: 14px; font-weight: 600; }
-.ref-stats { display: flex; gap: 14px; margin-bottom: 24px; }
-.ref-stat-box { flex: 1; background: var(--bg-card); padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
-.ref-stat-box h3 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
-.ref-stat-box p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-.link-box {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 6px; display: flex;
-  align-items: center; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+/* REFERRAL */
+.ref-banner {
+  background:linear-gradient(135deg,#1a2a4a,#0d1b2a); border:1px solid var(--border);
+  border-radius:18px; padding:22px; margin-bottom:16px; text-align:center;
 }
-.link-box-text {
-  flex: 1; font-size: 12px; color: var(--text-secondary); padding: 8px 12px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  direction: ltr; text-align: left; font-weight: 600;
+.ref-banner h3 { font-size:18px; font-weight:800; margin-bottom:6px; }
+.ref-banner p { font-size:13px; color:var(--text2); line-height:1.5; }
+.ref-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.ref-stat {
+  background:var(--glass); border:1px solid var(--border); border-radius:16px;
+  padding:18px; text-align:center;
 }
-.btn-copy {
-  background: var(--gradient-blue); color: #fff;
-  border: none; padding: 10px 14px; border-radius: 10px;
-  font-weight: 800; font-family: inherit; font-size: 12px;
-  cursor: pointer; display: flex; align-items: center; gap: 5px;
-  transition: transform 0.1s; flex-shrink: 0;
-}
-.btn-copy:active { transform: scale(0.96); }
-.ranking-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; margin-top: 20px; }
-.ranking-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px; background: var(--bg-card);
-  border: 1px solid var(--border); border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
-}
-.ranking-row.me { border-color: var(--blue, #007AFF); }
-.ranking-rank {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center;
-  font-weight: 800; color: var(--text-primary);
-  flex-shrink: 0; font-size: 13px;
-}
-.ranking-rank.top1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
-.ranking-rank.top2 { background: linear-gradient(135deg, #E8E8E8, #A8A8A8); color: #000; }
-.ranking-rank.top3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
-.ranking-avatar {
-  width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center;
-  color: var(--text-secondary); flex-shrink: 0;
-  border: 1px solid var(--border);
-}
-.ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.ranking-info { flex: 1; min-width: 0; }
-.ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
-.ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.ref-stat .n { font-size:26px; font-weight:800; direction:ltr; }
+.ref-stat .l { font-size:12px; color:var(--text2); margin-top:4px; }
 
-/* ============ PROFILE ============ */
-.profile-header { text-align: center; margin-bottom: 30px; }
-.profile-avatar {
-  width: 90px; height: 90px; border-radius: 50%;
-  background: var(--bg-card); margin: 0 auto 16px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 36px; overflow: hidden; border: 3px solid var(--bg-soft);
+/* PROFILE */
+.prof-head { text-align:center; padding:16px 0 24px; }
+.prof-av {
+  width:84px; height:84px; border-radius:50%; margin:0 auto 12px;
+  background:var(--glass); border:3px solid var(--border); overflow:hidden;
+  display:grid; place-items:center; font-size:36px;
 }
-.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-.profile-header p { color: var(--text-secondary); font-size: 14px; font-weight: 600; }
+.prof-av img { width:100%; height:100%; object-fit:cover; }
+.prof-name { font-size:20px; font-weight:800; }
+.prof-id { font-size:13px; color:var(--text2); margin-top:4px; direction:ltr; }
+.stats-g { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.stat-c {
+  background:var(--glass); border:1px solid var(--border); border-radius:16px;
+  padding:18px; text-align:center;
+}
+.stat-c .n { font-size:22px; font-weight:800; direction:ltr; }
+.stat-c .l { font-size:12px; color:var(--text2); margin-top:4px; }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.stat-card {
-  background: var(--bg-card); padding: 20px; border-radius: 20px;
-  display: flex; align-items: center; gap: 16px; border: 1px solid var(--border);
-}
-.stat-card img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
-.stat-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 2px; }
-.stat-info p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-
-/* ============ MODALS ============ */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
-}
-.modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal-content {
-  background: var(--bg-card); border-radius: 24px; padding: 30px;
-  width: 100%; max-width: 340px; text-align: center;
-  animation: popIn 0.3s var(--spring); border: 1px solid var(--border);
-}
-@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal-content h3 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-.modal-content p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; font-weight: 600; line-height: 1.5; }
-.modal-btn {
-  width: 100%; padding: 16px; border-radius: 16px;
-  background: var(--gradient-blue); color: #fff;
-  border: none; font-size: 16px; font-weight: 800; cursor: pointer;
-  transition: transform 0.1s;
-}
-.modal-btn:active { transform: scale(0.97); }
-
-/* Prizes Grid in Modal */
-.prizes-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
-  margin-bottom: 24px; max-height: 40vh; overflow-y: auto; padding-right: 5px;
-}
-.prize-item {
-  background: var(--bg-soft); border-radius: 12px; padding: 10px;
-  display: flex; flex-direction: column; align-items: center;
-}
-.prize-item video { width: 40px; height: 40px; object-fit: contain; }
-.prize-item span {
-  font-size: 12px; font-weight: 800; margin-top: 6px;
-  display: flex; align-items: center; gap: 4px;
-}
-.prize-item img { width: 14px; height: 14px; border-radius: 50%; }
-
-/* Toast */
-.toast {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-  background: var(--bg-card); color: var(--text-primary);
-  padding: 14px 24px; border-radius: 30px; font-size: 14px; font-weight: 700;
-  z-index: 2000; transition: transform 0.3s var(--spring);
-  box-shadow: var(--shadow); border: 1px solid var(--border);
-  max-width: 90%; text-align: center;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ============ CLONED DOCK ============ */
+/* DOCK – elastic glass clone */
 .dock {
-  position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
-  left: 14px; right: 14px;
-  display: flex; align-items: center; gap: 10px; z-index: 100;
-  transition: transform 0.28s ease, opacity 0.2s ease;
+  position:absolute; bottom:calc(12px + var(--safe-bottom));
+  left:12px; right:12px; z-index:80;
+  display:flex; align-items:center; gap:10px;
+  transition:transform .3s var(--spring), opacity .25s;
+}
+body.keyboard-open .dock {
+  transform:translateY(calc(100% + 30px)); opacity:0; pointer-events:none;
 }
 .dock-nav {
-  flex: 1; height: 64px; position: relative;
-  isolation: isolate; overflow: hidden; --nav-index: 0;
-  background: rgba(28, 28, 30, 0.85);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  backdrop-filter: blur(20px) saturate(155%);
+  flex:1; height:var(--dock-h); position:relative; isolation:isolate; overflow:hidden;
+  --nav-index:0;
+  background:rgba(28,28,30,0.88);
+  border:1px solid var(--border);
+  border-radius:32px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:6px;
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
 }
 .dock-nav::before {
-  content: ''; position: absolute; z-index: 0;
-  top: 6px; bottom: 6px; right: 6px;
-  width: calc((100% - 14px) / 4);
-  border-radius: 26px;
-  background: rgba(255,255,255,0.1);
-  box-shadow: inset 0 1px rgba(255,255,255,0.1);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  transform: translateX(calc(var(--nav-index) * -100%));
-  transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
-  pointer-events: none;
+  content:''; position:absolute; z-index:0;
+  top:6px; bottom:6px; right:6px;
+  width:calc((100% - 12px) / 4);
+  border-radius:26px;
+  background:rgba(10,132,255,0.22);
+  border:1px solid rgba(10,132,255,0.35);
+  box-shadow:0 2px 12px rgba(10,132,255,0.15);
+  transform:translateX(calc(var(--nav-index) * -100%));
+  transition:transform 480ms cubic-bezier(.22,1.4,.36,1);
+  pointer-events:none;
 }
 .nav-item {
-  flex: 1; height: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 4px; color: var(--text-secondary);
-  font-size: 10px; font-weight: 700;
-  border-radius: 26px; transition: color 0.25s;
-  cursor: pointer; position: relative;
-  z-index: 1; background: transparent;
+  flex:1; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; color:var(--text2); font-size:10px; font-weight:700;
+  border-radius:26px; transition:color .25s; cursor:pointer; position:relative; z-index:1;
 }
-.nav-item i { font-size: 18px; }
-.nav-item.active { color: var(--text-primary); background: transparent; box-shadow: none; }
+.nav-item i { font-size:18px; }
+.nav-item.active { color:var(--blue); }
 .nav-profile {
-  width: 56px; height: 56px;
-  padding: 3px;
-  background: var(--bg-card);
-  border: 2px solid rgba(255,255,255,0.1);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  cursor: pointer;
-  transition: all 0.25s;
-  color: var(--text-secondary);
-  font-size: 20px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width:52px; height:52px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:grid; place-items:center; font-size:18px; color:#fff;
+  border:2px solid rgba(255,255,255,0.12);
+  transition:transform .22s var(--spring);
 }
-.nav-profile:active { transform: scale(0.92); }
-.nav-profile img {
-  width: 100%; height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
+.nav-profile:active { transform:scale(0.92); }
+.nav-profile.active { box-shadow:0 0 0 3px rgba(10,132,255,0.4); }
+
+/* MODAL */
+.modal {
+  position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:200;
+  display:none; align-items:flex-end; justify-content:center;
+  backdrop-filter:blur(6px);
 }
-.nav-profile.active {
-  border-color: #007AFF;
-  color: var(--text-primary);
-  box-shadow: 0 4px 20px rgba(0, 122, 255, 0.4);
+.modal.show { display:flex; }
+.modal-sheet {
+  width:100%; max-width:480px; background:var(--bg2);
+  border-radius:24px 24px 0 0; padding:24px 20px calc(22px + var(--safe-bottom));
+  animation:sheetUp .35s var(--spring);
 }
-.keyboard-open .dock {
-  transform: translateY(calc(100% + 24px));
-  opacity: 0; pointer-events: none;
+@keyframes sheetUp { from{transform:translateY(100%)} to{transform:none} }
+.modal-title { font-size:18px; font-weight:800; text-align:center; margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--text2); text-align:center; margin-bottom:18px; line-height:1.55; }
+.prizes-g {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  max-height:48vh; overflow-y:auto; margin-bottom:14px;
 }
+.prize-i {
+  background:var(--glass); border:1px solid var(--border); border-radius:14px;
+  padding:12px 6px; text-align:center;
+}
+.prize-i video, .prize-i img { width:48px; height:48px; object-fit:contain; margin-bottom:6px; }
+.prize-i span { font-size:12px; font-weight:700; direction:ltr; display:block; }
+
+/* TOAST */
+.toast {
+  position:fixed; top:calc(var(--safe-top) + 18px); left:50%;
+  transform:translateX(-50%) translateY(-120px);
+  background:rgba(28,28,30,0.96); border:1px solid var(--border); color:#fff;
+  padding:12px 22px; border-radius:14px; font-weight:700; font-size:14px;
+  z-index:300; transition:transform .4s var(--spring); backdrop-filter:blur(20px);
+  max-width:90%; text-align:center;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.err { border-color:var(--red); }
+.toast.ok { border-color:var(--green); }
+
+.section-t { font-size:16px; font-weight:800; margin:18px 0 12px; }
+.empty { text-align:center; padding:36px 16px; color:var(--text2); font-size:14px; }
 </style>
 </head>
 <body>
+<div class="splash" id="splash"><div class="splash-bar"><i></i></div></div>
 
-<!-- Splash Screen -->
-<div class="splash" id="splash">
-  <div class="loader-bar"><div class="loader-fill"></div></div>
-</div>
-
-<!-- App Container -->
-<div class="app-container" id="app">
-  
-  <!-- Top App Bar -->
-  <header class="top-app-bar"></header>
-  
-  <!-- Floating Balances -->
-  <div class="floating-balances">
-    <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/17926810487851.png" alt="Stars">
-      <span id="topStars">0</span>
-      <button class="add-btn" onclick="go('deposit')">+</button>
+<div class="app" id="app">
+  <div class="top-bar"></div>
+  <div class="balances">
+    <div class="bal-chip" onclick="go('deposit')">
+      <img src="https://up6.cc/2026/10/17926810487851.png" alt="s">
+      <span id="balStars">0</span>
+      <div class="bal-plus">+</div>
     </div>
-    <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="Gems">
-      <span id="topGems">0</span>
-      <button class="add-btn" onclick="go('deposit')">+</button>
+    <div class="bal-chip" onclick="go('deposit')">
+      <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="g">
+      <span id="balGems">0</span>
+      <div class="bal-plus">+</div>
     </div>
   </div>
 
-  <!-- Main Scroll Area -->
-  <main class="main-scroll" id="mainScroll">
-    
-    <!-- View: Home -->
+  <div class="main" id="main">
+    <!-- HOME -->
     <div class="view active" id="view-home">
-      <div class="live-strip" id="live-strip"></div>
-      
-      <div class="home-cards">
-        <div class="home-card free" onclick="go('spin')">
-          <div>
-            <h3>مجاناً (Free)</h3>
-            <p>جرب حظك واربح جوائز فورية</p>
-          </div>
-          <i class="fas fa-gift icon"></i>
+      <div class="live-strip">
+        <div class="live-label">LIVE</div>
+        <div class="live-track" id="liveTrack"></div>
+      </div>
+      <div class="action-cards">
+        <div class="action-card free" onclick="go('spin')">
+          <div class="action-icon"><i class="fas fa-gift"></i></div>
+          <div><div class="action-title">مجاناً</div><div class="action-desc">دوّر العجلة واربح نجوم وجوائز</div></div>
         </div>
-        <div class="home-card tasks" onclick="go('tasks')">
-          <div>
-            <h3>المهام (Tasks)</h3>
-            <p>أكمل المهام واربح النجوم والتذاكر</p>
-          </div>
-          <i class="fas fa-tasks icon"></i>
+        <div class="action-card tasks" onclick="go('tasks')">
+          <div class="action-icon"><i class="fas fa-tasks"></i></div>
+          <div><div class="action-title">المهام</div><div class="action-desc">أكمل المهام واحصل على تذاكر ونجوم</div></div>
         </div>
-        <div class="home-card referral" onclick="go('referral')">
-          <div>
-            <h3>دعوة الأصدقاء</h3>
-            <p>اربح 10% من إيداعات أصدقائك</p>
-          </div>
-          <i class="fas fa-users icon"></i>
+        <div class="action-card ref" onclick="go('referral')">
+          <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+          <div><div class="action-title">دعوة الأصدقاء</div><div class="action-desc">اربح 10% من إيداعاتهم + 5 ماسات</div></div>
         </div>
       </div>
     </div>
 
-    <!-- View: Spin Game -->
+    <!-- SPIN -->
     <div class="view" id="view-spin">
-      <div class="page-header" style="text-align:center; margin-bottom: 20px;">
-        <h2 class="page-title">عجلة الحظ</h2>
-        <p class="page-subtitle">جرب حظك الآن واربح جوائز قيمة</p>
-      </div>
-      
-      <div class="live-strip" id="spin-live-strip" style="margin-bottom: 30px;"></div>
-      
-      <div class="spin-container">
-        <div class="spin-track-wrapper">
-          <div class="spin-indicator"></div>
+      <div class="spin-box">
+        <div class="spin-wrap">
+          <div class="spin-line"></div>
           <div class="spin-track" id="spinTrack"></div>
         </div>
-        
-        <button class="spin-btn" id="spinBtn" onclick="startSpin()">
-          Spin for <span>399</span> <img src="https://up6.cc/2026/10/17926810487851.png">
-        </button>
-        
-        <button style="background:none; border:none; color:var(--text-secondary); margin-top:24px; font-weight:700; font-size:14px; cursor:pointer;" onclick="openModal('modalPrizes')">
-          <i class="fas fa-list"></i> عرض الجوائز (Prizes)
+        <button class="spin-btn" id="spinBtn" onclick="doSpin()">
+          تدوير مقابل <img src="https://up6.cc/2026/10/17926810487851.png" style="width:18px;height:18px;vertical-align:middle"> 399
         </button>
       </div>
+      <button class="btn-sec" onclick="openPrizes()">الجوائز المحتملة</button>
     </div>
 
-    <!-- View: Tasks -->
+    <!-- TASKS -->
     <div class="view" id="view-tasks">
-      <div class="page-header">
-        <h2 class="page-title">المهام</h2>
-        <p class="page-subtitle">أكمل المهام السهلة لتربح التذاكر والنجوم!</p>
-      </div>
-      
-      <div class="tasks-list">
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon"><i class="fas fa-mobile-alt"></i></div>
-            <div class="task-text">
-              <h4>الشاشة الرئيسية</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#007AFF"><i class="fas fa-envelope"></i></div>
-            <div class="task-text">
-              <h4>الرابط (Link)</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#34C759"><i class="fas fa-camera"></i></div>
-            <div class="task-text">
-              <h4>القصة (Story)</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#229ED9"><i class="fab fa-telegram"></i></div>
-            <div class="task-text">
-              <h4>اشترك في قناتنا</h4>
-              <div class="task-reward"><i class="fas fa-star" style="color:#FFD700"></i> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#FF0000"><i class="fab fa-youtube"></i></div>
-            <div class="task-text">
-              <h4>اشترك في يوتيوب</h4>
-              <div class="task-reward"><i class="fas fa-star" style="color:#FFD700"></i> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
-        </div>
-      </div>
+      <div class="section-t">المهام</div>
+      <div id="tasksList"></div>
     </div>
 
-    <!-- View: Deposit -->
+    <!-- DEPOSIT -->
     <div class="view" id="view-deposit">
-      <div class="page-header" style="text-align:center;">
-        <h2 class="page-title">إيداع الرصيد</h2>
-      </div>
-      
-      <div class="tabs">
-        <div class="tab active" onclick="switchDepositTab('stars', this)">
-          <img src="https://up6.cc/2026/10/17926810487851.png"> Stars
+      <div class="tabs-row" id="depTabs">
+        <div class="tab-pill active" data-tab="stars" onclick="setDepTab('stars')">
+          <img src="https://up6.cc/2026/10/17926810487851.png"> النجوم
         </div>
-        <div class="tab" onclick="switchDepositTab('crypto', this)"><i class="fab fa-bitcoin"></i> Crypto</div>
-        <div class="tab" onclick="switchDepositTab('binance', this)">
-          <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
+        <div class="tab-pill" data-tab="crypto" onclick="setDepTab('crypto')">كريبتو</div>
+        <div class="tab-pill" data-tab="binance" onclick="setDepTab('binance')">
+          <img src="https://up6.cc/2026/09/178982889076391.png"> بايننس
         </div>
-        <div class="tab" onclick="switchDepositTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> Sham
+        <div class="tab-pill" data-tab="sham" onclick="setDepTab('sham')">
+          <img src="https://up6.cc/2026/09/178975725154411.png"> شام كاش
         </div>
       </div>
-
-      <!-- Stars Tab -->
-      <div id="dep-tab-stars" class="dep-tab-content">
-        <div class="amount-display">
-          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI()">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
-        </div>
-        <div class="quick-chips">
-          <button class="chip" onclick="addChip(500)">+ 500</button>
-          <button class="chip" onclick="addChip(2000)">+ 2,000</button>
-          <button class="chip" onclick="addChip(5000)">+ 5,000</button>
-        </div>
-        <button class="topup-btn" onclick="processDeposit('stars')">Top up</button>
-      </div>
-
-      <!-- Crypto Tab -->
-      <div id="dep-tab-crypto" class="dep-tab-content" style="display:none;">
-        <div class="amount-display">
-          <span style="font-size:4.5rem; font-weight:800;">$</span>
-          <input type="number" id="cryptoAmountInput" value="10" oninput="updateCryptoUI()">
-        </div>
-        <div class="quick-chips">
-          <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
-          <button class="chip" onclick="addCryptoChip(50)">+ $50</button>
-          <button class="chip" onclick="addCryptoChip(100)">+ $100</button>
-        </div>
-        <button class="topup-btn" onclick="processDeposit('crypto')">Pay with Crypto</button>
-      </div>
-
-      <!-- Binance Tab -->
-      <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
-        <div class="manual-instructions">
-          <p>1. قم بتحويل المبلغ إلى معرّف Binance Pay التالي:</p>
-          <div class="copy-box">
-            <span>1121748571</span>
-            <button class="copy-btn" onclick="copyText('1121748571')">نسخ</button>
-          </div>
-          <p>2. انسخ معرّف حسابك والصقه في خانة "Note" عند التحويل:</p>
-          <div class="copy-box">
-            <span id="binanceUserId">123456789</span>
-            <button class="copy-btn" onclick="copyText(document.getElementById('binanceUserId').innerText)">نسخ</button>
-          </div>
-          <p style="color:var(--warning); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
-        </div>
-      </div>
-
-      <!-- Sham Tab -->
-      <div id="dep-tab-sham" class="dep-tab-content" style="display:none;">
-        <div class="manual-instructions">
-          <p>1. قم بتحويل المبلغ إلى معرّف شام كاش التالي:</p>
-          <div class="copy-box">
-            <span style="font-size:12px;">334a08ea2d1bbed05f214a7f08e37ae4</span>
-            <button class="copy-btn" onclick="copyText('334a08ea2d1bbed05f214a7f08e37ae4')">نسخ</button>
-          </div>
-          <p>2. انسخ معرّف حسابك والصقه في خانة "الملاحظة" عند التحويل:</p>
-          <div class="copy-box">
-            <span id="shamUserId">123456789</span>
-            <button class="copy-btn" onclick="copyText(document.getElementById('shamUserId').innerText)">نسخ</button>
-          </div>
-          <p style="color:var(--warning); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
-        </div>
-      </div>
+      <div id="depContent"></div>
     </div>
 
-    <!-- View: Withdraw -->
+    <!-- WITHDRAW -->
     <div class="view" id="view-withdraw">
-      <div class="page-header" style="text-align:center;">
-        <h2 class="page-title">سحب الأرباح</h2>
-      </div>
-      
-      <div class="tabs">
-        <div class="tab active" onclick="switchWithdrawTab('binance', this)">
-          <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
+      <div class="tabs-row">
+        <div class="tab-pill active" data-wd="binance" onclick="setWdTab('binance')">
+          <img src="https://up6.cc/2026/09/178982889076391.png"> بايننس
         </div>
-        <div class="tab" onclick="switchWithdrawTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> Sham Cash
+        <div class="tab-pill" data-wd="sham" onclick="setWdTab('sham')">
+          <img src="https://up6.cc/2026/09/178975725154411.png"> شام كاش
         </div>
       </div>
-
-      <div id="wd-tab-binance" class="wd-tab-content">
-        <div class="wd-input-group">
-          <label>معرّف Binance Pay</label>
-          <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
-        </div>
-        <div class="wd-input-group">
-          <label>المبلغ (نجوم)</label>
-          <input type="number" class="wd-input" placeholder="Min 50 Stars" id="wdBinanceAmount">
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600;">10 Stars = $0.10</p>
-        <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
+      <div class="field">
+        <label id="wdLabel">معرّف Binance Pay</label>
+        <input type="text" id="wdAccount" placeholder="أدخل معرّف المحفظة">
       </div>
-
-      <div id="wd-tab-sham" class="wd-tab-content" style="display:none;">
-        <div class="wd-input-group">
-          <label>معرّف شام كاش</label>
-          <input type="text" class="wd-input" placeholder="Sham Cash ID" id="wdShamId">
-        </div>
-        <div class="wd-input-group">
-          <label>المبلغ (نجوم)</label>
-          <input type="number" class="wd-input" placeholder="Min 50 Stars" id="wdShamAmount">
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600;">10 Stars = 10 SYP</p>
-        <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
+      <div class="amount-box">
+        <div class="big"><span id="wdVal">0</span> <img src="https://up6.cc/2026/10/17926810487851.png"></div>
+        <div class="hint">الحد الأدنى 50 ★ — 10 ★ = $0.10 أو 10 ل.س</div>
       </div>
-
-      <h3 style="margin-top:40px; margin-bottom:16px; font-weight:800; font-size:18px;">سجل السحوبات</h3>
-      <div class="history-list" id="withdrawHistory"></div>
-      <button class="wd-history-more" id="wdHistoryMore" type="button" style="display:none;" onclick="loadMoreHistory()">عرض المزيد</button>
+      <div class="chips" id="wdChips"></div>
+      <button class="btn-main" id="wdBtn" onclick="doWithdraw()">سحب</button>
+      <div class="section-t">سجل السحوبات</div>
+      <div id="wdHistory"></div>
+      <button class="btn-sec" id="wdMore" style="display:none" onclick="moreWd()">عرض المزيد</button>
     </div>
 
-    <!-- View: Referral -->
+    <!-- REFERRAL -->
     <div class="view" id="view-referral">
-      <div class="referral-header">
-        <h2>Invite friends and earn 10%</h2>
-        <p>from their deposits! Also by 5 tickets for each.</p>
+      <div class="ref-banner">
+        <h3>ادعُ أصدقاءك واربح 10%</h3>
+        <p>من إيداعاتهم + 5 ماسات لكل دعوة (حد 30 يومياً)</p>
       </div>
-      
       <div class="ref-stats">
-        <div class="ref-stat-box">
-          <h3 id="refInvited">0</h3>
-          <p>Invited</p>
-        </div>
-        <div class="ref-stat-box">
-          <h3 id="refEarned">0</h3>
-          <p>Earned</p>
-        </div>
+        <div class="ref-stat"><div class="n" id="rInv">0</div><div class="l">المدعوون</div></div>
+        <div class="ref-stat"><div class="n" id="rEarn">0</div><div class="l">الأرباح</div></div>
       </div>
-      
-      <button class="topup-btn" onclick="shareReferral()"><i class="fas fa-share-alt"></i> Invite</button>
-      <div class="link-box">
-        <div class="link-box-text" id="refLinkText">https://t.me/CuteBeeStarsBot/app?startapp=...</div>
-        <button class="btn-copy" onclick="copyText(document.getElementById('refLinkText').innerText)"><i class="fas fa-copy"></i> Copy</button>
+      <button class="btn-main" onclick="shareRef()">دعوة الأصدقاء</button>
+      <div class="field" style="margin-top:14px">
+        <label>رابط الدعوة</label>
+        <input type="text" id="refLink" readonly>
+        <button onclick="copyText($('refLink').value)">نسخ</button>
       </div>
-
-      <h3 style="margin-top:30px; margin-bottom:10px; font-weight:800; font-size:18px;">Leaderboard</h3>
-      <div class="ranking-list" id="rankingList">
-        <div style="text-align:center; padding:20px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i></div>
-      </div>
+      <div class="section-t">لوحة المتصدرين</div>
+      <div id="leaderboard"></div>
     </div>
 
-    <!-- View: Profile -->
+    <!-- PROFILE -->
     <div class="view" id="view-profile">
-      <div class="profile-header">
-        <div class="profile-avatar" id="profileAvatar">
-          <i class="fas fa-user"></i>
-        </div>
-        <h2 id="profileName">User Name</h2>
-        <p id="profileId">ID: 123456789</p>
+      <div class="prof-head">
+        <div class="prof-av" id="pAv">🐝</div>
+        <div class="prof-name" id="pName">مستخدم</div>
+        <div class="prof-id" id="pId">@id</div>
       </div>
-      
-      <div class="stats-grid">
-        <div class="stat-card">
-          <img src="https://up6.cc/2026/10/17926810487851.png">
-          <div class="stat-info">
-            <h3 id="statStars">0</h3>
-            <p>Stars</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <img src="https://up6.cc/2026/10/179267515752371.jpg">
-          <div class="stat-info">
-            <h3 id="statGems">0</h3>
-            <p>Gems</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-users" style="font-size:28px; color:#007AFF;"></i>
-          <div class="stat-info">
-            <h3 id="statRefs">0</h3>
-            <p>Referrals</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-ticket-alt" style="font-size:28px; color:#5E5CE6;"></i>
-          <div class="stat-info">
-            <h3 id="statTickets">0</h3>
-            <p>Tickets</p>
-          </div>
-        </div>
+      <div class="stats-g">
+        <div class="stat-c"><div class="n" id="ps">0</div><div class="l">نجوم</div></div>
+        <div class="stat-c"><div class="n" id="pg">0</div><div class="l">ماسات</div></div>
+        <div class="stat-c"><div class="n" id="pr">0</div><div class="l">إحالات</div></div>
+        <div class="stat-c"><div class="n" id="pt">0</div><div class="l">تذاكر</div></div>
       </div>
     </div>
+  </div>
 
-  </main>
-
-  <!-- Bottom Dock (Cloned) -->
+  <!-- DOCK -->
   <div class="dock">
-    <div class="dock-nav">
-      <div class="nav-item active" data-view="home" onclick="go('home')">
-        <i class="fas fa-home"></i>
-        <span>الرئيسية</span>
-      </div>
-      <div class="nav-item" data-view="tasks" onclick="go('tasks')">
-        <i class="fas fa-tasks"></i>
-        <span>المهام</span>
-      </div>
-      <div class="nav-item" data-view="deposit" onclick="go('deposit')">
-        <i class="fas fa-wallet"></i>
-        <span>إيداع</span>
-      </div>
-      <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
-        <i class="fas fa-money-bill-transfer"></i>
-        <span>سحب</span>
-      </div>
+    <div class="dock-nav" id="dockNav">
+      <div class="nav-item active" data-view="home" onclick="go('home')"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+      <div class="nav-item" data-view="tasks" onclick="go('tasks')"><i class="fas fa-tasks"></i><span>المهام</span></div>
+      <div class="nav-item" data-view="deposit" onclick="go('deposit')"><i class="fas fa-wallet"></i><span>إيداع</span></div>
+      <div class="nav-item" data-view="withdraw" onclick="go('withdraw')"><i class="fas fa-money-bill-wave"></i><span>سحب</span></div>
     </div>
-    <div class="nav-profile" data-view="profile" onclick="go('profile')">
-      <i class="fas fa-user"></i>
-    </div>
-  </div>
-
-</div>
-
-<!-- Modal: Insufficient Balance -->
-<div class="modal-overlay" id="modalInsufficient">
-  <div class="modal-content">
-    <h3>Not enough balance!</h3>
-    <p>You're short of <span id="shortAmount" style="color:#FF3B30; font-weight:800;">999</span> stars. Please top up your balance.</p>
-    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">Top up</button>
+    <div class="nav-profile" id="navProf" onclick="go('profile')"><i class="fas fa-user"></i></div>
   </div>
 </div>
 
-<!-- Modal: Prizes List -->
-<div class="modal-overlay" id="modalPrizes">
-  <div class="modal-content" style="max-width: 400px;">
-    <h3 style="margin-bottom: 20px;">Possible prizes</h3>
-    <div class="prizes-grid" id="prizesGrid"></div>
-    <button class="modal-btn" onclick="closeModal('modalPrizes')">Close</button>
+<div class="modal" id="modal">
+  <div class="modal-sheet">
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-sub" id="mSub"></div>
+    <div id="mBody"></div>
+    <button class="btn-main" style="margin-top:8px" id="mBtn" onclick="closeModal()">حسناً</button>
   </div>
 </div>
+<div class="toast" id="toast"></div>
 
-<!-- Modal: Win Prize -->
-<div class="modal-overlay" id="modalWin">
-  <div class="modal-content">
-    <div style="font-size:50px; color:#FFD700; margin-bottom:15px;"><i class="fas fa-trophy"></i></div>
-    <h3>أنت فائز!</h3>
-    <p>لقد ربحت <span id="winAmount" style="color:#34C759; font-weight:800;">0</span> نجمة!</p>
-    <button class="modal-btn" onclick="closeModal('modalWin')">رائع</button>
-  </div>
-</div>
-
-<!-- Toast Notification -->
-<div class="toast" id="toast">Message</div>
-
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-'use strict';
-
-// ===================== CONFIG & ASSETS =====================
-const ASSETS = {
-  star: 'https://up6.cc/2026/10/17926810487851.png',
-  gem: 'https://up6.cc/2026/10/179267515752371.jpg',
-  binance: 'https://up6.cc/2026/09/178982889076391.png',
-  sham: 'https://up6.cc/2026/09/178975725154411.png'
+const CONFIG = {
+  firebase: {
+    apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
+    authDomain: "puppy-marge.firebaseapp.com",
+    projectId: "puppy-marge",
+    storageBucket: "puppy-marge.firebasestorage.app",
+    messagingSenderId: "907422647300",
+    appId: "1:907422647300:web:efa524fcfef96288c4a151"
+  },
+  bot: { username: "CuteBeeStarsBot", appName: "app" },
+  col: "cutebee_users",
+  wdCol: "cutebee_withdrawals",
+  txCol: "cutebee_transactions",
+  spinCost: 399,
+  wdMin: 50,
+  rateUsd: 0.01,
+  shamRate: 1
 };
-
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
-  authDomain: "puppy-marge.firebaseapp.com",
-  projectId: "puppy-marge",
-  storageBucket: "puppy-marge.firebasestorage.app",
-  messagingSenderId: "907422647300",
-  appId: "1:907422647300:web:efa524fcfef96288c4a151"
-};
-
-const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 
 const PRIZES = [
-  { id: 1, value: 39760, webm: 'gifts_by_StickerEmojiRobot-078.webm' },
-  { id: 2, value: 7129, webm: 'Cars_by_StickerEmojiRobot-045.webm' },
-  { id: 3, value: 3877, webm: 'gifts_by_StickerEmojiRobot-069.webm' },
-  { id: 4, value: 623, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
-  { id: 5, value: 453, webm: 'Cars_by_StickerEmojiRobot-036.webm' },
-  { id: 6, value: 100, webm: 'gifts_by_StickerEmojiRobot-041.webm' },
-  { id: 7, value: 50, webm: 'Cars_by_StickerEmojiRobot-033.webm' },
-  { id: 8, value: 25, webm: 'Cars_by_StickerEmojiRobot-040.webm' },
-  { id: 9, value: 15, webm: 'Cars_by_StickerEmojiRobot-042.webm' },
-  { id: 10, value: 10, webm: 'Cars_by_StickerEmojiRobot-043.webm' },
-  { id: 11, value: 5, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
+  { stars:39760, webm:"gifts_by_StickerEmojiRobot-078.webm" },
+  { stars:7129,  webm:"Cars_by_StickerEmojiRobot-045.webm" },
+  { stars:3877,  webm:"gifts_by_StickerEmojiRobot-012.webm" },
+  { stars:623,   webm:"gifts_by_StickerEmojiRobot-033.webm" },
+  { stars:453,   webm:"gifts_by_StickerEmojiRobot-056.webm" },
+  { stars:100, webm:null }, { stars:50, webm:null }, { stars:25, webm:null },
+  { stars:15, webm:null }, { stars:10, webm:null }, { stars:5, webm:null }
 ];
 
-// ===================== STATE =====================
-let user = {
-  id: '123456789',
-  name: 'Player',
-  photo: '',
-  stars: 1000, 
-  gems: 150,
-  referrals: 0,
-  tickets: 1
+const TASKS = [
+  { id:"home",  title:"إضافة للشاشة الرئيسية", reward:"1 ◆", type:"gems", val:1, icon:"fa-mobile-alt", color:"#0A84FF" },
+  { id:"link",  title:"ربط الحساب",           reward:"1 ◆", type:"gems", val:1, icon:"fa-link",      color:"#30D158" },
+  { id:"story", title:"مشاركة ستوري",         reward:"1 ◆", type:"gems", val:1, icon:"fa-camera",    color:"#FF9F0A" },
+  { id:"tg",    title:"اشترك في قناتنا",      reward:"1 ◆", type:"gems", val:1, icon:"fa-paper-plane", color:"#0A84FF", url:"https://t.me/cutebeestars" },
+  { id:"yt",    title:"اشترك في يوتيوب",      reward:"1 ★", type:"stars",val:1, icon:"fa-youtube",   color:"#FF453A", url:"https://youtube.com" },
+  { id:"chat",  title:"انضم للشات",           reward:"1 ★", type:"stars",val:1, icon:"fa-comments",  color:"#0A84FF", url:"https://t.me" },
+  { id:"ig",    title:"تابعنا على إنستغرام",  reward:"1 ★", type:"stars",val:1, icon:"fa-instagram", color:"#BF5AF2", url:"https://instagram.com" }
+];
+
+let S = {
+  user: null,
+  busy: false,
+  depTab: "stars",
+  wdTab: "binance",
+  wdAmt: 0,
+  starsAmt: 200,
+  cryptoUsd: 10,
+  spinning: false
 };
-
-let spinState = { isSpinning: false };
-let depositAmount = 200;
-let withdrawalHistory = [];
-let wdDisplayCount = 5;
-let globalRankingLoaded = false;
-
-// ===================== TELEGRAM & FIREBASE =====================
-const tg = window.Telegram?.WebApp;
 let db = null;
+let TG = { id: "guest", name: "لاعب", username: "", photo: null, start: null };
+let wdRows = [];
+let wdShow = 5;
 
-function initTelegram() {
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#1C1C1E');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#0f0f11');
-    if (tg.initDataUnsafe?.user) {
-      user.id = String(tg.initDataUnsafe.user.id);
-      user.name = tg.initDataUnsafe.user.first_name;
-      user.photo = tg.initDataUnsafe.user.photo_url || '';
-    }
-  }
+const $ = id => document.getElementById(id);
+const fmt = n => (Number(n)||0).toLocaleString("en-US");
+
+function toast(msg, type="") {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove("show"), 2600);
 }
 
-function initFirebase() {
-  try {
-    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.firestore();
-    fetchUserData();
-  } catch (e) {
-    console.warn('Firebase init failed', e);
-    showToast('خطأ في الاتصال بقاعدة البيانات');
-  }
+function showModal(title, sub, body="") {
+  $("mTitle").textContent = title;
+  $("mSub").textContent = sub;
+  $("mBody").innerHTML = body;
+  $("modal").classList.add("show");
+}
+function closeModal() { $("modal").classList.remove("show"); }
+
+function go(v) {
+  document.querySelectorAll(".view").forEach(el => el.classList.remove("active"));
+  const target = $("view-" + v);
+  if (target) target.classList.add("active");
+
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === v));
+  $("navProf").classList.toggle("active", v === "profile");
+
+  // elastic indicator
+  const items = ["home","tasks","deposit","withdraw"];
+  const idx = items.indexOf(v);
+  const nav = $("dockNav");
+  if (nav) nav.style.setProperty("--nav-index", idx >= 0 ? idx : 0);
+
+  if (v === "tasks") renderTasks();
+  if (v === "deposit") setDepTab(S.depTab);
+  if (v === "withdraw") { setWdTab(S.wdTab); loadWd(); }
+  if (v === "referral") renderRef();
+  if (v === "profile") renderProf();
+  if (v === "spin") buildSpin();
 }
 
-async function fetchUserData() {
-  if (!db) return;
+function renderBal() {
+  if (!S.user) return;
+  $("balStars").textContent = fmt(S.user.stars);
+  $("balGems").textContent = fmt(S.user.gems);
+}
+
+function newUser() {
+  return {
+    telegramId: TG.id,
+    name: TG.name,
+    username: TG.username,
+    photoUrl: TG.photo,
+    stars: 25,
+    gems: 0,
+    tickets: 0,
+    referralCount: 0,
+    referralEarned: 0,
+    referralCode: String(TG.id),
+    referredBy: null,
+    tasks: {},
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+}
+
+async function save() {
+  if (!db || !S.user) return;
   try {
-    const docRef = db.collection('puppy_users').doc(user.id);
-    const doc = await docRef.get();
-    if (doc.exists) {
-      const data = doc.data();
-      user.stars = data.stars || 0;
-      user.gems = data.gems || 0;
-      user.referrals = data.referralCount || 0;
-      user.tickets = data.tickets || 0;
-    } else {
-      // Create new user
-      await docRef.set({
-        telegramId: user.id,
-        name: user.name,
-        photoUrl: user.photo,
-        stars: 0,
-        gems: 0,
-        referralCount: 0,
-        tickets: 0,
+    S.user.updatedAt = Date.now();
+    await db.collection(CONFIG.col).doc(String(TG.id)).set(S.user, { merge: true });
+  } catch (e) { console.warn("save", e); }
+}
+
+function buildLive() {
+  const track = $("liveTrack");
+  let h = "";
+  for (let r = 0; r < 2; r++) {
+    PRIZES.slice(0, 7).forEach(p => {
+      h += p.webm
+        ? `<video src="${p.webm}" autoplay muted loop playsinline></video>`
+        : `<img src="https://up6.cc/2026/10/17926810487851.png">`;
+    });
+  }
+  track.innerHTML = h;
+}
+
+function buildSpin() {
+  const track = $("spinTrack");
+  let items = [];
+  for (let i = 0; i < 10; i++) items = items.concat(PRIZES);
+  track.innerHTML = items.map(p => `
+    <div class="spin-item">
+      \( {p.webm ? `<video src=" \){p.webm}" autoplay muted loop playsinline></video>` : `<img src="https://up6.cc/2026/10/17926810487851.png">`}
+      <span>${fmt(p.stars)} ★</span>
+    </div>`).join("");
+  track.style.transition = "none";
+  track.style.transform = "translateX(0)";
+}
+
+async function doSpin() {
+  if (S.spinning || S.busy) return;
+  if (!S.user || S.user.stars < CONFIG.spinCost) {
+    showModal("رصيد غير كافٍ!", `تحتاج ${CONFIG.spinCost - (S.user?.stars || 0)} نجمة إضافية`,
+      `<button class="btn-main" onclick="closeModal();go('deposit')">تعبئة الرصيد</button>`);
+    return;
+  }
+  S.spinning = true;
+  S.busy = true;
+  $("spinBtn").disabled = true;
+  S.user.stars -= CONFIG.spinCost;
+  renderBal();
+  await save();
+
+  const track = $("spinTrack");
+  const win = Math.floor(Math.random() * PRIZES.length);
+  const prize = PRIZES[win];
+  const itemW = 110;
+  const offset = (PRIZES.length * 5 + win) * itemW;
+
+  track.style.transition = "none";
+  track.style.transform = "translateX(0)";
+  void track.offsetWidth;
+  track.style.transition = "transform 4.6s cubic-bezier(0.15, 0.85, 0.25, 1)";
+  track.style.transform = `translateX(-${offset}px)`;
+
+  setTimeout(async () => {
+    S.user.stars += prize.stars;
+    renderBal();
+    await save();
+    showModal("مبروك! 🎉", `ربحت ${fmt(prize.stars)} نجمة`);
+    S.spinning = false;
+    S.busy = false;
+    $("spinBtn").disabled = false;
+  }, 4800);
+}
+
+function openPrizes() {
+  const body = `<div class="prizes-g">${PRIZES.map(p => `
+    <div class="prize-i">
+      \( {p.webm ? `<video src=" \){p.webm}" autoplay muted loop playsinline></video>` : `<img src="https://up6.cc/2026/10/17926810487851.png">`}
+      <span>${fmt(p.stars)} ★</span>
+    </div>`).join("")}</div>`;
+  showModal("الجوائز المحتملة", "", body);
+}
+
+function renderTasks() {
+  $("tasksList").innerHTML = TASKS.map(t => {
+    const done = S.user?.tasks?.[t.id];
+    return `<div class="task-card">
+      <div class="task-icon" style="background:\( {t.color}22;color: \){t.color}"><i class="fas ${t.icon}"></i></div>
+      <div class="task-info">
+        <div class="task-title">${t.title}</div>
+        <div class="task-reward">${t.reward}</div>
+      </div>
+      ${done
+        ? `<button class="task-btn done">تم</button>`
+        : `<button class="task-btn" onclick="doTask('${t.id}')">ابدأ</button>`}
+    </div>`;
+  }).join("");
+}
+
+async function doTask(id) {
+  const t = TASKS.find(x => x.id === id);
+  if (!t || S.user.tasks[id]) return;
+  if (t.url) {
+    try { window.Telegram?.WebApp?.openLink(t.url); } catch(e) { window.open(t.url, "_blank"); }
+  }
+  S.user.tasks[id] = Date.now();
+  if (t.type === "stars") S.user.stars += t.val;
+  else S.user.gems += t.val;
+  renderBal();
+  renderTasks();
+  await save();
+  toast("تم + " + t.reward, "ok");
+}
+
+function setDepTab(tab) {
+  S.depTab = tab;
+  document.querySelectorAll("#depTabs .tab-pill").forEach(p => p.classList.toggle("active", p.dataset.tab === tab));
+  const c = $("depContent");
+  if (tab === "stars") {
+    c.innerHTML = `
+      <div class="amount-box">
+        <div class="big"><span id="sVal">${fmt(S.starsAmt)}</span> <img src="https://up6.cc/2026/10/17926810487851.png"></div>
+        <div class="hint">الحد الأدنى 1 نجمة</div>
+      </div>
+      <div class="chips">
+        <div class="chip" onclick="setStars(500)">+500</div>
+        <div class="chip" onclick="setStars(2000)">+2,000</div>
+        <div class="chip" onclick="setStars(5000)">+5,000</div>
+      </div>
+      <button class="btn-main" onclick="payStars()">تعبئة</button>`;
+  } else if (tab === "crypto") {
+    c.innerHTML = `
+      <div class="amount-box">
+        <div class="big">\( <span id="cVal"> \){S.cryptoUsd}</span></div>
+        <div class="hint">الحد الأدنى $1 — تُضاف الماسات بعد التأكيد</div>
+      </div>
+      <div class="chips">
+        <div class="chip" onclick="setCrypto(5)">$5</div>
+        <div class="chip" onclick="setCrypto(10)">$10</div>
+        <div class="chip" onclick="setCrypto(25)">$25</div>
+        <div class="chip" onclick="setCrypto(50)">$50</div>
+      </div>
+      <button class="btn-main" onclick="toast('سيتم ربط بوابة الدفع قريباً','ok')">الدفع بالكريبتو</button>`;
+  } else {
+    const isBin = tab === "binance";
+    const recv = isBin ? "YOUR_BINANCE_PAY_ID" : "YOUR_SHAM_CASH_ID";
+    c.innerHTML = `
+      <div class="field"><label>معرّف الاستلام</label><input readonly value="\( {recv}"><button onclick="copyText(' \){recv}')">نسخ</button></div>
+      <div class="field"><label>معرّفك</label><input readonly value="\( {TG.id}"><button onclick="copyText(' \){TG.id}')">نسخ</button></div>
+      <p style="font-size:13px;color:var(--text2);margin:12px 0 18px;line-height:1.65">
+        حوّل المبلغ وأضف معرّفك (<b>${TG.id}</b>) في ملاحظة التحويل.<br>ستتم المراجعة خلال 24 ساعة.
+      </p>
+      <button class="btn-main" onclick="toast('أرسل إثبات التحويل للدعم','ok')">تم التحويل</button>`;
+  }
+}
+function setStars(n) { S.starsAmt = n; if ($("sVal")) $("sVal").textContent = fmt(n); }
+function setCrypto(n) { S.cryptoUsd = n; if ($("cVal")) $("cVal").textContent = n; }
+
+async function payStars() {
+  toast("جاري تجهيز فاتورة تيليجرام ستارز...", "ok");
+  // هنا تضع كود إنشاء الفاتورة الحقيقي عبر بوت تيليجرام
+}
+
+function setWdTab(tab) {
+  S.wdTab = tab;
+  document.querySelectorAll("[data-wd]").forEach(p => p.classList.toggle("active", p.dataset.wd === tab));
+  $("wdLabel").textContent = tab === "binance" ? "معرّف Binance Pay" : "معرّف شام كاش";
+  $("wdAccount").placeholder = tab === "binance" ? "Binance Pay ID أو البريد" : "معرّف شام كاش";
+  const amts = tab === "binance" ? [500, 2000, 5000, 10000] : [100, 500, 1000, 5000];
+  \( ("wdChips").innerHTML = amts.map(a => `<div class="chip" onclick="setWd( \){a})">+${fmt(a)}</div>`).join("");
+  setWd(0);
+}
+function setWd(n) { S.wdAmt = n; $("wdVal").textContent = fmt(n); }
+
+async function doWithdraw() {
+  if (S.busy) return;
+  const amt = S.wdAmt;
+  const acc = $("wdAccount").value.trim();
+  if (amt < CONFIG.wdMin) return toast("الحد الأدنى " + CONFIG.wdMin + " نجمة", "err");
+  if (amt > (S.user?.stars || 0)) return toast("رصيد غير كافٍ", "err");
+  if (acc.length < 4) return toast("أدخل معرّفاً صحيحاً", "err");
+
+  S.busy = true;
+  $("wdBtn").disabled = true;
+  try {
+    S.user.stars -= amt;
+    const payout = S.wdTab === "sham"
+      ? (amt * CONFIG.shamRate) + " ل.س"
+      : "$" + (amt * CONFIG.rateUsd).toFixed(2);
+
+    if (db) {
+      await db.collection(CONFIG.wdCol).add({
+        userId: TG.id,
+        amount: amt,
+        method: S.wdTab,
+        account: acc,
+        payout,
+        status: "pending",
         createdAt: Date.now()
       });
     }
-    updateBalances();
-    loadWithdrawalHistory();
-    renderProfile();
+    await save();
+    renderBal();
+    loadWd();
+    showModal("تم إرسال الطلب", "سيتم المعالجة خلال 24-72 ساعة");
+    setWd(0);
+    $("wdAccount").value = "";
   } catch (e) {
-    console.warn('Error fetching user:', e);
-  }
-}
-
-async function syncUserData(updates) {
-  if (!db) return;
-  try {
-    await db.collection('puppy_users').doc(user.id).set(updates, { merge: true });
-  } catch (e) {
-    console.warn('Error syncing data:', e);
-  }
-}
-
-// ===================== APP INITIALIZATION =====================
-window.onload = () => {
-  initTelegram();
-  
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
-    document.getElementById('app').classList.add('ready');
-    
-    initFirebase();
-    updateBalances();
-    renderLiveStrip();
-    renderPrizesModal();
-    
-    // Set user IDs for manual deposit
-    document.getElementById('binanceUserId').innerText = user.id;
-    document.getElementById('shamUserId').innerText = user.id;
-    document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=${user.id}`;
-
-    // Bind keyboard for dock
-    document.addEventListener('focusin', () => document.body.classList.add('keyboard-open'));
-    document.addEventListener('focusout', () => document.body.classList.remove('keyboard-open'));
-  }, 2000);
-};
-
-// ===================== NAVIGATION =====================
-function go(viewName) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const target = document.getElementById('view-' + viewName);
-  if (target) target.classList.add('active');
-
-  // Update Dock
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
-  
-  const activeNav = document.querySelector(`.nav-item[data-view="${viewName}"]`);
-  const activeProfile = document.querySelector(`.nav-profile[data-view="${viewName}"]`);
-  
-  if (activeNav) {
-    activeNav.classList.add('active');
-    const items = Array.from(document.querySelectorAll('.nav-item'));
-    const index = items.indexOf(activeNav);
-    document.querySelector('.dock-nav').style.setProperty('--nav-index', index);
-  } else if (activeProfile) {
-    activeProfile.classList.add('active');
-  } else {
-    // If navigating to a view not on the dock (e.g., spin), remove active states or set to default
-    document.querySelector('.dock-nav').style.setProperty('--nav-index', 0);
-  }
-
-  // Scroll to top smoothly
-  document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
-
-  if (viewName === 'referral' && !globalRankingLoaded) {
-    loadGlobalRanking();
-  }
-  if (viewName === 'withdraw') {
-    loadWithdrawalHistory();
-  }
-}
-
-// ===================== RENDER FUNCTIONS =====================
-function updateBalances() {
-  const formatNum = num => Number(num).toLocaleString('en-US');
-  
-  document.getElementById('topStars').innerText = formatNum(user.stars);
-  document.getElementById('topGems').innerText = formatNum(user.gems);
-  
-  document.getElementById('statStars').innerText = formatNum(user.stars);
-  document.getElementById('statGems').innerText = formatNum(user.gems);
-  document.getElementById('statRefs').innerText = user.referrals;
-  document.getElementById('statTickets').innerText = user.tickets;
-  
-  document.getElementById('refInvited').innerText = user.referrals;
-  document.getElementById('refEarned').innerText = (user.referrals * 10).toFixed(2);
-}
-
-function renderLiveStrip() {
-  const strips = [document.getElementById('live-strip'), document.getElementById('spin-live-strip')];
-  strips.forEach(strip => {
-    if (!strip) return;
-    strip.innerHTML = '';
-    PRIZES.slice(0, 6).forEach(prize => {
-      const div = document.createElement('div');
-      div.className = 'live-item';
-      div.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
-      strip.appendChild(div);
-    });
-  });
-}
-
-function renderPrizesModal() {
-  const grid = document.getElementById('prizesGrid');
-  grid.innerHTML = '';
-  PRIZES.forEach(prize => {
-    const el = document.createElement('div');
-    el.className = 'prize-item';
-    el.innerHTML = `
-      <video src="${prize.webm}" autoplay loop muted playsinline></video>
-      <span>${prize.value.toLocaleString()} <img src="${ASSETS.star}"></span>
-    `;
-    grid.appendChild(el);
-  });
-}
-
-function renderProfile() {
-  document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = 'ID: ' + user.id;
-  const avatar = document.getElementById('profileAvatar');
-  if (user.photo) {
-    avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
-  }
-}
-
-// ===================== HISTORY =====================
-async function loadWithdrawalHistory() {
-  if (!db) {
-    renderWithdrawHistory(); // render default mock
-    return;
-  }
-  try {
-    const q = await db.collection('puppy_withdrawals').where('userId', '==', user.id).get();
-    let rows = [];
-    q.forEach(doc => rows.push(doc.data()));
-    rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    withdrawalHistory = rows;
-    renderWithdrawHistory();
-  } catch(e) {
-    console.warn('History fetch err', e);
-    renderWithdrawHistory();
-  }
-}
-
-function renderWithdrawHistory() {
-  const list = document.getElementById('withdrawHistory');
-  const moreBtn = document.getElementById('wdHistoryMore');
-  list.innerHTML = '';
-  
-  if (withdrawalHistory.length === 0) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:20px;">لا يوجد سجل سحب بعد</p>';
-    moreBtn.style.display = 'none';
-    return;
-  }
-
-  const statusMap = {
-    pending: { text: 'قيد المراجعة', class: 'st-pending' },
-    processing: { text: 'قيد التنفيذ', class: 'st-processing' },
-    completed: { text: 'مكتمل', class: 'st-completed' },
-    rejected: { text: 'مرفوض', class: 'st-rejected' }
-  };
-
-  const slice = withdrawalHistory.slice(0, wdDisplayCount);
-  slice.forEach(w => {
-    const st = statusMap[w.status] || statusMap.pending;
-    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
-    const div = document.createElement('div');
-    div.className = 'history-item';
-    div.innerHTML = `
-      <div class="history-info">
-        <h4>${w.amount} نجوم (${w.method === 'binance' ? 'Binance' : 'شام كاش'})</h4>
-        <p>${dateStr}</p>
-      </div>
-      <div class="status ${st.class}">${st.text}</div>
-    `;
-    list.appendChild(div);
-  });
-
-  if (withdrawalHistory.length > wdDisplayCount) {
-    moreBtn.style.display = 'block';
-  } else {
-    moreBtn.style.display = 'none';
-  }
-}
-
-function loadMoreHistory() {
-  wdDisplayCount += 5;
-  renderWithdrawHistory();
-}
-
-// ===================== ACTIONS & LOGIC =====================
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => showToast('تم النسخ بنجاح!'));
-}
-
-function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=${user.id}&text=Join Cute Bee Stars and win big!`;
-  if (tg) tg.openTelegramLink(url);
-  else window.open(url, '_blank');
-}
-
-async function loadGlobalRanking() {
-  const list = document.getElementById('rankingList');
-  if (!db) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
-    return;
-  }
-  try {
-    const q = await db.collection('puppy_users').orderBy('referralCount', 'desc').limit(20).get();
-    if (q.empty) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
-      return;
-    }
-    list.innerHTML = '';
-    let index = 1;
-    q.forEach(doc => {
-      const data = doc.data();
-      if ((data.referralCount || 0) === 0) return; // Skip 0 referrals
-      
-      const isMe = doc.id === user.id;
-      const rankClass = index === 1 ? 'top1' : index === 2 ? 'top2' : index === 3 ? 'top3' : '';
-      const avatar = data.photoUrl 
-        ? `<img src="${data.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` 
-        : '<i class="fas fa-user"></i>';
-        
-      const div = document.createElement('div');
-      div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `
-        <div class="ranking-rank ${rankClass}">${index}</div>
-        <div class="ranking-avatar">${avatar}</div>
-        <div class="ranking-info">
-          <div class="ranking-name">${data.name || 'Player'} ${isMe ? '(أنت)' : ''}</div>
-          <div class="ranking-count">${data.referralCount} إحالة</div>
-        </div>
-      `;
-      list.appendChild(div);
-      index++;
-    });
-    if (index === 1) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
-    }
-    globalRankingLoaded = true;
-  } catch(e) {
-    console.warn('Ranking err', e);
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
-  }
-}
-
-// --- Spin Game Logic ---
-function startSpin() {
-  if (spinState.isSpinning) return;
-  const spinCost = 399;
-  
-  if (user.stars < spinCost) {
-    document.getElementById('shortAmount').innerText = spinCost - user.stars;
-    openModal('modalInsufficient');
-    return;
-  }
-
-  user.stars -= spinCost;
-  updateBalances();
-  syncUserData({ stars: user.stars });
-
-  spinState.isSpinning = true;
-  document.getElementById('spinBtn').disabled = true;
-  
-  const track = document.getElementById('spinTrack');
-  track.innerHTML = '';
-  
-  const totalItems = 40;
-  const itemWidth = 112; // Width + Gap
-  const centerOffset = window.innerWidth / 2 - 50; 
-  
-  const winnerIndex = 35;
-  const winnerPrize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
-
-  for (let i = 0; i < totalItems; i++) {
-    const prize = i === winnerIndex ? winnerPrize : PRIZES[Math.floor(Math.random() * PRIZES.length)];
-    const div = document.createElement('div');
-    div.className = 'spin-item';
-    div.innerHTML = `
-      <video src="${prize.webm}" autoplay loop muted playsinline></video>
-      <div class="val">${prize.value} <img src="${ASSETS.star}"></div>
-    `;
-    track.appendChild(div);
-  }
-
-  // Calculate translation to land center on winner
-  const randomOffset = (Math.random() - 0.5) * 40; 
-  const translateX = -(winnerIndex * itemWidth - centerOffset + randomOffset);
-
-  // Reset
-  track.style.transition = 'none';
-  track.style.transform = `translateX(0px)`;
-  
-  void track.offsetWidth; // Force reflow
-
-  // Animate
-  track.style.transition = 'transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
-  track.style.transform = `translateX(${translateX}px)`;
-
-  setTimeout(() => {
-    spinState.isSpinning = false;
-    document.getElementById('spinBtn').disabled = false;
-    user.stars += winnerPrize.value;
-    updateBalances();
-    syncUserData({ stars: user.stars });
-    
-    // Show Win Modal
-    document.getElementById('winAmount').innerText = winnerPrize.value.toLocaleString();
-    openModal('modalWin');
-    
-  }, 3600);
-}
-
-// --- Deposit Logic ---
-function switchDepositTab(tab, el) {
-  document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  
-  document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('dep-tab-' + tab).style.display = 'block';
-}
-
-function updateDepositUI() {
-  const val = parseInt(document.getElementById('depositAmountInput').value) || 0;
-  depositAmount = val;
-}
-
-function addChip(amount) {
-  const input = document.getElementById('depositAmountInput');
-  let current = parseInt(input.value) || 0;
-  input.value = current + amount;
-  updateDepositUI();
-}
-
-function updateCryptoUI() {
-  // Optional visual updates for crypto
-}
-
-function addCryptoChip(amount) {
-  const input = document.getElementById('cryptoAmountInput');
-  let current = parseInt(input.value) || 0;
-  input.value = current + amount;
-}
-
-async function processDeposit(type) {
-  if (type === 'stars') {
-    if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
-    if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
-    
-    showToast('جاري إنشاء الفاتورة...');
-    try {
-      const resp = await fetch(`${API_BASE}/api/create-invoice`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, stars: depositAmount })
-      });
-      const data = await resp.json();
-      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
-      
-      tg.openInvoice(data.invoiceLink, (status) => {
-        if (status === 'paid') {
-          user.stars += depositAmount;
-          updateBalances();
-          syncUserData({ stars: user.stars });
-          showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
-          go('home');
-        } else if (status === 'cancelled') {
-          showToast('تم إلغاء الدفع');
-        } else {
-          showToast('فشل الدفع');
-        }
-      });
-    } catch (e) {
-      showToast(e.message || 'تعذر بدء الدفع');
-    }
-  } else if (type === 'crypto') {
-    const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast('الحد الأدنى $1');
-    if (!tg || !tg.openLink) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
-    
-    showToast('جاري إنشاء الفاتورة...');
-    try {
-      const amountCents = Math.round(amount * 100);
-      const resp = await fetch(`${API_BASE}/api/shieldz/create-invoice`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId: user.id, 
-          amount_usd_cents: amountCents, 
-          gems: Math.floor(amount * 10000), // Assuming conversion rate
-          idempotency_key: 'pm_' + user.id + '_' + Date.now()
-        })
-      });
-      const data = await resp.json();
-      if (!data.ok || !data.pay_url) throw new Error(data.error || 'فشل الاتصال');
-      
-      tg.openLink(data.pay_url);
-      showToast('يرجى إكمال الدفع في المتصفح');
-    } catch(e) {
-      showToast(e.message || 'تعذر بدء الدفع');
-    }
-  }
-}
-
-// --- Withdraw Logic ---
-function switchWithdrawTab(tab, el) {
-  document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  
-  document.querySelectorAll('.wd-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('wd-tab-' + tab).style.display = 'block';
-}
-
-async function processWithdraw(method) {
-  let id, amount;
-  if (method === 'binance') {
-    id = document.getElementById('wdBinanceId').value;
-    amount = parseInt(document.getElementById('wdBinanceAmount').value);
-  } else {
-    id = document.getElementById('wdShamId').value;
-    amount = parseInt(document.getElementById('wdShamAmount').value);
-  }
-
-  if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
-  if (!amount || amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
-  if (amount > user.stars) return showToast('رصيدك غير كافٍ');
-
-  const btn = event.target;
-  btn.disabled = true;
-  btn.innerText = 'جاري الإرسال...';
-
-  try {
-    user.stars -= amount;
-    updateBalances();
-    
-    const newWithdraw = {
-      userId: user.id,
-      userName: user.name,
-      method: method,
-      amount: amount,
-      account: id,
-      status: 'pending',
-      createdAt: Date.now()
-    };
-
-    if (db) {
-      await db.collection('puppy_withdrawals').add(newWithdraw);
-      await syncUserData({ stars: user.stars });
-    } else {
-      withdrawalHistory.unshift(newWithdraw);
-    }
-    
-    showToast('تم تقديم طلب السحب بنجاح');
-    
-    // Clear inputs
-    document.getElementById('wdBinanceId').value = '';
-    document.getElementById('wdBinanceAmount').value = '';
-    document.getElementById('wdShamId').value = '';
-    document.getElementById('wdShamAmount').value = '';
-    
-    if (db) loadWithdrawalHistory();
-    else renderWithdrawHistory();
-
-  } catch(e) {
-    showToast('حدث خطأ أثناء السحب');
-    user.stars += amount; // refund
-    updateBalances();
+    toast("حدثت مشكلة، حاول لاحقاً", "err");
   } finally {
-    btn.disabled = false;
-    btn.innerText = 'تقديم الطلب';
+    S.busy = false;
+    $("wdBtn").disabled = false;
   }
 }
 
-// --- Tasks Logic ---
-function completeTask(btn) {
-  if (btn.innerText === 'Start') {
-    btn.innerText = '11:42:13';
-    btn.style.background = 'var(--text-secondary)';
-    btn.style.color = 'transparent';
-    
-    let time = 3600; // 1 hour mock
-    const interval = setInterval(() => {
-      time--;
-      const m = Math.floor(time / 60);
-      const s = time % 60;
-      btn.innerText = `${m}:${s.toString().padStart(2, '0')}`;
-      
-      if (time <= 0) {
-        clearInterval(interval);
-        btn.innerText = 'Claim';
-        btn.style.background = 'var(--success)';
-        btn.style.color = '#fff';
-        btn.onclick = () => {
-          user.stars += 1;
-          updateBalances();
-          syncUserData({ stars: user.stars });
-          btn.innerText = 'Done';
-          btn.style.background = 'var(--bg-soft)';
-          btn.style.color = 'var(--text-secondary)';
-          showToast('+1 نجمة');
-        };
+async function loadWd() {
+  if (!db) {
+    $("wdHistory").innerHTML = '<div class="empty">لا يوجد سجل</div>';
+    return;
+  }
+  try {
+    const q = await db.collection(CONFIG.wdCol).where("userId", "==", TG.id).limit(40).get();
+    wdRows = [];
+    q.forEach(d => wdRows.push(d.data()));
+    wdRows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    renderWd();
+  } catch (e) {
+    $("wdHistory").innerHTML = '<div class="empty">تعذر تحميل السجل</div>';
+  }
+}
+
+function renderWd() {
+  const map = {
+    pending: "قيد المراجعة",
+    processing: "قيد التنفيذ",
+    completed: "مكتمل",
+    approved: "مقبول",
+    rejected: "مرفوض"
+  };
+  const slice = wdRows.slice(0, wdShow);
+  $("wdHistory").innerHTML = slice.length
+    ? slice.map(w => `
+      <div class="wd-row">
+        <div>
+          <div class="wd-amt">${fmt(w.amount)} ★ → ${w.payout || ""}</div>
+          <div class="wd-date">${new Date(w.createdAt || Date.now()).toLocaleDateString("ar-EG")}</div>
+        </div>
+        <div class="wd-st st-\( {w.status || "pending"}"> \){map[w.status] || "قيد المراجعة"}</div>
+      </div>`).join("")
+    : '<div class="empty">لا يوجد سجل بعد</div>';
+  $("wdMore").style.display = wdRows.length > wdShow ? "block" : "none";
+}
+function moreWd() { wdShow += 5; renderWd(); }
+
+function renderRef() {
+  $("rInv").textContent = fmt(S.user?.referralCount || 0);
+  $("rEarn").textContent = fmt(S.user?.referralEarned || 0);
+  \( ("refLink").value = `https://t.me/ \){CONFIG.bot.username}/\( {CONFIG.bot.appName}?startapp=ref_ \){TG.id}`;
+
+  if (db) {
+    db.collection(CONFIG.col).orderBy("referralCount", "desc").limit(20).get()
+      .then(q => {
+        let h = "", rank = 1;
+        q.forEach(d => {
+          const u = d.data();
+          const me = d.id === String(TG.id);
+          h += `<div class="task-card" style="${me ? "border-color:var(--blue)" : ""}">
+            <div style="font-weight:800;width:28px">${rank++}</div>
+            <div class="task-info"><div class="task-title">${u.name || "لاعب"}</div></div>
+            <div style="font-weight:700;direction:ltr">${fmt(u.referralCount || 0)}</div>
+          </div>`;
+        });
+        $("leaderboard").innerHTML = h || '<div class="empty">لا بيانات بعد</div>';
+      }).catch(() => { $("leaderboard").innerHTML = '<div class="empty">—</div>'; });
+  }
+}
+
+function shareRef() {
+  const link = $("refLink").value;
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=\( {encodeURIComponent(link)}&text= \){encodeURIComponent("انضم لـ Cute Bee Stars!")}`);
+  } else {
+    copyText(link);
+  }
+}
+
+function renderProf() {
+  $("pName").textContent = S.user?.name || TG.name || "مستخدم";
+  $("pId").textContent = "@" + (S.user?.username || TG.username || TG.id);
+  $("ps").textContent = fmt(S.user?.stars || 0);
+  $("pg").textContent = fmt(S.user?.gems || 0);
+  $("pr").textContent = fmt(S.user?.referralCount || 0);
+  $("pt").textContent = fmt(S.user?.tickets || 0);
+  if (S.user?.photoUrl) \( ("pAv").innerHTML = `<img src=" \){S.user.photoUrl}">`;
+}
+
+function copyText(t) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(t).then(() => toast("تم النسخ ✅", "ok")).catch(() => fallbackCopy(t));
+  } else fallbackCopy(t);
+}
+function fallbackCopy(t) {
+  const a = document.createElement("textarea");
+  a.value = t; a.style.cssText = "position:fixed;opacity:0";
+  document.body.appendChild(a); a.select();
+  try { document.execCommand("copy"); toast("تم النسخ ✅", "ok"); } catch(e) { toast("تعذر النسخ", "err"); }
+  a.remove();
+}
+
+/* Keyboard hide dock */
+document.addEventListener("focusin", e => {
+  if (e.target.matches("input, textarea")) document.body.classList.add("keyboard-open");
+});
+document.addEventListener("focusout", () => {
+  setTimeout(() => document.body.classList.remove("keyboard-open"), 120);
+});
+
+/* ========== BOOT – never hang ========== */
+async function boot() {
+  // Force hide splash after max 2.8s no matter what
+  const forceHide = setTimeout(() => {
+    $("splash").classList.add("hide");
+    $("app").style.display = "flex";
+    setTimeout(() => $("splash")?.remove(), 600);
+  }, 2800);
+
+  try {
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor("#0f0f11");
+      tg.setBackgroundColor("#0f0f11");
+      const u = tg.initDataUnsafe?.user;
+      if (u) {
+        TG.id = String(u.id);
+        TG.name = (u.first_name || "") + (u.last_name ? " " + u.last_name : "");
+        TG.username = u.username || "";
+        TG.photo = u.photo_url || null;
       }
-    }, 1000);
-  }
-}
-</script>
+      TG.start = tg.initDataUnsafe?.start_param || null;
+    }
+  } catch (e) { console.warn("TG init", e); }
 
+  // Firebase
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(CONFIG.firebase);
+    db = firebase.firestore();
+  } catch (e) {
+    console.warn("Firebase failed, continuing offline", e);
+    db = null;
+  }
+
+  // Load user
+  try {
+    if (db) {
+      const doc = await Promise.race([
+        db.collection(CONFIG.col).doc(String(TG.id)).get(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 4000))
+      ]);
+      if (doc && doc.exists) {
+        S.user = { ...newUser(), ...doc.data() };
+        S.user.stars = Number(S.user.stars) || 0;
+        S.user.gems = Number(S.user.gems) || 0;
+      } else {
+        S.user = newUser();
+        await save();
+      }
+    } else {
+      S.user = newUser();
+    }
+  } catch (e) {
+    console.warn("User load", e);
+    S.user = newUser();
+  }
+
+  // Referral
+  if (TG.start && TG.start.startsWith("ref_") && S.user && !S.user.referredBy) {
+    // can be expanded later
+  }
+
+  renderBal();
+  buildLive();
+  buildSpin();
+
+  clearTimeout(forceHide);
+  $("splash").classList.add("hide");
+  $("app").style.display = "flex";
+  setTimeout(() => $("splash")?.remove(), 600);
+
+  go("home");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  boot().catch(err => {
+    console.error(err);
+    $("splash").classList.add("hide");
+    $("app").style.display = "flex";
+    S.user = newUser();
+    renderBal();
+    go("home");
+  });
+});
+</script>
 </body>
 </html>
