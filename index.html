@@ -7,226 +7,210 @@
 <title>Cute Bee Stars</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-main: #121212;
-  --bg-card: rgba(40, 40, 45, 0.7);
-  --bg-card-solid: #28282D;
+  --bg-main: #0f0f11;
+  --bg-card: rgba(30, 30, 35, 0.6);
+  --bg-card-hover: rgba(45, 45, 50, 0.8);
   --accent: #0A84FF;
+  --accent-glow: rgba(10, 132, 255, 0.4);
   --text-primary: #FFFFFF;
-  --text-secondary: #A1A1A6;
-  --border: rgba(255, 255, 255, 0.1);
-  --radius-card: 24px;
-  --radius-btn: 16px;
+  --text-secondary: #8E8E93;
+  --border: rgba(255, 255, 255, 0.08);
+  --radius: 24px;
+  --radius-sm: 16px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 20px);
-  --app-bar-height: 10vh;
   --dock-height: 70px;
+  --app-bar-height: 12vh;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: var(--bg-main); font-family: 'IBM Plex Sans Arabic', sans-serif; color: var(--text-primary); user-select: none; }
+html, body { height: 100%; overflow: hidden; background: var(--bg-main); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; color: var(--text-primary); user-select: none; }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
-input { font: inherit; color: inherit; }
+input { font: inherit; color: inherit; outline: none; }
 ::-webkit-scrollbar { display: none; }
 
 /* ============ SPLASH ============ */
-.splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: 20vh; transition: opacity 0.5s ease;
-}
-.splash::before {
-  content: ''; position: absolute; inset: 0; background: rgba(18,18,18,0.5); backdrop-filter: blur(3px);
-}
+.splash { position: fixed; inset: 0; z-index: 9999; background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 15vh; transition: opacity 0.5s ease; }
+.splash::before { content: ''; position: absolute; inset: 0; background: rgba(15, 15, 17, 0.6); backdrop-filter: blur(5px); }
 .splash-content { position: relative; z-index: 1; text-align: center; width: 100%; }
-.splash-title { font-size: 28px; font-weight: 800; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-.loader-bar { width: 200px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 0 auto; overflow: hidden; }
+.splash-title { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.loader-bar { width: 220px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 0 auto; overflow: hidden; }
 .loader-fill { width: 0%; height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent); }
 .splash.hide { opacity: 0; pointer-events: none; }
 
 /* ============ APP CONTAINER ============ */
-.app-container { display: flex; flex-direction: column; height: 100dvh; position: relative; max-width: 480px; margin: 0 auto; overflow: hidden; background: #1A1A1C; }
+.app-container { display: flex; flex-direction: column; height: 100dvh; position: relative; max-width: 480px; margin: 0 auto; overflow: hidden; }
 
-/* ============ APP BAR ============ */
-.app-bar {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: calc(var(--app-bar-height) + var(--safe-top));
-  background: rgba(30, 30, 32, 0.85);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-radius: 0 0 24px 24px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--safe-top) 16px 0 16px;
-  z-index: 100;
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-.app-bar-left { display: flex; align-items: center; gap: 12px; flex: 1; }
-.app-bar-title { font-size: 16px; font-weight: 800; display: none; }
-.back-btn { display: none; font-size: 20px; color: var(--text-primary); cursor: pointer; width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%; align-items: center; justify-content: center; }
-.app-bar-balances { display: flex; gap: 8px; align-items: center; }
-.balance-pill {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.1);
-  padding: 6px 12px; border-radius: 20px;
-  font-weight: 800; font-size: 14px; direction: ltr;
-}
-.balance-pill img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; }
+/* ============ APP BAR (EMPTY) ============ */
+.app-bar { position: absolute; top: 0; left: 0; right: 0; height: calc(var(--app-bar-height) + var(--safe-top)); background: rgba(25, 25, 28, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 0 0 30px 30px; z-index: 100; border-bottom: 1px solid var(--border); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+
+/* ============ BALANCES WRAPPER ============ */
+.balances-wrapper { position: absolute; top: calc(var(--app-bar-height) + var(--safe-top) + 10px); left: 0; right: 0; display: flex; justify-content: center; gap: 12px; z-index: 101; }
+.balance-pill { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 16px; direction: ltr; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.balance-pill img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+.balance-pill .add-btn { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 4px; cursor: pointer; transition: transform 0.2s; }
+.balance-pill .add-btn:active { transform: scale(0.85); }
 
 /* ============ MAIN SCROLL ============ */
-.main-scroll {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: calc(var(--app-bar-height) + var(--safe-top) + 20px) 16px calc(var(--dock-height) + 30px + var(--safe-bottom));
-}
+.main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: calc(var(--app-bar-height) + var(--safe-top) + 70px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom)); }
 .view { display: none; animation: viewIn 0.3s ease-out; }
 .view.active { display: block; }
-@keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes viewIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
 
-/* ============ HOME PAGE ============ */
-.live-strip {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-card); padding: 12px 16px; margin-bottom: 20px;
-  overflow: hidden;
-}
+/* ============ HOME ============ */
+.live-strip { display: flex; align-items: center; gap: 12px; background: var(--bg-card); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 .live-title { font-size: 18px; font-weight: 800; color: #fff; margin-right: 10px; }
-.live-items { display: flex; gap: 10px; animation: scrollLive 15s linear infinite; }
-.live-items img { width: 40px; height: 40px; object-fit: contain; }
-@keyframes scrollLive { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.live-items { display: flex; gap: 12px; animation: scrollLive 20s linear infinite; }
+.live-items video, .live-items img { width: 45px; height: 45px; object-fit: contain; }
+@keyframes scrollLive { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
-.home-card {
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px; border-radius: var(--radius-card);
-  margin-bottom: 16px; cursor: pointer;
-  transition: transform 0.1s; position: relative; overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-.home-card:active { transform: scale(0.97); }
-.home-card-icon { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
+.home-card { display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: var(--radius); margin-bottom: 16px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.home-card:active { transform: scale(0.95); }
+.home-card-icon { width: 65px; height: 65px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
 .home-card-info { flex: 1; }
-.home-card-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.home-card-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
 .home-card-desc { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; }
-
-.card-free { background: linear-gradient(135deg, #3A3A3C, #2C2C2E); }
+.card-free { background: linear-gradient(135deg, #444, #222); border: 1px solid rgba(255,255,255,0.1); }
 .card-tasks { background: linear-gradient(135deg, #6B38E0, #8A2BE2); }
 .card-deposit { background: linear-gradient(135deg, #0A84FF, #0055FF); }
 .card-withdraw { background: linear-gradient(135deg, #FF3B30, #D32F2F); }
 .card-referral { background: linear-gradient(135deg, #00C6FF, #0072FF); }
 
 /* ============ SPIN GAME ============ */
-.spin-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-.spin-wheel {
-  height: 240px; width: 100%; overflow: hidden; position: relative;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-}
-.spin-item { height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.spin-item img { width: 80px; height: 80px; object-fit: contain; }
-.spin-item .val { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 12px; font-weight: 800; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
-.spin-item .val img { width: 16px; height: 16px; }
-.spin-arrows { font-size: 24px; color: var(--text-secondary); margin: 10px 0; }
+.spin-container { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+.spin-wheel { height: 260px; width: 100%; overflow: hidden; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent); }
+.spin-item { height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.spin-item video { width: 90px; height: 90px; object-fit: contain; }
+.spin-item .val { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); padding: 6px 14px; border-radius: 12px; font-weight: 800; font-size: 15px; margin-top: 6px; display: flex; align-items: center; gap: 6px; direction: ltr; }
+.spin-item .val img { width: 16px; height: 16px; border-radius: 50%; }
+.spin-arrows { font-size: 20px; color: var(--text-secondary); margin: 5px 0; }
 .spin-actions { display: flex; gap: 12px; width: 100%; margin-top: 20px; }
-.btn-spin-opt { flex: 1; padding: 12px; border-radius: var(--radius-btn); background: rgba(255,255,255,0.1); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-spin-main { width: 100%; padding: 16px; border-radius: var(--radius-btn); background: var(--accent); color: #fff; font-weight: 800; font-size: 18px; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(10,132,255,0.4); }
-.btn-spin-main:active { transform: scale(0.97); }
+.btn-spin-opt { flex: 1; padding: 14px; border-radius: var(--radius-sm); background: var(--bg-card); backdrop-filter: blur(10px); border: 1px solid var(--border); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; }
+.btn-spin-opt:active { transform: scale(0.95); }
+.btn-spin-main { width: 100%; padding: 18px; border-radius: var(--radius-sm); background: var(--accent); color: #fff; font-weight: 800; font-size: 18px; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 25px var(--accent-glow); transition: transform 0.2s; }
+.btn-spin-main:active { transform: scale(0.95); }
+.btn-spin-main img { width: 24px; height: 24px; }
 
-/* ============ TASKS PAGE ============ */
+/* ============ TASKS ============ */
 .page-title { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 8px; }
 .page-sub { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: 24px; line-height: 1.5; }
-.task-group { background: var(--bg-card); border-radius: var(--radius-card); padding: 8px; margin-bottom: 16px; border: 1px solid var(--border); }
-.task-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--border); }
+.task-group { background: var(--bg-card); backdrop-filter: blur(15px); border-radius: var(--radius); padding: 8px; margin-bottom: 16px; border: 1px solid var(--border); }
+.task-item { display: flex; align-items: center; gap: 14px; padding: 14px; border-bottom: 1px solid var(--border); }
 .task-item:last-child { border-bottom: none; }
-.task-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.task-icon.telegram { background: #229ED9; } .task-icon.youtube { background: #FF0000; } .task-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.task-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.task-icon.telegram { background: #229ED9; } .task-icon.youtube { background: #FF0000; } .task-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743); }
 .task-info { flex: 1; }
-.task-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.task-reward { font-size: 13px; color: var(--accent); font-weight: 800; display: flex; align-items: center; gap: 4px; }
-.task-reward img { width: 14px; height: 14px; }
-.btn-task { padding: 8px 16px; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 800; font-size: 13px; }
+.task-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.task-reward { font-size: 14px; color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.task-reward img { width: 16px; height: 16px; border-radius: 50%; }
+.btn-task { padding: 8px 20px; border-radius: 12px; background: var(--accent); color: #fff; font-weight: 800; font-size: 14px; transition: transform 0.2s; }
+.btn-task:active { transform: scale(0.9); }
 .btn-task.timer { background: rgba(255,255,255,0.1); color: var(--text-secondary); }
 
-/* ============ DEPOSIT PAGE ============ */
-.tabs-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
-.tab-btn { padding: 10px 16px; border-radius: 20px; background: rgba(255,255,255,0.1); font-weight: 800; font-size: 14px; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-.tab-btn.active { background: var(--accent); color: #fff; }
-.deposit-amount-display { text-align: center; font-size: 64px; font-weight: 800; margin: 40px 0; direction: ltr; display: flex; align-items: center; justify-content: center; gap: 12px; }
-.deposit-amount-display img { width: 50px; height: 50px; }
-.deposit-suggestions { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
-.sugg-btn { padding: 12px 20px; border-radius: 16px; background: rgba(255,255,255,0.1); font-weight: 800; font-size: 16px; }
-.sugg-btn:active { background: rgba(255,255,255,0.2); }
-.btn-primary { width: 100%; padding: 16px; border-radius: var(--radius-btn); background: var(--accent); color: #fff; font-weight: 800; font-size: 18px; box-shadow: 0 4px 15px rgba(10,132,255,0.4); }
-.btn-primary:active { transform: scale(0.97); }
+/* ============ DEPOSIT ============ */
+.main-deposit-card { background: var(--bg-card); backdrop-filter: blur(20px); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.dep-methods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.dep-method-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s; }
+.dep-method-card.active { border-color: var(--accent); background: rgba(10, 132, 255, 0.1); box-shadow: 0 0 15px var(--accent-glow); }
+.dep-method-card i { font-size: 24px; color: #fff; }
+.dep-method-card span { font-weight: 700; font-size: 14px; }
+.dep-content-box { display: none; animation: fadeIn 0.3s; }
+.dep-content-box.active { display: block; }
+.amount-display { text-align: center; font-size: 56px; font-weight: 800; margin: 30px 0; direction: ltr; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.amount-display img { width: 45px; height: 45px; border-radius: 50%; }
+.sugg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.sugg-btn { padding: 14px 0; border-radius: var(--radius-sm); background: rgba(255,255,255,0.08); border: 1px solid var(--border); font-weight: 800; font-size: 15px; transition: transform 0.2s; }
+.sugg-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.15); }
+.btn-primary { width: 100%; padding: 16px; border-radius: var(--radius-sm); background: var(--accent); color: #fff; font-weight: 800; font-size: 18px; box-shadow: 0 8px 25px var(--accent-glow); transition: transform 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.btn-primary:active { transform: scale(0.95); }
 .btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+.manual-box { background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+.manual-step { font-size: 14px; margin-bottom: 10px; font-weight: 700; }
+.copy-field { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; font-family: monospace; font-size: 14px; direction: ltr; border: 1px solid var(--border); margin-bottom: 12px; }
+.copy-field i { color: var(--accent); cursor: pointer; font-size: 18px; padding: 5px; }
 
-/* ============ WITHDRAW PAGE ============ */
-.wd-card { background: var(--bg-card); border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); text-align: center; }
-.wd-input-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px; border: 1px solid var(--border); font-size: 18px; font-weight: 800; direction: ltr; width: 100%; text-align: center; color: #fff; margin-bottom: 12px; }
-.wd-hint { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
-.wd-amount-box { text-align: center; font-size: 50px; font-weight: 800; margin: 20px 0; direction: ltr; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.wd-amount-box img { width: 40px; height: 40px; }
-.wd-limits { font-size: 13px; color: var(--text-secondary); }
+/* ============ WITHDRAW ============ */
+.wd-card { background: var(--bg-card); backdrop-filter: blur(15px); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+.wd-methods { display: flex; gap: 10px; margin-bottom: 20px; }
+.wd-method-btn { flex: 1; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); font-weight: 700; font-size: 14px; transition: all 0.2s; }
+.wd-method-btn.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+.wd-input { width: 100%; padding: 16px; border-radius: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; direction: ltr; text-align: left; }
+.wd-input::placeholder { color: var(--text-secondary); font-weight: 500; text-align: right; direction: rtl; }
+.wd-hint { font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+.wd-amount-input { width: 100%; background: transparent; border: none; text-align: center; font-size: 48px; font-weight: 800; color: #fff; direction: ltr; margin-bottom: 10px; }
+.wd-limits { text-align: center; font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+.wd-history-title { font-size: 18px; font-weight: 800; margin: 24px 0 12px; }
+.wd-history-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border); }
+.wd-history-info { display: flex; flex-direction: column; gap: 4px; }
+.wd-history-amt { font-size: 16px; font-weight: 800; direction: ltr; text-align: right; }
+.wd-history-date { font-size: 12px; color: var(--text-secondary); }
+.wd-history-status { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+.st-pending { background: rgba(255, 152, 0, 0.2); color: #FF9800; }
+.st-approved { background: rgba(52, 199, 89, 0.2); color: #34C759; }
+.st-rejected { background: rgba(255, 59, 48, 0.2); color: #FF3B30; }
 
-/* ============ REFERRAL PAGE ============ */
-.ref-card { background: var(--bg-card); border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
-.ref-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; line-height: 1.4; }
-.ref-title span.highlight { background: var(--accent); padding: 2px 8px; border-radius: 8px; }
-.ref-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
-.ref-stats { display: flex; gap: 10px; margin-bottom: 20px; }
-.ref-stat { flex: 1; background: rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; text-align: center; }
-.ref-stat-val { font-size: 24px; font-weight: 800; }
-.ref-stat-lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-.ref-actions { display: flex; gap: 10px; }
-.ref-btn { flex: 1; padding: 14px; border-radius: 16px; background: var(--accent); color: #fff; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.ref-btn-copy { width: 54px; height: 54px; border-radius: 16px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.ref-links { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
-.ref-link-box { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; direction: ltr; }
-.ref-link-box span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ============ REFERRAL ============ */
+.ref-card { background: var(--bg-card); backdrop-filter: blur(15px); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; border: 1px solid var(--border); }
+.ref-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; line-height: 1.4; }
+.ref-title span.highlight { background: var(--accent); padding: 2px 10px; border-radius: 10px; color: #fff; box-shadow: 0 2px 10px var(--accent-glow); }
+.ref-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.ref-desc img { width: 18px; height: 18px; border-radius: 50%; }
+.ref-stats { display: flex; gap: 12px; margin-bottom: 24px; }
+.ref-stat { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+.ref-stat-val { font-size: 28px; font-weight: 800; }
+.ref-stat-lbl { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.ref-actions { display: flex; gap: 12px; }
+.ref-btn { flex: 1; padding: 16px; border-radius: var(--radius-sm); background: var(--accent); color: #fff; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.2s; }
+.ref-btn:active { transform: scale(0.95); }
+.ref-btn-copy { width: 56px; height: 56px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.08); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; transition: transform 0.2s; }
+.ref-btn-copy:active { transform: scale(0.9); }
+.ref-link-box { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; direction: ltr; border: 1px solid var(--border); margin-top: 16px; }
+.ref-link-box span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-secondary); }
 
-/* ============ PROFILE PAGE ============ */
-.profile-header { text-align: center; padding: 30px 0; }
-.profile-avatar { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 16px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 36px; border: 3px solid rgba(255,255,255,0.2); overflow: hidden; }
+/* ============ PROFILE ============ */
+.profile-header { text-align: center; padding: 20px 0 30px; }
+.profile-avatar { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 16px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 40px; border: 4px solid rgba(255,255,255,0.1); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-name { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-.profile-id { font-size: 14px; color: var(--text-secondary); }
+.profile-name { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.profile-id { font-size: 15px; color: var(--text-secondary); direction: ltr; font-family: monospace; }
 .profile-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.profile-stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; text-align: center; }
-.profile-stat-val { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
-.profile-stat-lbl { font-size: 13px; color: var(--text-secondary); }
-.profile-menu-item { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px; margin-bottom: 12px; cursor: pointer; }
-.profile-menu-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.profile-stat-card { background: var(--bg-card); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+.profile-stat-val { font-size: 26px; font-weight: 800; color: var(--accent); margin-bottom: 6px; direction: ltr; }
+.profile-stat-lbl { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
-/* ============ BOTTOM DOCK (Jelly) ============ */
-.dock { position: absolute; bottom: calc(14px + var(--safe-bottom)); left: 14px; right: 14px; display: flex; align-items: center; gap: 10px; z-index: 100; transition: transform 0.3s ease; }
-.dock-nav { flex: 1; height: var(--dock-height); position: relative; isolation: isolate; overflow: hidden; --nav-index: 0; background: rgba(30, 30, 32, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 32px; display: flex; align-items: center; justify-content: space-between; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.dock-nav::before { content: ''; position: absolute; z-index: 0; top: 6px; bottom: 6px; right: 6px; width: calc((100% - 14px) / 5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 26px; background: rgba(255, 255, 255, 0.15); box-shadow: 0 3px 12px rgba(0,0,0,0.2); transform: translateX(calc(var(--nav-index) * -100%)); transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1); pointer-events: none; }
-.nav-item { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-secondary); font-size: 10px; font-weight: 700; border-radius: 26px; transition: color 0.25s; cursor: pointer; position: relative; z-index: 1; }
-.nav-item i { font-size: 18px; }
+/* ============ BOTTOM DOCK (JELLY) ============ */
+.dock { position: absolute; bottom: calc(14px + var(--safe-bottom)); left: 16px; right: 16px; display: flex; align-items: center; z-index: 100; transition: transform 0.3s ease; }
+.dock-nav { flex: 1; height: var(--dock-height); position: relative; isolation: isolate; overflow: hidden; --nav-index: 0; background: rgba(25, 25, 28, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; display: flex; align-items: center; justify-content: space-between; padding: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+.dock-nav::before { content: ''; position: absolute; z-index: 0; top: 8px; bottom: 8px; right: 8px; width: calc((100% - 16px) / 5); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 25px; background: rgba(255, 255, 255, 0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.3); transform: translateX(calc(var(--nav-index) * -100%)); transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; }
+.nav-item { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-secondary); font-size: 11px; font-weight: 700; border-radius: 25px; transition: color 0.25s; cursor: pointer; position: relative; z-index: 1; }
+.nav-item i { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
 .nav-item.active { color: #fff; }
+.nav-item.active i { transform: scale(1.1); }
 .keyboard-open .dock { transform: translateY(150%); opacity: 0; }
 
 /* ============ MODALS ============ */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
 .modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal-box { background: #2C2C2E; border: 1px solid var(--border); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; text-align: center; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.modal-box { background: #1C1C1E; border: 1px solid var(--border); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; text-align: center; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-.modal-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
-.btn-modal { background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; font-size: 16px; width: 100%; }
-.btn-close-x { position: absolute; top: 16px; left: 16px; color: var(--text-secondary); font-size: 20px; cursor: pointer; }
+.modal-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+.modal-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
+.btn-modal { background: var(--accent); color: #fff; padding: 16px; border-radius: var(--radius-sm); font-weight: 800; font-size: 16px; width: 100%; transition: transform 0.2s; }
+.btn-modal:active { transform: scale(0.95); }
+.btn-close-x { position: absolute; top: 20px; left: 20px; color: var(--text-secondary); font-size: 20px; cursor: pointer; }
 
-/* Prizes Grid */
-.prizes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 50vh; overflow-y: auto; padding-bottom: 20px; margin-bottom: 10px; }
-.prize-item { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.prize-item img { width: 60px; height: 60px; object-fit: contain; }
-.prize-val { background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 10px; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 4px; }
-.prize-val img { width: 14px; height: 14px; }
+/* Prizes */
+.prizes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 50vh; overflow-y: auto; padding-bottom: 20px; margin-bottom: 10px; }
+.prize-item { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--border); }
+.prize-item video, .prize-item img { width: 60px; height: 60px; object-fit: contain; }
+.prize-val { background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 10px; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 4px; direction: ltr; }
+.prize-val img { width: 16px; height: 16px; border-radius: 50%; }
 
 /* Toast */
-.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--bg-card-solid); color: #fff; padding: 12px 24px; border-radius: 20px; font-weight: 700; z-index: 10000; transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); border: 1px solid var(--border); }
+.toast { position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #1C1C1E; color: #fff; padding: 14px 24px; border-radius: 20px; font-weight: 700; z-index: 10000; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); }
 .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -242,21 +226,20 @@ input { font: inherit; color: inherit; }
 
 <div class="app-container" id="app" style="display:none">
 
-  <!-- APP BAR -->
-  <div class="app-bar">
-    <div class="app-bar-left">
-      <div class="back-btn" id="backBtn" onclick="go('home')"><i class="fas fa-arrow-right"></i></div>
-      <div class="app-bar-title" id="appBarTitle">Cute Bee Stars</div>
+  <!-- APP BAR (EMPTY) -->
+  <div class="app-bar"></div>
+
+  <!-- BALANCES -->
+  <div class="balances-wrapper">
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/17926810487851.png" alt="Stars">
+      <span id="topStars">0</span>
+      <div class="add-btn" onclick="go('deposit')"><i class="fas fa-plus"></i></div>
     </div>
-    <div class="app-bar-balances">
-      <div class="balance-pill">
-        <img src="https://up6.cc/2026/10/17926810487851.png" alt="Stars">
-        <span id="topStars">0</span>
-      </div>
-      <div class="balance-pill" style="background:rgba(108,92,231,0.2);">
-        <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="Gems">
-        <span id="topGems">0</span>
-      </div>
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="Gems">
+      <span id="topGems">0</span>
+      <div class="add-btn" onclick="go('deposit')"><i class="fas fa-plus"></i></div>
     </div>
   </div>
 
@@ -268,97 +251,71 @@ input { font: inherit; color: inherit; }
       <div class="live-strip">
         <div class="live-title">LIVE</div>
         <div class="live-items">
-          <img src="https://up6.cc/2026/10/179267967675431.jpg" alt="">
-          <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">
-          <img src="https://up6.cc/2026/10/17926810487851.png" alt="">
-          <img src="https://up6.cc/2026/10/179267967675431.jpg" alt="">
-          <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">
+          <!-- استخدام فيديوهات webm كما في الكود الأصلي -->
+          <video src="gifts_by_StickerEmojiRobot-078.webm" autoplay loop muted playsinline></video>
+          <video src="HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm" autoplay loop muted playsinline></video>
+          <video src="gifts_by_StickerEmojiRobot-069.webm" autoplay loop muted playsinline></video>
+          <video src="Artisan_Brick_by_StickerEmojiRobot-018.webm" autoplay loop muted playsinline></video>
+          <video src="Cars_by_StickerEmojiRobot-045.webm" autoplay loop muted playsinline></video>
         </div>
       </div>
 
       <div class="home-card card-free" onclick="openSpin()">
         <img src="https://cdn-icons-png.flaticon.com/512/4213/4213188.png" class="home-card-icon" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5))">
         <div class="home-card-info">
-          <div class="home-card-title">Free</div>
-          <div class="home-card-desc">2 cases</div>
+          <div class="home-card-title">مجاناً</div>
+          <div class="home-card-desc">حالتان مجانيتان</div>
         </div>
       </div>
 
       <div class="home-card card-tasks" onclick="go('tasks')">
         <img src="https://cdn-icons-png.flaticon.com/512/8684/8684279.png" class="home-card-icon">
         <div class="home-card-info">
-          <div class="home-card-title">Tasks</div>
-          <div class="home-card-desc">Complete to earn tickets</div>
-        </div>
-      </div>
-
-      <div class="home-card card-deposit" onclick="go('deposit')">
-        <img src="https://cdn-icons-png.flaticon.com/512/1058/1058921.png" class="home-card-icon">
-        <div class="home-card-info">
-          <div class="home-card-title">Deposit</div>
-          <div class="home-card-desc">Top up your balance</div>
-        </div>
-      </div>
-
-      <div class="home-card card-withdraw" onclick="go('withdraw')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" class="home-card-icon">
-        <div class="home-card-info">
-          <div class="home-card-title">Withdraw</div>
-          <div class="home-card-desc">Cash out your stars</div>
+          <div class="home-card-title">المهام</div>
+          <div class="home-card-desc">أكمل المهام لربح التذاكر</div>
         </div>
       </div>
 
       <div class="home-card card-referral" onclick="go('referral')">
         <img src="https://cdn-icons-png.flaticon.com/512/4213/4213211.png" class="home-card-icon">
         <div class="home-card-info">
-          <div class="home-card-title">Invite</div>
-          <div class="home-card-desc">Earn 10% from friends</div>
+          <div class="home-card-title">دعوة الأصدقاء</div>
+          <div class="home-card-desc">اربح 10% من إيداعاتهم</div>
         </div>
       </div>
     </div>
 
     <!-- SPIN GAME -->
     <div class="view" id="view-spin">
-      <div class="live-strip" style="margin-bottom:30px">
-        <div class="live-title">LIVE</div>
-        <div class="live-items">
-          <img src="https://up6.cc/2026/10/179267967675431.jpg" alt="">
-          <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="">
-          <img src="https://up6.cc/2026/10/17926810487851.png" alt="">
-        </div>
-      </div>
-
       <div class="spin-container">
         <div class="spin-arrows"><i class="fas fa-chevron-down"></i></div>
-        <div class="spin-wheel" id="spinWheel">
-          <!-- Items injected by JS -->
-        </div>
+        <div class="spin-wheel" id="spinWheel"></div>
         <div class="spin-arrows"><i class="fas fa-chevron-up"></i></div>
 
         <div class="spin-actions">
-          <button class="btn-spin-opt" onclick="toast('Settings saved')"><i class="fas fa-cog"></i> Settings</button>
-          <button class="btn-spin-opt" onclick="openPrizesModal()"><i class="fas fa-gift"></i> Prizes</button>
+          <button class="btn-spin-opt" onclick="toast('الإعدادات قريباً')"><i class="fas fa-cog"></i> إعدادات</button>
+          <button class="btn-spin-opt" onclick="openPrizesModal()"><i class="fas fa-gift"></i> الجوائز</button>
         </div>
 
         <button class="btn-spin-main" id="spinBtn" onclick="doSpin()">
-          Spin for <img src="https://up6.cc/2026/10/17926810487851.png" style="width:24px;height:24px"> 399
+          تدوير مقابل <img src="https://up6.cc/2026/10/17926810487851.png"> 399
         </button>
       </div>
     </div>
 
     <!-- TASKS -->
     <div class="view" id="view-tasks">
-      <div class="page-title">Tasks</div>
-      <div class="page-sub">Complete easy tasks to earn tickets. Use tickets to open free cases!</div>
+      <div class="page-title">المهام</div>
+      <div class="page-sub">أكمل المهام السهلة لربح التذاكر. استخدم التذاكر لفتح الحالات المجانية!</div>
 
       <div class="task-group">
         <div class="task-item">
           <div class="task-icon" style="background:#333"><i class="fas fa-mobile-alt"></i></div>
           <div class="task-info">
-            <div class="task-title">Home screen</div>
+            <div class="task-title">الشاشة الرئيسية</div>
             <div class="task-reward"><img src="https://up6.cc/2026/10/179267515752371.jpg"> 1</div>
           </div>
-          <button class="btn-task" onclick="startTask(this)">Start</button>
+          <button class="btn-task" onclick="startTask(this)">ابدأ</button>
         </div>
       </div>
 
@@ -366,15 +323,15 @@ input { font: inherit; color: inherit; }
         <div class="task-item">
           <div class="task-icon" style="background:#5A6BFF"><i class="fas fa-envelope"></i></div>
           <div class="task-info">
-            <div class="task-title">Link</div>
+            <div class="task-title">الرابط</div>
             <div class="task-reward"><img src="https://up6.cc/2026/10/179267515752371.jpg"> 1</div>
           </div>
-          <button class="btn-task" onclick="startTask(this)">Start</button>
+          <button class="btn-task" onclick="startTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-icon" style="background:#00B894"><i class="fas fa-camera"></i></div>
           <div class="task-info">
-            <div class="task-title">Story</div>
+            <div class="task-title">القصة</div>
             <div class="task-reward"><img src="https://up6.cc/2026/10/179267515752371.jpg"> 1</div>
           </div>
           <button class="btn-task timer" disabled>11:42:13</button>
@@ -382,34 +339,18 @@ input { font: inherit; color: inherit; }
       </div>
 
       <div class="task-group">
-        <div class="task-item">
+        <div class="task-item" onclick="window.open('https://t.me/your_channel')">
           <div class="task-icon telegram"><i class="fab fa-telegram-plane"></i></div>
           <div class="task-info">
-            <div class="task-title">Subscribe to our channel</div>
+            <div class="task-title">اشترك في قناتنا</div>
             <div class="task-reward"><img src="https://up6.cc/2026/10/179267515752371.jpg"> 1</div>
           </div>
           <i class="fas fa-chevron-left" style="color:var(--text-secondary)"></i>
         </div>
-        <div class="task-item">
+        <div class="task-item" onclick="window.open('https://youtube.com')">
           <div class="task-icon youtube"><i class="fab fa-youtube"></i></div>
           <div class="task-info">
-            <div class="task-title">Subscribe to YouTube</div>
-            <div class="task-reward"><img src="https://up6.cc/2026/10/17926810487851.png"> 1</div>
-          </div>
-          <i class="fas fa-chevron-left" style="color:var(--text-secondary)"></i>
-        </div>
-        <div class="task-item">
-          <div class="task-icon telegram"><i class="fab fa-telegram-plane"></i></div>
-          <div class="task-info">
-            <div class="task-title">Join our chat</div>
-            <div class="task-reward"><img src="https://up6.cc/2026/10/17926810487851.png"> 1</div>
-          </div>
-          <i class="fas fa-chevron-left" style="color:var(--text-secondary)"></i>
-        </div>
-        <div class="task-item">
-          <div class="task-icon instagram"><i class="fab fa-instagram"></i></div>
-          <div class="task-info">
-            <div class="task-title">Subscribe to Instagram</div>
+            <div class="task-title">اشترك في يوتيوب</div>
             <div class="task-reward"><img src="https://up6.cc/2026/10/17926810487851.png"> 1</div>
           </div>
           <i class="fas fa-chevron-left" style="color:var(--text-secondary)"></i>
@@ -419,118 +360,135 @@ input { font: inherit; color: inherit; }
 
     <!-- DEPOSIT -->
     <div class="view" id="view-deposit">
-      <div class="page-title" style="margin-bottom:20px">Balance replenishment</div>
+      <div class="page-title" style="margin-bottom:20px">إيداع الرصيد</div>
       
-      <div class="tabs-scroll">
-        <div class="tab-btn active" onclick="setDepTab('stars', this)"><i class="fas fa-star" style="color:#FFD700"></i> Stars</div>
-        <div class="tab-btn" onclick="setDepTab('crypto', this)"><i class="fas fa-coins" style="color:#00D26A"></i> Crypto</div>
-        <div class="tab-btn" onclick="setDepTab('binance', this)"><i class="fas fa-wallet" style="color:#F3BA2F"></i> Binance</div>
-        <div class="tab-btn" onclick="setDepTab('sham', this)"><i class="fas fa-money-bill-wave" style="color:#34C759"></i> Sham Cash</div>
-      </div>
+      <div class="main-deposit-card">
+        <div class="dep-methods-grid">
+          <div class="dep-method-card active" onclick="setDepTab('stars', this)">
+            <i class="fas fa-star" style="color: #FFD700;"></i>
+            <span>النجوم</span>
+          </div>
+          <div class="dep-method-card" onclick="setDepTab('crypto', this)">
+            <i class="fas fa-coins" style="color: #00D26A;"></i>
+            <span>كريبتو</span>
+          </div>
+          <div class="dep-method-card" onclick="setDepTab('binance', this)">
+            <i class="fas fa-wallet" style="color: #F3BA2F;"></i>
+            <span>بايننس</span>
+          </div>
+          <div class="dep-method-card" onclick="setDepTab('sham', this)">
+            <i class="fas fa-money-bill-wave" style="color: #34C759;"></i>
+            <span>شام كاش</span>
+          </div>
+        </div>
 
-      <!-- Stars Deposit -->
-      <div id="dep-tab-stars">
-        <div class="deposit-amount-display" id="depStarsDisplay">
-          <span id="depStarsInput" style="outline:none" contenteditable="true" inputmode="numeric">200</span>
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+        <!-- Stars Deposit -->
+        <div id="dep-tab-stars" class="dep-content-box active">
+          <div class="amount-display">
+            <span id="depStarsInput">200</span>
+            <img src="https://up6.cc/2026/10/17926810487851.png">
+          </div>
+          <div class="sugg-grid">
+            <button class="sugg-btn" onclick="addDepStars(500)">+ 500</button>
+            <button class="sugg-btn" onclick="addDepStars(2000)">+ 2,000</button>
+            <button class="sugg-btn" onclick="addDepStars(5000)">+ 5,000</button>
+          </div>
+          <button class="btn-primary" onclick="startStarsTopup()">تأكيد الإيداع</button>
         </div>
-        <div class="deposit-suggestions">
-          <button class="sugg-btn" onclick="addDepStars(500)">+ 500</button>
-          <button class="sugg-btn" onclick="addDepStars(2000)">+ 2,000</button>
-          <button class="sugg-btn" onclick="addDepStars(5000)">+ 5,000</button>
-        </div>
-        <button class="btn-primary" id="depStarsBtn" onclick="startStarsTopup()">Top up</button>
-      </div>
 
-      <!-- Crypto Deposit -->
-      <div id="dep-tab-crypto" style="display:none">
-        <div class="deposit-amount-display">
-          <span id="depCryptoUsd">$0</span>
+        <!-- Crypto Deposit -->
+        <div id="dep-tab-crypto" class="dep-content-box">
+          <div class="amount-display">
+            <span id="depCryptoUsd">$1</span>
+          </div>
+          <div class="sugg-grid">
+            <button class="sugg-btn" onclick="setCryptoUsd(1)">$1</button>
+            <button class="sugg-btn" onclick="setCryptoUsd(10)">$10</button>
+            <button class="sugg-btn" onclick="setCryptoUsd(50)">$50</button>
+          </div>
+          <button class="btn-primary" id="depCryptoBtn" onclick="startCryptoPayment()">الدفع بالكريبتو</button>
         </div>
-        <div class="deposit-suggestions">
-          <button class="sugg-btn" onclick="setCryptoUsd(5)">$5</button>
-          <button class="sugg-btn" onclick="setCryptoUsd(10)">$10</button>
-          <button class="sugg-btn" onclick="setCryptoUsd(50)">$50</button>
-        </div>
-        <button class="btn-primary" id="depCryptoBtn" onclick="startCryptoPayment()" disabled>Pay with Crypto</button>
-      </div>
 
-      <!-- Binance Deposit -->
-      <div id="dep-tab-binance" style="display:none">
-        <div class="wd-card" style="text-align:right">
-          <div style="font-size:14px;margin-bottom:10px;font-weight:700">1. Transfer to Binance Pay ID:</div>
-          <div class="ref-link-box" style="margin-bottom:10px"><span>1121748571</span><i class="fas fa-copy" onclick="copyText('1121748571')"></i></div>
-          <div style="font-size:14px;margin-bottom:10px;font-weight:700">2. Put your ID in the Note:</div>
-          <div class="ref-link-box"><span id="depBinanceId">----</span><i class="fas fa-copy" onclick="copyText(S.user.telegramId)"></i></div>
-          <div class="wd-hint" style="margin-top:10px">After transfer, admin will verify and add stars within 24h.</div>
+        <!-- Binance Deposit -->
+        <div id="dep-tab-binance" class="dep-content-box">
+          <div class="manual-box">
+            <div class="manual-step">1. قم بالتحويل إلى معرف Binance Pay:</div>
+            <div class="copy-field"><span>1121748571</span><i class="fas fa-copy" onclick="copyText('1121748571')"></i></div>
+            <div class="manual-step">2. ضع معرف حسابك في الملاحظة:</div>
+            <div class="copy-field"><span id="depBinanceId">----</span><i class="fas fa-copy" onclick="copyText(S.user.telegramId)"></i></div>
+            <div class="wd-hint">بعد إتمام التحويل، ستتم إضافة الرصيد خلال 24 ساعة.</div>
+          </div>
         </div>
-      </div>
 
-      <!-- Sham Cash Deposit -->
-      <div id="dep-tab-sham" style="display:none">
-        <div class="wd-card" style="text-align:right">
-          <div style="font-size:14px;margin-bottom:10px;font-weight:700">1. Transfer to Sham Cash ID:</div>
-          <div class="ref-link-box" style="margin-bottom:10px"><span>334a08ea2d1bbed05f214a7f08e37ae4</span><i class="fas fa-copy" onclick="copyText('334a08ea2d1bbed05f214a7f08e37ae4')"></i></div>
-          <div style="font-size:14px;margin-bottom:10px;font-weight:700">2. Put your ID in the Note:</div>
-          <div class="ref-link-box"><span id="depShamId">----</span><i class="fas fa-copy" onclick="copyText(S.user.telegramId)"></i></div>
-          <div class="wd-hint" style="margin-top:10px">After transfer, admin will verify and add stars within 24h.</div>
+        <!-- Sham Cash Deposit -->
+        <div id="dep-tab-sham" class="dep-content-box">
+          <div class="manual-box">
+            <div class="manual-step">1. قم بالتحويل إلى معرف شام كاش:</div>
+            <div class="copy-field"><span>334a08ea2d1bbed05f214a7f08e37ae4</span><i class="fas fa-copy" onclick="copyText('334a08ea2d1bbed05f214a7f08e37ae4')"></i></div>
+            <div class="manual-step">2. ضع معرف حسابك في الملاحظة:</div>
+            <div class="copy-field"><span id="depShamId">----</span><i class="fas fa-copy" onclick="copyText(S.user.telegramId)"></i></div>
+            <div class="wd-hint">بعد إتمام التحويل، ستتم إضافة الرصيد خلال 24 ساعة.</div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- WITHDRAW -->
     <div class="view" id="view-withdraw">
-      <div class="page-title" style="margin-bottom:20px">Withdraw funds</div>
-
-      <div class="tabs-scroll">
-        <div class="tab-btn active" onclick="setWdTab('stars', this)">⭐ Stars</div>
-        <div class="tab-btn" onclick="setWdTab('binance', this)">🪙 Binance</div>
-        <div class="tab-btn" onclick="setWdTab('sham', this)">💵 Sham Cash</div>
-      </div>
+      <div class="page-title" style="margin-bottom:20px">سحب الأرباح</div>
 
       <div class="wd-card">
-        <input type="text" class="wd-input-box" id="wdAccount" placeholder="@username" value="@User">
-        <div class="wd-hint">Stars will be sent to your Telegram account.<br>Make sure the username is correct!</div>
-      </div>
-
-      <div class="wd-card">
-        <div class="wd-amount-box">
-          <span id="wdAmountDisplay" contenteditable="true" inputmode="numeric">0</span>
-          <img src="https://up6.cc/2026/10/17926810487851.png">
+        <div class="wd-methods">
+          <button class="wd-method-btn active" onclick="setWdTab('binance', this)">بايننس</button>
+          <button class="wd-method-btn" onclick="setWdTab('sham', this)">شام كاش</button>
         </div>
-        <div class="wd-limits">Minimum amount: 50, maximum: 10,000</div>
+
+        <input type="text" class="wd-input" id="wdAccount" placeholder="أدخل معرف Binance أو شام كاش هنا...">
+        <div class="wd-hint" id="wdHint">تأكد من صحة المعرف، سيتم تحويل الأرباح إليه.</div>
+
+        <input type="number" class="wd-amount-input" id="wdAmount" placeholder="0" min="50" max="10000">
+        <div class="wd-limits">الحد الأدنى: 50 نجمة | الحد الأقصى: 10,000 نجمة</div>
+
+        <button class="btn-primary" onclick="doWithdraw()">تأكيد السحب</button>
       </div>
 
-      <button class="btn-primary" id="wdSubmitBtn" onclick="doWithdraw()">Enter amount</button>
+      <div class="wd-history-title">سجل السحوبات</div>
+      <div id="wdHistoryList">
+        <!-- History injected here -->
+      </div>
     </div>
 
     <!-- REFERRAL -->
     <div class="view" id="view-referral">
       <div class="ref-card">
-        <div class="ref-title">Invite friends and earn <span class="highlight">10%</span> from their deposits!</div>
-        <div class="ref-desc">Also by <img src="https://up6.cc/2026/10/179267515752371.jpg" style="width:14px;height:14px;display:inline-block;vertical-align:middle"> 5 for each, but no more than 30 per day</div>
+        <div class="ref-title">ادعُ أصدقاءك واربح <span class="highlight">10%</span> من إيداعاتهم!</div>
+        <div class="ref-desc">أيضاً ب <img src="https://up6.cc/2026/10/179267515752371.jpg"> 5 لكل صديق، ولكن بحد أقصى 30 في اليوم.</div>
         
         <div class="ref-stats">
           <div class="ref-stat">
             <div class="ref-stat-val" id="refInvited">0</div>
-            <div class="ref-stat-lbl">Invited</div>
+            <div class="ref-stat-lbl">المدعوون</div>
           </div>
           <div class="ref-stat">
             <div class="ref-stat-val" id="refEarned">0</div>
-            <div class="ref-stat-lbl">Earned</div>
+            <div class="ref-stat-lbl">الأرباح</div>
           </div>
         </div>
 
         <div class="ref-actions">
-          <button class="ref-btn" onclick="shareRef()"><i class="fas fa-share"></i> Invite</button>
+          <button class="ref-btn" onclick="shareRef()"><i class="fas fa-share"></i> دعوة</button>
           <button class="ref-btn-copy" onclick="copyText(S.user.refLink)"><i class="fas fa-copy"></i></button>
         </div>
       </div>
 
       <div class="ref-card">
-        <div style="font-size:16px;font-weight:800;margin-bottom:10px">Your Referral Link</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:10px">رابط الدعوة الخاص بك</div>
         <div class="ref-link-box">
           <span id="refLinkText">...</span>
+        </div>
+        <div style="font-size:16px;font-weight:800;margin-top:20px;margin-bottom:10px">معرف المستخدم الخاص بك</div>
+        <div class="ref-link-box">
+          <span id="refIdText">...</span>
         </div>
       </div>
     </div>
@@ -539,26 +497,26 @@ input { font: inherit; color: inherit; }
     <div class="view" id="view-profile">
       <div class="profile-header">
         <div class="profile-avatar" id="profAvatar"><i class="fas fa-user"></i></div>
-        <div class="profile-name" id="profName">User</div>
+        <div class="profile-name" id="profName">المستخدم</div>
         <div class="profile-id" id="profId">ID: 000000</div>
       </div>
 
       <div class="profile-stats-grid">
         <div class="profile-stat-card">
           <div class="profile-stat-val" id="profStars">0</div>
-          <div class="profile-stat-lbl">Stars</div>
-        </div>
-        <div class="profile-stat-card">
-          <div class="profile-stat-val" id="profTickets">0</div>
-          <div class="profile-stat-lbl">Tickets</div>
-        </div>
-        <div class="profile-stat-card">
-          <div class="profile-stat-val" id="profRefs">0</div>
-          <div class="profile-stat-lbl">Referrals</div>
+          <div class="profile-stat-lbl">النجوم</div>
         </div>
         <div class="profile-stat-card">
           <div class="profile-stat-val" id="profGems">0</div>
-          <div class="profile-stat-lbl">Gems</div>
+          <div class="profile-stat-lbl">الماسات</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-val" id="profRefs">0</div>
+          <div class="profile-stat-lbl">الإحالات</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-val" id="profTickets">0</div>
+          <div class="profile-stat-lbl">التذاكر</div>
         </div>
       </div>
     </div>
@@ -570,23 +528,23 @@ input { font: inherit; color: inherit; }
     <div class="dock-nav">
       <div class="nav-item active" data-view="home" onclick="go('home')">
         <i class="fas fa-house"></i>
-        <span>Home</span>
+        <span>الرئيسية</span>
       </div>
       <div class="nav-item" data-view="tasks" onclick="go('tasks')">
         <i class="fas fa-list-check"></i>
-        <span>Tasks</span>
+        <span>المهام</span>
       </div>
       <div class="nav-item" data-view="deposit" onclick="go('deposit')">
-        <i class="fas fa-plus"></i>
-        <span>Deposit</span>
+        <i class="fas fa-plus-circle"></i>
+        <span>إيداع</span>
       </div>
       <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
         <i class="fas fa-money-bill-transfer"></i>
-        <span>Withdraw</span>
+        <span>سحب</span>
       </div>
       <div class="nav-item" data-view="profile" onclick="go('profile')">
         <i class="fas fa-user"></i>
-        <span>Profile</span>
+        <span>حسابي</span>
       </div>
     </div>
   </div>
@@ -597,19 +555,17 @@ input { font: inherit; color: inherit; }
 <div class="modal-overlay" id="prizesModal">
   <div class="modal-box" style="max-width:400px;position:relative">
     <i class="fas fa-times btn-close-x" onclick="closeModal('prizesModal')"></i>
-    <div class="modal-title">Possible prizes</div>
-    <div class="prizes-grid" id="prizesGrid">
-      <!-- Injected by JS -->
-    </div>
-    <button class="btn-modal" style="background:#444" onclick="closeModal('prizesModal')">Close</button>
+    <div class="modal-title">الجوائز المحتملة</div>
+    <div class="prizes-grid" id="prizesGrid"></div>
+    <button class="btn-modal" style="background:#333;margin-top:10px" onclick="closeModal('prizesModal')">إغلاق</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="notEnoughModal">
   <div class="modal-box">
-    <div class="modal-title">Not enough balance!</div>
-    <div class="modal-desc" id="notEnoughDesc">You're short of 999 stars. Please top up your balance.</div>
-    <button class="btn-modal" onclick="closeModal('notEnoughModal'); go('deposit');">Top up</button>
+    <div class="modal-title">رصيد غير كافٍ!</div>
+    <div class="modal-desc" id="notEnoughDesc">تحتاج المزيد من النجوم للقيام بذلك.</div>
+    <button class="btn-modal" onclick="closeModal('notEnoughModal'); go('deposit');">إيداع</button>
   </div>
 </div>
 
@@ -620,7 +576,6 @@ input { font: inherit; color: inherit; }
 <script>
 'use strict';
 
-// CONFIG
 const CONFIG = {
   firebase: {
     apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
@@ -640,7 +595,7 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 const fmt = n => Number(n || 0).toLocaleString('en-US');
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc = s => String(s == null ? '' : s);
 
 const TG = {
   app: null, user: null, id: null,
@@ -668,9 +623,10 @@ const S = {
   user: null,
   busy: false,
   depStars: 200,
-  depCryptoUsd: 0,
-  wdMethod: 'stars',
+  depCryptoUsd: 1,
+  wdMethod: 'binance',
   spinWheelIndex: 0,
+  // استخدام اسماء ملفات webm كما في الكود القديم
   spinPrizes: [
     { webm: 'gifts_by_StickerEmojiRobot-078.webm', val: 1046 },
     { webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm', val: 1284 },
@@ -679,9 +635,7 @@ const S = {
     { webm: 'Cars_by_StickerEmojiRobot-045.webm', val: 5000 },
     { webm: 'Cars_by_StickerEmojiRobot-036.webm', val: 3500 },
     { webm: 'Cars_by_StickerEmojiRobot-033.webm', val: 2500 },
-    { webm: 'Cars_by_StickerEmojiRobot-040.webm', val: 1500 },
-    { webm: 'Cars_by_StickerEmojiRobot-042.webm', val: 1000 },
-    { webm: 'Cars_by_StickerEmojiRobot-043.webm', val: 800 }
+    { webm: 'Cars_by_StickerEmojiRobot-040.webm', val: 1500 }
   ]
 };
 
@@ -690,26 +644,13 @@ function toast(msg) {
   setTimeout(() => e.classList.remove('show'), 2500);
 }
 function closeModal(id) { $(id).classList.remove('show'); }
-function copyText(t) { navigator.clipboard.writeText(t).then(() => toast('Copied!')); }
+function copyText(t) { navigator.clipboard.writeText(t).then(() => toast('تم النسخ!')); }
 
-// NAVIGATION
 function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = $('view-' + viewName);
   if (target) target.classList.add('active');
 
-  // App Bar
-  const backBtn = $('backBtn');
-  const appTitle = $('appBarTitle');
-  if (viewName === 'home') {
-    backBtn.style.display = 'none';
-    appTitle.style.display = 'block';
-  } else {
-    backBtn.style.display = 'flex';
-    appTitle.style.display = 'none';
-  }
-
-  // Dock
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
   const dockNav = document.querySelector('.dock-nav');
   const dockItems = Array.from(document.querySelectorAll('.dock-nav .nav-item'));
@@ -718,22 +659,20 @@ function go(viewName) {
 
   $('mainScroll').scrollTop = 0;
 
-  // Render logic
   if (viewName === 'spin') renderSpinWheel();
   if (viewName === 'deposit') updateDepositUI();
-  if (viewName === 'withdraw') updateWithdrawUI();
+  if (viewName === 'withdraw') { updateWithdrawUI(); loadWdHistory(); }
   if (viewName === 'profile') renderProfile();
 }
 
-// HOME & SPIN
 function openSpin() { go('spin'); }
 
 function renderSpinWheel() {
   const wheel = $('spinWheel');
   wheel.innerHTML = S.spinPrizes.map((p, i) => `
-    <div class="spin-item" style="transform: translateY(${(i - S.spinWheelIndex) * 120}px)">
-      <img src="${p.webm.replace('.webm', '.png')}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4213/4213188.png'">
-      <div class="val">⭐ ${p.val}</div>
+    <div class="spin-item" style="transform: translateY(${(i - S.spinWheelIndex) * 130}px)">
+      <video src="${p.webm}" autoplay loop muted playsinline style="opacity: 0.9;"></video>
+      <div class="val"><img src="https://up6.cc/2026/10/17926810487851.png"> ${p.val}</div>
     </div>
   `).join('');
 }
@@ -741,23 +680,23 @@ function renderSpinWheel() {
 function doSpin() {
   const cost = CONFIG.spinCost;
   if ((S.user.stars || 0) < cost) {
-    $('notEnoughDesc').textContent = `You're short of ${cost - (S.user.stars || 0)} stars. Please top up your balance.`;
+    $('notEnoughDesc').textContent = `تحتاج إلى ${cost - (S.user.stars || 0)} نجمة إضافية. يرجى شحن رصيدك.`;
     $('notEnoughModal').classList.add('show');
     return;
   }
   
+  if (S.busy) return;
   S.busy = true;
   S.user.stars -= cost;
   updateBalances();
   
-  // Animation
   let spins = Math.floor(Math.random() * 20) + 20;
   let current = S.spinWheelIndex;
   let interval = setInterval(() => {
     current++;
     $('spinWheel').innerHTML = S.spinPrizes.map((p, i) => {
-      let offset = (i - (current % S.spinPrizes.length)) * 120;
-      return `<div class="spin-item" style="transform: translateY(${offset}px)"><img src="${p.webm.replace('.webm', '.png')}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4213/4213188.png'"><div class="val">⭐ ${p.val}</div></div>`;
+      let offset = (i - (current % S.spinPrizes.length)) * 130;
+      return `<div class="spin-item" style="transform: translateY(${offset}px)"><video src="${p.webm}" autoplay loop muted playsinline></video><div class="val"><img src="https://up6.cc/2026/10/17926810487851.png"> ${p.val}</div></div>`;
     }).join('');
   }, 50);
 
@@ -773,8 +712,8 @@ function doSpin() {
     try {
       await FB.set({ stars: S.user.stars });
       updateBalances();
-      toast(`You won ${win} Stars!`);
-    } catch (e) { toast('Error saving data'); }
+      toast(`لقد ربحت ${win} نجمة!`);
+    } catch (e) { toast('حدث خطأ في الحفظ'); }
     S.busy = false;
   }, 2000);
 }
@@ -782,19 +721,19 @@ function doSpin() {
 function openPrizesModal() {
   $('prizesGrid').innerHTML = S.spinPrizes.map(p => `
     <div class="prize-item">
-      <img src="${p.webm.replace('.webm', '.png')}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4213/4213188.png'">
-      <div class="prize-val">⭐ ${p.val}</div>
+      <video src="${p.webm}" autoplay loop muted playsinline></video>
+      <div class="prize-val"><img src="https://up6.cc/2026/10/17926810487851.png"> ${p.val}</div>
     </div>
   `).join('');
   $('prizesModal').classList.add('show');
 }
 
-// DEPOSIT
 function setDepTab(tab, btn) {
-  document.querySelectorAll('#view-deposit .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.dep-method-card').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   ['stars', 'crypto', 'binance', 'sham'].forEach(t => {
-    $('dep-tab-' + t).style.display = t === tab ? 'block' : 'none';
+    $('dep-tab-' + t).classList.remove('active');
+    if (t === tab) $('dep-tab-' + t).classList.add('active');
   });
 }
 
@@ -806,7 +745,7 @@ function addDepStars(amt) {
 function setCryptoUsd(amt) {
   S.depCryptoUsd = amt;
   $('depCryptoUsd').textContent = '$' + amt;
-  $('depCryptoBtn').disabled = false;
+  $('depCryptoBtn').disabled = amt < 1; // الحد الأدنى 1 دولار
 }
 
 function updateDepositUI() {
@@ -816,9 +755,9 @@ function updateDepositUI() {
 }
 
 async function startStarsTopup() {
-  if (!TG.app || !TG.app.openInvoice) return toast('Open in Telegram');
+  if (!TG.app || !TG.app.openInvoice) return toast('يرجى فتح التطبيق من تيليجرام');
   const starsAmount = S.depStars;
-  if (starsAmount < 1) return toast('Invalid amount');
+  if (starsAmount < 1) return toast('مبلغ غير صالح');
   
   try {
     const resp = await fetch(CONFIG.api.base + '/api/create-invoice', {
@@ -826,49 +765,114 @@ async function startStarsTopup() {
       body: JSON.stringify({ userId: TG.id, stars: starsAmount })
     });
     const data = await resp.json();
-    if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'Failed');
+    if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل');
     
     TG.app.openInvoice(data.invoiceLink, async (status) => {
       if (status === 'paid') {
         const fresh = await FB.get();
         S.user.stars = Number(fresh.stars || 0);
         updateBalances();
-        toast('Success! Stars added.');
+        toast('تمت إضافة النجوم بنجاح!');
       }
     });
-  } catch (e) { toast('Error creating invoice'); }
+  } catch (e) { toast('خطأ في إنشاء الفاتورة'); }
 }
 
-// WITHDRAW
+async function startCryptoPayment() {
+  if (!TG.app) return toast('يرجى فتح التطبيق من تيليجرام');
+  if (S.depCryptoUsd < 1) return toast('الحد الأدنى هو $1');
+  
+  try {
+    const resp = await fetch(CONFIG.api.base + '/api/shieldz/create-invoice', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: TG.id, amount_usd_cents: S.depCryptoUsd * 100 })
+    });
+    const data = await resp.json();
+    if (!data.ok || !data.pay_url) throw new Error(data.error || 'فشل');
+    
+    TG.app.openLink(data.pay_url);
+    toast('يرجى إكمال الدفع في المتصفح...');
+    // هنا يمكن إضافة Polling للتأكد من الدفع
+  } catch (e) { toast('خطأ في بدء الدفع بالكريبتو'); }
+}
+
 function setWdTab(method, btn) {
   S.wdMethod = method;
-  document.querySelectorAll('#view-withdraw .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.wd-method-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  if (method === 'binance') {
+    $('wdAccount').placeholder = 'أدخل معرف Binance Pay هنا...';
+    $('wdHint').textContent = 'تأكد من صحة معرف Binance، سيتم تحويل الأرباح إليه.';
+  } else {
+    $('wdAccount').placeholder = 'أدخل معرف شام كاش هنا...';
+    $('wdHint').textContent = 'تأكد من صحة معرف شام كاش، سيتم تحويل الأرباح إليه.';
+  }
 }
 
 function updateWithdrawUI() {
-  $('wdAccount').value = S.user.username ? '@' + S.user.username : '@User' + S.user.telegramId;
+  if ($('wdAccount')) $('wdAccount').value = '';
 }
 
 async function doWithdraw() {
-  const amt = parseInt($('wdAmountDisplay').textContent) || 0;
-  if (amt < CONFIG.minWithdrawStars) return toast(`Minimum is ${CONFIG.minWithdrawStars} stars`);
-  if (amt > (S.user.stars || 0)) return toast('Not enough stars');
+  const account = $('wdAccount').value.trim();
+  const amt = parseInt($('wdAmount').value) || 0;
   
+  if (!account || account.length < 5) return toast('يرجى إدخال معرف صحيح');
+  if (amt < CONFIG.minWithdrawStars) return toast(`الحد الأدنى للسحب هو ${CONFIG.minWithdrawStars} نجمة`);
+  if (amt > CONFIG.maxWithdrawStars) return toast(`الحد الأقصى للسحب هو ${CONFIG.maxWithdrawStars} نجمة`);
+  if (amt > (S.user.stars || 0)) return toast('رصيدك غير كافٍ');
+  
+  if (S.busy) return;
   S.busy = true;
+  
   try {
     S.user.stars -= amt;
     await FB.set({ stars: S.user.stars });
     await db.collection(CONFIG.wdCol).add({
-      userId: TG.id, amount: amt, method: S.wdMethod, status: 'pending', createdAt: Date.now()
+      userId: TG.id, userName: S.user.name, amount: amt, account: account, method: S.wdMethod, status: 'pending', createdAt: Date.now()
     });
     updateBalances();
-    toast('Withdraw request submitted!');
-  } catch (e) { toast('Error processing withdrawal'); }
+    $('wdAmount').value = '';
+    $('wdAccount').value = '';
+    toast('تم إرسال طلب السحب بنجاح!');
+    loadWdHistory();
+  } catch (e) { toast('حدث خطأ أثناء المعالجة'); }
   S.busy = false;
 }
 
-// PROFILE & GLOBAL
+async function loadWdHistory() {
+  const list = $('wdHistoryList');
+  if (!list || !db) return;
+  list.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-secondary)">جاري التحميل...</div>';
+  
+  try {
+    const q = await db.collection(CONFIG.wdCol).where('userId', '==', TG.id).limit(20).get();
+    const items = [];
+    q.forEach(doc => items.push(doc.data()));
+    items.sort((a, b) => b.createdAt - a.createdAt);
+    
+    if (items.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:14px">لا يوجد سجل سحوبات بعد</div>';
+      return;
+    }
+    
+    const statusMap = { pending: 'قيد المراجعة', approved: 'مقبول', rejected: 'مرفوض' };
+    const classMap = { pending: 'st-pending', approved: 'st-approved', rejected: 'st-rejected' };
+    
+    list.innerHTML = items.map(w => `
+      <div class="wd-history-item">
+        <div class="wd-history-info">
+          <div class="wd-history-amt">${fmt(w.amount)} ⭐ → ${w.method === 'binance' ? 'Binance' : 'Sham Cash'}</div>
+          <div class="wd-history-date">${new Date(w.createdAt).toLocaleDateString('ar-EG')}</div>
+        </div>
+        <div class="wd-history-status ${classMap[w.status]}">${statusMap[w.status]}</div>
+      </div>
+    `).join('');
+  } catch (e) {
+    list.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-secondary)">تعذر تحميل السجل</div>';
+  }
+}
+
 function updateBalances() {
   if (!S.user) return;
   $('topStars').textContent = fmt(S.user.stars);
@@ -885,7 +889,11 @@ function renderProfile() {
   $('profRefs').textContent = u.referralCount || 0;
   $('refInvited').textContent = u.referralCount || 0;
   $('refEarned').textContent = u.referralEarnings || 0;
-  $('refLinkText').textContent = `https://t.me/${CONFIG.bot.username}/${CONFIG.bot.appName}?startapp=ref_${u.referralCode}`;
+  
+  const url = `https://t.me/${CONFIG.bot.username}/${CONFIG.bot.appName}?startapp=ref_${u.referralCode}`;
+  $('refLinkText').textContent = url;
+  $('refIdText').textContent = u.telegramId;
+  S.user.refLink = url;
   
   if (u.photoUrl) {
     $('profAvatar').innerHTML = `<img src="${u.photoUrl}">`;
@@ -894,20 +902,29 @@ function renderProfile() {
 }
 
 function shareRef() {
-  const url = `https://t.me/${CONFIG.bot.username}/${CONFIG.bot.appName}?startapp=ref_${S.user.referralCode}`;
-  const text = "Join Cute Bee Stars and earn real rewards!";
+  const url = S.user.refLink;
+  const text = "انضم إلى Cute Bee Stars واربح جوائز حقيقية!";
   TG.app.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
 }
 
-// BOOT
+function startTask(btn) {
+  btn.textContent = '10:00:00';
+  btn.classList.add('timer');
+  btn.disabled = true;
+  toast('تم بدء المهمة!');
+}
+
+// KEYBOARD DOCK
+document.addEventListener('focusin', () => document.body.classList.add('keyboard-open'));
+document.addEventListener('focusout', () => setTimeout(() => document.body.classList.remove('keyboard-open'), 100));
+
 async function boot() {
   if (!TG.init()) {
-    document.body.innerHTML = '<h2 style="text-align:center;margin-top:50px">Open in Telegram</h2>';
+    document.body.innerHTML = '<h2 style="text-align:center;margin-top:50px;font-family:sans-serif;color:#fff;">يرجى فتح التطبيق من تيليجرام</h2>';
     return;
   }
   FB.init();
   
-  // Fake progress bar
   let progress = 0;
   const loader = setInterval(() => {
     progress += Math.random() * 20;
@@ -919,7 +936,7 @@ async function boot() {
     const ex = await FB.get();
     if (ex) {
       S.user = Object.assign({
-        telegramId: TG.id, name: (TG.user.first_name || 'User'),
+        telegramId: TG.id, name: (TG.user.first_name || 'مستخدم'),
         username: TG.user.username, photoUrl: TG.user.photo_url,
         stars: 0, gems: 0, tickets: 0, referralCode: TG.id,
         referralCount: 0, referralEarnings: 0
@@ -929,7 +946,7 @@ async function boot() {
       S.user.tickets = Number(ex.tickets || 0);
     } else {
       S.user = {
-        telegramId: TG.id, name: (TG.user.first_name || 'User'),
+        telegramId: TG.id, name: (TG.user.first_name || 'مستخدم'),
         username: TG.user.username, photoUrl: TG.user.photo_url,
         stars: 0, gems: 0, tickets: 0, referralCode: TG.id,
         referralCount: 0, referralEarnings: 0, createdAt: Date.now()
@@ -937,7 +954,7 @@ async function boot() {
       await FB.set(S.user, false);
     }
   } catch (e) {
-    S.user = { stars: 0, gems: 0, tickets: 0, name: 'User', telegramId: TG.id };
+    S.user = { stars: 0, gems: 0, tickets: 0, name: 'مستخدم', telegramId: TG.id };
   }
 
   clearInterval(loader);
@@ -950,22 +967,6 @@ async function boot() {
     updateDepositUI();
   }, 500);
 }
-
-// Task mock logic
-function startTask(btn) {
-  btn.textContent = '10:00:00';
-  btn.classList.add('timer');
-  btn.disabled = true;
-  toast('Task started!');
-}
-
-// Prevent contenteditable line breaks
-document.querySelectorAll('[contenteditable]').forEach(el => {
-  el.addEventListener('keydown', e => { if(e.key === 'Enter') e.preventDefault(); });
-  el.addEventListener('input', () => {
-    el.textContent = el.textContent.replace(/[^0-9]/g, '');
-  });
-});
 
 document.addEventListener('DOMContentLoaded', boot);
 </script>
