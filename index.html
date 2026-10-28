@@ -25,6 +25,7 @@
   --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
   --gradient-purple: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%);
   --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+  --gradient-spin: linear-gradient(180deg, #003399 0%, #001144 100%);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
@@ -137,6 +138,37 @@ input { font: inherit; color: inherit; }
 }
 .live-item video { width: 100%; height: 100%; object-fit: contain; }
 
+/* Daily Login */
+.daily-login-card {
+  background: var(--bg-card); border-radius: 24px; padding: 20px;
+  margin-bottom: 20px; border: 1px solid var(--border);
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.daily-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.daily-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+.daily-timer {
+  font-family: monospace; font-size: 14px; font-weight: 700;
+  background: var(--bg-soft); padding: 4px 10px; border-radius: 8px;
+  color: var(--warning);
+}
+.daily-days {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+}
+.day-box {
+  flex: 1; min-width: 50px; background: var(--bg-soft);
+  border-radius: 12px; padding: 10px 4px; text-align: center;
+  border: 1px solid transparent; transition: all 0.2s;
+}
+.day-box.active { border-color: var(--blue, #007AFF); background: rgba(0,122,255,0.1); }
+.day-box.claimed { opacity: 0.5; background: rgba(0,0,0,0.2); }
+.day-box h4 { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.day-box .reward { font-size: 16px; font-weight: 800; color: #5E5CE6; margin-bottom: 4px;}
+.day-box .reward i { font-size: 20px; }
+.day-box .check { color: var(--success); font-size: 18px; }
+
 .home-cards { display: flex; flex-direction: column; gap: 14px; }
 .home-card {
   border-radius: 24px; padding: 24px;
@@ -153,44 +185,66 @@ input { font: inherit; color: inherit; }
 .home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
 .home-card .icon { font-size: 32px; opacity: 0.9; }
 
-/* ============ SPIN GAME (ENHANCED) ============ */
-.spin-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 20px; }
+/* ============ SPIN GAME (STANDALONE DESIGN) ============ */
+#view-spin {
+  background: var(--gradient-spin);
+  margin: -20px -16px -40px -16px;
+  padding: 20px 16px 40px 16px;
+  min-height: calc(100dvh - var(--top-bar-height) - var(--safe-top));
+}
+.spin-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;}
 .spin-track-wrapper {
   width: 100%; overflow: hidden; position: relative;
-  padding: 40px 0; margin-bottom: 20px;
+  padding: 50px 0; margin-bottom: 20px;
 }
 .spin-indicator {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 4px;
-  background: var(--blue, #007AFF); transform: translateX(-50%);
-  z-index: 2; box-shadow: 0 0 16px rgba(0, 122, 255, 1);
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
+  background: #fff; transform: translateX(-50%);
+  z-index: 2; box-shadow: 0 0 16px rgba(255, 255, 255, 1);
   border-radius: 2px;
 }
 .spin-track {
   display: flex; gap: 16px;
-  transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .spin-item {
-  width: 130px; height: 150px; background: var(--bg-card);
+  width: 120px; height: 140px; background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   border-radius: 20px; display: flex; flex-direction: column;
   align-items: center; justify-content: center; flex-shrink: 0;
-  border: 1px solid var(--border); box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow);
 }
-.spin-item video { width: 90px; height: 90px; object-fit: contain; }
+.spin-item video { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));}
 .spin-item .val {
-  font-size: 15px; font-weight: 800; margin-top: 10px;
+  font-size: 14px; font-weight: 800; margin-top: 10px; color: #fff;
   display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 12px;
 }
-.spin-item .val img { width: 16px; height: 16px; border-radius: 50%; }
+.spin-item .val img { width: 14px; height: 14px; border-radius: 50%; }
+
+.spin-controls {
+  display: flex; gap: 12px; width: 100%; margin-bottom: 16px;
+}
+.spin-ctrl-btn {
+  flex: 1; background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: #fff; border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px; border-radius: 16px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 0.1s;
+}
+.spin-ctrl-btn:active { transform: scale(0.96); }
 
 .spin-btn {
-  background: var(--gradient-blue); color: #fff;
-  border: none; padding: 18px 50px; border-radius: 30px;
+  width: 100%; background: #007AFF; color: #fff;
+  border: none; padding: 20px; border-radius: 20px;
   font-size: 20px; font-weight: 800; cursor: pointer;
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
   transition: transform 0.1s var(--spring);
-  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.5);
 }
-.spin-btn:active { transform: scale(0.95); }
+.spin-btn:active { transform: scale(0.97); }
 .spin-btn img { width: 24px; height: 24px; }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
 
@@ -199,29 +253,38 @@ input { font: inherit; color: inherit; }
 .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
 .page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
-.tasks-list { display: flex; flex-direction: column; gap: 12px; }
-.task-item {
-  background: var(--bg-card); border-radius: 20px; padding: 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+.task-group {
+  background: var(--bg-card); border-radius: 24px;
+  margin-bottom: 16px; overflow: hidden;
+  border: 1px solid var(--border);
 }
+.task-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; border-bottom: 1px solid var(--border);
+}
+.task-item:last-child { border-bottom: none; }
 .task-info { display: flex; align-items: center; gap: 14px; }
 .task-icon {
-  width: 48px; height: 48px; border-radius: 14px;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center; font-size: 22px;
+  width: 50px; height: 50px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
 }
-.task-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.task-icon-img { width: 34px; height: 50px; border-radius: 8px; background:#000; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+.task-icon-img img { width: 100%; height: 100%; object-fit: contain; }
+.task-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #fff;}
 .task-reward {
   display: flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--text-secondary); font-weight: 700;
+  font-size: 14px; color: var(--text-secondary); font-weight: 700;
 }
-.task-reward img { width: 14px; height: 14px; border-radius: 50%; }
+.task-reward i { font-size: 16px; color: #5E5CE6; }
 .start-btn {
-  background: var(--blue, #007AFF); color: #fff; border: none;
-  padding: 8px 18px; border-radius: 12px;
-  font-weight: 700; font-size: 13px; cursor: pointer;
+  background: #007AFF; color: #fff; border: none;
+  padding: 10px 20px; border-radius: 14px;
+  font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
+}
+.start-btn.timer {
+  background: rgba(255,255,255,0.1); color: var(--text-secondary);
+  font-family: monospace; font-size: 13px;
 }
 
 /* ============ DEPOSIT & WITHDRAW ============ */
@@ -240,7 +303,7 @@ input { font: inherit; color: inherit; }
 .tab.active { background: var(--bg-soft); color: var(--text-primary); }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 
-.amount-display { text-align: center; margin: 30px 0 40px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.amount-display { text-align: center; margin: 20px 0 30px; display: flex; align-items: center; justify-content: center; gap: 12px; }
 .amount-display input {
   font-size: 4.5rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
@@ -249,6 +312,13 @@ input { font: inherit; color: inherit; }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .amount-display img { width: 48px; height: 48px; border-radius: 50%; }
+
+.calc-result {
+  text-align: center; font-size: 18px; font-weight: 700;
+  color: var(--success); margin-bottom: 30px;
+  background: rgba(52, 199, 89, 0.1); padding: 10px; border-radius: 12px;
+  display: inline-block; width: 100%;
+}
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
 .chip {
@@ -270,6 +340,11 @@ input { font: inherit; color: inherit; }
 
 .manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
+.warning-box {
+  background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.3);
+  padding: 12px; border-radius: 12px; color: #FF3B30; font-size: 13px; font-weight: 700;
+  margin-bottom: 16px; display: flex; align-items: flex-start; gap: 8px;
+}
 .copy-box {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg-soft); padding: 12px 16px;
@@ -298,12 +373,13 @@ input { font: inherit; color: inherit; }
 .crypto-btn.check { background: var(--gradient-blue); color: #fff; }
 .crypto-btn.cancel { background: var(--bg-soft); color: var(--text-secondary); }
 
-.wd-input-group { margin-bottom: 20px; }
-.wd-input-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 600; font-size: 14px; }
+.wd-input-group { margin-bottom: 20px; margin-top: 20px; }
+.wd-input-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 600; font-size: 14px; text-align: center;}
 .wd-input {
   width: 100%; padding: 16px; border-radius: 16px;
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none;
+  text-align: center;
 }
 .wd-input:focus { border-color: var(--blue, #007AFF); }
 
@@ -560,10 +636,6 @@ input { font: inherit; color: inherit; }
       <button class="add-btn" onclick="go('deposit')">+</button>
     </div>
     <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/179267515752371.jpg" alt="Gems">
-      <span id="topGems">0</span>
-    </div>
-    <div class="balance-pill">
       <i class="fas fa-ticket-alt" style="color:#5E5CE6;"></i>
       <span id="topTickets">0</span>
     </div>
@@ -574,6 +646,18 @@ input { font: inherit; color: inherit; }
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
+      
+      <!-- Daily Login Card -->
+      <div class="daily-login-card">
+        <div class="daily-header">
+          <div class="daily-title">تسجيل الدخول اليومي</div>
+          <div class="daily-timer" id="dailyTimer">00:00:00</div>
+        </div>
+        <div class="daily-days" id="dailyDaysContainer">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
       <div class="live-strip" id="live-strip"></div>
       
       <div class="home-cards">
@@ -587,7 +671,7 @@ input { font: inherit; color: inherit; }
         <div class="home-card tasks" onclick="go('tasks')">
           <div>
             <h3>المهام (Tasks)</h3>
-            <p>أكمل المهام واربح النجوم والتذاكر</p>
+            <p>أكمل المهام واربح التذاكر</p>
           </div>
           <i class="fas fa-tasks icon"></i>
         </div>
@@ -601,27 +685,25 @@ input { font: inherit; color: inherit; }
       </div>
     </div>
 
-    <!-- View: Spin Game -->
+    <!-- View: Spin Game (Standalone) -->
     <div class="view" id="view-spin">
-      <div class="page-header" style="text-align:center; margin-bottom: 20px;">
-        <h2 class="page-title">عجلة الحظ</h2>
-        <p class="page-subtitle">جرب حظك الآن واربح جوائز قيمة</p>
-      </div>
-      
-      <div class="live-strip" id="spin-live-strip" style="margin-bottom: 20px;"></div>
-      
       <div class="spin-container">
         <div class="spin-track-wrapper">
           <div class="spin-indicator"></div>
           <div class="spin-track" id="spinTrack"></div>
         </div>
         
+        <div class="spin-controls">
+          <button class="spin-ctrl-btn" onclick="toggleSpinSound()">
+            <i class="fas" id="soundIcon">fa-volume-up</i> <span id="soundText">الصوت</span>
+          </button>
+          <button class="spin-ctrl-btn" onclick="openModal('modalPrizes')">
+            <i class="fas fa-gift"></i> الجوائز
+          </button>
+        </div>
+
         <button class="spin-btn" id="spinBtn" onclick="startSpin()">
           Spin for <span>399</span> <img src="https://up6.cc/2026/10/17926810487851.png">
-        </button>
-        
-        <button style="background:none; border:none; color:var(--text-secondary); margin-top:24px; font-weight:700; font-size:14px; cursor:pointer;" onclick="openModal('modalPrizes')">
-          <i class="fas fa-list"></i> عرض الجوائز (Prizes)
         </button>
       </div>
     </div>
@@ -630,46 +712,79 @@ input { font: inherit; color: inherit; }
     <div class="view" id="view-tasks">
       <div class="page-header">
         <h2 class="page-title">المهام</h2>
-        <p class="page-subtitle">أكمل المهام السهلة لتربح التذاكر والنجوم!</p>
+        <p class="page-subtitle">أكمل المهام السهلة لتربح التذاكر!</p>
       </div>
       
-      <div class="tasks-list">
+      <div class="task-group">
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="task-icon-img"><img src="https://img.icons8.com/color/96/iphone.png" alt="App"></div>
             <div class="task-text">
-              <h4>الشاشة الرئيسية</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
+              <h4>Home screen</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">Start</button>
         </div>
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:#007AFF"><i class="fas fa-envelope"></i></div>
+            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-envelope"></i></div>
             <div class="task-text">
-              <h4>الرابط (Link)</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
+              <h4>Link</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">Start</button>
         </div>
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:#34C759"><i class="fas fa-camera"></i></div>
+            <div class="task-icon" style="background:#34C759; color:#fff;"><i class="fas fa-camera"></i></div>
             <div class="task-text">
-              <h4>القصة (Story)</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt" style="color:#5E5CE6"></i> 1</div>
+              <h4>Story</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">Start</button>
         </div>
+      </div>
+
+      <div class="task-group">
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:#229ED9"><i class="fab fa-telegram"></i></div>
+            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
             <div class="task-text">
               <h4>اشترك في قناتنا</h4>
-              <div class="task-reward"><i class="fas fa-star" style="color:#FFD700"></i> 1</div>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+            </div>
+          </div>
+          <button class="start-btn" onclick="completeTask(this)">Start</button>
+        </div>
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
+            <div class="task-text">
+              <h4>اشترك في يوتيوب</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+            </div>
+          </div>
+          <button class="start-btn" onclick="completeTask(this)">Start</button>
+        </div>
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
+            <div class="task-text">
+              <h4>انضم إلى الدردشة</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+            </div>
+          </div>
+          <button class="start-btn" onclick="completeTask(this)">Start</button>
+        </div>
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-icon" style="background:#fff; color:#000;"><i class="fab fa-instagram"></i></div>
+            <div class="task-text">
+              <h4>اشترك في انستغرام</h4>
+              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">Start</button>
@@ -726,12 +841,13 @@ input { font: inherit; color: inherit; }
 
         <div class="amount-display">
           <span style="font-size:4.5rem; font-weight:800;">$</span>
-          <input type="number" id="cryptoAmountInput" value="10" oninput="updateCryptoUI()">
+          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI()">
         </div>
+        <div class="calc-result" id="cryptoCalcResult">ستحصل على 100 نجمة</div>
         <div class="quick-chips">
+          <button class="chip" onclick="addCryptoChip(1)">+ $1</button>
+          <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
           <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
-          <button class="chip" onclick="addCryptoChip(50)">+ $50</button>
-          <button class="chip" onclick="addCryptoChip(100)">+ $100</button>
         </div>
         <button class="topup-btn" onclick="processDeposit('crypto')">Pay with Crypto</button>
         <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
@@ -739,6 +855,10 @@ input { font: inherit; color: inherit; }
 
       <!-- Binance Tab -->
       <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
+        <div class="warning-box">
+          <i class="fas fa-exclamation-triangle" style="margin-top:3px;"></i>
+          <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+        </div>
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف Binance Pay التالي:</p>
           <div class="copy-box">
@@ -756,6 +876,10 @@ input { font: inherit; color: inherit; }
 
       <!-- Sham Tab -->
       <div id="dep-tab-sham" class="dep-tab-content" style="display:none;">
+        <div class="warning-box">
+          <i class="fas fa-exclamation-triangle" style="margin-top:3px;"></i>
+          <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+        </div>
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف شام كاش التالي:</p>
           <div class="copy-box">
@@ -788,28 +912,34 @@ input { font: inherit; color: inherit; }
       </div>
 
       <div id="wd-tab-binance" class="wd-tab-content">
+        <div class="amount-display">
+          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance')">
+          <img src="https://up6.cc/2026/10/17926810487851.png">
+        </div>
+        <div class="calc-result" id="wdBinanceResult">ستحصل على $0.00</div>
+        
         <div class="wd-input-group">
           <label>معرّف Binance Pay</label>
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
-        <div class="wd-input-group">
-          <label>المبلغ (نجوم)</label>
-          <input type="number" class="wd-input" placeholder="Min 50 Stars" id="wdBinanceAmount">
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600;">10 Stars = $0.10</p>
+        
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = $0.10 | الحد الأدنى للسحب 50 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
       </div>
 
       <div id="wd-tab-sham" class="wd-tab-content" style="display:none;">
+        <div class="amount-display">
+          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham')">
+          <img src="https://up6.cc/2026/10/17926810487851.png">
+        </div>
+        <div class="calc-result" id="wdShamResult">ستحصل على 0 ل.س</div>
+
         <div class="wd-input-group">
           <label>معرّف شام كاش</label>
           <input type="text" class="wd-input" placeholder="Sham Cash ID" id="wdShamId">
         </div>
-        <div class="wd-input-group">
-          <label>المبلغ (نجوم)</label>
-          <input type="number" class="wd-input" placeholder="Min 50 Stars" id="wdShamAmount">
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600;">10 Stars = 10 SYP</p>
+
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = 10 SYP | الحد الأدنى للسحب 50 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
 
@@ -887,13 +1017,6 @@ input { font: inherit; color: inherit; }
           </div>
         </div>
         <div class="stat-card">
-          <img src="https://up6.cc/2026/10/179267515752371.jpg">
-          <div class="stat-info">
-            <h3 id="statGems">0</h3>
-            <p>Gems</p>
-          </div>
-        </div>
-        <div class="stat-card">
           <i class="fas fa-ticket-alt" style="font-size:28px; color:#5E5CE6;"></i>
           <div class="stat-info">
             <h3 id="statTickets">0</h3>
@@ -967,6 +1090,24 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
+<!-- Modal: Withdraw Success -->
+<div class="modal-overlay" id="modalWithdrawSuccess">
+  <div class="modal-content">
+    <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
+    <h3>تم تقديم الطلب بنجاح</h3>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">
+      قمت بسحب <span id="successWdStars" style="color:#FFD700; font-weight:800;">0</span> نجمة
+    </p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">
+      وستحصل على <span id="successWdPayout" style="color:#34C759; font-weight:800;">$0.00</span>
+    </p>
+    <div style="background: rgba(255,149,0,0.1); color: var(--warning); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 24px;">
+      <i class="fas fa-clock"></i> سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.
+    </div>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')">حسناً</button>
+  </div>
+</div>
+
 <!-- Toast Notification -->
 <div class="toast" id="toast">Message</div>
 
@@ -976,7 +1117,6 @@ input { font: inherit; color: inherit; }
 // ===================== CONFIG & ASSETS =====================
 const ASSETS = {
   star: 'https://up6.cc/2026/10/17926810487851.png',
-  gem: 'https://up6.cc/2026/10/179267515752371.jpg',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
   sham: 'https://up6.cc/2026/09/178975725154411.png'
 };
@@ -1012,20 +1152,26 @@ let user = {
   name: 'Player',
   photo: '',
   stars: 1000, 
-  gems: 0, // Removed default, starts at 0
   tickets: 0,
-  referrals: 0
+  referrals: 0,
+  lastDailyClaim: 0,
+  dailyStreak: 0
 };
 
-let spinState = { isSpinning: false };
+let spinState = { isSpinning: false, soundOn: true };
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdDisplayCount = 5;
 let globalRankingLoaded = false;
+let dailyTimerInterval = null;
 
 // Crypto Pending State
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
+
+// Audio for spin
+const spinAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
+spinAudio.loop = true;
 
 // ===================== TELEGRAM & FIREBASE =====================
 const tg = window.Telegram?.WebApp;
@@ -1064,9 +1210,10 @@ async function fetchUserData() {
     if (doc.exists) {
       const data = doc.data();
       user.stars = data.stars || 0;
-      user.gems = data.gems || 0;
       user.tickets = data.tickets || 0;
       user.referrals = data.referralCount || 0;
+      user.lastDailyClaim = data.lastDailyClaim || 0;
+      user.dailyStreak = data.dailyStreak || 0;
     } else {
       // Create new user
       await docRef.set({
@@ -1074,13 +1221,15 @@ async function fetchUserData() {
         name: user.name,
         photoUrl: user.photo,
         stars: 0,
-        gems: 0,
         tickets: 0,
         referralCount: 0,
+        lastDailyClaim: 0,
+        dailyStreak: 0,
         createdAt: Date.now()
       });
     }
     updateBalances();
+    initDailyLogin();
     loadWithdrawalHistory();
     renderProfile();
     
@@ -1150,7 +1299,6 @@ function go(viewName) {
   document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
 
   if (viewName === 'referral' && !globalRankingLoaded) {
-    // Don't load immediately, wait for tab click, but reset
     globalRankingLoaded = false; 
   }
   if (viewName === 'withdraw') {
@@ -1163,11 +1311,9 @@ function updateBalances() {
   const formatNum = num => Number(num).toLocaleString('en-US');
   
   document.getElementById('topStars').innerText = formatNum(user.stars);
-  document.getElementById('topGems').innerText = formatNum(user.gems);
   document.getElementById('topTickets').innerText = formatNum(user.tickets);
   
   document.getElementById('statStars').innerText = formatNum(user.stars);
-  document.getElementById('statGems').innerText = formatNum(user.gems);
   document.getElementById('statTickets').innerText = formatNum(user.tickets);
   document.getElementById('statRefs').innerText = user.referrals;
   
@@ -1176,7 +1322,7 @@ function updateBalances() {
 }
 
 function renderLiveStrip() {
-  const strips = [document.getElementById('live-strip'), document.getElementById('spin-live-strip')];
+  const strips = [document.getElementById('live-strip')];
   strips.forEach(strip => {
     if (!strip) return;
     strip.innerHTML = '';
@@ -1212,73 +1358,112 @@ function renderProfile() {
   }
 }
 
-// ===================== REFERRAL & RANKING =====================
-function switchRefTab(tab, el) {
-  document.querySelectorAll('#view-referral .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+// ===================== DAILY LOGIN =====================
+function initDailyLogin() {
+  const container = document.getElementById('dailyDaysContainer');
+  const timerEl = document.getElementById('dailyTimer');
+  if (!container || !timerEl) return;
+
+  container.innerHTML = '';
+  const now = Date.now();
+  const timeSinceLast = now - user.lastDailyClaim;
+  const oneDay = 24 * 60 * 60 * 1000;
   
-  document.querySelectorAll('.ref-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('ref-tab-' + tab).style.display = 'block';
+  let canClaim = timeSinceLast >= oneDay || user.lastDailyClaim === 0;
+  let currentDay = (user.dailyStreak % 7) + 1;
 
-  if (tab === 'ranking' && !globalRankingLoaded) {
-    loadGlobalRanking();
-  }
-}
-
-async function loadGlobalRanking() {
-  const list = document.getElementById('rankingList');
-  if (!db) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
-    return;
-  }
-  try {
-    const q = await db.collection('puppy_users').orderBy('referralCount', 'desc').limit(20).get();
-    if (q.empty) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
-      return;
+  for (let i = 1; i <= 7; i++) {
+    const dayBox = document.createElement('div');
+    dayBox.className = 'day-box';
+    
+    let isClaimed = false;
+    if (user.lastDailyClaim > 0) {
+       if (currentDay > i) isClaimed = true;
+       if (!canClaim && currentDay === i) isClaimed = true;
     }
-    list.innerHTML = '';
-    let index = 1;
-    q.forEach(doc => {
-      const data = doc.data();
-      if ((data.referralCount || 0) === 0) return; // Skip 0 referrals
+
+    if (isClaimed) dayBox.classList.add('claimed');
+    if (canClaim && currentDay === i) dayBox.classList.add('active');
+
+    dayBox.innerHTML = `
+      <h4>اليوم ${i}</h4>
+      <div class="reward">${isClaimed ? '<i class="fas fa-check-circle check"></i>' : '<i class="fas fa-ticket-alt"></i>'}</div>
+      <div style="font-size:10px; color:var(--text-secondary);">1 تيكت</div>
+    `;
+
+    if (canClaim && currentDay === i) {
+      dayBox.onclick = claimDailyReward;
+      dayBox.style.cursor = 'pointer';
+      dayBox.style.borderColor = 'var(--success)';
+      timerEl.innerText = 'جاهز للاستلام!';
+      timerEl.style.color = 'var(--success)';
+    }
+    container.appendChild(dayBox);
+  }
+
+  if (dailyTimerInterval) clearInterval(dailyTimerInterval);
+  
+  if (!canClaim) {
+    dailyTimerInterval = setInterval(() => {
+      const diff = Date.now() - user.lastDailyClaim;
+      const remain = oneDay - diff;
       
-      const isMe = doc.id === user.id;
-      const rankClass = index === 1 ? 'top1' : index === 2 ? 'top2' : index === 3 ? 'top3' : '';
-      const avatar = data.photoUrl 
-        ? `<img src="${data.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` 
-        : '<i class="fas fa-user"></i>';
-        
-      const div = document.createElement('div');
-      div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `
-        <div class="ranking-rank ${rankClass}">${index}</div>
-        <div class="ranking-avatar">${avatar}</div>
-        <div class="ranking-info">
-          <div class="ranking-name">${data.name || 'Player'} ${isMe ? '(أنت)' : ''}</div>
-          <div class="ranking-count">${data.referralCount} إحالة</div>
-        </div>
-      `;
-      list.appendChild(div);
-      index++;
-    });
-    if (index === 1) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
-    }
-    globalRankingLoaded = true;
-  } catch(e) {
-    console.warn('Ranking err', e);
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
+      if (remain <= 0) {
+        clearInterval(dailyTimerInterval);
+        initDailyLogin(); // Re-render
+        return;
+      }
+      
+      const h = Math.floor(remain / (1000 * 60 * 60));
+      const m = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((remain % (1000 * 60)) / 1000);
+      
+      timerEl.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      timerEl.style.color = 'var(--warning)';
+    }, 1000);
+  } else if (user.lastDailyClaim > 0 && !canClaim) {
+      // handled in loop
+  } else if (user.lastDailyClaim === 0) {
+      timerEl.innerText = 'جاهز للاستلام!';
+      timerEl.style.color = 'var(--success)';
   }
 }
 
-function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=Join Cute Bee Stars and win big!`;
-  if (tg) tg.openTelegramLink(url);
-  else window.open(url, '_blank');
+async function claimDailyReward() {
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  if (user.lastDailyClaim > 0 && (now - user.lastDailyClaim) < oneDay) return;
+
+  user.tickets += 1;
+  user.lastDailyClaim = now;
+  user.dailyStreak = (user.dailyStreak || 0) + 1;
+  
+  updateBalances();
+  await syncUserData({ 
+    tickets: user.tickets, 
+    lastDailyClaim: user.lastDailyClaim,
+    dailyStreak: user.dailyStreak
+  });
+  
+  showToast('تم استلام التيكت اليومي بنجاح!');
+  initDailyLogin();
 }
 
 // ===================== SPIN GAME =====================
+function toggleSpinSound() {
+  spinState.soundOn = !spinState.soundOn;
+  const icon = document.getElementById('soundIcon');
+  const text = document.getElementById('soundText');
+  if (spinState.soundOn) {
+    icon.className = 'fas fa-volume-up';
+    text.innerText = 'الصوت';
+  } else {
+    icon.className = 'fas fa-volume-mute';
+    text.innerText = 'صامت';
+    spinAudio.pause();
+  }
+}
+
 function startSpin() {
   if (spinState.isSpinning) return;
   const spinCost = 399;
@@ -1296,12 +1481,17 @@ function startSpin() {
   spinState.isSpinning = true;
   document.getElementById('spinBtn').disabled = true;
   
+  if (spinState.soundOn) {
+    spinAudio.currentTime = 0;
+    spinAudio.play().catch(e => console.log('Audio play blocked'));
+  }
+  
   const track = document.getElementById('spinTrack');
   track.innerHTML = '';
   
   const totalItems = 40;
-  const itemWidth = 146; // 130px width + 16px gap
-  const centerOffset = window.innerWidth / 2 - 65; 
+  const itemWidth = 136; // 120px width + 16px gap
+  const centerOffset = window.innerWidth / 2 - 60; 
   
   const winnerIndex = 35;
   const winnerPrize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
@@ -1328,12 +1518,14 @@ function startSpin() {
   void track.offsetWidth; // Force reflow
 
   // Animate
-  track.style.transition = 'transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+  track.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
   track.style.transform = `translateX(${translateX}px)`;
 
   setTimeout(() => {
     spinState.isSpinning = false;
     document.getElementById('spinBtn').disabled = false;
+    spinAudio.pause();
+    
     user.stars += winnerPrize.value;
     updateBalances();
     syncUserData({ stars: user.stars });
@@ -1342,7 +1534,7 @@ function startSpin() {
     document.getElementById('winAmount').innerText = winnerPrize.value.toLocaleString();
     openModal('modalWin');
     
-  }, 3600);
+  }, 4100);
 }
 
 // ===================== DEPOSIT =====================
@@ -1367,18 +1559,22 @@ function addChip(amount) {
 }
 
 function updateCryptoUI() {
-  const val = parseFloat(document.getElementById('cryptoAmountInput').value) || 0;
+  let val = parseFloat(document.getElementById('cryptoAmountInput').value) || 0;
   if (val > 1000) {
+    val = 1000;
     document.getElementById('cryptoAmountInput').value = 1000;
   }
+  const stars = Math.floor(val * 100);
+  document.getElementById('cryptoCalcResult').innerText = `ستحصل على ${stars.toLocaleString()} نجمة`;
 }
 
 function addCryptoChip(amount) {
   const input = document.getElementById('cryptoAmountInput');
-  let current = parseInt(input.value) || 0;
+  let current = parseFloat(input.value) || 0;
   let newVal = current + amount;
   if (newVal > 1000) newVal = 1000;
   input.value = newVal;
+  updateCryptoUI();
 }
 
 async function processDeposit(type) {
@@ -1421,13 +1617,14 @@ async function processDeposit(type) {
     showToast('جاري إنشاء الفاتورة...');
     try {
       const amountCents = Math.round(amount * 100);
+      const starsToAdd = Math.floor(amount * 100);
       const resp = await fetch(`${API_BASE}/api/shieldz/create-invoice`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           userId: user.id, 
           amount_usd_cents: amountCents, 
-          gems: Math.floor(amount * 10000), 
+          stars: starsToAdd, 
           idempotency_key: 'pm_' + user.id + '_' + Date.now()
         })
       });
@@ -1492,9 +1689,7 @@ async function checkCryptoStatus() {
     const data = await resp.json();
     
     if (data.status === 'paid') {
-      // Success
       showToast('تم استلام الدفع بنجاح!');
-      // Refresh balance from server
       fetchUserData();
       cancelCryptoInvoice();
     } else if (data.status === 'expired' || data.status === 'failed') {
@@ -1518,6 +1713,19 @@ function switchWithdrawTab(tab, el) {
   
   document.querySelectorAll('.wd-tab-content').forEach(c => c.style.display = 'none');
   document.getElementById('wd-tab-' + tab).style.display = 'block';
+}
+
+function updateWdUI(method) {
+  let stars = 0;
+  if (method === 'binance') {
+    stars = parseInt(document.getElementById('wdBinanceAmount').value) || 0;
+    const usd = (stars * 0.01).toFixed(2);
+    document.getElementById('wdBinanceResult').innerText = `ستحصل على $${usd}`;
+  } else {
+    stars = parseInt(document.getElementById('wdShamAmount').value) || 0;
+    const syp = (stars * 1).toFixed(0);
+    document.getElementById('wdShamResult').innerText = `ستحصل على ${syp} ل.س`;
+  }
 }
 
 async function loadWithdrawalHistory() {
@@ -1585,13 +1793,15 @@ function loadMoreHistory() {
 }
 
 async function processWithdraw(method) {
-  let id, amount;
+  let id, amount, payoutStr;
   if (method === 'binance') {
     id = document.getElementById('wdBinanceId').value;
     amount = parseInt(document.getElementById('wdBinanceAmount').value);
+    payoutStr = '$' + (amount * 0.01).toFixed(2);
   } else {
     id = document.getElementById('wdShamId').value;
     amount = parseInt(document.getElementById('wdShamAmount').value);
+    payoutStr = (amount * 1).toFixed(0) + ' ل.س';
   }
 
   if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
@@ -1623,13 +1833,18 @@ async function processWithdraw(method) {
       withdrawalHistory.unshift(newWithdraw);
     }
     
-    showToast('تم تقديم طلب السحب بنجاح');
+    // Show Success Modal
+    document.getElementById('successWdStars').innerText = amount;
+    document.getElementById('successWdPayout').innerText = payoutStr;
+    openModal('modalWithdrawSuccess');
     
     // Clear inputs
     document.getElementById('wdBinanceId').value = '';
     document.getElementById('wdBinanceAmount').value = '';
     document.getElementById('wdShamId').value = '';
     document.getElementById('wdShamAmount').value = '';
+    updateWdUI('binance');
+    updateWdUI('sham');
     
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
@@ -1642,6 +1857,72 @@ async function processWithdraw(method) {
     btn.disabled = false;
     btn.innerText = 'تقديم الطلب';
   }
+}
+
+// ===================== REFERRAL & RANKING =====================
+function switchRefTab(tab, el) {
+  document.querySelectorAll('#view-referral .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  
+  document.querySelectorAll('.ref-tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById('ref-tab-' + tab).style.display = 'block';
+
+  if (tab === 'ranking' && !globalRankingLoaded) {
+    loadGlobalRanking();
+  }
+}
+
+async function loadGlobalRanking() {
+  const list = document.getElementById('rankingList');
+  if (!db) {
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
+    return;
+  }
+  try {
+    const q = await db.collection('puppy_users').orderBy('referralCount', 'desc').limit(20).get();
+    if (q.empty) {
+      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
+      return;
+    }
+    list.innerHTML = '';
+    let index = 1;
+    q.forEach(doc => {
+      const data = doc.data();
+      if ((data.referralCount || 0) === 0) return; 
+      
+      const isMe = doc.id === user.id;
+      const rankClass = index === 1 ? 'top1' : index === 2 ? 'top2' : index === 3 ? 'top3' : '';
+      const avatar = data.photoUrl 
+        ? `<img src="${data.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` 
+        : '<i class="fas fa-user"></i>';
+        
+      const div = document.createElement('div');
+      div.className = `ranking-row ${isMe ? 'me' : ''}`;
+      div.innerHTML = `
+        <div class="ranking-rank ${rankClass}">${index}</div>
+        <div class="ranking-avatar">${avatar}</div>
+        <div class="ranking-info">
+          <div class="ranking-name">${data.name || 'Player'} ${isMe ? '(أنت)' : ''}</div>
+          <div class="ranking-count">${data.referralCount} إحالة</div>
+        </div>
+      `;
+      list.appendChild(div);
+      index++;
+    });
+    if (index === 1) {
+      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
+    }
+    globalRankingLoaded = true;
+  } catch(e) {
+    console.warn('Ranking err', e);
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
+  }
+}
+
+function shareReferral() {
+  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=Join Cute Bee Stars and win big!`;
+  if (tg) tg.openTelegramLink(url);
+  else window.open(url, '_blank');
 }
 
 // ===================== UTILS & TASKS =====================
@@ -1661,30 +1942,30 @@ function closeModal(id) { document.getElementById(id).classList.remove('show'); 
 
 function completeTask(btn) {
   if (btn.innerText === 'Start') {
-    btn.innerText = '11:42:13';
-    btn.style.background = 'var(--text-secondary)';
-    btn.style.color = 'transparent';
-    
+    btn.className = 'start-btn timer';
     let time = 3600; // 1 hour mock
+    
     const interval = setInterval(() => {
       time--;
-      const m = Math.floor(time / 60);
+      const h = Math.floor(time / 3600);
+      const m = Math.floor((time % 3600) / 60);
       const s = time % 60;
-      btn.innerText = `${m}:${s.toString().padStart(2, '0')}`;
+      btn.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
       
       if (time <= 0) {
         clearInterval(interval);
         btn.innerText = 'Claim';
+        btn.className = 'start-btn';
         btn.style.background = 'var(--success)';
-        btn.style.color = '#fff';
         btn.onclick = () => {
-          user.stars += 1;
+          user.tickets += 1;
           updateBalances();
-          syncUserData({ stars: user.stars });
+          syncUserData({ tickets: user.tickets });
           btn.innerText = 'Done';
           btn.style.background = 'var(--bg-soft)';
           btn.style.color = 'var(--text-secondary)';
-          showToast('+1 نجمة');
+          btn.disabled = true;
+          showToast('+1 تيكت');
         };
       }
     }, 1000);
