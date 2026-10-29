@@ -25,7 +25,6 @@
   --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
   --gradient-purple: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%);
   --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
-  --gradient-spin: linear-gradient(180deg, #003399 0%, #001144 100%);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
@@ -34,6 +33,35 @@
   --dock-height: 64px;
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Theme-able surfaces */
+  --nav-bg: rgba(28, 28, 30, 0.85);
+  --nav-border: rgba(255,255,255,0.08);
+  --nav-indicator-bg: rgba(255,255,255,0.1);
+  --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
+  --glass-pill-bg: rgba(44, 44, 46, 0.55);
+  --glass-pill-border: rgba(255,255,255,0.12);
+  --glass-pill-inner-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  --glass-divider: rgba(255,255,255,0.15);
+}
+
+[data-theme="light"] {
+  --bg-main: #f2f2f7;
+  --bg-card: #ffffff;
+  --bg-soft: #e5e5ea;
+  --text-primary: #1c1c1e;
+  --text-secondary: #6c6c70;
+  --border: rgba(0, 0, 0, 0.08);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --nav-border: rgba(0,0,0,0.08);
+  --nav-indicator-bg: rgba(0,0,0,0.06);
+  --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.9);
+  --glass-pill-bg: rgba(255, 255, 255, 0.75);
+  --glass-pill-border: rgba(0,0,0,0.08);
+  --glass-pill-inner-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  --glass-divider: rgba(0,0,0,0.12);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -43,6 +71,7 @@ body {
   background: var(--bg-main); color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
   overscroll-behavior: none; user-select: none; direction: rtl;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input { font: inherit; color: inherit; }
@@ -78,42 +107,69 @@ input { font: inherit; color: inherit; }
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
-  background: rgba(28, 28, 30, 0.85);
+  background: var(--nav-bg);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
   border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--nav-border);
   z-index: 50; padding-top: var(--safe-top);
+  transition: background 0.35s ease, border-color 0.35s ease;
 }
 
-/* ============ FLOATING BALANCES ============ */
+/* ============ NEW GLASS BALANCES ============ */
 .floating-balances {
   position: absolute;
   top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
   left: 0; right: 0;
-  display: flex; justify-content: center; gap: 8px;
+  display: flex; justify-content: center;
   z-index: 51;
+  padding: 0 16px;
 }
-.balance-pill {
-  background: rgba(44, 44, 46, 0.85);
-  border: 1px solid var(--border);
-  border-radius: 24px; padding: 6px 12px;
-  display: flex; align-items: center; gap: 6px;
-  font-weight: 700; font-size: 13px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-sm);
+.glass-balance-bar {
+  display: flex;
+  align-items: center;
+  background: var(--glass-pill-bg);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-pill-border);
+  border-radius: 30px;
+  padding: 6px 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), var(--glass-pill-inner-shadow);
+  gap: 4px;
+  transition: background 0.35s ease, border-color 0.35s ease;
 }
-.balance-pill img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; }
-.balance-pill i { font-size: 16px; }
-.add-btn {
-  background: var(--gradient-blue); color: #fff;
+.balance-segment {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 12px;
+  font-weight: 800; font-size: 14px;
+  color: var(--text-primary);
+}
+.balance-icon {
   width: 20px; height: 20px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800; margin-right: 2px;
-  transition: transform 0.1s;
+  object-fit: cover;
 }
-.add-btn:active { transform: scale(0.9); }
+.balance-ticket-icon { font-size: 17px; color: #5E5CE6; }
+.balance-divider {
+  width: 1px; height: 22px;
+  background: var(--glass-divider);
+  flex-shrink: 0;
+}
+.deposit-mini-btn {
+  background: var(--gradient-blue);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.1s;
+  white-space: nowrap;
+}
+.deposit-mini-btn:active { transform: scale(0.93); }
 
 /* ============ MAIN SCROLL ============ */
 .main-scroll {
@@ -129,6 +185,7 @@ input { font: inherit; color: inherit; }
   display: flex; gap: 10px; overflow-x: auto;
   padding: 10px; background: var(--bg-card); border-radius: 16px;
   margin-bottom: 20px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
 }
 .live-item {
   width: 44px; height: 44px; flex-shrink: 0;
@@ -137,37 +194,6 @@ input { font: inherit; color: inherit; }
   overflow: hidden;
 }
 .live-item video { width: 100%; height: 100%; object-fit: contain; }
-
-/* Daily Login */
-.daily-login-card {
-  background: var(--bg-card); border-radius: 24px; padding: 20px;
-  margin-bottom: 20px; border: 1px solid var(--border);
-  box-shadow: var(--shadow); position: relative; overflow: hidden;
-}
-.daily-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 16px;
-}
-.daily-title { font-size: 18px; font-weight: 800; color: var(--text-primary); }
-.daily-timer {
-  font-family: monospace; font-size: 14px; font-weight: 700;
-  background: var(--bg-soft); padding: 4px 10px; border-radius: 8px;
-  color: var(--warning);
-}
-.daily-days {
-  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
-}
-.day-box {
-  flex: 1; min-width: 50px; background: var(--bg-soft);
-  border-radius: 12px; padding: 10px 4px; text-align: center;
-  border: 1px solid transparent; transition: all 0.2s;
-}
-.day-box.active { border-color: var(--blue, #007AFF); background: rgba(0,122,255,0.1); }
-.day-box.claimed { opacity: 0.5; background: rgba(0,0,0,0.2); }
-.day-box h4 { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
-.day-box .reward { font-size: 16px; font-weight: 800; color: #5E5CE6; margin-bottom: 4px;}
-.day-box .reward i { font-size: 20px; }
-.day-box .check { color: var(--success); font-size: 18px; }
 
 .home-cards { display: flex; flex-direction: column; gap: 14px; }
 .home-card {
@@ -181,11 +207,100 @@ input { font: inherit; color: inherit; }
 .home-card.free { background: var(--gradient-dark); }
 .home-card.tasks { background: var(--gradient-purple); }
 .home-card.referral { background: var(--gradient-blue); }
-.home-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.home-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #fff; }
 .home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
-.home-card .icon { font-size: 32px; opacity: 0.9; }
+.home-card .icon { font-size: 32px; opacity: 0.9; color: #fff; }
 
-/* ============ SPIN GAME (NEW PROFESSIONAL DESIGN) ============ */
+/* ============ DAILY LOGIN (NEW DESIGN - in Tasks) ============ */
+.daily-claim-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+.daily-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.daily-title-area h3 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
+.daily-title-area p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.daily-streak-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: linear-gradient(135deg, #FF9500, #FF3B30);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+}
+.daily-week-days {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.daily-day-circle {
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  transition: all 0.3s var(--spring);
+  position: relative;
+}
+.daily-day-circle.active {
+  border-color: var(--success);
+  background: rgba(52, 199, 89, 0.15);
+  color: var(--success);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
+}
+.daily-day-circle.claimed {
+  background: rgba(52, 199, 89, 0.2);
+  color: var(--success);
+  border-color: rgba(52, 199, 89, 0.35);
+}
+.daily-day-circle.claimed i { font-size: 14px; }
+.daily-claim-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #34C759, #28a745);
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(52, 199, 89, 0.35);
+  transition: transform 0.1s, background 0.3s;
+}
+.daily-claim-btn:active:not(:disabled) { transform: scale(0.97); }
+.daily-claim-btn:disabled {
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  box-shadow: none;
+  cursor: not-allowed;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+/* ============ SPIN GAME (updated buttons) ============ */
 #view-spin {
   position: absolute;
   inset: 0;
@@ -201,16 +316,9 @@ input { font: inherit; color: inherit; }
   padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--dock-height) + 20px + var(--safe-bottom));
   overflow: hidden;
 }
-#view-spin.active {
-  display: flex;
-  animation: spinIn 0.45s ease;
-}
-@keyframes spinIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
-}
+#view-spin.active { display: flex; animation: spinIn 0.45s ease; }
+@keyframes spinIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
-/* Ambient stars background */
 #view-spin::before {
   content: '';
   position: absolute;
@@ -232,12 +340,9 @@ input { font: inherit; color: inherit; }
   pointer-events: none;
   z-index: 0;
 }
-@keyframes twinkle {
-  0% { opacity: 0.4; }
-  100% { opacity: 0.95; }
-}
+@keyframes twinkle { 0% { opacity: 0.4; } 100% { opacity: 0.95; } }
 
-/* Floating top controls */
+/* Spin top bar - GLASS buttons (matching balance pills) */
 .spin-top-bar {
   position: absolute;
   top: calc(var(--top-bar-height) + var(--safe-top) + 12px);
@@ -248,12 +353,12 @@ input { font: inherit; color: inherit; }
   z-index: 3;
 }
 .spin-float-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(44, 44, 46, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
   color: #fff;
-  padding: 9px 14px;
+  padding: 8px 14px;
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -262,12 +367,12 @@ input { font: inherit; color: inherit; }
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
 }
-.spin-float-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.18); }
-.spin-float-btn i { font-size: 15px; color: #FFD700; }
+.spin-float-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.15); }
+.spin-float-btn i { font-size: 14px; color: #FFD700; }
 
-/* Main spin container */
+/* Spin container */
 .spin-container {
   position: relative;
   z-index: 1;
@@ -280,10 +385,7 @@ input { font: inherit; color: inherit; }
   width: 100%;
 }
 
-.spin-title {
-  text-align: center;
-  margin-bottom: 8px;
-}
+.spin-title { text-align: center; margin-bottom: 8px; }
 .spin-title h1 {
   font-size: 30px;
   font-weight: 800;
@@ -295,27 +397,17 @@ input { font: inherit; color: inherit; }
   filter: drop-shadow(0 2px 8px rgba(255, 165, 0, 0.4));
   letter-spacing: 0.5px;
 }
-.spin-title p {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 600;
-}
+.spin-title p { font-size: 13px; color: rgba(255, 255, 255, 0.7); font-weight: 600; }
 
 .spin-track-wrapper {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding: 40px 0;
-  border-radius: 24px;
+  width: 100%; overflow: hidden; position: relative;
+  padding: 40px 0; border-radius: 24px;
 }
 .spin-track-wrapper::before,
 .spin-track-wrapper::after {
   content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 60px;
-  z-index: 3;
-  pointer-events: none;
+  position: absolute; top: 0; bottom: 0; width: 60px;
+  z-index: 3; pointer-events: none;
 }
 .spin-track-wrapper::before {
   left: 0;
@@ -327,31 +419,20 @@ input { font: inherit; color: inherit; }
 }
 
 .spin-indicator {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
+  position: absolute; left: 50%; top: 0; bottom: 0;
   width: 3px;
   background: linear-gradient(180deg, transparent 0%, #FFD700 20%, #fff 50%, #FFD700 80%, transparent 100%);
   transform: translateX(-50%);
   z-index: 2;
-  box-shadow:
-    0 0 20px rgba(255, 215, 0, 1),
-    0 0 40px rgba(255, 215, 0, 0.6),
-    0 0 60px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3);
   border-radius: 2px;
   animation: indicatorPulse 1.5s ease-in-out infinite alternate;
 }
-.spin-indicator::before,
-.spin-indicator::after {
+.spin-indicator::before, .spin-indicator::after {
   content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 14px;
-  background: #FFD700;
-  border-radius: 50%;
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 14px; height: 14px;
+  background: #FFD700; border-radius: 50%;
   box-shadow: 0 0 20px rgba(255, 215, 0, 1);
 }
 .spin-indicator::before { top: -7px; }
@@ -380,9 +461,7 @@ input { font: inherit; color: inherit; }
   justify-content: center;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -394,12 +473,22 @@ input { font: inherit; color: inherit; }
   background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
   pointer-events: none;
 }
+
+/* Auto-scrolling prize video inside card */
 .spin-item video {
   width: 80px;
   height: 80px;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+  animation: prizeSway 5s ease-in-out infinite;
 }
+@keyframes prizeSway {
+  0%, 100% { transform: translateX(-10px) translateY(0) scale(1); }
+  25% { transform: translateX(0) translateY(-4px) scale(1.02); }
+  50% { transform: translateX(10px) translateY(0) scale(1); }
+  75% { transform: translateX(0) translateY(4px) scale(1.02); }
+}
+
 .spin-item .val {
   font-size: 13px;
   font-weight: 800;
@@ -413,13 +502,9 @@ input { font: inherit; color: inherit; }
   border-radius: 12px;
   border: 1px solid rgba(255,215,0,0.3);
 }
-.spin-item .val img {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-}
+.spin-item .val img { width: 14px; height: 14px; border-radius: 50%; }
 
-/* Big spin button */
+/* Spin main button - "Spin" + star image */
 .spin-btn {
   width: 100%;
   max-width: 340px;
@@ -428,7 +513,7 @@ input { font: inherit; color: inherit; }
   border: none;
   padding: 20px;
   border-radius: 22px;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 800;
   cursor: pointer;
   display: flex;
@@ -436,14 +521,10 @@ input { font: inherit; color: inherit; }
   justify-content: center;
   gap: 10px;
   transition: transform 0.15s var(--spring);
-  box-shadow:
-    0 8px 24px rgba(255, 165, 0, 0.45),
-    0 4px 12px rgba(255, 215, 0, 0.3),
-    inset 0 -4px 0 rgba(0, 0, 0, 0.15),
-    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(255, 165, 0, 0.45), 0 4px 12px rgba(255, 215, 0, 0.3), inset 0 -4px 0 rgba(0, 0, 0, 0.15), inset 0 2px 0 rgba(255, 255, 255, 0.4);
   position: relative;
   overflow: hidden;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 .spin-btn::before {
   content: '';
@@ -454,13 +535,12 @@ input { font: inherit; color: inherit; }
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
   animation: shimmer 2.5s infinite;
 }
-@keyframes shimmer {
-  100% { left: 100%; }
-}
+@keyframes shimmer { 100% { left: 100%; } }
 .spin-btn:active { transform: scale(0.96); }
 .spin-btn img { width: 24px; height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
 .spin-btn:disabled::before { animation: none; }
+.spin-btn .spin-cost { font-size: 22px; font-weight: 900; }
 
 /* ============ TASKS ============ */
 .page-header { margin-bottom: 24px; }
@@ -471,6 +551,7 @@ input { font: inherit; color: inherit; }
   background: var(--bg-card); border-radius: 24px;
   margin-bottom: 16px; overflow: hidden;
   border: 1px solid var(--border);
+  transition: background 0.35s ease, border-color 0.35s ease;
 }
 .task-item {
   display: flex; align-items: center; justify-content: space-between;
@@ -484,7 +565,7 @@ input { font: inherit; color: inherit; }
 }
 .task-icon-img { width: 34px; height: 50px; border-radius: 8px; background:#000; display: flex; align-items: center; justify-content: center; overflow: hidden;}
 .task-icon-img img { width: 100%; height: 100%; object-fit: contain; }
-.task-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #fff;}
+.task-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
 .task-reward {
   display: flex; align-items: center; gap: 6px;
   font-size: 14px; color: var(--text-secondary); font-weight: 700;
@@ -497,7 +578,7 @@ input { font: inherit; color: inherit; }
   transition: background 0.2s;
 }
 .start-btn.timer {
-  background: rgba(255,255,255,0.1); color: var(--text-secondary);
+  background: var(--bg-soft); color: var(--text-secondary);
   font-family: monospace; font-size: 13px;
 }
 
@@ -518,36 +599,24 @@ input { font: inherit; color: inherit; }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 
 .amount-display {
-  text-align: center;
-  margin: 20px 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
+  text-align: center; margin: 20px 0 10px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; width: 100%;
 }
 .amount-display input {
   font-size: 3.5rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 200px; outline: none;
-  field-sizing: content;
-  transition: width 0.1s;
+  field-sizing: content; transition: width 0.1s;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display .dollar-sign {
-  font-size: 3.5rem; font-weight: 800; color: var(--text-primary);
-}
+.amount-display .dollar-sign { font-size: 3.5rem; font-weight: 800; color: var(--text-primary); }
 .amount-display img { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
 
 .calc-subtext {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  margin-top: 0px;
-  margin-bottom: 24px;
-  min-height: 22px;
+  text-align: center; font-size: 15px; font-weight: 700;
+  color: var(--text-primary); margin-top: 0; margin-bottom: 24px; min-height: 22px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
@@ -568,21 +637,12 @@ input { font: inherit; color: inherit; }
 }
 .topup-btn:active { transform: scale(0.97); }
 
-/* Secondary button (no shadow / no glow) */
 .btn-secondary {
-  width: 100%;
-  padding: 16px;
-  border-radius: 18px;
-  font-size: 15px;
-  font-weight: 800;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  width: 100%; padding: 16px; border-radius: 18px;
+  font-size: 15px; font-weight: 800;
+  background: var(--bg-card); color: var(--text-primary);
+  border: 1px solid var(--border); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.2s;
 }
 .btn-secondary:active { background: var(--bg-soft); }
@@ -592,15 +652,9 @@ input { font: inherit; color: inherit; }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
 
 .warning-box {
-  background: transparent;
-  border: none;
-  padding: 0;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 16px;
-  display: flex; align-items: flex-start; gap: 8px;
-  line-height: 1.5;
+  border: none; padding: 0; color: var(--text-primary);
+  font-size: 12px; font-weight: 600; margin-top: 16px;
+  display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
 }
 .warning-box i { color: var(--warning); margin-top: 3px; }
 
@@ -609,15 +663,14 @@ input { font: inherit; color: inherit; }
   background: var(--bg-soft); padding: 12px 16px;
   border-radius: 14px; margin-bottom: 14px;
 }
-.copy-box span { font-family: monospace; font-size: 14px; font-weight: 700; }
+.copy-box span { font-family: monospace; font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .copy-btn {
-  background: rgba(255,255,255,0.1); border: none; color: #fff;
+  background: rgba(128,128,128,0.2); border: none; color: var(--text-primary);
   padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
 }
 
-/* Crypto Pending Banner */
 .crypto-pending-banner {
-  background: linear-gradient(135deg, #2C2C2E, #1C1C1E);
+  background: linear-gradient(135deg, var(--bg-soft), var(--bg-card));
   border: 1px solid var(--warning); border-radius: 20px;
   padding: 16px; margin-bottom: 20px; display: none;
 }
@@ -640,54 +693,62 @@ input { font: inherit; color: inherit; }
   color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none;
   text-align: center;
 }
-.wd-input:focus { border-color: var(--blue, #007AFF); }
+.wd-input:focus { border-color: #007AFF; }
 
-/* ============ WITHDRAW HISTORY (NEW COMPACT DESIGN) ============ */
+/* ============ WITHDRAW HISTORY (UPDATED) ============ */
 .history-modal {
-  max-width: 360px;
-  padding: 22px;
+  max-width: 380px !important;
+  padding: 22px 18px 16px !important;
 }
+.history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
 .history-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-height: 300px;
+  gap: 6px;
+  max-height: 320px;
   overflow-y: auto;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .history-item {
   background: var(--bg-soft);
-  padding: 12px 14px;
-  border-radius: 14px;
+  padding: 8px 14px;
+  min-height: 46px;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: 1px solid var(--border);
   gap: 10px;
 }
-.history-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; color: #fff; }
-.history-info p { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
-.status { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+.history-info h4 { font-size: 12px; font-weight: 700; margin-bottom: 1px; color: var(--text-primary); line-height: 1.4; }
+.history-info p { font-size: 10px; color: var(--text-secondary); font-weight: 600; line-height: 1.3; }
+.status { padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
 .st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
 
 .show-all-btn {
-  width: 100%;
-  padding: 12px;
+  width: 100%; padding: 10px;
   background: var(--bg-soft);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 10px;
+  font-size: 12px;
+  margin-bottom: 8px;
   cursor: pointer;
   display: none;
 }
 .show-all-btn.visible { display: block; }
 .show-all-btn:active { background: var(--bg-card); }
+
+.history-modal .modal-btn {
+  padding: 11px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+  margin-top: 4px;
+}
 
 /* ============ REFERRAL ============ */
 .referral-header { text-align: center; margin-bottom: 24px; }
@@ -729,7 +790,7 @@ input { font: inherit; color: inherit; }
   border: 1px solid var(--border); border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
 }
-.ranking-row.me { border-color: var(--blue, #007AFF); }
+.ranking-row.me { border-color: #007AFF; }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--bg-soft); display: flex;
@@ -773,6 +834,49 @@ input { font: inherit; color: inherit; }
 .stat-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 2px; }
 .stat-info p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 
+/* Theme toggle */
+.profile-settings {
+  margin-top: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.setting-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; cursor: pointer;
+}
+.setting-left { display: flex; align-items: center; gap: 14px; }
+.setting-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--text-primary);
+}
+.setting-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; color: var(--text-primary); }
+.setting-text p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.theme-switch {
+  width: 48px; height: 28px;
+  background: var(--bg-soft);
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.3s;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.theme-switch-knob {
+  position: absolute;
+  top: 3px; right: 3px;
+  width: 20px; height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s var(--spring);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.theme-switch.active { background: #34C759; }
+.theme-switch.active .theme-switch-knob { transform: translateX(-20px); }
+
 /* ============ MODALS ============ */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.7);
@@ -797,7 +901,6 @@ input { font: inherit; color: inherit; }
 }
 .modal-btn:active { transform: scale(0.97); }
 
-/* Prizes Grid in Modal */
 .prizes-grid {
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
   margin-bottom: 24px; max-height: 40vh; overflow-y: auto; padding-right: 5px;
@@ -810,10 +913,10 @@ input { font: inherit; color: inherit; }
 .prize-item span {
   font-size: 12px; font-weight: 800; margin-top: 6px;
   display: flex; align-items: center; gap: 4px;
+  color: var(--text-primary);
 }
 .prize-item img { width: 14px; height: 14px; border-radius: 50%; }
 
-/* Toast */
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
   background: var(--bg-card); color: var(--text-primary);
@@ -834,25 +937,26 @@ input { font: inherit; color: inherit; }
 .dock-nav {
   flex: 1; height: 64px; position: relative;
   isolation: isolate; overflow: hidden; --nav-index: 0;
-  background: rgba(28, 28, 30, 0.85);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
   border-radius: 32px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   -webkit-backdrop-filter: blur(20px) saturate(155%);
   backdrop-filter: blur(20px) saturate(155%);
+  transition: background 0.35s ease, border-color 0.35s ease;
 }
 .dock-nav::before {
   content: ''; position: absolute; z-index: 0;
   top: 6px; bottom: 6px; right: 6px;
   width: calc((100% - 14px) / 4);
   border-radius: 26px;
-  background: rgba(255,255,255,0.1);
-  box-shadow: inset 0 1px rgba(255,255,255,0.1);
+  background: var(--nav-indicator-bg);
+  box-shadow: var(--nav-indicator-shadow);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transform: translateX(calc(var(--nav-index) * -100%));
-  transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
+  transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1), background 0.35s ease;
   pointer-events: none;
 }
 .nav-item {
@@ -866,12 +970,12 @@ input { font: inherit; color: inherit; }
   z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
-.nav-item.active { color: var(--text-primary); background: transparent; box-shadow: none; }
+.nav-item.active { color: var(--text-primary); }
 .nav-profile {
   width: 56px; height: 56px;
   padding: 3px;
   background: var(--bg-card);
-  border: 2px solid rgba(255,255,255,0.1);
+  border: 2px solid var(--nav-border);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -883,12 +987,7 @@ input { font: inherit; color: inherit; }
   flex-shrink: 0;
 }
 .nav-profile:active { transform: scale(0.92); }
-.nav-profile img {
-  width: 100%; height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
+.nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .nav-profile.active {
   border-color: #007AFF;
   color: var(--text-primary);
@@ -898,25 +997,29 @@ input { font: inherit; color: inherit; }
 </head>
 <body>
 
-<!-- Splash Screen -->
 <div class="splash" id="splash">
   <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
-<!-- App Container -->
 <div class="app-container" id="app">
   
   <header class="top-app-bar"></header>
   
+  <!-- NEW GLASS BALANCE BAR -->
   <div class="floating-balances">
-    <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
-      <span id="topStars">0</span>
-      <button class="add-btn" onclick="go('deposit')">+</button>
-    </div>
-    <div class="balance-pill">
-      <i class="fas fa-ticket-alt" style="color:#5E5CE6;"></i>
-      <span id="topTickets">0</span>
+    <div class="glass-balance-bar">
+      <div class="balance-segment">
+        <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars" class="balance-icon">
+        <span id="topStars">0</span>
+        <button class="deposit-mini-btn" onclick="go('deposit')">
+          <i class="fas fa-plus" style="font-size:9px;"></i> إيداع
+        </button>
+      </div>
+      <div class="balance-divider"></div>
+      <div class="balance-segment">
+        <i class="fas fa-ticket-alt balance-ticket-icon"></i>
+        <span id="topTickets">0</span>
+      </div>
     </div>
   </div>
 
@@ -924,14 +1027,6 @@ input { font: inherit; color: inherit; }
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
-      <div class="daily-login-card">
-        <div class="daily-header">
-          <div class="daily-title">تسجيل الدخول اليومي</div>
-          <div class="daily-timer" id="dailyTimer">00:00:00</div>
-        </div>
-        <div class="daily-days" id="dailyDaysContainer"></div>
-      </div>
-
       <div class="live-strip" id="live-strip"></div>
       
       <div class="home-cards">
@@ -959,10 +1054,8 @@ input { font: inherit; color: inherit; }
       </div>
     </div>
 
-    <!-- View: Spin Game (REDESIGNED) -->
+    <!-- View: Spin Game -->
     <div class="view" id="view-spin">
-      
-      <!-- Floating top controls -->
       <div class="spin-top-bar">
         <button class="spin-float-btn" onclick="openModal('modalPrizes')">
           <i class="fas fa-gift"></i>
@@ -986,18 +1079,37 @@ input { font: inherit; color: inherit; }
         </div>
 
         <button class="spin-btn" id="spinBtn" onclick="startSpin()">
-          <i class="fas fa-star"></i>
-          العب الآن — 399
+          <span>Spin</span>
+          <span class="spin-cost">— 399</span>
           <img src="https://up6.cc/2026/10/17932600818491.png">
         </button>
       </div>
     </div>
 
-    <!-- View: Tasks -->
+    <!-- View: Tasks (with Daily Login) -->
     <div class="view" id="view-tasks">
       <div class="page-header">
         <h2 class="page-title">المهام</h2>
         <p class="page-subtitle">أكمل المهام السهلة لتربح التذاكر!</p>
+      </div>
+
+      <!-- Daily Login (moved from Home) -->
+      <div class="daily-claim-card">
+        <div class="daily-card-header">
+          <div class="daily-title-area">
+            <h3>المكافأة اليومية</h3>
+            <p>احصل على تذكرة كل يوم</p>
+          </div>
+          <div class="daily-streak-badge">
+            <i class="fas fa-fire"></i>
+            <span id="streakCount">0</span>
+          </div>
+        </div>
+        <div class="daily-week-days" id="dailyWeekDays"></div>
+        <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
+          <i class="fas fa-ticket-alt"></i>
+          <span id="claimBtnText">استلام المكافأة</span>
+        </button>
       </div>
       
       <div class="task-group">
@@ -1096,7 +1208,6 @@ input { font: inherit; color: inherit; }
         </div>
       </div>
 
-      <!-- Stars Tab -->
       <div id="dep-tab-stars" class="dep-tab-content">
         <div class="amount-display">
           <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
@@ -1110,9 +1221,7 @@ input { font: inherit; color: inherit; }
         <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
       </div>
 
-      <!-- Crypto Tab -->
       <div id="dep-tab-crypto" class="dep-tab-content" style="display:none;">
-        
         <div id="cryptoPendingBanner" class="crypto-pending-banner">
           <div class="crypto-pending-header">
             <span class="crypto-pending-title">فاتورة معلقة</span>
@@ -1140,7 +1249,6 @@ input { font: inherit; color: inherit; }
         <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
       </div>
 
-      <!-- Binance Tab -->
       <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف Binance Pay التالي:</p>
@@ -1160,7 +1268,6 @@ input { font: inherit; color: inherit; }
         </div>
       </div>
 
-      <!-- Sham Tab -->
       <div id="dep-tab-sham" class="dep-tab-content" style="display:none;">
         <div class="manual-instructions">
           <p>1. قم بتحويل المبلغ إلى معرّف شام كاش التالي:</p>
@@ -1235,7 +1342,6 @@ input { font: inherit; color: inherit; }
 
     <!-- View: Referral -->
     <div class="view" id="view-referral">
-      
       <div class="tabs" style="margin-bottom: 20px;">
         <div class="tab active" onclick="switchRefTab('invite', this)">دعوة الأصدقاء</div>
         <div class="tab" onclick="switchRefTab('ranking', this)">التصنيفات</div>
@@ -1278,7 +1384,6 @@ input { font: inherit; color: inherit; }
           <div style="text-align:center; padding:20px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i></div>
         </div>
       </div>
-
     </div>
 
     <!-- View: Profile -->
@@ -1314,11 +1419,26 @@ input { font: inherit; color: inherit; }
           </div>
         </div>
       </div>
+
+      <!-- THEME TOGGLE -->
+      <div class="profile-settings">
+        <div class="setting-item" onclick="toggleTheme()">
+          <div class="setting-left">
+            <div class="setting-icon"><i class="fas fa-moon" id="themeIcon"></i></div>
+            <div class="setting-text">
+              <h4>المظهر</h4>
+              <p id="themeLabel">الوضع الداكن</p>
+            </div>
+          </div>
+          <div class="theme-switch" id="themeSwitch">
+            <div class="theme-switch-knob"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
 
-  <!-- Bottom Dock -->
   <div class="dock">
     <div class="dock-nav">
       <div class="nav-item active" data-view="home" onclick="go('home')">
@@ -1345,7 +1465,7 @@ input { font: inherit; color: inherit; }
 
 </div>
 
-<!-- Modal: Insufficient Balance -->
+<!-- Modals -->
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
     <h3>رصيدك غير كافٍ!</h3>
@@ -1354,7 +1474,6 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
-<!-- Modal: Prizes List -->
 <div class="modal-overlay" id="modalPrizes">
   <div class="modal-content" style="max-width: 400px;">
     <h3 style="margin-bottom: 20px;">الجوائز المحتملة</h3>
@@ -1363,7 +1482,6 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
-<!-- Modal: Win Prize -->
 <div class="modal-overlay" id="modalWin">
   <div class="modal-content">
     <div style="font-size:50px; color:#FFD700; margin-bottom:15px;"><i class="fas fa-trophy"></i></div>
@@ -1373,7 +1491,6 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
-<!-- Modal: Withdraw Success -->
 <div class="modal-overlay" id="modalWithdrawSuccess">
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
@@ -1391,23 +1508,20 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
-<!-- Modal: Withdraw History (NEW COMPACT DESIGN) -->
 <div class="modal-overlay" id="modalWithdrawHistory">
   <div class="modal-content history-modal">
-    <h3 style="margin-bottom: 16px; font-size: 18px;">سجل السحوبات</h3>
+    <h3>سجل السحوبات</h3>
     <div class="history-list" id="withdrawHistoryList"></div>
     <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">عرض الكل</button>
     <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
   </div>
 </div>
 
-<!-- Toast Notification -->
 <div class="toast" id="toast">رسالة</div>
 
 <script>
 'use strict';
 
-// ===================== CONFIG & ASSETS =====================
 const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
@@ -1424,6 +1538,7 @@ const FIREBASE_CONFIG = {
 };
 
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 const PRIZES = [
   { id: 1, value: 39760, webm: 'gifts_by_StickerEmojiRobot-078.webm' },
@@ -1439,15 +1554,15 @@ const PRIZES = [
   { id: 11, value: 5, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
 ];
 
-// ===================== STATE =====================
 let user = {
   id: '123456789',
   name: 'لاعب',
   photo: '',
-  stars: 1000, 
+  stars: 1000,
   tickets: 0,
   referrals: 0,
   lastDailyClaim: 0,
+  nextDailyClaim: 0,
   dailyStreak: 0
 };
 
@@ -1457,6 +1572,7 @@ let withdrawalHistory = [];
 let wdShowAll = false;
 let globalRankingLoaded = false;
 let dailyTimerInterval = null;
+let serverOffset = 0;
 
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
@@ -1464,10 +1580,30 @@ let cryptoTimerInterval = null;
 const spinAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
 spinAudio.loop = true;
 
-// ===================== TELEGRAM & FIREBASE =====================
 const tg = window.Telegram?.WebApp;
 let db = null;
 
+// ===================== SERVER TIME (anti-cheat) =====================
+async function calibrateServerTime() {
+  if (!db) return;
+  try {
+    const before = Date.now();
+    const ref = db.collection('_serverSync').doc('ping');
+    await ref.set({ t: firebase.firestore.FieldValue.serverTimestamp() });
+    const snap = await ref.get();
+    const after = Date.now();
+    const serverT = snap.data().t.toMillis();
+    const roundTrip = after - before;
+    serverOffset = serverT - (before + roundTrip / 2);
+    console.log('[ServerTime] offset calibrated:', serverOffset, 'ms');
+  } catch (e) {
+    console.warn('[ServerTime] calibration failed', e);
+  }
+}
+
+function serverNow() { return Date.now() + serverOffset; }
+
+// ===================== INIT =====================
 function initTelegram() {
   if (tg) {
     tg.ready();
@@ -1487,6 +1623,7 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     fetchUserData();
+    calibrateServerTime().then(() => initDailyLogin());
   } catch (e) {
     console.warn('Firebase init failed', e);
     showToast('خطأ في الاتصال بقاعدة البيانات');
@@ -1504,17 +1641,15 @@ async function fetchUserData() {
       user.tickets = data.tickets || 0;
       user.referrals = data.referralCount || 0;
       user.lastDailyClaim = data.lastDailyClaim || 0;
+      user.nextDailyClaim = data.nextDailyClaim || 0;
       user.dailyStreak = data.dailyStreak || 0;
     } else {
       await docRef.set({
         telegramId: user.id,
         name: user.name,
         photoUrl: user.photo,
-        stars: 0,
-        tickets: 0,
-        referralCount: 0,
-        lastDailyClaim: 0,
-        dailyStreak: 0,
+        stars: 0, tickets: 0, referralCount: 0,
+        lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0,
         createdAt: Date.now()
       });
     }
@@ -1527,7 +1662,6 @@ async function fetchUserData() {
     document.getElementById('shamUserId').innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-
   } catch (e) {
     console.warn('Error fetching user:', e);
   }
@@ -1542,8 +1676,12 @@ async function syncUserData(updates) {
   }
 }
 
-// ===================== APP INITIALIZATION =====================
 window.onload = () => {
+  // Apply theme from localStorage
+  if (localStorage.getItem('theme') === 'light') {
+    applyLightTheme();
+  }
+  
   initTelegram();
   
   setTimeout(() => {
@@ -1554,12 +1692,44 @@ window.onload = () => {
     updateBalances();
     renderLiveStrip();
     renderPrizesModal();
-    
     adjustInputWidth(document.getElementById('depositAmountInput'));
     adjustInputWidth(document.getElementById('cryptoAmountInput'));
-    
   }, 2000);
 };
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && db) {
+    calibrateServerTime().then(() => initDailyLogin());
+  }
+});
+
+// ===================== THEME =====================
+function applyLightTheme() {
+  document.documentElement.setAttribute('data-theme', 'light');
+  document.getElementById('themeIcon').className = 'fas fa-sun';
+  document.getElementById('themeLabel').innerText = 'الوضع الفاتح';
+  document.getElementById('themeSwitch').classList.add('active');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#FFFFFF');
+}
+
+function applyDarkTheme() {
+  document.documentElement.removeAttribute('data-theme');
+  document.getElementById('themeIcon').className = 'fas fa-moon';
+  document.getElementById('themeLabel').innerText = 'الوضع الداكن';
+  document.getElementById('themeSwitch').classList.remove('active');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#1C1C1E');
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    applyDarkTheme();
+    localStorage.setItem('theme', 'dark');
+  } else {
+    applyLightTheme();
+    localStorage.setItem('theme', 'light');
+  }
+}
 
 // ===================== NAVIGATION =====================
 function go(viewName) {
@@ -1586,22 +1756,17 @@ function go(viewName) {
 
   document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
 
-  if (viewName === 'withdraw') {
-    loadWithdrawalHistory();
-  }
+  if (viewName === 'withdraw') loadWithdrawalHistory();
 }
 
-// ===================== RENDER FUNCTIONS =====================
+// ===================== RENDER =====================
 function updateBalances() {
-  const formatNum = num => Number(num).toLocaleString('en-US');
-  
-  document.getElementById('topStars').innerText = formatNum(user.stars);
-  document.getElementById('topTickets').innerText = formatNum(user.tickets);
-  
-  document.getElementById('statStars').innerText = formatNum(user.stars);
-  document.getElementById('statTickets').innerText = formatNum(user.tickets);
+  const f = n => Number(n).toLocaleString('en-US');
+  document.getElementById('topStars').innerText = f(user.stars);
+  document.getElementById('topTickets').innerText = f(user.tickets);
+  document.getElementById('statStars').innerText = f(user.stars);
+  document.getElementById('statTickets').innerText = f(user.tickets);
   document.getElementById('statRefs').innerText = user.referrals;
-  
   document.getElementById('refInvited').innerText = user.referrals;
   document.getElementById('refEarned').innerText = user.referrals * 2;
 }
@@ -1641,88 +1806,94 @@ function renderProfile() {
   }
 }
 
-// ===================== DAILY LOGIN =====================
+// ===================== DAILY LOGIN (server-time anti-cheat) =====================
+function formatRemain(ms) {
+  if (ms <= 0) return '00:00:00';
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
 function initDailyLogin() {
-  const container = document.getElementById('dailyDaysContainer');
-  const timerEl = document.getElementById('dailyTimer');
-  if (!container || !timerEl) return;
+  const container = document.getElementById('dailyWeekDays');
+  const btn = document.getElementById('dailyClaimBtn');
+  const btnText = document.getElementById('claimBtnText');
+  const streakCount = document.getElementById('streakCount');
+  if (!container || !btn) return;
+
+  const now = serverNow();
+  const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
+  const streak = user.dailyStreak || 0;
+  const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
+  const activeDay = (claimsThisWeek % 7) + 1;
+
+  streakCount.innerText = streak;
 
   container.innerHTML = '';
-  const now = Date.now();
-  const timeSinceLast = now - user.lastDailyClaim;
-  const oneDay = 24 * 60 * 60 * 1000;
-  
-  let canClaim = timeSinceLast >= oneDay || user.lastDailyClaim === 0;
-  let currentDay = (user.dailyStreak % 7) + 1;
-
   for (let i = 1; i <= 7; i++) {
-    const dayBox = document.createElement('div');
-    dayBox.className = 'day-box';
-    
-    let isClaimed = false;
-    if (user.lastDailyClaim > 0) {
-       if (currentDay > i) isClaimed = true;
-       if (!canClaim && currentDay === i) isClaimed = true;
+    const circle = document.createElement('div');
+    circle.className = 'daily-day-circle';
+
+    if (canClaim && i === activeDay) {
+      circle.classList.add('active');
+    } else if (!canClaim && i <= claimsThisWeek) {
+      circle.classList.add('claimed');
+    } else if (canClaim && i < activeDay) {
+      circle.classList.add('claimed');
     }
 
-    if (isClaimed) dayBox.classList.add('claimed');
-    if (canClaim && currentDay === i) dayBox.classList.add('active');
-
-    dayBox.innerHTML = `
-      <h4>اليوم ${i}</h4>
-      <div class="reward">${isClaimed ? '<i class="fas fa-check-circle check"></i>' : '<i class="fas fa-ticket-alt"></i>'}</div>
-      <div style="font-size:10px; color:var(--text-secondary);">1 تيكت</div>
-    `;
-
-    if (canClaim && currentDay === i) {
-      dayBox.onclick = claimDailyReward;
-      dayBox.style.cursor = 'pointer';
-      dayBox.style.borderColor = 'var(--success)';
-      timerEl.innerText = 'جاهز للاستلام!';
-      timerEl.style.color = 'var(--success)';
+    if (circle.classList.contains('claimed')) {
+      circle.innerHTML = '<i class="fas fa-check"></i>';
+    } else {
+      circle.innerText = i;
     }
-    container.appendChild(dayBox);
+    container.appendChild(circle);
   }
 
   if (dailyTimerInterval) clearInterval(dailyTimerInterval);
   
-  if (!canClaim) {
-    dailyTimerInterval = setInterval(() => {
-      const diff = Date.now() - user.lastDailyClaim;
-      const remain = oneDay - diff;
-      
+  if (canClaim) {
+    btn.disabled = false;
+    btnText.innerText = 'استلام المكافأة';
+  } else {
+    btn.disabled = true;
+    const updateTimer = () => {
+      const remain = user.nextDailyClaim - serverNow();
       if (remain <= 0) {
         clearInterval(dailyTimerInterval);
         initDailyLogin();
         return;
       }
-      
-      const h = Math.floor(remain / (1000 * 60 * 60));
-      const m = Math.floor((remain % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((remain % (1000 * 60)) / 1000);
-      
-      timerEl.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-      timerEl.style.color = 'var(--warning)';
-    }, 1000);
-  } else if (user.lastDailyClaim === 0) {
-    timerEl.innerText = 'جاهز للاستلام!';
-    timerEl.style.color = 'var(--success)';
+      btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
+    };
+    updateTimer();
+    dailyTimerInterval = setInterval(updateTimer, 1000);
   }
 }
 
 async function claimDailyReward() {
-  const now = Date.now();
-  const oneDay = 24 * 60 * 60 * 1000;
-  if (user.lastDailyClaim > 0 && (now - user.lastDailyClaim) < oneDay) return;
+  const now = serverNow();
+  if (user.nextDailyClaim && now < user.nextDailyClaim) {
+    showToast('لم يحن وقت الاستلام بعد');
+    return;
+  }
 
+  const btn = document.getElementById('dailyClaimBtn');
+  btn.disabled = true;
+
+  const nextClaim = now + ONE_DAY;
   user.tickets += 1;
   user.lastDailyClaim = now;
+  user.nextDailyClaim = nextClaim;
   user.dailyStreak = (user.dailyStreak || 0) + 1;
   
   updateBalances();
+  
   await syncUserData({ 
     tickets: user.tickets, 
-    lastDailyClaim: user.lastDailyClaim,
+    lastDailyClaim: firebase.firestore.FieldValue.serverTimestamp(),
+    nextDailyClaim: nextClaim,
     dailyStreak: user.dailyStreak
   });
   
@@ -1730,7 +1901,7 @@ async function claimDailyReward() {
   initDailyLogin();
 }
 
-// ===================== SPIN GAME =====================
+// ===================== SPIN =====================
 function toggleSpinSound() {
   spinState.soundOn = !spinState.soundOn;
   const icon = document.getElementById('soundIcon');
@@ -1764,16 +1935,15 @@ function startSpin() {
   
   if (spinState.soundOn) {
     spinAudio.currentTime = 0;
-    spinAudio.play().catch(e => console.log('Audio play blocked'));
+    spinAudio.play().catch(e => console.log('Audio blocked'));
   }
   
   const track = document.getElementById('spinTrack');
   track.innerHTML = '';
   
   const totalItems = 40;
-  const itemWidth = 136; // 120px width + 16px gap
-  const centerOffset = window.innerWidth / 2 - 60; 
-  
+  const itemWidth = 136;
+  const centerOffset = window.innerWidth / 2 - 60;
   const winnerIndex = 35;
   const winnerPrize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
 
@@ -1793,7 +1963,6 @@ function startSpin() {
 
   track.style.transition = 'none';
   track.style.transform = `translateX(0px)`;
-  
   void track.offsetWidth;
 
   track.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.2, 1)';
@@ -1810,7 +1979,6 @@ function startSpin() {
     
     document.getElementById('winAmount').innerText = winnerPrize.value.toLocaleString();
     openModal('modalWin');
-    
   }, 4100);
 }
 
@@ -1826,15 +1994,13 @@ function adjustInputWidth(input) {
 function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
   document.getElementById('dep-tab-' + tab).style.display = 'block';
 }
 
 function updateDepositUI(input) {
   adjustInputWidth(input);
-  const val = parseInt(input.value) || 0;
-  depositAmount = val;
+  depositAmount = parseInt(input.value) || 0;
 }
 
 function addChip(amount) {
@@ -1847,10 +2013,7 @@ function addChip(amount) {
 function updateCryptoUI(input) {
   adjustInputWidth(input);
   let val = parseFloat(input.value) || 0;
-  if (val > 1000) {
-    val = 1000;
-    input.value = 1000;
-  }
+  if (val > 1000) { val = 1000; input.value = 1000; }
   const stars = Math.floor(val * 100);
   document.getElementById('cryptoCalcSubtext').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
 }
@@ -1903,12 +2066,10 @@ async function processDeposit(type) {
     
     showToast('جاري إنشاء الفاتورة...');
     try {
-      const amountCents = Math.round(amount * 100);
-      const starsToAdd = Math.floor(amount * 100);
-      const payload = { 
-        userId: user.id, 
-        amount_usd_cents: amountCents, 
-        stars: starsToAdd, 
+      const payload = {
+        userId: user.id,
+        amount_usd_cents: Math.round(amount * 100),
+        stars: Math.floor(amount * 100),
         idempotency_key: 'pm_' + user.id + '_' + Date.now()
       };
       
@@ -1916,10 +2077,7 @@ async function processDeposit(type) {
       
       const resp = await fetch(`${API_BASE}/api/shieldz/create-invoice`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload)
       });
       
@@ -1936,18 +2094,10 @@ async function processDeposit(type) {
       
       console.log('[Crypto] Response data:', data);
       
-      if (!resp.ok) {
-        throw new Error(data.error || data.message || `خطأ في الخادم (${resp.status})`);
-      }
-      
-      if (!data.ok && !data.pay_url) {
-        throw new Error(data.error || data.message || 'لم يتم استلام رابط الدفع');
-      }
+      if (!resp.ok) throw new Error(data.error || data.message || `خطأ في الخادم (${resp.status})`);
       
       const payUrl = data.pay_url || data.payment_url || data.url;
-      if (!payUrl) {
-        throw new Error('رابط الدفع غير متوفر');
-      }
+      if (!payUrl) throw new Error(data.error || data.message || 'لم يتم استلام رابط الدفع');
       
       cryptoPendingInvoice = {
         id: data.invoice_id || data.id,
@@ -1964,7 +2114,6 @@ async function processDeposit(type) {
       }
       
       showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
-      
     } catch(e) {
       console.error('[Crypto] Deposit error:', e);
       showToast(e.message || 'تعذر بدء الدفع');
@@ -1972,29 +2121,24 @@ async function processDeposit(type) {
   }
 }
 
-// Crypto Pending Logic
 function startCryptoTimer() {
   const banner = document.getElementById('cryptoPendingBanner');
   const timerEl = document.getElementById('cryptoPendingTimer');
   banner.style.display = 'block';
-  
   if (cryptoTimerInterval) clearInterval(cryptoTimerInterval);
   
   cryptoTimerInterval = setInterval(() => {
     if (!cryptoPendingInvoice) return;
-    const elapsed = Date.now() - cryptoPendingInvoice.createdAt;
-    const remain = Math.max(0, 30 * 60 * 1000 - elapsed);
-    
+    const remain = Math.max(0, 30 * 60 * 1000 - (Date.now() - cryptoPendingInvoice.createdAt));
     if (remain <= 0) {
       clearInterval(cryptoTimerInterval);
       cancelCryptoInvoice();
       showToast('انتهت صلاحية الفاتورة');
       return;
     }
-    
     const mins = Math.floor(remain / 60000);
     const secs = Math.floor((remain % 60000) / 1000);
-    timerEl.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    timerEl.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
   }, 1000);
 }
 
@@ -2025,7 +2169,7 @@ async function checkCryptoStatus(btn) {
       showToast('الفاتورة لا تزال قيد الانتظار');
     }
   } catch (e) {
-    console.error('[Crypto] Check status error:', e);
+    console.error('[Crypto] Check error:', e);
     showToast('تعذر التحقق');
   } finally {
     btn.innerHTML = oldTxt;
@@ -2037,30 +2181,22 @@ async function checkCryptoStatus(btn) {
 function switchWithdrawTab(tab, el) {
   document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  
   document.querySelectorAll('.wd-tab-content').forEach(c => c.style.display = 'none');
   document.getElementById('wd-tab-' + tab).style.display = 'block';
 }
 
 function updateWdUI(method, input) {
   adjustInputWidth(input);
-  let stars = 0;
+  const stars = parseInt(input.value) || 0;
   if (method === 'binance') {
-    stars = parseInt(input.value) || 0;
-    const usd = (stars * 0.01).toFixed(2);
-    document.getElementById('wdBinanceResult').innerText = `$${usd}`;
+    document.getElementById('wdBinanceResult').innerText = `$${(stars * 0.01).toFixed(2)}`;
   } else {
-    stars = parseInt(input.value) || 0;
-    const syp = (stars * 1).toFixed(0);
-    document.getElementById('wdShamResult').innerText = `${syp} ل.س`;
+    document.getElementById('wdShamResult').innerText = `${(stars * 1).toFixed(0)} ل.س`;
   }
 }
 
 async function loadWithdrawalHistory() {
-  if (!db) {
-    renderWithdrawHistory();
-    return;
-  }
+  if (!db) { renderWithdrawHistory(); return; }
   try {
     const q = await db.collection('puppy_withdrawals').where('userId', '==', user.id).get();
     let rows = [];
@@ -2069,7 +2205,7 @@ async function loadWithdrawalHistory() {
     withdrawalHistory = rows;
     renderWithdrawHistory();
   } catch(e) {
-    console.warn('History fetch err', e);
+    console.warn('History err', e);
     renderWithdrawHistory();
   }
 }
@@ -2089,7 +2225,6 @@ function renderWithdrawHistory() {
   const list = document.getElementById('withdrawHistoryList');
   const showAllBtn = document.getElementById('showAllWdBtn');
   if (!list) return;
-  
   list.innerHTML = '';
   
   if (withdrawalHistory.length === 0) {
@@ -2158,13 +2293,8 @@ async function processWithdraw(method) {
     updateBalances();
     
     const newWithdraw = {
-      userId: user.id,
-      userName: user.name,
-      method: method,
-      amount: amount,
-      account: id,
-      status: 'pending',
-      createdAt: Date.now()
+      userId: user.id, userName: user.name, method: method,
+      amount: amount, account: id, status: 'pending', createdAt: Date.now()
     };
 
     if (db) {
@@ -2190,7 +2320,6 @@ async function processWithdraw(method) {
     
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
-
   } catch(e) {
     showToast('حدث خطأ أثناء السحب');
     user.stars += amount;
@@ -2205,13 +2334,9 @@ async function processWithdraw(method) {
 function switchRefTab(tab, el) {
   document.querySelectorAll('#view-referral .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  
   document.querySelectorAll('.ref-tab-content').forEach(c => c.style.display = 'none');
   document.getElementById('ref-tab-' + tab).style.display = 'block';
-
-  if (tab === 'ranking' && !globalRankingLoaded) {
-    loadGlobalRanking();
-  }
+  if (tab === 'ranking' && !globalRankingLoaded) loadGlobalRanking();
 }
 
 async function loadGlobalRanking() {
@@ -2231,13 +2356,11 @@ async function loadGlobalRanking() {
     q.forEach(doc => {
       const data = doc.data();
       if ((data.referralCount || 0) === 0) return; 
-      
       const isMe = doc.id === user.id;
       const rankClass = index === 1 ? 'top1' : index === 2 ? 'top2' : index === 3 ? 'top3' : '';
       const avatar = data.photoUrl 
         ? `<img src="${data.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` 
         : '<i class="fas fa-user"></i>';
-        
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
       div.innerHTML = `
@@ -2251,12 +2374,9 @@ async function loadGlobalRanking() {
       list.appendChild(div);
       index++;
     });
-    if (index === 1) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
-    }
+    if (index === 1) list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
     globalRankingLoaded = true;
   } catch(e) {
-    console.warn('Ranking err', e);
     list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
   }
 }
@@ -2267,7 +2387,7 @@ function shareReferral() {
   else window.open(url, '_blank');
 }
 
-// ===================== UTILS & TASKS =====================
+// ===================== UTILS =====================
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.innerText = msg;
@@ -2286,14 +2406,12 @@ function completeTask(btn) {
   if (btn.innerText === 'ابدأ') {
     btn.className = 'start-btn timer';
     let time = 3600;
-    
     const interval = setInterval(() => {
       time--;
       const h = Math.floor(time / 3600);
       const m = Math.floor((time % 3600) / 60);
       const s = time % 60;
-      btn.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-      
+      btn.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       if (time <= 0) {
         clearInterval(interval);
         btn.innerText = 'استلام';
@@ -2313,7 +2431,6 @@ function completeTask(btn) {
     }, 1000);
   }
 }
-
 </script>
 
 </body>
