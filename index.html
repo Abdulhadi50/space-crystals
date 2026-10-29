@@ -117,11 +117,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  padding: 4px 10px; /* increased size by ~3% */
+  padding: 4px 10px;
   gap: 8px;
   color: var(--text-primary);
   font-weight: 800;
-  font-size: 17px; /* slightly larger font */
+  font-size: 17px;
 }
 [data-theme="light"] .balance-pill {
   background: rgba(255, 255, 255, 0.5);
@@ -228,6 +228,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .daily-week-days {
   display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px;
+  min-height: 40px;
 }
 .daily-day-circle {
   flex: 1; aspect-ratio: 1; border-radius: 50%;
@@ -309,18 +310,19 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; object-fit: contain; }
 
-/* Deposit Layout */
+/* Updated Deposit Layout */
 .dep-layout {
-  display: flex; flex-direction: column;
-  min-height: calc(100dvh - 300px); /* pushes bottom to bottom of screen */
-  justify-content: space-between;
-}
-.dep-top-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  padding-top: 15px;
+}
+.dep-top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  padding: 30px 0;
+  margin-bottom: 10px;
 }
 .amount-display {
   text-align: center;
@@ -328,15 +330,16 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   gap: 8px; width: 100%;
 }
 .amount-display input {
-  font-size: 3.5rem; font-weight: 800; background: transparent;
+  font-size: 3rem; /* slightly smaller */
+  font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 200px; outline: none;
   field-sizing: content; transition: width 0.1s;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display .dollar-sign { font-size: 3.5rem; font-weight: 800; color: var(--text-primary); }
-.amount-display img { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+.amount-display .dollar-sign { font-size: 3rem; font-weight: 800; color: var(--text-primary); }
+.amount-display img { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
 
 .calc-subtext {
   text-align: center; font-size: 15px; font-weight: 700;
@@ -347,6 +350,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 10px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -420,22 +424,30 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .wd-input:focus { border-color: #007AFF; }
 
-/* ============ WITHDRAW HISTORY ============ */
+/* ============ WITHDRAW HISTORY (UPDATED DESIGN) ============ */
 .history-modal {
   max-width: 380px !important; padding: 22px 18px 16px !important;
 }
 .history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
 .history-list {
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column;
   max-height: 320px; overflow-y: auto; margin-bottom: 12px;
 }
-.history-item {
-  background: var(--bg-soft); padding: 8px 14px; min-height: 46px;
-  border-radius: 10px; display: flex; justify-content: space-between;
-  align-items: center; border: 1px solid var(--border); gap: 10px;
+.history-date-header {
+  font-size: 12px; color: var(--text-secondary);
+  margin: 12px 4px 6px; font-weight: 700;
 }
-.history-info h4 { font-size: 12px; font-weight: 700; margin-bottom: 1px; color: var(--text-primary); line-height: 1.4; }
-.history-info p { font-size: 10px; color: var(--text-secondary); font-weight: 600; line-height: 1.3; }
+.history-date-header:first-child { margin-top: 0; }
+.history-item {
+  background: var(--bg-soft); padding: 12px 14px;
+  border-radius: 14px; display: flex; justify-content: space-between;
+  align-items: center; border: 1px solid var(--border); gap: 10px;
+  margin-bottom: 8px;
+}
+.history-main { display: flex; flex-direction: column; gap: 2px; }
+.history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); }
+.history-method { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+
 .status { padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
 .st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
@@ -644,14 +656,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   
   <header class="top-app-bar"></header>
   
-  <!-- Balance Pills -->
   <div class="floating-balances">
-    <!-- Tickets (Left) -->
     <div class="balance-pill">
       <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
       <span id="topTickets">0</span>
     </div>
-    <!-- Stars (Right) -->
     <div class="balance-pill">
       <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
       <span id="topStars">0</span>
@@ -663,7 +672,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
-      <!-- Live Strip -->
       <div class="live-strip">
         <div class="live-badge">LIVE</div>
         <div class="live-icons" id="liveIcons"></div>
@@ -705,10 +713,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <span id="streakCount">0</span>
           </div>
         </div>
-        <div class="daily-week-days" id="dailyWeekDays"></div>
+        <div class="daily-week-days" id="dailyWeekDays">
+          <!-- Will be injected via JS, shows loading first -->
+        </div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
           <i class="fas fa-ticket-alt"></i>
-          <span id="claimBtnText">استلام المكافأة</span>
+          <span id="claimBtnText">جاري التحقق...</span>
         </button>
       </div>
       
@@ -928,7 +938,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
         
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى للسحب 50 نجمة</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
       </div>
 
@@ -944,7 +954,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <input type="text" class="wd-input" placeholder="Sham Cash ID" id="wdShamId">
         </div>
 
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 10 ل.س | الحد الأدنى للسحب 50 نجمة</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 10 ل.س | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
 
@@ -1117,7 +1127,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 <script>
 'use strict';
 
-// Prevent context menu and dragging
 document.addEventListener('contextmenu', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   e.preventDefault();
@@ -1202,6 +1211,14 @@ async function calibrateServerTime() {
 
 function serverNow() { return Date.now() + serverOffset; }
 
+// Function to get the exact timestamp of the next midnight (12:00 AM)
+function getNextMidnight() {
+  const now = new Date(serverNow());
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0); // Sets to next day at 00:00:00
+  return midnight.getTime();
+}
+
 function initTelegram() {
   if (tg) {
     tg.ready();
@@ -1221,7 +1238,7 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     fetchUserData();
-    calibrateServerTime().then(() => initDailyLogin());
+    // We will calibrate inside initDailyLogin
   } catch (e) {
     showToast('خطأ في الاتصال بقاعدة البيانات');
   }
@@ -1249,7 +1266,7 @@ async function fetchUserData() {
       });
     }
     updateBalances();
-    initDailyLogin();
+    initDailyLogin(); // Init after user data is fetched
     loadWithdrawalHistory();
     renderProfile();
     
@@ -1406,61 +1423,73 @@ function formatRemain(ms) {
   return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 
-function initDailyLogin() {
+async function initDailyLogin() {
   const container = document.getElementById('dailyWeekDays');
   const btn = document.getElementById('dailyClaimBtn');
   const btnText = document.getElementById('claimBtnText');
   const streakCount = document.getElementById('streakCount');
   if (!container || !btn) return;
 
-  const now = serverNow();
-  const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
-  const streak = user.dailyStreak || 0;
-  const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
-  const activeDay = (claimsThisWeek % 7) + 1;
+  // Prevent flickering: Show loading until time is calibrated
+  btn.disabled = true;
+  btnText.innerText = 'جاري التحقق...';
+  container.innerHTML = '<div style="text-align:center; width:100%; color:var(--text-secondary); padding-top:10px;"><i class="fas fa-spinner fa-spin"></i></div>';
 
-  streakCount.innerText = streak;
-
-  container.innerHTML = '';
-  for (let i = 1; i <= 7; i++) {
-    const circle = document.createElement('div');
-    circle.className = 'daily-day-circle';
-
-    if (canClaim && i === activeDay) {
-      circle.classList.add('active');
-    } else if (!canClaim && i <= claimsThisWeek) {
-      circle.classList.add('claimed');
-    } else if (canClaim && i < activeDay) {
-      circle.classList.add('claimed');
-    }
-
-    if (circle.classList.contains('claimed')) {
-      circle.innerHTML = '<i class="fas fa-check"></i>';
-    } else {
-      circle.innerText = i;
-    }
-    container.appendChild(circle);
+  if (serverOffset === 0) {
+    await calibrateServerTime();
   }
 
-  if (dailyTimerInterval) clearInterval(dailyTimerInterval);
-  
-  if (canClaim) {
-    btn.disabled = false;
-    btnText.innerText = 'استلام المكافأة';
-  } else {
-    btn.disabled = true;
-    const updateTimer = () => {
-      const remain = user.nextDailyClaim - serverNow();
-      if (remain <= 0) {
-        clearInterval(dailyTimerInterval);
-        initDailyLogin();
-        return;
+  // Small delay to ensure DOM updates
+  setTimeout(() => {
+    const now = serverNow();
+    const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
+    const streak = user.dailyStreak || 0;
+    const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
+    const activeDay = (claimsThisWeek % 7) + 1;
+
+    streakCount.innerText = streak;
+
+    container.innerHTML = '';
+    for (let i = 1; i <= 7; i++) {
+      const circle = document.createElement('div');
+      circle.className = 'daily-day-circle';
+
+      if (canClaim && i === activeDay) {
+        circle.classList.add('active');
+      } else if (!canClaim && i <= claimsThisWeek) {
+        circle.classList.add('claimed');
+      } else if (canClaim && i < activeDay) {
+        circle.classList.add('claimed');
       }
-      btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
-    };
-    updateTimer();
-    dailyTimerInterval = setInterval(updateTimer, 1000);
-  }
+
+      if (circle.classList.contains('claimed')) {
+        circle.innerHTML = '<i class="fas fa-check"></i>';
+      } else {
+        circle.innerText = i;
+      }
+      container.appendChild(circle);
+    }
+
+    if (dailyTimerInterval) clearInterval(dailyTimerInterval);
+    
+    if (canClaim) {
+      btn.disabled = false;
+      btnText.innerText = 'استلام المكافأة';
+    } else {
+      btn.disabled = true;
+      const updateTimer = () => {
+        const remain = user.nextDailyClaim - serverNow();
+        if (remain <= 0) {
+          clearInterval(dailyTimerInterval);
+          initDailyLogin();
+          return;
+        }
+        btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
+      };
+      updateTimer();
+      dailyTimerInterval = setInterval(updateTimer, 1000);
+    }
+  }, 100);
 }
 
 async function claimDailyReward() {
@@ -1473,7 +1502,9 @@ async function claimDailyReward() {
   const btn = document.getElementById('dailyClaimBtn');
   btn.disabled = true;
 
-  const nextClaim = now + ONE_DAY;
+  // Set next claim to exactly midnight
+  const nextClaim = getNextMidnight();
+  
   user.tickets += 1;
   user.lastDailyClaim = now;
   user.nextDailyClaim = nextClaim;
@@ -1525,22 +1556,14 @@ function addChip(amount) {
 // STRICT ONE DECIMAL ONLY FOR CRYPTO
 function updateCryptoUI(input) {
   let raw = input.value;
-  
-  // Remove non-numeric and non-dot characters
   raw = raw.replace(/[^0-9.]/g, '');
-  
-  // Allow only one dot
   const parts = raw.split('.');
-  if (parts.length > 2) {
-    raw = parts[0] + '.' + parts.slice(1).join('');
-  }
+  if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
   
-  // Limit decimal places to 1
   if (parts.length === 2 && parts[1].length > 1) {
     raw = parts[0] + '.' + parts[1].substring(0, 1);
   }
   
-  // Limit to 1000
   let val = parseFloat(raw) || 0;
   if (val > 1000) {
     raw = '1000';
@@ -1559,8 +1582,6 @@ function addCryptoChip(amount) {
   let current = parseFloat(input.value) || 0;
   let newVal = current + amount;
   if (newVal > 1000) newVal = 1000;
-  
-  // Format to max 1 decimal
   input.value = Math.round(newVal * 10) / 10;
   updateCryptoUI(input);
 }
@@ -1755,17 +1776,28 @@ function renderWithdrawHistory() {
   };
 
   const itemsToShow = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
+  let lastDate = '';
 
   itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
     const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
+
+    // Add date header if it's a new date
+    if (dateStr !== lastDate) {
+      const dateHeader = document.createElement('div');
+      dateHeader.className = 'history-date-header';
+      dateHeader.innerText = dateStr;
+      list.appendChild(dateHeader);
+      lastDate = dateStr;
+    }
+
     const div = document.createElement('div');
     div.className = 'history-item';
     div.innerHTML = `
-      <div class="history-info">
-        <h4>${w.amount} نجمة · ${methodName}</h4>
-        <p>${dateStr}</p>
+      <div class="history-main">
+        <div class="history-amount">${w.amount} نجمة</div>
+        <div class="history-method">${methodName}</div>
       </div>
       <div class="status ${st.class}">${st.text}</div>
     `;
@@ -1796,6 +1828,7 @@ async function processWithdraw(method) {
 
   if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
   if (!amount || amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
+  if (amount > 5000) return showToast('الحد الأقصى للسحب 5000 نجمة');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
 
   const btn = event.target;
