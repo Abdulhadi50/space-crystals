@@ -31,6 +31,7 @@
   --nav-border: rgba(255,255,255,0.08);
   --nav-indicator-bg: rgba(255,255,255,0.1);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
+  --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -126,7 +127,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .view.active { display: block; animation: viewIn 0.3s var(--spring); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ LIVE STRIP ============ */
+/* ============ LIVE STRIP (MARQUEE) ============ */
 .live-strip {
   display: flex; align-items: stretch; gap: 12px;
   background: var(--bg-card); border-radius: 20px;
@@ -153,10 +154,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 @keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(0.8); } }
 
-.live-icons {
+.live-icons-wrapper {
+  flex: 1; overflow: hidden; position: relative;
+  display: flex; align-items: center;
+}
+.live-icons-track {
   display: flex; gap: 8px;
-  overflow: hidden; flex: 1;
-  align-items: center;
+  animation: slideMarquee 15s linear infinite;
+  width: max-content;
+}
+@keyframes slideMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .live-icon-slot {
   width: 48px; height: 48px;
@@ -164,9 +173,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
-  animation: popIn 0.3s ease;
 }
-@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .live-icon-slot video { width: 100%; height: 100%; object-fit: contain; }
 
 /* ============ HOME CARDS ============ */
@@ -204,6 +211,98 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   margin-left: -5px;
   transform: scale(1.3);
 }
+
+/* ============ SPIN GAME VIEW ============ */
+#view-spin {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100dvh - var(--top-bar-height) - var(--safe-top) - 80px);
+}
+#view-spin.active {
+  display: flex;
+  animation: viewIn 0.3s var(--spring);
+}
+
+.spin-track-wrapper {
+  width: 100%; overflow: hidden; position: relative;
+  padding: 40px 0;
+  margin-bottom: 20px;
+}
+.spin-indicator {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
+  background: #fff; transform: translateX(-50%);
+  z-index: 2;
+  border-radius: 2px;
+}
+.spin-indicator::before, .spin-indicator::after {
+  content: '';
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 12px; height: 12px; background: #fff; border-radius: 50%;
+}
+.spin-indicator::before { top: -6px; }
+.spin-indicator::after { bottom: -6px; }
+
+.spin-track {
+  display: flex; gap: 16px;
+  transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.spin-item {
+  width: 140px; height: 160px;
+  background: var(--bg-card);
+  border-radius: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.spin-item video {
+  width: 90px; height: 90px; object-fit: contain;
+}
+.spin-item .val {
+  font-size: 14px; font-weight: 800; margin-top: 10px;
+  color: #FFD700;
+  display: flex; align-items: center; gap: 5px;
+  background: var(--bg-soft); padding: 4px 10px; border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.spin-item .val img { width: 16px; height: 16px; border-radius: 50%; }
+
+.spin-btn {
+  width: 100%; 
+  background: var(--gradient-blue);
+  color: #fff;
+  border: none;
+  padding: 20px;
+  border-radius: 22px;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform 0.1s;
+}
+.spin-btn:active { transform: scale(0.97); }
+.spin-btn:disabled { opacity: 0.6; pointer-events: none; }
+.spin-btn img { width: 24px; height: 24px; }
+.spin-btn .spin-cost { font-size: 22px; font-weight: 900; }
+
+.spin-ctrl-btn {
+  flex: 1; 
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.spin-ctrl-btn:active { transform: scale(0.96); }
 
 /* ============ TASKS & DAILY LOGIN ============ */
 .page-header { margin-bottom: 24px; }
@@ -371,11 +470,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .topup-btn:active { transform: scale(0.97); }
 
-/* Updated Withdraw History Button */
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: var(--bg-card); /* لون رمادي مثل بطاقة الاختيار */
+  background: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -568,48 +666,57 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .modal-btn:active { transform: scale(0.97); }
 
-/* ============ BOTTOM SHEET (Task Verification) ============ */
-.bottom-sheet-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
-  z-index: 2000; display: none;
-  align-items: flex-end; justify-content: center;
+/* Spin Specific Modals */
+.spin-win-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
 }
-.bottom-sheet-overlay.show { display: flex; }
-.bottom-sheet {
-  background: #1C1C1E;
-  width: 100%; max-width: 480px;
-  border-top-left-radius: 24px; border-top-right-radius: 24px;
-  padding: 30px 24px calc(24px + env(safe-area-inset-bottom));
-  position: relative;
-  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  text-align: center;
+.spin-win-modal .modal-icon { width: 100px; height: 100px; margin: 0 auto 20px; }
+.spin-win-modal .modal-icon video { width: 100%; height: 100%; object-fit: contain; }
+.spin-win-modal .win-value {
+  font-size: 32px; font-weight: 900; color: var(--star-color);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 24px;
 }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.close-sheet {
-  position: absolute; top: 16px; right: 16px;
-  color: var(--text-secondary); font-size: 20px;
+.spin-win-modal .win-value img { width: 32px; height: 32px; }
+
+.prizes-list {
+  max-height: 50vh; overflow-y: auto; text-align: right;
+  margin-bottom: 20px; padding-right: 5px;
 }
-.task-modal-icon {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: #229ED9;
-  margin: 0 auto 20px;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+.prizes-list::-webkit-scrollbar { width: 4px; }
+.prizes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+.prize-category { font-size: 18px; font-weight: 800; margin: 16px 0 10px; color: #FFD700; }
+.prize-category.tickets { color: #9d4edd; }
+.prize-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-soft); border-radius: 12px;
+  padding: 10px 16px; margin-bottom: 8px; border: 1px solid var(--border);
 }
-.task-modal-icon i { font-size: 40px; color: #fff; }
-.task-modal-icon img { width: 100%; height: 100%; object-fit: cover; }
-.bottom-sheet h3 {
-  font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #fff;
-  line-height: 1.4; padding: 0 10px;
+.prize-info { display: flex; align-items: center; gap: 12px; }
+.prize-info video { width: 40px; height: 40px; object-fit: contain; }
+.prize-details h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.prize-details p { font-size: 12px; color: var(--text-secondary); }
+.prize-chance { font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 8px; }
+
+.switch-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-soft); padding: 16px; border-radius: 16px;
+  margin-bottom: 20px; border: 1px solid var(--border);
 }
-.sheet-btn {
-  width: 100%; padding: 16px; border-radius: 16px;
-  font-size: 16px; font-weight: 800; margin-bottom: 12px;
-  cursor: pointer; border: none;
+.switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc; transition: .4s; border-radius: 34px;
 }
-.sheet-btn.primary { background: #007AFF; color: #fff; }
-.sheet-btn.secondary { background: #2C2C2E; color: #fff; }
+.slider:before {
+  position: absolute; content: ""; height: 20px; width: 20px;
+  left: 4px; bottom: 4px; background-color: white;
+  transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: var(--primary-blue); }
+input:checked + .slider:before { transform: translateX(22px); }
 
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
@@ -690,11 +797,14 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     <div class="view active" id="view-home">
       <div class="live-strip">
         <div class="live-badge">LIVE</div>
-        <div class="live-icons" id="liveIcons"></div>
+        <div class="live-icons-wrapper">
+          <div class="live-icons-track" id="liveIcons"></div>
+        </div>
       </div>
       
       <div class="home-cards">
-        <div class="home-card card-free" onclick="showToast('قريباً')">
+        <!-- Free Card Links to Spin -->
+        <div class="home-card card-free" onclick="go('spin')">
           <div class="card-text">
             <h3>Free</h3>
             <p>2 cases</p>
@@ -702,7 +812,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift">
         </div>
 
-        <!-- Crash Card Added Here -->
+        <!-- Crash Card -->
         <div class="home-card card-crash" onclick="showToast('قريباً')">
           <div class="card-text">
             <h3>Crash</h3>
@@ -727,6 +837,31 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral">
         </div>
       </div>
+    </div>
+
+    <!-- View: Spin Game -->
+    <div class="view" id="view-spin">
+      <div class="spin-track-wrapper">
+        <div class="spin-indicator"></div>
+        <div class="spin-track" id="spin-track">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 16px;">
+        <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
+          <i class="fas fa-cog"></i> Settings
+        </button>
+        <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
+          <i class="fas fa-gift"></i> Prizes
+        </button>
+      </div>
+
+      <button class="spin-btn" id="spin-btn" onclick="startSpin()">
+        <span>Spin</span>
+        <span class="spin-cost">— 10</span>
+        <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+      </button>
     </div>
 
     <!-- View: Tasks -->
@@ -1059,17 +1194,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 </div>
 
-<!-- Task Verification Bottom Sheet -->
-<div class="bottom-sheet-overlay" id="taskSheet">
-  <div class="bottom-sheet">
-    <button class="close-sheet" onclick="closeTaskSheet()"><i class="fas fa-times"></i></button>
-    <div class="task-modal-icon" id="tsIcon"></div>
-    <h3 id="tsTitle">اسم المهمة</h3>
-    <button class="sheet-btn primary" id="tsStartBtn" onclick="startTaskAction()">Start</button>
-    <button class="sheet-btn secondary" onclick="checkTaskAction()">Check task</button>
-  </div>
-</div>
-
 <!-- Modals -->
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
@@ -1079,6 +1203,47 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   </div>
 </div>
 
+<!-- Spin Win Modal -->
+<div class="modal-overlay" id="spin-win-modal">
+  <div class="modal-content spin-win-modal">
+    <div class="modal-icon" id="win-icon"></div>
+    <h3>مبروك! لقد ربحت</h3>
+    <p style="margin-bottom: 10px;">لقد حصلت على</p>
+    <div class="win-value" id="win-value"></div>
+    <button class="modal-btn" onclick="claimSpinReward()">استلام المكافأة</button>
+  </div>
+</div>
+
+<!-- Spin Prizes Modal -->
+<div class="modal-overlay" id="spin-prizes-modal">
+  <div class="modal-content">
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <div class="prizes-list">
+      <div class="prize-category">⭐ جوائز النجوم</div>
+      <div id="prizes-stars-list"></div>
+      <div class="prize-category tickets">🎫 جوائز التذاكر</div>
+      <div id="prizes-tickets-list"></div>
+    </div>
+    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">إغلاق</button>
+  </div>
+</div>
+
+<!-- Spin Settings Modal -->
+<div class="modal-overlay" id="spin-settings-modal">
+  <div class="modal-content">
+    <h3 style="margin-bottom: 20px;">الإعدادات</h3>
+    <div class="switch-row">
+      <span style="font-weight:700;">صوت الدوران</span>
+      <label class="switch">
+        <input type="checkbox" id="spin-sound-toggle" onchange="toggleSpinSound(this)">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <button class="modal-btn" onclick="closeModal('spin-settings-modal')">حفظ وإغلاق</button>
+  </div>
+</div>
+
+<!-- Withdraw Success Modal -->
 <div class="modal-overlay" id="modalWithdrawSuccess">
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
@@ -1096,12 +1261,24 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   </div>
 </div>
 
+<!-- Withdraw History Modal -->
 <div class="modal-overlay" id="modalWithdrawHistory">
   <div class="modal-content history-modal">
     <h3>سجل السحوبات</h3>
     <div class="history-list" id="withdrawHistoryList"></div>
     <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">عرض الكل</button>
     <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
+  </div>
+</div>
+
+<!-- Task Bottom Sheet -->
+<div class="modal-overlay" id="taskSheet" style="align-items: flex-end; padding: 0;">
+  <div class="modal-content" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
+    <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
+    <div class="task-modal-icon" id="tsIcon" style="width: 80px; height: 80px; border-radius: 50%; background: #229ED9; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
+    <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #fff; line-height: 1.4; padding: 0 10px;">اسم المهمة</h3>
+    <button class="modal-btn" id="tsStartBtn" onclick="startTaskAction()" style="margin-bottom: 12px;">Start</button>
+    <button class="modal-btn" onclick="checkTaskAction()" style="background: var(--bg-soft); color: var(--text-primary);">Check task</button>
   </div>
 </div>
 
@@ -1154,18 +1331,37 @@ const PRIZES = [
   { id: 11, value: 5, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
 ];
 
+const WINNING_TABLE = [
+  // 2% للنجوم الكبيرة (10 إلى 500)
+  { id: 'p1', webm: 'gifts_by_StickerEmojiRobot-078.webm', value: 500, type: 'star', weight: 0.5 },
+  { id: 'p2', webm: 'Cars_by_StickerEmojiRobot-045.webm', value: 100, type: 'star', weight: 0.5 },
+  { id: 'p3', webm: 'gifts_by_StickerEmojiRobot-069.webm', value: 50, type: 'star', weight: 0.5 },
+  { id: 'p4', webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm', value: 10, type: 'star', weight: 0.5 },
+  
+  // 48% للنجوم الصغيرة (0.01 إلى 9.99)
+  { id: 'p5', webm: 'Cars_by_StickerEmojiRobot-036.webm', value: 5, type: 'star', weight: 12 },
+  { id: 'p6', webm: 'gifts_by_StickerEmojiRobot-041.webm', value: 1, type: 'star', weight: 18 },
+  { id: 'p7', webm: 'Cars_by_StickerEmojiRobot-033.webm', value: 0.5, type: 'star', weight: 10 },
+  { id: 'p8', webm: 'Cars_by_StickerEmojiRobot-040.webm', value: 0.1, type: 'star', weight: 8 },
+  
+  // 50% للتذاكر (1 إلى 50)
+  { id: 'p9', webm: 'Cars_by_StickerEmojiRobot-042.webm', value: 10, type: 'ticket', weight: 15 },
+  { id: 'p10', webm: 'Cars_by_StickerEmojiRobot-043.webm', value: 5, type: 'ticket', weight: 20 },
+  { id: 'p11', webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm', value: 1, type: 'ticket', weight: 15 }
+];
+
 let user = {
   id: '123456789',
   name: 'لاعب',
   photo: '',
-  stars: 1000,
-  tickets: 0,
+  stars: 25,
+  tickets: 20,
   referrals: 0,
   totalWithdrawn: 0,
   lastDailyClaim: 0,
   nextDailyClaim: 0,
   dailyStreak: 0,
-  completedTasks: [] // تتبع المهام المكتملة
+  completedTasks: []
 };
 
 let depositAmount = 200;
@@ -1174,7 +1370,7 @@ let wdShowAll = false;
 let globalRankingLoaded = false;
 let dailyTimerInterval = null;
 let serverOffset = 0;
-let liveStripInterval = null;
+let isClaimingDaily = false;
 
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
@@ -1183,6 +1379,11 @@ let cryptoTimerInterval = null;
 let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
+
+// Spin System Variables
+let spinState = { isSpinning: false, soundOn: true };
+let pendingPrize = null;
+let audioCtx = null;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1248,11 +1449,11 @@ async function fetchUserData() {
       user.lastDailyClaim = data.lastDailyClaim || 0;
       user.nextDailyClaim = data.nextDailyClaim || 0;
       user.dailyStreak = data.dailyStreak || 0;
-      user.completedTasks = data.completedTasks || []; // جلب المهام المكتملة
+      user.completedTasks = data.completedTasks || [];
     } else {
       await docRef.set({
         telegramId: user.id, name: user.name, photoUrl: user.photo,
-        stars: 0, tickets: 0, referralCount: 0,
+        stars: 25, tickets: 20, referralCount: 0,
         lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0,
         completedTasks: [],
         createdAt: Date.now()
@@ -1287,6 +1488,7 @@ window.onload = () => {
     initFirebase();
     updateBalances();
     initLiveStrip();
+    initSpinGame();
     adjustInputWidth(document.getElementById('depositAmountInput'));
     adjustInputWidth(document.getElementById('cryptoAmountInput'));
   }, 2000);
@@ -1326,9 +1528,9 @@ function go(viewName) {
 
 function updateBalances() {
   const f = n => Number(n).toLocaleString('en-US');
-  document.getElementById('topStars').innerText = f(user.stars);
+  document.getElementById('topStars').innerText = f(user.stars % 1 === 0 ? user.stars : user.stars.toFixed(2));
   document.getElementById('topTickets').innerText = f(user.tickets);
-  document.getElementById('statStars').innerText = f(user.stars);
+  document.getElementById('statStars').innerText = f(user.stars % 1 === 0 ? user.stars : user.stars.toFixed(2));
   document.getElementById('statTickets').innerText = f(user.tickets);
   document.getElementById('statRefs').innerText = user.referrals;
   document.getElementById('statTotalWithdrawn').innerText = f(user.totalWithdrawn);
@@ -1336,41 +1538,22 @@ function updateBalances() {
   document.getElementById('refEarned').innerText = user.referrals * 2;
 }
 
+/* ================= LIVE STRIP (MARQUEE) ================= */
 function initLiveStrip() {
   const container = document.getElementById('liveIcons');
   if (!container) return;
   
   container.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const slot = document.createElement('div');
-    slot.className = 'live-icon-slot';
-    container.appendChild(slot);
-  }
   
-  const slots = container.querySelectorAll('.live-icon-slot');
+  // نكرر المصفوفة مرتين لضمان التمرير المستمر
+  const itemsToRender = [...PRIZES, ...PRIZES];
   
-  const updateIcons = () => {
-    slots.forEach(slot => {
-      const prize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
-      const video = document.createElement('video');
-      video.src = prize.webm;
-      video.autoplay = true;
-      video.loop = true;
-      video.muted = true;
-      video.playsInline = true;
-      
-      slot.innerHTML = '';
-      slot.appendChild(video);
-      
-      slot.style.animation = 'none';
-      slot.offsetHeight;
-      slot.style.animation = 'popIn 0.3s ease';
-    });
-  };
-  
-  updateIcons();
-  if (liveStripInterval) clearInterval(liveStripInterval);
-  liveStripInterval = setInterval(updateIcons, 1000);
+  itemsToRender.forEach(prize => {
+    const div = document.createElement('div');
+    div.className = 'live-icon-slot';
+    div.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
+    container.appendChild(div);
+  });
 }
 
 function renderProfile() {
@@ -1382,6 +1565,221 @@ function renderProfile() {
   }
 }
 
+/* ================= SPIN GAME ================= */
+function initSpinGame() {
+  const track = document.getElementById('spin-track');
+  track.innerHTML = '';
+  // إضافة 5 عناصر عشوائية
+  for (let i = 0; i < 5; i++) {
+    const prize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    track.appendChild(createSpinItem(prize));
+  }
+}
+
+function createSpinItem(prize) {
+  const div = document.createElement('div');
+  div.className = 'spin-item';
+  const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
+  div.innerHTML = `
+    <video src="${prize.webm}" autoplay loop muted playsinline></video>
+    <div class="val">
+      <img src="${icon}"> ${prize.value}
+    </div>
+  `;
+  return div;
+}
+
+function pickPrizeByWeight() {
+  const totalWeight = WINNING_TABLE.reduce((sum, p) => sum + p.weight, 0);
+  let random = Math.random() * totalWeight;
+  
+  for (const prize of WINNING_TABLE) {
+    if (random < prize.weight) return prize;
+    random -= prize.weight;
+  }
+  return WINNING_TABLE[0];
+}
+
+function startSpin() {
+  if (spinState.isSpinning) return;
+
+  if (user.tickets < 10) {
+    showToast('تحتاج إلى 10 تذاكر للدوران!');
+    return;
+  }
+
+  // Deduct tickets
+  user.tickets -= 10;
+  updateBalances();
+  syncUserData({ tickets: firebase.firestore.FieldValue.increment(-10) });
+
+  spinState.isSpinning = true;
+  document.getElementById('spin-btn').disabled = true;
+
+  const winner = pickPrizeByWeight();
+  pendingPrize = winner;
+
+  playTickSound(0.1, 100);
+
+  const track = document.getElementById('spin-track');
+  track.innerHTML = '';
+  track.style.transition = 'none';
+  track.style.transform = 'translateX(0px)';
+
+  const totalItems = 40;
+  const winnerIndex = 35;
+
+  for (let i = 0; i < totalItems; i++) {
+    const prize = i === winnerIndex ? winner : WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    track.appendChild(createSpinItem(prize));
+  }
+
+  const ITEM_WIDTH = 156; // 140 + 16 gap
+  const centerOffset = window.innerWidth / 2 - 70; // 70 is half of 140
+  const targetX = -(winnerIndex * ITEM_WIDTH - centerOffset);
+  const randomOffset = (Math.random() - 0.5) * 30; 
+  const finalTranslate = targetX + randomOffset;
+
+  void track.offsetWidth; 
+  track.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.2, 1)';
+  track.style.transform = `translateX(${finalTranslate}px)`;
+
+  let tickDelay = 100;
+  let totalElapsed = 0;
+  const playTicks = () => {
+    if (totalElapsed > 4000) return;
+    playTickSound(0.05, 800);
+    totalElapsed += tickDelay;
+    tickDelay = 100 + (totalElapsed * 0.5); 
+    if (totalElapsed < 4000) setTimeout(playTicks, tickDelay);
+  };
+  setTimeout(playTicks, 200);
+
+  setTimeout(() => {
+    spinState.isSpinning = false;
+    showSpinWinModal(winner);
+  }, 4100);
+}
+
+function showSpinWinModal(prize) {
+  const winIcon = document.getElementById('win-icon');
+  const winValue = document.getElementById('win-value');
+  
+  winIcon.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
+  
+  const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
+  winValue.innerHTML = `<img src="${icon}"> ${prize.value}`;
+  winValue.style.color = prize.type === 'star' ? '#FFD700' : '#9d4edd';
+
+  openModal('spin-win-modal');
+  playWinSound();
+}
+
+function claimSpinReward() {
+  if (!pendingPrize) return;
+
+  if (pendingPrize.type === 'star') {
+    user.stars += pendingPrize.value;
+    syncUserData({ stars: firebase.firestore.FieldValue.increment(pendingPrize.value) });
+  } else {
+    user.tickets += pendingPrize.value;
+    syncUserData({ tickets: firebase.firestore.FieldValue.increment(pendingPrize.value) });
+  }
+
+  updateBalances();
+  
+  pendingPrize = null;
+  closeModal('spin-win-modal');
+  
+  document.getElementById('spin-btn').disabled = false;
+}
+
+function toggleSpinSound(checkbox) {
+  spinState.soundOn = checkbox.checked;
+  localStorage.setItem('spinSoundOn', spinState.soundOn);
+}
+
+function playTickSound(volume, freq) {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  } catch (e) { console.warn('Audio error', e); }
+}
+
+function playWinSound() {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99]; 
+    notes.forEach((freq, i) => {
+      setTimeout(() => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }, i * 100);
+    });
+  } catch (e) { console.warn('Audio error', e); }
+}
+
+/* Populate Prizes Modal List */
+document.addEventListener('DOMContentLoaded', () => {
+  const starsList = document.getElementById('prizes-stars-list');
+  const ticketsList = document.getElementById('prizes-tickets-list');
+
+  WINNING_TABLE.forEach(prize => {
+    const chance = (prize.weight / 100) * 100;
+    
+    const div = document.createElement('div');
+    div.className = 'prize-row';
+    const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
+    
+    div.innerHTML = `
+      <div class="prize-info">
+        <video src="${prize.webm}" autoplay loop muted playsinline></video>
+        <div class="prize-details">
+          <h4 style="display:flex; align-items:center; gap:4px;">
+            ${prize.value} <img src="${icon}" style="width:14px; height:14px;">
+          </h4>
+          <p>${prize.type === 'star' ? 'نجوم' : 'تذاكر'}</p>
+        </div>
+      </div>
+      <div class="prize-chance">${chance}%</div>
+    `;
+
+    if (prize.type === 'star') starsList.appendChild(div);
+    else ticketsList.appendChild(div);
+  });
+  
+  // Set initial sound toggle
+  const savedSound = localStorage.getItem('spinSoundOn');
+  if (savedSound !== null) {
+    spinState.soundOn = savedSound === 'true';
+    document.getElementById('spin-sound-toggle').checked = spinState.soundOn;
+  }
+});
+
+/* ================= TASKS & DAILY LOGIN ================= */
 function formatRemain(ms) {
   if (ms <= 0) return '00:00:00';
   const h = Math.floor(ms / 3600000);
@@ -1397,97 +1795,130 @@ async function initDailyLogin() {
   const streakCount = document.getElementById('streakCount');
   if (!container || !btn) return;
 
-  btn.disabled = true;
-  btnText.innerText = 'جاري التحقق...';
-  container.innerHTML = '<div style="text-align:center; width:100%; color:var(--text-secondary); padding-top:10px;"><i class="fas fa-spinner fa-spin"></i></div>';
-
   if (serverOffset === 0) {
+    btnText.innerText = 'جاري المزامنة...';
     await calibrateServerTime();
   }
 
-  setTimeout(() => {
-    const now = serverNow();
-    const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
-    const streak = user.dailyStreak || 0;
-    const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
-    const activeDay = (claimsThisWeek % 7) + 1;
+  const now = serverNow();
+  const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
+  const streak = user.dailyStreak || 0;
+  const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
+  const activeDay = (claimsThisWeek % 7) + 1;
 
-    streakCount.innerText = streak;
+  streakCount.innerText = streak;
 
-    container.innerHTML = '';
-    for (let i = 1; i <= 7; i++) {
-      const circle = document.createElement('div');
-      circle.className = 'daily-day-circle';
+  container.innerHTML = '';
+  for (let i = 1; i <= 7; i++) {
+    const circle = document.createElement('div');
+    circle.className = 'daily-day-circle';
 
-      if (canClaim && i === activeDay) {
-        circle.classList.add('active');
-      } else if (!canClaim && i <= claimsThisWeek) {
-        circle.classList.add('claimed');
-      } else if (canClaim && i < activeDay) {
-        circle.classList.add('claimed');
-      }
-
-      if (circle.classList.contains('claimed')) {
-        circle.innerHTML = '<i class="fas fa-check"></i>';
-      } else {
-        circle.innerText = i;
-      }
-      container.appendChild(circle);
+    if (canClaim && i === activeDay) {
+      circle.classList.add('active');
+    } else if (!canClaim && i <= claimsThisWeek) {
+      circle.classList.add('claimed');
+    } else if (canClaim && i < activeDay) {
+      circle.classList.add('claimed');
     }
 
-    if (dailyTimerInterval) clearInterval(dailyTimerInterval);
-    
-    if (canClaim) {
-      btn.disabled = false;
-      btnText.innerText = 'استلام المكافأة';
+    if (circle.classList.contains('claimed')) {
+      circle.innerHTML = '<i class="fas fa-check"></i>';
     } else {
-      btn.disabled = true;
-      const updateTimer = () => {
-        const remain = user.nextDailyClaim - serverNow();
-        if (remain <= 0) {
-          clearInterval(dailyTimerInterval);
-          initDailyLogin();
-          return;
-        }
-        btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
-      };
-      updateTimer();
-      dailyTimerInterval = setInterval(updateTimer, 1000);
+      circle.innerText = i;
     }
-  }, 100);
+    container.appendChild(circle);
+  }
+
+  if (dailyTimerInterval) clearInterval(dailyTimerInterval);
+  
+  if (canClaim) {
+    btn.disabled = false;
+    btnText.innerText = 'استلام المكافأة';
+    btn.style.background = '#FFFFFF';
+  } else {
+    btn.disabled = true;
+    btn.style.background = 'var(--bg-soft)';
+    
+    const updateTimer = () => {
+      const remain = user.nextDailyClaim - serverNow();
+      if (remain <= 0) {
+        clearInterval(dailyTimerInterval);
+        btn.disabled = false;
+        btnText.innerText = 'استلام المكافأة';
+        btn.style.background = '#FFFFFF';
+        return;
+      }
+      btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
+    };
+    updateTimer();
+    dailyTimerInterval = setInterval(updateTimer, 1000);
+  }
 }
 
 async function claimDailyReward() {
+  if (isClaimingDaily) return;
+  isClaimingDaily = true;
+
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
     showToast('لم يحن وقت الاستلام بعد');
+    isClaimingDaily = false;
     return;
   }
 
   const btn = document.getElementById('dailyClaimBtn');
+  const btnText = document.getElementById('claimBtnText');
+  
   btn.disabled = true;
+  btnText.innerText = 'جاري التحقق...';
+  btn.style.background = 'var(--bg-soft)';
 
-  const nextClaim = getNextMidnight();
-  
-  user.tickets += 1;
-  user.lastDailyClaim = now;
-  user.nextDailyClaim = nextClaim;
-  user.dailyStreak = (user.dailyStreak || 0) + 1;
-  
-  updateBalances();
-  
-  await syncUserData({ 
-    tickets: user.tickets, 
-    lastDailyClaim: firebase.firestore.FieldValue.serverTimestamp(),
-    nextDailyClaim: nextClaim,
-    dailyStreak: user.dailyStreak
-  });
-  
-  showToast('تم استلام التيكت اليومي بنجاح!');
-  initDailyLogin();
+  try {
+    const userRef = db.collection('puppy_users').doc(user.id);
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(userRef);
+      if (!doc.exists) throw new Error("User not found");
+      
+      const data = doc.data();
+      const serverTime = serverNow();
+      const nextClaim = data.nextDailyClaim || 0;
+
+      if (serverTime < nextClaim) {
+        throw new Error("Too early");
+      }
+
+      const nextClaimTime = getNextMidnight();
+      const newStreak = (data.dailyStreak || 0) + 1;
+
+      transaction.update(userRef, {
+        tickets: (data.tickets || 0) + 1,
+        lastDailyClaim: firebase.firestore.FieldValue.serverTimestamp(),
+        nextDailyClaim: nextClaimTime,
+        dailyStreak: newStreak
+      });
+
+      user.tickets = (data.tickets || 0) + 1;
+      user.nextDailyClaim = nextClaimTime;
+      user.dailyStreak = newStreak;
+    });
+
+    showToast('تم استلام المكافأة بنجاح!');
+    updateBalances();
+    initDailyLogin();
+
+  } catch (e) {
+    if (e.message === "Too early") {
+      showToast('لم يحن وقت الاستلام بعد (تم رفض المحاولة)');
+    } else {
+      showToast('حدث خطأ أثناء الاستلام');
+      console.error(e);
+    }
+    initDailyLogin();
+  } finally {
+    isClaimingDaily = false;
+  }
 }
 
-/* ================= TASKS LOGIC ================= */
 async function loadTasks() {
   const container = document.getElementById('tasksContainer');
   if (!db) return;
@@ -1515,7 +1946,6 @@ async function loadTasks() {
         iconHtml = `<i class="fab fa-telegram"></i>`;
       }
 
-      // If task is completed, show disabled button
       let actionBtn = isCompleted 
         ? `<button class="start-btn" style="background: var(--bg-soft); color: var(--text-secondary);" disabled>تم</button>`
         : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
@@ -1563,11 +1993,11 @@ function openTaskSheet(taskId) {
     iconContainer.innerHTML = `<i class="fab fa-telegram"></i>`;
   }
 
-  document.getElementById('taskSheet').classList.add('show');
+  openModal('taskSheet');
 }
 
 function closeTaskSheet() {
-  document.getElementById('taskSheet').classList.remove('show');
+  closeModal('taskSheet');
   currentTask = null;
 }
 
@@ -1630,8 +2060,6 @@ async function checkTaskAction() {
     
     showToast(`تم إكمال المهمة بنجاح! +${amount} ${isTicket ? 'تيكت' : 'نجمة'}`);
     closeTaskSheet();
-    
-    // Re-render tasks to show the "Done" state
     loadTasks(); 
     
   } catch (e) {
@@ -1723,7 +2151,7 @@ async function processDeposit(type) {
         if (status === 'paid') {
           user.stars += depositAmount;
           updateBalances();
-          syncUserData({ stars: user.stars });
+          syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
           showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
           go('home');
         } else if (status === 'cancelled') {
@@ -1988,7 +2416,7 @@ async function processWithdraw(method) {
 
     if (db) {
       await db.collection('puppy_withdrawals').add(newWithdraw);
-      await syncUserData({ stars: user.stars });
+      await syncUserData({ stars: firebase.firestore.FieldValue.increment(-amount) });
     } else {
       withdrawalHistory.unshift(newWithdraw);
     }
