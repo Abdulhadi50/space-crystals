@@ -18,8 +18,6 @@
   --text-primary: #FFFFFF;
   --text-secondary: #8E8E93;
   --border: rgba(255, 255, 255, 0.08);
-  --button-color: #DC07AF; /* لون الأزرار الجديد */
-  --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
@@ -35,19 +33,6 @@
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
 }
 
-[data-theme="light"] {
-  --bg-main: #f2f2f7;
-  --bg-card: #ffffff;
-  --bg-soft: #e5e5ea;
-  --text-primary: #1c1c1e;
-  --text-secondary: #6c6c70;
-  --border: rgba(0, 0, 0, 0.08);
-  --nav-bg: rgba(255, 255, 255, 0.85);
-  --nav-border: rgba(0,0,0,0.08);
-  --nav-indicator-bg: rgba(0,0,0,0.06);
-  --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.9);
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
 body {
@@ -55,7 +40,6 @@ body {
   background: var(--bg-main); color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
   overscroll-behavior: none; user-select: none; -webkit-user-select: none; direction: rtl;
-  transition: background 0.35s ease, color 0.35s ease;
 }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input, textarea { font: inherit; color: inherit; user-select: text; -webkit-user-select: text; }
@@ -75,7 +59,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-radius: 3px; overflow: hidden;
 }
 .loader-fill {
-  width: 0%; height: 100%; background: var(--button-color);
+  width: 0%; height: 100%; background: #FFFFFF;
   border-radius: 3px; animation: load 2s forwards;
 }
 @keyframes load { to { width: 100%; } }
@@ -98,10 +82,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
   border-bottom: 1px solid var(--nav-border);
   z-index: 50; padding-top: var(--safe-top);
-  transition: background 0.35s ease, border-color 0.35s ease;
 }
 
-/* ============ BALANCE PILLS ============ */
+/* ============ BALANCE PILLS (Fully Rounded) ============ */
 .floating-balances {
   position: absolute;
   top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
@@ -115,20 +98,16 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
+  border-radius: 999px; /* زوايا دائرية بالكامل */
   padding: 4px 10px;
   gap: 8px;
   color: var(--text-primary);
   font-weight: 800;
   font-size: 17px;
 }
-[data-theme="light"] .balance-pill {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 0, 0, 0.05);
-}
 .balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
 .deposit-mini-btn {
-  background: var(--button-color); color: #fff;
+  background: #FFFFFF; color: #000000;
   width: 22px; height: 22px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 800; line-height: 1;
@@ -199,12 +178,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer; transition: transform 0.2s var(--spring);
   position: relative; overflow: hidden;
   min-height: 105px;
-  /* تم إزالة الظل */
 }
 .home-card:active { transform: scale(0.97); }
 
-/* ألوان البطاقات (بقيت كما هي) */
-.home-card.card-free { background: var(--gradient-dark); border: 1px solid var(--border); }
+.home-card.card-free { background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border: 1px solid var(--border); }
 .home-card.card-cases { background: linear-gradient(135deg, #DC07AF 0%, #661797 100%); }
 .home-card.referral { background: linear-gradient(135deg, #661797 0%, #DC07AF 100%); }
 
@@ -236,8 +213,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .daily-title-area p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
 .daily-streak-badge {
   display: flex; align-items: center; gap: 5px;
-  background: var(--button-color);
-  color: #fff; padding: 6px 12px; border-radius: 20px;
+  background: #FFFFFF; color: #000000;
+  padding: 6px 12px; border-radius: 20px;
   font-weight: 800; font-size: 13px;
 }
 .daily-week-days {
@@ -263,10 +240,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .daily-day-circle.claimed i { font-size: 14px; }
 .daily-claim-btn {
   width: 100%; padding: 16px; border-radius: 18px;
-  background: var(--button-color); color: #fff;
+  background: #FFFFFF; color: #000000;
   border: none; font-size: 15px; font-weight: 800;
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  cursor: pointer; transition: transform 0.1s, background 0.3s;
+  cursor: pointer; transition: transform 0.1s;
 }
 .daily-claim-btn:active:not(:disabled) { transform: scale(0.97); }
 .daily-claim-btn:disabled {
@@ -297,7 +274,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .task-reward img { width: 16px; height: 16px; object-fit: contain; }
 .start-btn {
-  background: var(--button-color); color: #fff; border: none;
+  background: #FFFFFF; color: #000000; border: none;
   padding: 10px 20px; border-radius: 14px;
   font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
@@ -368,15 +345,15 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: var(--bg-card); border: 1px solid var(--border);
-  padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
+  background: #FFFFFF; border: 1px solid var(--border);
+  padding: 12px 20px; border-radius: 16px; color: #000000;
   font-weight: 700; font-size: 15px; cursor: pointer;
   transition: transform 0.1s;
 }
 .chip:active { transform: scale(0.95); }
 
 .topup-btn {
-  width: 100%; background: var(--button-color); color: #fff;
+  width: 100%; background: #FFFFFF; color: #000000;
   border: none; padding: 18px; border-radius: 20px;
   font-size: 18px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
@@ -386,13 +363,13 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: var(--bg-card); color: var(--text-primary);
+  background: #FFFFFF; color: #000000;
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.2s;
 }
-.btn-secondary:active { background: var(--bg-soft); }
-.btn-secondary i { font-size: 16px; color: var(--text-secondary); }
+.btn-secondary:active { background: #e5e5ea; }
+.btn-secondary i { font-size: 16px; color: #000000; }
 
 .manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
@@ -409,7 +386,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .copy-box span { font-family: monospace; font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .copy-btn {
-  background: rgba(128,128,128,0.2); border: none; color: var(--text-primary);
+  background: #FFFFFF; border: none; color: #000000;
   padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
 }
 
@@ -425,7 +402,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .crypto-pending-timer { font-family: monospace; font-weight: 800; font-size: 16px; color: var(--text-primary); }
 .crypto-pending-actions { display: flex; gap: 10px; }
 .crypto-btn { flex: 1; padding: 12px; border-radius: 14px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
-.crypto-btn.check { background: var(--button-color); color: #fff; }
+.crypto-btn.check { background: #FFFFFF; color: #000000; }
 .crypto-btn.cancel { background: var(--bg-soft); color: var(--text-secondary); }
 
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
@@ -435,7 +412,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none; text-align: center;
 }
-.wd-input:focus { border-color: var(--button-color); }
+.wd-input:focus { border-color: #FFFFFF; }
 
 /* ============ WITHDRAW HISTORY ============ */
 .history-modal {
@@ -463,7 +440,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .status { padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
-.st-processing { background: rgba(220, 7, 175, 0.15); color: var(--button-color); }
+.st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
 
@@ -500,7 +477,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 800; direction: ltr; text-align: left; letter-spacing: 1px;
 }
 .btn-copy {
-  background: var(--button-color); color: #fff;
+  background: #FFFFFF; color: #000000;
   border: none; padding: 12px 18px; border-radius: 14px;
   font-weight: 800; font-family: inherit; font-size: 13px;
   cursor: pointer; display: flex; align-items: center; gap: 6px;
@@ -513,7 +490,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 12px 14px; background: var(--bg-card);
   border: 1px solid var(--border); border-radius: 20px;
 }
-.ranking-row.me { border-color: var(--button-color); }
+.ranking-row.me { border-color: #FFFFFF; }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--bg-soft); display: flex;
@@ -554,36 +531,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .stat-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 2px; }
 .stat-info p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 
-.profile-settings {
-  margin-top: 20px; background: var(--bg-card);
-  border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
-}
-.setting-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px; cursor: pointer; border-bottom: 1px solid var(--border);
-}
-.setting-item:last-child { border-bottom: none; }
-.setting-left { display: flex; align-items: center; gap: 14px; }
-.setting-icon {
-  width: 40px; height: 40px; border-radius: 12px; background: var(--bg-soft);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: var(--text-primary);
-}
-.setting-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; color: var(--text-primary); }
-.setting-text p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-.theme-switch {
-  width: 48px; height: 28px; background: var(--bg-soft);
-  border-radius: 20px; position: relative;
-  transition: background 0.3s; border: 1px solid var(--border); flex-shrink: 0;
-}
-.theme-switch-knob {
-  position: absolute; top: 3px; right: 3px;
-  width: 20px; height: 20px; background: #fff; border-radius: 50%;
-  transition: transform 0.3s var(--spring);
-}
-.theme-switch.active { background: var(--button-color); }
-.theme-switch.active .theme-switch-knob { transform: translateX(-20px); }
-
 /* ============ MODALS & DOCK ============ */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.7);
@@ -602,7 +549,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .modal-content p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; font-weight: 600; line-height: 1.5; }
 .modal-btn {
   width: 100%; padding: 16px; border-radius: 16px;
-  background: var(--button-color); color: #fff;
+  background: #FFFFFF; color: #000000;
   border: none; font-size: 16px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
 }
@@ -627,7 +574,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: var(--nav-bg); border: 1px solid var(--nav-border);
   border-radius: 32px; display: flex; align-items: center; justify-content: space-between;
   padding: 6px; -webkit-backdrop-filter: blur(20px) saturate(155%); backdrop-filter: blur(20px) saturate(155%);
-  transition: background 0.35s ease, border-color 0.35s ease;
 }
 .dock-nav::before {
   content: ''; position: absolute; z-index: 0;
@@ -636,7 +582,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: var(--nav-indicator-bg); box-shadow: var(--nav-indicator-shadow);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   transform: translateX(calc(var(--nav-index) * -100%));
-  transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1), background 0.35s ease;
+  transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
   pointer-events: none;
 }
 .nav-item {
@@ -647,8 +593,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
-.nav-item.active { color: var(--button-color); }
-[data-theme="light"] .nav-item.active { color: var(--button-color); }
+.nav-item.active { color: var(--text-primary); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: var(--bg-card); border: 2px solid var(--nav-border);
@@ -658,7 +603,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
-.nav-profile.active { border-color: var(--button-color); color: var(--button-color); }
+.nav-profile.active { border-color: #007AFF; color: var(--text-primary); }
 </style>
 </head>
 <body>
@@ -948,6 +893,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
         <div class="tab" onclick="switchWithdrawTab('sham', this)">
           <img src="https://up6.cc/2026/09/178975725154411.png"> شام كاش
         </div>
+        <div class="tab" onclick="switchWithdrawTab('gram', this)">
+          <img src="https://up6.cc/2026/10/179327300871781.png"> Gram
+        </div>
       </div>
 
       <div id="wd-tab-binance" class="wd-tab-content">
@@ -980,6 +928,23 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
         <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 10 ل.س | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
+      </div>
+
+      <!-- Gram Withdrawal Tab -->
+      <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
+        <div class="amount-display">
+          <input type="number" id="wdGramAmount" placeholder="0" oninput="updateWdUI('gram', this)">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
+        </div>
+        <div class="calc-subtext" id="wdGramResult">0 TON</div>
+
+        <div class="wd-input-group">
+          <label>عنوان محفظة TON</label>
+          <input type="text" class="wd-input" placeholder="TON Wallet Address" id="wdGramId">
+        </div>
+
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 0.1 TON | الحد الأدنى 10 نجوم | الأقصى 5000 نجمة</p>
+        <button class="topup-btn" onclick="processWithdraw('gram')">تقديم الطلب</button>
       </div>
 
       <button class="btn-secondary" style="margin-top: 20px;" onclick="openWithdrawHistory()">
@@ -1066,25 +1031,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           </div>
         </div>
         <div class="stat-card">
-          <i class="fas fa-money-bill-transfer" style="font-size:28px; color:var(--success);"></i>
+          <i class="fas fa-star" style="font-size:28px; color:var(--warning);"></i>
           <div class="stat-info">
             <h3 id="statTotalWithdrawn">0</h3>
             <p>إجمالي السحوبات</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="profile-settings">
-        <div class="setting-item" onclick="toggleTheme()">
-          <div class="setting-left">
-            <div class="setting-icon"><i class="fas fa-moon" id="themeIcon"></i></div>
-            <div class="setting-text">
-              <h4>المظهر</h4>
-              <p id="themeLabel">الوضع الداكن</p>
-            </div>
-          </div>
-          <div class="theme-switch" id="themeSwitch">
-            <div class="theme-switch-knob"></div>
           </div>
         </div>
       </div>
@@ -1172,6 +1122,7 @@ const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
   sham: 'https://up6.cc/2026/09/178975725154411.png',
+  gram: 'https://up6.cc/2026/10/179327300871781.png',
   ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png'
 };
 
@@ -1316,8 +1267,6 @@ async function syncUserData(updates) {
 }
 
 window.onload = () => {
-  if (localStorage.getItem('theme') === 'light') applyLightTheme();
-  
   initTelegram();
   
   setTimeout(() => {
@@ -1337,31 +1286,6 @@ document.addEventListener('visibilitychange', () => {
     calibrateServerTime().then(() => initDailyLogin());
   }
 });
-
-function applyLightTheme() {
-  document.documentElement.setAttribute('data-theme', 'light');
-  document.getElementById('themeIcon').className = 'fas fa-sun';
-  document.getElementById('themeLabel').innerText = 'الوضع الفاتح';
-  document.getElementById('themeSwitch').classList.add('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#FFFFFF');
-}
-
-function applyDarkTheme() {
-  document.documentElement.removeAttribute('data-theme');
-  document.getElementById('themeIcon').className = 'fas fa-moon';
-  document.getElementById('themeLabel').innerText = 'الوضع الداكن';
-  document.getElementById('themeSwitch').classList.remove('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#1C1C1E');
-}
-
-function toggleTheme() {
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  if (isLight) {
-    applyDarkTheme(); localStorage.setItem('theme', 'dark');
-  } else {
-    applyLightTheme(); localStorage.setItem('theme', 'light');
-  }
-}
 
 function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1750,11 +1674,18 @@ function switchWithdrawTab(tab, el) {
 function updateWdUI(method, input) {
   adjustInputWidth(input);
   let val = parseInt(input.value) || 0;
-  input.value = val;
+  
+  if (val > 5000) {
+    val = 5000;
+    input.value = 5000;
+  }
+  
   if (method === 'binance') {
     document.getElementById('wdBinanceResult').innerText = `$${(val * 0.01).toFixed(2)}`;
-  } else {
+  } else if (method === 'sham') {
     document.getElementById('wdShamResult').innerText = `${(val * 1).toFixed(0)} ل.س`;
+  } else if (method === 'gram') {
+    document.getElementById('wdGramResult').innerText = `${(val * 0.01).toFixed(2)} TON`;
   }
 }
 
@@ -1767,7 +1698,6 @@ async function loadWithdrawalHistory() {
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
     
-    // حساب إجمالي السحوبات
     user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
     document.getElementById('statTotalWithdrawn').innerText = user.totalWithdrawn.toLocaleString('en-US');
     
@@ -1813,7 +1743,10 @@ function renderWithdrawHistory() {
   itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
-    const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
+    
+    let methodName = 'شام كاش';
+    if (w.method === 'binance') methodName = 'Binance';
+    else if (w.method === 'gram') methodName = 'Gram (TON)';
 
     if (dateStr !== lastDate) {
       const dateHeader = document.createElement('div');
@@ -1851,14 +1784,25 @@ async function processWithdraw(method) {
     id = document.getElementById('wdBinanceId').value;
     amount = parseInt(document.getElementById('wdBinanceAmount').value);
     payoutStr = '$' + (amount * 0.01).toFixed(2);
-  } else {
+  } else if (method === 'sham') {
     id = document.getElementById('wdShamId').value;
     amount = parseInt(document.getElementById('wdShamAmount').value);
     payoutStr = (amount * 1).toFixed(0) + ' ل.س';
+  } else if (method === 'gram') {
+    id = document.getElementById('wdGramId').value;
+    amount = parseInt(document.getElementById('wdGramAmount').value);
+    payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
 
   if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
-  if (!amount || amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
+  if (!amount) return showToast('أدخل مبلغاً صحيحاً');
+  
+  if (method === 'gram') {
+    if (amount < 10) return showToast('الحد الأدنى للسحب 10 نجوم');
+  } else {
+    if (amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
+  }
+  
   if (amount > 5000) return showToast('الحد الأقصى للسحب 5000 نجمة');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
 
@@ -1890,11 +1834,16 @@ async function processWithdraw(method) {
     document.getElementById('wdBinanceAmount').value = '';
     document.getElementById('wdShamId').value = '';
     document.getElementById('wdShamAmount').value = '';
+    document.getElementById('wdGramId').value = '';
+    document.getElementById('wdGramAmount').value = '';
     
     adjustInputWidth(document.getElementById('wdBinanceAmount'));
     adjustInputWidth(document.getElementById('wdShamAmount'));
+    adjustInputWidth(document.getElementById('wdGramAmount'));
+    
     updateWdUI('binance', document.getElementById('wdBinanceAmount'));
     updateWdUI('sham', document.getElementById('wdShamAmount'));
+    updateWdUI('gram', document.getElementById('wdGramAmount'));
     
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
@@ -1993,6 +1942,7 @@ function completeTask(btn) {
         btn.innerText = 'استلام';
         btn.className = 'start-btn';
         btn.style.background = 'var(--success)';
+        btn.style.color = '#000';
         btn.onclick = () => {
           user.tickets += 1;
           updateBalances();
