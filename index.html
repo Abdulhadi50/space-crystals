@@ -30,7 +30,6 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Theme surfaces */
   --nav-bg: rgba(28, 28, 30, 0.85);
   --nav-border: rgba(255,255,255,0.08);
   --nav-indicator-bg: rgba(255,255,255,0.1);
@@ -118,26 +117,27 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  padding: 2px 8px;
-  gap: 6px;
+  padding: 4px 10px; /* increased size by ~3% */
+  gap: 8px;
   color: var(--text-primary);
   font-weight: 800;
-  font-size: 16px;
+  font-size: 17px; /* slightly larger font */
 }
 [data-theme="light"] .balance-pill {
   background: rgba(255, 255, 255, 0.5);
   border-color: rgba(0, 0, 0, 0.05);
 }
-.balance-pill img { width: 22px; height: 22px; border-radius: 50%; }
-.balance-pill i { font-size: 18px; color: #5E5CE6; }
+.balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
 .deposit-mini-btn {
   background: var(--gradient-blue); color: #fff;
-  padding: 4px 8px; border-radius: 10px;
-  font-size: 10px; font-weight: 800;
+  width: 22px; height: 22px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; line-height: 1;
   border: none; cursor: pointer;
   margin-right: 4px;
+  padding-bottom: 2px;
 }
-.deposit-mini-btn:active { transform: scale(0.93); }
+.deposit-mini-btn:active { transform: scale(0.9); }
 
 /* ============ MAIN SCROLL ============ */
 .main-scroll {
@@ -148,19 +148,24 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .view.active { display: block; animation: viewIn 0.3s var(--spring); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ NEW LIVE STRIP ============ */
+/* ============ LIVE STRIP ============ */
 .live-strip {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: stretch; gap: 12px;
   background: var(--bg-card); border-radius: 20px;
   padding: 12px 16px; margin-bottom: 20px;
   border: 1px solid var(--border);
   overflow: hidden;
+  min-height: 72px;
 }
 .live-badge {
-  font-size: 15px; font-weight: 900; letter-spacing: 1px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 14px; font-weight: 900; letter-spacing: 2px;
   color: #FF3B30;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
   flex-shrink: 0;
+  padding: 4px 0;
 }
 .live-badge::before {
   content: '';
@@ -173,6 +178,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .live-icons {
   display: flex; gap: 8px;
   overflow: hidden; flex: 1;
+  align-items: center;
 }
 .live-icon-slot {
   width: 48px; height: 48px;
@@ -202,7 +208,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 /* ============ TASKS & DAILY LOGIN ============ */
 .page-header { margin-bottom: 24px; }
-.page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 .page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
 .daily-claim-card {
@@ -301,9 +307,23 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .tab.active { background: var(--bg-soft); color: var(--text-primary); }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
+.tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; object-fit: contain; }
 
+/* Deposit Layout */
+.dep-layout {
+  display: flex; flex-direction: column;
+  min-height: calc(100dvh - 300px); /* pushes bottom to bottom of screen */
+  justify-content: space-between;
+}
+.dep-top-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 .amount-display {
-  text-align: center; margin: 20px 0 10px;
+  text-align: center;
   display: flex; align-items: center; justify-content: center;
   gap: 8px; width: 100%;
 }
@@ -320,10 +340,16 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .calc-subtext {
   text-align: center; font-size: 15px; font-weight: 700;
-  color: var(--text-primary); margin-top: 0; margin-bottom: 24px; min-height: 22px;
+  color: var(--text-primary); margin-top: 8px; min-height: 22px;
 }
 
-.quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+.dep-bottom-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
   background: var(--bg-card); border: 1px solid var(--border);
   padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
@@ -336,7 +362,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   width: 100%; background: var(--gradient-blue); color: #fff;
   border: none; padding: 18px; border-radius: 20px;
   font-size: 18px; font-weight: 800; cursor: pointer;
-  margin-bottom: 20px; transition: transform 0.1s;
+  transition: transform 0.1s;
 }
 .topup-btn:active { transform: scale(0.97); }
 
@@ -618,18 +644,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   
   <header class="top-app-bar"></header>
   
-  <!-- Separated Balance Pills -->
+  <!-- Balance Pills -->
   <div class="floating-balances">
+    <!-- Tickets (Left) -->
+    <div class="balance-pill">
+      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
+      <span id="topTickets">0</span>
+    </div>
     <!-- Stars (Right) -->
     <div class="balance-pill">
       <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
       <span id="topStars">0</span>
-      <button class="deposit-mini-btn" onclick="go('deposit')">Deposit</button>
-    </div>
-    <!-- Tickets (Left) -->
-    <div class="balance-pill">
-      <i class="fas fa-ticket-alt"></i>
-      <span id="topTickets">0</span>
+      <button class="deposit-mini-btn" onclick="go('deposit')">+</button>
     </div>
   </div>
 
@@ -637,7 +663,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
-      <!-- New Live Strip -->
+      <!-- Live Strip -->
       <div class="live-strip">
         <div class="live-badge">LIVE</div>
         <div class="live-icons" id="liveIcons"></div>
@@ -765,15 +791,19 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
     <!-- View: Deposit -->
     <div class="view" id="view-deposit">
-      <div class="page-header" style="text-align:center;">
-        <h2 class="page-title">إيداع الرصيد</h2>
+      <div class="page-header" style="text-align:center; margin-bottom: 15px;">
+        <h2 class="page-title" style="justify-content: center;">
+          شراء نجوم <img src="https://up6.cc/2026/10/17932600818491.png" style="width: 28px; height: 28px; border-radius: 50%;">
+        </h2>
       </div>
       
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)">
           <img src="https://up6.cc/2026/10/17932600818491.png"> نجوم
         </div>
-        <div class="tab" onclick="switchDepositTab('crypto', this)"><i class="fab fa-bitcoin"></i> كريبتو</div>
+        <div class="tab" onclick="switchDepositTab('crypto', this)">
+          <img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو
+        </div>
         <div class="tab" onclick="switchDepositTab('binance', this)">
           <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
         </div>
@@ -782,45 +812,54 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
         </div>
       </div>
 
-      <div id="dep-tab-stars" class="dep-tab-content">
-        <div class="amount-display">
-          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
-          <img src="https://up6.cc/2026/10/17932600818491.png">
+      <div id="dep-tab-stars" class="dep-tab-content dep-layout">
+        <div class="dep-top-section">
+          <div class="amount-display">
+            <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
+            <img src="https://up6.cc/2026/10/17932600818491.png">
+          </div>
         </div>
-        <div class="quick-chips">
-          <button class="chip" onclick="addChip(500)">+ 500</button>
-          <button class="chip" onclick="addChip(2000)">+ 2,000</button>
-          <button class="chip" onclick="addChip(5000)">+ 5,000</button>
+        <div class="dep-bottom-section">
+          <div class="quick-chips">
+            <button class="chip" onclick="addChip(500)">+ 500</button>
+            <button class="chip" onclick="addChip(2000)">+ 2,000</button>
+            <button class="chip" onclick="addChip(5000)">+ 5,000</button>
+          </div>
+          <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
         </div>
-        <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
       </div>
 
-      <div id="dep-tab-crypto" class="dep-tab-content" style="display:none;">
-        <div id="cryptoPendingBanner" class="crypto-pending-banner">
-          <div class="crypto-pending-header">
-            <span class="crypto-pending-title">فاتورة معلقة</span>
-            <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
+      <div id="dep-tab-crypto" class="dep-tab-content dep-layout" style="display:none;">
+        <div class="dep-top-section">
+          <div id="cryptoPendingBanner" class="crypto-pending-banner">
+            <div class="crypto-pending-header">
+              <span class="crypto-pending-title">فاتورة معلقة</span>
+              <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
+            </div>
+            <div class="crypto-pending-actions">
+              <button class="crypto-btn check" onclick="checkCryptoStatus(this)"><i class="fas fa-rotate"></i> تحقق</button>
+              <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()"><i class="fas fa-xmark"></i> إلغاء</button>
+            </div>
           </div>
-          <div class="crypto-pending-actions">
-            <button class="crypto-btn check" onclick="checkCryptoStatus(this)"><i class="fas fa-rotate"></i> تحقق</button>
-            <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()"><i class="fas fa-xmark"></i> إلغاء</button>
-          </div>
-        </div>
 
-        <div class="amount-display">
-          <span class="dollar-sign">$</span>
-          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
+          <div class="amount-display">
+            <span class="dollar-sign">$</span>
+            <input type="text" inputmode="decimal" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
+          </div>
+          <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
+            100 <img src="https://up6.cc/2026/10/17932600818491.png" style="width:16px; height:16px; border-radius:50%;">
+          </div>
         </div>
-        <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
-          100 <img src="https://up6.cc/2026/10/17932600818491.png" style="width:16px; height:16px; border-radius:50%;">
+        
+        <div class="dep-bottom-section">
+          <div class="quick-chips">
+            <button class="chip" onclick="addCryptoChip(1)">+ $1</button>
+            <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
+            <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
+          </div>
+          <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
+          <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
         </div>
-        <div class="quick-chips">
-          <button class="chip" onclick="addCryptoChip(1)">+ $1</button>
-          <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
-          <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
-        </div>
-        <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
-        <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
       </div>
 
       <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
@@ -865,7 +904,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     <!-- View: Withdraw -->
     <div class="view" id="view-withdraw">
       <div class="page-header" style="text-align:center;">
-        <h2 class="page-title">سحب الأرباح</h2>
+        <h2 class="page-title" style="justify-content: center;">سحب الأرباح</h2>
       </div>
       
       <div class="tabs">
@@ -1078,7 +1117,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 <script>
 'use strict';
 
-// Prevent context menu and dragging (except for inputs)
+// Prevent context menu and dragging
 document.addEventListener('contextmenu', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   e.preventDefault();
@@ -1239,7 +1278,7 @@ window.onload = () => {
     
     initFirebase();
     updateBalances();
-    initLiveStrip(); // Initialize new live strip
+    initLiveStrip();
     adjustInputWidth(document.getElementById('depositAmountInput'));
     adjustInputWidth(document.getElementById('cryptoAmountInput'));
   }, 2000);
@@ -1313,13 +1352,12 @@ function updateBalances() {
   document.getElementById('refEarned').innerText = user.referrals * 2;
 }
 
-// NEW LIVE STRIP LOGIC
 function initLiveStrip() {
   const container = document.getElementById('liveIcons');
   if (!container) return;
   
   container.innerHTML = '';
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 5; i++) {
     const slot = document.createElement('div');
     slot.className = 'live-icon-slot';
     container.appendChild(slot);
@@ -1340,16 +1378,15 @@ function initLiveStrip() {
       slot.innerHTML = '';
       slot.appendChild(video);
       
-      // Reset animation to make it pop in
       slot.style.animation = 'none';
-      slot.offsetHeight; // trigger reflow
+      slot.offsetHeight;
       slot.style.animation = 'popIn 0.3s ease';
     });
   };
   
   updateIcons();
   if (liveStripInterval) clearInterval(liveStripInterval);
-  liveStripInterval = setInterval(updateIcons, 1000); // Change every second
+  liveStripInterval = setInterval(updateIcons, 1000);
 }
 
 function renderProfile() {
@@ -1466,12 +1503,16 @@ function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('dep-tab-' + tab).style.display = 'block';
+  document.getElementById('dep-tab-' + tab).style.display = 'flex'; // Keep flex for dep-layout
 }
 
+// STRICT INTEGER ONLY FOR STARS
 function updateDepositUI(input) {
+  let val = parseInt(input.value) || 0;
+  if (val < 0) val = 0;
+  input.value = val;
+  depositAmount = val;
   adjustInputWidth(input);
-  depositAmount = parseInt(input.value) || 0;
 }
 
 function addChip(amount) {
@@ -1481,10 +1522,34 @@ function addChip(amount) {
   updateDepositUI(input);
 }
 
+// STRICT ONE DECIMAL ONLY FOR CRYPTO
 function updateCryptoUI(input) {
+  let raw = input.value;
+  
+  // Remove non-numeric and non-dot characters
+  raw = raw.replace(/[^0-9.]/g, '');
+  
+  // Allow only one dot
+  const parts = raw.split('.');
+  if (parts.length > 2) {
+    raw = parts[0] + '.' + parts.slice(1).join('');
+  }
+  
+  // Limit decimal places to 1
+  if (parts.length === 2 && parts[1].length > 1) {
+    raw = parts[0] + '.' + parts[1].substring(0, 1);
+  }
+  
+  // Limit to 1000
+  let val = parseFloat(raw) || 0;
+  if (val > 1000) {
+    raw = '1000';
+    val = 1000;
+  }
+  
+  input.value = raw;
   adjustInputWidth(input);
-  let val = parseFloat(input.value) || 0;
-  if (val > 1000) { val = 1000; input.value = 1000; }
+  
   const stars = Math.floor(val * 100);
   document.getElementById('cryptoCalcSubtext').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
 }
@@ -1494,7 +1559,9 @@ function addCryptoChip(amount) {
   let current = parseFloat(input.value) || 0;
   let newVal = current + amount;
   if (newVal > 1000) newVal = 1000;
-  input.value = newVal;
+  
+  // Format to max 1 decimal
+  input.value = Math.round(newVal * 10) / 10;
   updateCryptoUI(input);
 }
 
@@ -1634,11 +1701,12 @@ function switchWithdrawTab(tab, el) {
 
 function updateWdUI(method, input) {
   adjustInputWidth(input);
-  const stars = parseInt(input.value) || 0;
+  let val = parseInt(input.value) || 0;
+  input.value = val;
   if (method === 'binance') {
-    document.getElementById('wdBinanceResult').innerText = `$${(stars * 0.01).toFixed(2)}`;
+    document.getElementById('wdBinanceResult').innerText = `$${(val * 0.01).toFixed(2)}`;
   } else {
-    document.getElementById('wdShamResult').innerText = `${(stars * 1).toFixed(0)} ل.س`;
+    document.getElementById('wdShamResult').innerText = `${(val * 1).toFixed(0)} ل.س`;
   }
 }
 
