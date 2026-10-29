@@ -160,7 +160,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .live-icons-track {
   display: flex; gap: 8px;
-  animation: slideMarquee 15s linear infinite;
+  animation: slideMarquee 20s linear infinite;
   width: max-content;
 }
 @keyframes slideMarquee {
@@ -217,29 +217,47 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: none;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: calc(100dvh - var(--top-bar-height) - var(--safe-top) - 80px);
+  background: linear-gradient(180deg, #0f1c3f 0%, #050a17 100%);
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 80px);
+  padding-bottom: calc(var(--dock-height) + 20px + var(--safe-bottom));
+  overflow: hidden; /* Prevent scrolling */
 }
 #view-spin.active {
   display: flex;
   animation: viewIn 0.3s var(--spring);
 }
 
+/* Padding between live and spin track */
+.spin-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  padding: 0 16px;
+}
+
 .spin-track-wrapper {
   width: 100%; overflow: hidden; position: relative;
-  padding: 40px 0;
-  margin-bottom: 20px;
+  padding: 30px 0;
+  margin-bottom: 30px; /* Spacing */
 }
 .spin-indicator {
   position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
   background: #fff; transform: translateX(-50%);
   z-index: 2;
   border-radius: 2px;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
 }
 .spin-indicator::before, .spin-indicator::after {
   content: '';
   position: absolute; left: 50%; transform: translateX(-50%);
   width: 12px; height: 12px; background: #fff; border-radius: 50%;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
 }
 .spin-indicator::before { top: -6px; }
 .spin-indicator::after { bottom: -6px; }
@@ -260,7 +278,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   position: relative; overflow: hidden;
 }
 .spin-item img {
-  width: 90px; height: 90px; object-fit: contain;
+  width: 80px; height: 80px; object-fit: contain;
 }
 .spin-item .val {
   font-size: 14px; font-weight: 800; margin-top: 10px;
@@ -283,6 +301,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   transition: transform 0.1s;
+  margin-bottom: 20px;
 }
 .spin-btn:active { transform: scale(0.97); }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
@@ -680,24 +699,64 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .spin-win-modal .win-value img { width: 32px; height: 32px; }
 
-.prizes-list {
-  max-height: 50vh; overflow-y: auto; text-align: right;
-  margin-bottom: 20px; padding-right: 5px;
+/* NEW: Prizes Grid Modal */
+.prizes-grid-modal {
+  background: #1C1C1E; /* Dark background matching image */
+  border-radius: 24px; padding: 20px;
+  width: 100%; max-width: 400px; text-align: center;
+  border: 1px solid var(--border);
 }
-.prizes-list::-webkit-scrollbar { width: 4px; }
-.prizes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-.prize-category { font-size: 18px; font-weight: 800; margin: 16px 0 10px; color: #FFD700; }
-.prize-category.tickets { color: #9d4edd; }
-.prize-row {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg-soft); border-radius: 12px;
-  padding: 10px 16px; margin-bottom: 8px; border: 1px solid var(--border);
+.prizes-grid-modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #fff; }
+.prizes-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding-bottom: 15px;
 }
-.prize-info { display: flex; align-items: center; gap: 12px; }
-.prize-info img { width: 40px; height: 40px; object-fit: contain; }
-.prize-details h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-.prize-details p { font-size: 12px; color: var(--text-secondary); }
-.prize-chance { font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 8px; }
+.prize-card {
+  background: #2d2d30; /* Dark gray box */
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 6px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.prize-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+.prize-card .price-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  width: 90%;
+  justify-content: center;
+}
+.prize-card .price-pill img {
+  width: 14px;
+  height: 14px;
+  margin-bottom: 0;
+}
+.prizes-grid-modal .modal-btn {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 10px;
+}
 
 .switch-row {
   display: flex; align-items: center; justify-content: space-between;
@@ -841,35 +900,36 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <!-- View: Spin Game -->
     <div class="view" id="view-spin">
-      <!-- LIVE Strip inside Spin Game -->
-      <div class="live-strip" style="width: 100%; margin-bottom: 10px;">
+      <div class="live-strip" style="width: 100%; margin-bottom: 20px; box-shadow: none;">
         <div class="live-badge">LIVE</div>
         <div class="live-icons-wrapper">
           <div class="live-icons-track" id="liveIconsSpin"></div>
         </div>
       </div>
 
-      <div class="spin-track-wrapper">
-        <div class="spin-indicator"></div>
-        <div class="spin-track" id="spin-track">
-          <!-- Populated by JS -->
+      <div class="spin-content">
+        <div class="spin-track-wrapper">
+          <div class="spin-indicator"></div>
+          <div class="spin-track" id="spin-track">
+            <!-- Populated by JS -->
+          </div>
         </div>
-      </div>
-      
-      <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 16px;">
-        <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
-          <i class="fas fa-cog"></i> Settings
-        </button>
-        <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
-          <i class="fas fa-gift"></i> Prizes
-        </button>
-      </div>
+        
+        <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 20px;">
+          <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
+            <i class="fas fa-cog"></i> Settings
+          </button>
+          <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
+            <i class="fas fa-gift"></i> Prizes
+          </button>
+        </div>
 
-      <button class="spin-btn" id="spin-btn" onclick="startSpin()">
-        <span>Spin</span>
-        <span class="spin-cost">— 10</span>
-        <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
-      </button>
+        <button class="spin-btn" id="spin-btn" onclick="startSpin()">
+          <span>Spin</span>
+          <span class="spin-cost">— 10</span>
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+        </button>
+      </div>
     </div>
 
     <!-- View: Tasks -->
@@ -1222,17 +1282,14 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Spin Prizes Modal -->
+<!-- Spin Prizes Modal (NEW GRID DESIGN) -->
 <div class="modal-overlay" id="spin-prizes-modal">
-  <div class="modal-content">
-    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
-    <div class="prizes-list">
-      <div class="prize-category">⭐ جوائز النجوم</div>
-      <div id="prizes-stars-list"></div>
-      <div class="prize-category tickets">🎫 جوائز التذاكر</div>
-      <div id="prizes-tickets-list"></div>
+  <div class="prizes-grid-modal">
+    <h3>Possible prizes</h3>
+    <div class="prizes-grid-container" id="prizes-grid-container">
+      <!-- Cards injected here -->
     </div>
-    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">إغلاق</button>
+    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">Close</button>
   </div>
 </div>
 
@@ -1325,21 +1382,25 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-// الجوائز الجديدة مرتبة من الأصغر للأكبر
+// الجوائز الجديدة (نجوم فقط) - مرتبة حسب القيمة
 const WINNING_TABLE = [
-  // 2% للنجوم الكبيرة
-  { id: 'p10', img: 'IMG_20261029_171453_689.png', value: 500, type: 'star', weight: 0.5 },
-  { id: 'p9', img: 'IMG_20261029_171514_869.png', value: 50, type: 'star', weight: 0.5 },
-  { id: 'p8', img: 'IMG_20261029_172042_619.png', value: 10, type: 'ticket', weight: 0.5 },
-  { id: 'p7', img: 'IMG_20261029_171539_567.png', value: 10, type: 'star', weight: 0.5 },
-
-  // 48% للنجوم الصغيرة
-  { id: 'p6', img: 'IMG_20261029_172134_616.png', value: 5, type: 'ticket', weight: 12 },
-  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, type: 'star', weight: 12 },
-  { id: 'p4', img: 'IMG_20261029_171631_362.png', value: 1, type: 'ticket', weight: 12 },
-  { id: 'p3', img: 'IMG_20261029_171802_634.png', value: 1, type: 'star', weight: 12 },
-  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, type: 'star', weight: 6 },
-  { id: 'p1', img: 'IMG_20261029_171638_229.png', value: 0.1, type: 'star', weight: 6 }
+  { id: 'n5', img: 'IMG_20261029_180056_326.png', value: 198, weight: 1 }, // 1%
+  { id: 'n4', img: 'IMG_20261029_180053_502.png', value: 156, weight: 2 }, // 2%
+  { id: 'n3', img: 'IMG_20261029_180050_512.png', value: 124, weight: 3 }, // 3%
+  { id: 'n2', img: 'IMG_20261029_180048_586.png', value: 89, weight: 5 },  // 5%
+  { id: 'n1', img: 'IMG_20261029_180047_113.png', value: 47, weight: 9 },  // 9%
+  
+  { id: 'p8', img: 'IMG_20261029_172042_619.png', value: 50, weight: 5 },  // تم تحويله من تذاكر
+  { id: 'p6', img: 'IMG_20261029_172134_616.png', value: 25, weight: 10 }, // تم تحويله من تذاكر
+  { id: 'p4', img: 'IMG_20261029_171631_362.png', value: 15, weight: 15 }, // تم تحويله من تذاكر
+  
+  { id: 'p10', img: 'IMG_20261029_171453_689.png', value: 500, weight: 0.5 },
+  { id: 'p9', img: 'IMG_20261029_171514_869.png', value: 50, weight: 0.5 },
+  { id: 'p7', img: 'IMG_20261029_171539_567.png', value: 10, weight: 10 },
+  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 15 },
+  { id: 'p3', img: 'IMG_20261029_171802_634.png', value: 1, weight: 15 },
+  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 5 },
+  { id: 'p1', img: 'IMG_20261029_171638_229.png', value: 0.1, weight: 4 }
 ];
 
 let user = {
@@ -1537,7 +1598,8 @@ function initLiveStrip() {
   const containerHome = document.getElementById('liveIconsHome');
   if (containerHome) {
     containerHome.innerHTML = '';
-    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
+    // نضاعف المصفوفة 4 مرات لضمان عدم انتهائها أبداً
+    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
     itemsToRender.forEach(prize => {
       const div = document.createElement('div');
       div.className = 'live-icon-slot';
@@ -1550,7 +1612,7 @@ function initLiveStrip() {
   const containerSpin = document.getElementById('liveIconsSpin');
   if (containerSpin) {
     containerSpin.innerHTML = '';
-    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
+    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
     itemsToRender.forEach(prize => {
       const div = document.createElement('div');
       div.className = 'live-icon-slot';
@@ -1583,11 +1645,10 @@ function initSpinGame() {
 function createSpinItem(prize) {
   const div = document.createElement('div');
   div.className = 'spin-item';
-  const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
   div.innerHTML = `
     <img src="${prize.img}" alt="Prize">
     <div class="val">
-      <img src="${icon}"> ${prize.value}
+      <img src="${ASSETS.star}"> ${prize.value}
     </div>
   `;
   return div;
@@ -1628,9 +1689,9 @@ function startSpin() {
   track.style.transition = 'none';
   track.style.transform = 'translateX(0px)';
 
-  // إنشاء 100 بطاقة لضمان عدم نفاذها أبداً أثناء الدوران
-  const totalItems = 100;
-  const winnerIndex = 80; // الفائز سيكون في البطاقة 80
+  // إنشاء 200 بطاقة لضمان عدم نفاذها أبداً
+  const totalItems = 200;
+  const winnerIndex = 150;
 
   for (let i = 0; i < totalItems; i++) {
     const prize = i === winnerIndex ? winner : WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
@@ -1655,7 +1716,7 @@ function startSpin() {
   setTimeout(() => {
     spinState.isSpinning = false;
     showSpinWinModal(winner);
-  }, 5100); // 5.1 ثانية لضمان انتهاء الحركة
+  }, 5100); 
 }
 
 function showSpinWinModal(prize) {
@@ -1663,10 +1724,8 @@ function showSpinWinModal(prize) {
   const winValue = document.getElementById('win-value');
   
   winIcon.innerHTML = `<img src="${prize.img}" alt="Win">`;
-  
-  const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
-  winValue.innerHTML = `<img src="${icon}"> ${prize.value}`;
-  winValue.style.color = prize.type === 'star' ? '#FFD700' : '#9d4edd';
+  winValue.innerHTML = `<img src="${ASSETS.star}"> ${prize.value}`;
+  winValue.style.color = '#FFD700';
 
   openModal('spin-win-modal');
 }
@@ -1674,13 +1733,8 @@ function showSpinWinModal(prize) {
 function claimSpinReward() {
   if (!pendingPrize) return;
 
-  if (pendingPrize.type === 'star') {
-    user.stars += pendingPrize.value;
-    syncUserData({ stars: firebase.firestore.FieldValue.increment(pendingPrize.value) });
-  } else {
-    user.tickets += pendingPrize.value;
-    syncUserData({ tickets: firebase.firestore.FieldValue.increment(pendingPrize.value) });
-  }
+  user.stars += pendingPrize.value;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(pendingPrize.value) });
 
   updateBalances();
   
@@ -1701,7 +1755,7 @@ function playAcceleratingTickSound(durationMs) {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
     let elapsed = 0;
-    let delay = 150; // يبدأ بطيئاً
+    let delay = 150;
 
     const tick = () => {
       if (elapsed >= durationMs) return;
@@ -1721,9 +1775,8 @@ function playAcceleratingTickSound(durationMs) {
       osc.start();
       osc.stop(audioCtx.currentTime + 0.05);
 
-      // تسريع الصوت تدريجياً
       elapsed += delay;
-      delay = Math.max(30, delay * 0.85); // يقل التأخير ليصبح أسرع
+      delay = Math.max(30, delay * 0.85); 
       
       spinTickTimeout = setTimeout(tick, delay);
     };
@@ -1733,33 +1786,22 @@ function playAcceleratingTickSound(durationMs) {
   } catch (e) { console.warn('Audio error', e); }
 }
 
-/* Populate Prizes Modal List */
+/* Populate Prizes Modal List (NEW GRID) */
 document.addEventListener('DOMContentLoaded', () => {
-  const starsList = document.getElementById('prizes-stars-list');
-  const ticketsList = document.getElementById('prizes-tickets-list');
+  const gridContainer = document.getElementById('prizes-grid-container');
 
   WINNING_TABLE.forEach(prize => {
-    const chance = (prize.weight / 100) * 100;
-    
     const div = document.createElement('div');
-    div.className = 'prize-row';
-    const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
+    div.className = 'prize-card';
     
     div.innerHTML = `
-      <div class="prize-info">
-        <img src="${prize.img}" alt="Prize">
-        <div class="prize-details">
-          <h4 style="display:flex; align-items:center; gap:4px;">
-            ${prize.value} <img src="${icon}" style="width:14px; height:14px;">
-          </h4>
-          <p>${prize.type === 'star' ? 'نجوم' : 'تذاكر'}</p>
-        </div>
+      <img src="${prize.img}" alt="Prize">
+      <div class="price-pill">
+        <img src="${ASSETS.star}"> ${prize.value}
       </div>
-      <div class="prize-chance">${chance}%</div>
     `;
 
-    if (prize.type === 'star') starsList.appendChild(div);
-    else ticketsList.appendChild(div);
+    gridContainer.appendChild(div);
   });
   
   // Set initial sound toggle
