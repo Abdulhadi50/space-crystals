@@ -743,6 +743,180 @@ input:checked + .slider:before { transform: translateX(22px); }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .nav-profile.active { border-color: #007AFF; color: var(--text-primary); }
+
+/* ============ CRASH GAME INTEGRATION ============ */
+#view-crash {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg-main);
+  display: none;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+}
+#view-crash.active {
+  display: flex;
+}
+
+.crash-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: calc(var(--safe-top) + 15px) 20px 15px;
+  background: transparent;
+  z-index: 10;
+}
+.back-btn {
+  color: #fff; font-size: 20px;
+  background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.crash-balance-pill {
+  display: flex; align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 4px 10px;
+  gap: 8px;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 17px;
+  direction: ltr;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.crash-balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
+
+.crash-game-area {
+  flex: 1.5; position: relative; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; z-index: 1; overflow: hidden;
+}
+.crash-game-area.cashout-anim {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.crash-stars-bg {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+                    radial-gradient(1.5px 1.5px at 60% 70%, #fff, transparent),
+                    radial-gradient(1px 1px at 80% 20%, #fff, transparent),
+                    radial-gradient(2px 2px at 40% 80%, #fff, transparent);
+  background-size: 200px 200px;
+  opacity: 0.3; z-index: 0;
+  animation: moveStars 10s linear infinite;
+}
+@keyframes moveStars {
+  0% { background-position: 0 0; }
+  100% { background-position: -200px 200px; }
+}
+
+.crash-rocket, .crash-waiting-icon {
+  position: absolute;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.crash-rocket { width: 200px; height: 200px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); }
+.crash-rocket.active { opacity: 1; }
+.crash-waiting-icon { width: 110px; height: 110px; }
+.crash-waiting-icon.active { opacity: 1; }
+
+.crash-bottom-panel {
+  background: #111115; border-top-left-radius: 28px; border-top-right-radius: 28px;
+  padding: 12px 16px calc(20px + var(--safe-bottom)); z-index: 10; border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; flex: 0.8; max-height: 45%;
+}
+
+.crash-bet-controls {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  border: 1px solid var(--border);
+  justify-content: space-between;
+}
+
+.crash-history-strip {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+  scrollbar-width: none; direction: ltr;
+  border-bottom: 1px solid var(--border); padding-bottom: 8px;
+}
+.crash-history-strip::-webkit-scrollbar { display: none; }
+.crash-history-pill {
+  padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 800;
+  background: var(--bg-soft); color: #ffffff; flex-shrink: 0;
+  border: 1px solid var(--border);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.crash-history-pill.live { 
+  background: #ffffff; color: #000000; border: 1px solid #ffffff; 
+}
+
+.crash-round-timer {
+  text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.crash-toggle-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.crash-toggle-left { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+.crash-toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+.crash-toggle-switch input { opacity: 0; width: 0; height: 0; }
+.crash-slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #3a3a3c; transition: .4s; border-radius: 20px;
+}
+.crash-slider:before {
+  position: absolute; content: ""; height: 14px; width: 14px;
+  left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%;
+}
+input:checked + .crash-slider { background-color: var(--success); }
+input:checked + .crash-slider:before { transform: translateX(16px); }
+
+.crash-auto-input-wrap { display: flex; align-items: center; gap: 4px; }
+.crash-auto-input-wrap input {
+  width: 40px; background: transparent; border: none; color: #fff;
+  font-weight: 700; font-size: 12px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+}
+
+.crash-bet-input-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--bg-soft); padding: 4px; border-radius: 14px;
+  border: 1px solid var(--border);
+}
+.crash-bet-input-row img { width: 20px; height: 20px; }
+.crash-bet-input-row input {
+  background: transparent; border: none; color: #fff;
+  font-size: 24px; font-weight: 800; width: 70px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+}
+.crash-bet-input-row input::-webkit-outer-spin-button,
+.crash-bet-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.crash-quick-chips { display: flex; gap: 6px; }
+.crash-quick-chips button {
+  flex: 1; background: var(--bg-soft); border: none; color: #fff;
+  padding: 8px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+}
+
+.crash-main-btn {
+  width: 100%; padding: 14px; border-radius: 14px; border: none;
+  font-size: 16px; font-weight: 800; cursor: pointer; color: #fff;
+  background: var(--blue); direction: ltr; font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+.crash-main-btn.cashout { background: var(--success); }
+.crash-main-btn.cancel { background: var(--danger); color: #fff; }
+.crash-main-btn.disabled { background: var(--bg-soft); color: var(--text-secondary); pointer-events: none; }
+
 </style>
 </head>
 <body>
@@ -782,12 +956,12 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
 
         <!-- Crash Card -->
-        <div class="home-card card-crash" onclick="showToast('قريباً')">
+        <div class="home-card card-crash" onclick="go('crash')">
           <div class="card-text">
             <h3>Crash</h3>
             <p>لعبة السرعة</p>
           </div>
-          <video src="gifts_by_StickerEmojiRobot-010.webm" autoplay loop muted playsinline class="card-video-icon"></video>
+          <video src="Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00.webm" autoplay loop muted playsinline class="card-video-icon"></video>
         </div>
 
         <div class="home-card card-cases" onclick="showToast('قريباً')">
@@ -810,7 +984,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <!-- View: Spin Game -->
     <div class="view" id="view-spin">
-      
       <div class="spin-card-container">
           <div class="spin-card" id="spin-card">
               <img src="https://up6.cc/2026/10/17932600818491.png" id="spin-img" alt="Prize">
@@ -1164,6 +1337,67 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 </div>
 
+<!-- View: Crash Game (Full Screen Overlay) -->
+<div id="view-crash" class="view">
+  <div class="crash-header">
+    <button onclick="go('home')" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+    <div class="crash-balance-pill">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Star">
+      <span id="crash-top-balance">0</span>
+    </div>
+    <div style="width: 40px;"></div> <!-- Spacer -->
+  </div>
+
+  <div class="crash-game-area" id="crash-game-area">
+    <div class="crash-stars-bg" id="crash-stars-bg"></div>
+    <video src="Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00.webm" autoplay loop muted playsinline class="crash-rocket" id="crash-rocket"></video>
+    <video src="OwledDidi_by_StickerEmojiRobot-012.webm" autoplay loop muted playsinline class="crash-waiting-icon" id="crash-waiting-icon"></video>
+  </div>
+
+  <div class="crash-bottom-panel">
+    <div class="crash-bet-controls">
+      
+      <div class="crash-history-strip" id="crash-history-strip"></div>
+      <div class="crash-round-timer" id="crash-round-timer">Starting in 10s...</div>
+
+      <div class="crash-toggle-row">
+          <div class="crash-toggle-left">
+              <label class="crash-toggle-switch">
+                  <input type="checkbox" id="crash-auto-play-toggle" onchange="toggleCrashAutoPlay(this)">
+                  <span class="crash-slider"></span>
+              </label>
+              <span>Auto Play</span>
+          </div>
+          
+          <div class="crash-toggle-left">
+              <label class="crash-toggle-switch">
+                  <input type="checkbox" id="crash-auto-cashout-toggle">
+                  <span class="crash-slider"></span>
+              </label>
+              <div class="crash-auto-input-wrap">
+                  <span>x</span>
+                  <input type="text" id="crash-auto-cashout-val" value="2.00" readonly>
+              </div>
+          </div>
+      </div>
+
+      <div class="crash-bet-input-row">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
+          <input type="number" id="crash-bet-input" value="1" min="1" max="100" onchange="validateCrashBet()" placeholder="123">
+      </div>
+      
+      <div class="crash-quick-chips">
+          <button onclick="addCrashBet(10)">+ 10</button>
+          <button onclick="addCrashBet(50)">+ 50</button>
+          <button onclick="addCrashBet(100)">+ 100</button>
+      </div>
+      
+      <button class="crash-main-btn" id="crash-main-btn" onclick="handleCrashMainBtn()">Place bet</button>
+      
+    </div>
+  </div>
+</div>
+
 <!-- Modals -->
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
@@ -1188,9 +1422,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="modal-overlay" id="spin-prizes-modal">
   <div class="modal-content" style="max-width: 400px; padding: 20px;">
     <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
-    <div class="prizes-grid" id="prizes-grid-container">
-      <!-- Populated by JS -->
-    </div>
+    <div class="prizes-grid" id="prizes-grid-container"></div>
     <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">إغلاق</button>
   </div>
 </div>
@@ -1284,16 +1516,13 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-// الجوائز الجديدة (من 0.01 إلى 100 فقط)
+// Spin Game Prizes
 const WINNING_TABLE = [
-  // جوائز صغيرة 97% (مجموع الأوزان 97)
   { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.01, weight: 20 },
   { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.1, weight: 20 },
   { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 0.5, weight: 20 },
   { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 1, weight: 20 },
   { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 17 },
-
-  // جوائز كبيرة 3% (مجموع الأوزان 3) من 10 إلى 100
   { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 0.8 },
   { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 20, weight: 0.8 },
   { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 50, weight: 0.6 },
@@ -1323,9 +1552,28 @@ let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 
+// Spin State
 let spinState = { isSpinning: false, soundOn: true };
 let pendingPrize = null;
 let audioCtx = null;
+
+// Crash State
+let crashState = {
+  status: 'waiting', 
+  multiplier: 1.00,
+  crashPoint: 1.00,
+  hasBet: false,
+  activeBet: 0,
+  hasCashedOut: false,
+  autoPlay: false,
+  autoCashout: false,
+  autoCashoutValue: 2.00,
+  countdown: 10,
+  countdownInterval: null,
+  animationId: null,
+  startTime: 0
+};
+let liveCrashHistoryEl = null;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1428,6 +1676,10 @@ async function fetchUserData() {
     document.getElementById('shamUserId').innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
+    
+    // Update Crash Balance on load
+    updateCrashBalanceUI();
+
   } catch (e) {
     console.error('Error fetching user:', e);
   }
@@ -1460,9 +1712,25 @@ document.addEventListener('visibilitychange', () => {
 });
 
 function go(viewName) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => {
+    v.classList.remove('active');
+    if (v.id === 'view-crash') {
+      v.style.display = 'none'; // Ensure fullscreen crash view is hidden
+    }
+  });
+  
   const target = document.getElementById('view-' + viewName);
-  if (target) target.classList.add('active');
+  if (target) {
+    target.classList.add('active');
+    if (viewName === 'crash') {
+      target.style.display = 'flex'; // Ensure fullscreen crash view is shown
+      initCrashGame(); // Initialize Crash game logic
+    } else {
+      // Stop Crash game if navigating away
+      stopCrashGame();
+    }
+  }
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
@@ -1495,6 +1763,9 @@ function updateBalances() {
   document.getElementById('statTotalWithdrawn').innerText = f(user.totalWithdrawn);
   document.getElementById('refInvited').innerText = user.referrals;
   document.getElementById('refEarned').innerText = user.referrals * 2;
+  
+  // Sync Crash Game UI
+  updateCrashBalanceUI();
 }
 
 function renderProfile() {
@@ -1507,17 +1778,16 @@ function renderProfile() {
 }
 
 /* ================= SPIN GAME ================= */
+// ... (Keep Spin Game logic exactly as provided in main code)
 function initSpinGame() {
   document.getElementById('spin-img').src = WINNING_TABLE[0].img;
   document.getElementById('spin-val').innerText = WINNING_TABLE[0].value;
-
   WINNING_TABLE.forEach(p => { const img = new Image(); img.src = p.img; });
 }
 
 function pickPrizeByWeight() {
   const totalWeight = WINNING_TABLE.reduce((sum, p) => sum + p.weight, 0);
   let random = Math.random() * totalWeight;
-  
   for (const prize of WINNING_TABLE) {
     if (random < prize.weight) return prize;
     random -= prize.weight;
@@ -1527,7 +1797,6 @@ function pickPrizeByWeight() {
 
 function startSpin() {
   if (spinState.isSpinning) return;
-
   if (user.tickets < 10) {
     showToast('تحتاج إلى 10 تذاكر للدوران!');
     return;
@@ -1567,7 +1836,6 @@ function startSpin() {
     const nextDelay = 50 + Math.pow(progress, 3) * 400;
     setTimeout(animate, nextDelay);
   }
-
   animate();
 }
 
@@ -1577,12 +1845,10 @@ function playTickSound() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
     osc.type = 'square';
     osc.frequency.setValueAtTime(600, audioCtx.currentTime);
     gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
@@ -1593,22 +1859,17 @@ function playTickSound() {
 function showSpinWinModal(prize) {
   const winIcon = document.getElementById('win-icon');
   const winValue = document.getElementById('win-value');
-  
   winIcon.innerHTML = `<img src="${prize.img}" alt="Win">`;
   winValue.innerHTML = `<img src="${ASSETS.star}"> ${prize.value}`;
   winValue.style.color = '#FFD700';
-
   openModal('spin-win-modal');
 }
 
 function claimSpinReward() {
   if (!pendingPrize) return;
-
   user.stars += pendingPrize.value;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(pendingPrize.value) });
-
   updateBalances();
-  
   pendingPrize = null;
   closeModal('spin-win-modal');
   document.getElementById('spin-btn').disabled = false;
@@ -1623,9 +1884,7 @@ function renderPrizesGrid() {
   const container = document.getElementById('prizes-grid-container');
   if (!container) return;
   container.innerHTML = '';
-
   const sortedPrizes = [...WINNING_TABLE].sort((a, b) => a.value - b.value);
-
   sortedPrizes.forEach(prize => {
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
@@ -1648,7 +1907,288 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+/* ================= CRASH GAME ================= */
+function updateCrashBalanceUI() {
+  const f = n => Number(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const el = document.getElementById('crash-top-balance');
+  if (el) el.innerText = f(user.stars);
+}
+
+function initCrashGame() {
+  // Reset state if necessary
+  if (crashState.status === 'flying' || crashState.status === 'waiting') return; // Already running
+  resetCrashState();
+  startCrashWaitingPhase();
+}
+
+function resetCrashState() {
+  crashState.status = 'waiting';
+  crashState.multiplier = 1.00;
+  crashState.hasBet = false;
+  crashState.hasCashedOut = false;
+  crashState.countdown = 10;
+}
+
+function stopCrashGame() {
+  // Clear intervals and animation frames when leaving view
+  if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
+  if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
+  crashState.status = 'crashed'; // Force stop logic
+}
+
+function startCrashWaitingPhase() {
+  crashState.status = 'waiting';
+  crashState.multiplier = 1.00;
+  crashState.hasBet = false;
+  crashState.hasCashedOut = false;
+  crashState.countdown = 10;
+  
+  const starsBg = document.getElementById('crash-stars-bg');
+  const roundTimer = document.getElementById('crash-round-timer');
+  const mainBtn = document.getElementById('crash-main-btn');
+  const rocketIcon = document.getElementById('crash-rocket');
+  const waitingIcon = document.getElementById('crash-waiting-icon');
+  const historyStrip = document.getElementById('crash-history-strip');
+
+  starsBg.style.animationDuration = '10s';
+  roundTimer.style.display = 'block';
+  roundTimer.innerText = `Starting in ${crashState.countdown}s...`;
+  mainBtn.className = 'crash-main-btn';
+  mainBtn.innerText = 'Place bet';
+  
+  rocketIcon.classList.remove('active');
+  waitingIcon.classList.add('active');
+  
+  createLiveCrashHistory(historyStrip);
+
+  if (crashState.autoPlay) {
+    setTimeout(() => {
+      if (crashState.status === 'waiting' && !crashState.hasBet) {
+        placeCrashBet();
+      }
+    }, 500);
+  }
+
+  if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
+  crashState.countdownInterval = setInterval(() => {
+    crashState.countdown--;
+    if (crashState.countdown <= 0) {
+      clearInterval(crashState.countdownInterval);
+      startCrashFlyingPhase();
+    } else {
+      roundTimer.innerText = `Starting in ${crashState.countdown}s...`;
+    }
+  }, 1000);
+}
+
+function createLiveCrashHistory(historyStrip) {
+  const el = document.createElement('div');
+  el.className = 'crash-history-pill live';
+  el.innerText = 'x1.00';
+  historyStrip.prepend(el);
+  liveCrashHistoryEl = el;
+
+  if (historyStrip.children.length > 15) {
+    historyStrip.lastChild.remove();
+  }
+}
+
+function startCrashFlyingPhase() {
+  crashState.status = 'flying';
+  crashState.startTime = performance.now();
+  crashState.crashPoint = generateCrashPoint();
+  
+  const roundTimer = document.getElementById('crash-round-timer');
+  const starsBg = document.getElementById('crash-stars-bg');
+  const mainBtn = document.getElementById('crash-main-btn');
+  const rocketIcon = document.getElementById('crash-rocket');
+  const waitingIcon = document.getElementById('crash-waiting-icon');
+
+  roundTimer.style.display = 'none';
+  starsBg.style.animationDuration = '0.2s';
+  
+  waitingIcon.classList.remove('active');
+  rocketIcon.classList.add('active');
+
+  if (crashState.hasBet) {
+    mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+    mainBtn.className = 'crash-main-btn cashout';
+  } else {
+    mainBtn.innerText = 'Waiting...';
+    mainBtn.className = 'crash-main-btn disabled';
+  }
+
+  function loop(timestamp) {
+    if (crashState.status !== 'flying') return;
+
+    const elapsed = (timestamp - crashState.startTime) / 1000;
+    crashState.multiplier = Math.pow(1.08, elapsed);
+
+    if (liveCrashHistoryEl) {
+      liveCrashHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
+    }
+
+    if (crashState.hasBet && !crashState.hasCashedOut) {
+      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+      
+      if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) {
+        handleCrashCashOut();
+      }
+    }
+
+    if (crashState.multiplier >= crashState.crashPoint) {
+      crashState.multiplier = crashState.crashPoint;
+      handleCrashCrash();
+      return;
+    }
+
+    crashState.animationId = requestAnimationFrame(loop);
+  }
+  
+  crashState.animationId = requestAnimationFrame(loop);
+}
+
+function generateCrashPoint() {
+  const r = Math.random();
+  if (r < 0.50) return 1.00 + (Math.random() * 0.05); 
+  return 1.05 + Math.pow(Math.random(), 2) * 10; 
+}
+
+function handleCrashCrash() {
+  crashState.status = 'crashed';
+  cancelAnimationFrame(crashState.animationId);
+  
+  const mainBtn = document.getElementById('crash-main-btn');
+  const starsBg = document.getElementById('crash-stars-bg');
+  const rocketIcon = document.getElementById('crash-rocket');
+  const gameArea = document.getElementById('crash-game-area');
+
+  if (liveCrashHistoryEl) {
+    liveCrashHistoryEl.classList.remove('live');
+    liveCrashHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
+    liveCrashHistoryEl = null;
+  }
+
+  if (crashState.hasBet && !crashState.hasCashedOut) {
+    crashState.hasBet = false;
+    crashState.activeBet = 0;
+    mainBtn.innerText = 'Crashed';
+    mainBtn.className = 'crash-main-btn disabled';
+  } else if (crashState.hasCashedOut) {
+    mainBtn.innerText = 'You won!';
+    mainBtn.className = 'crash-main-btn disabled';
+  }
+
+  starsBg.style.animationDuration = '10s';
+  rocketIcon.classList.remove('active');
+
+  setTimeout(() => {
+    if (document.getElementById('view-crash').classList.contains('active')) {
+      startCrashWaitingPhase();
+    }
+  }, 3000);
+}
+
+function handleCrashCashOut() {
+  if (!crashState.hasBet || crashState.hasCashedOut) return;
+  crashState.hasCashedOut = true;
+
+  const winAmount = crashState.activeBet * crashState.multiplier;
+  
+  // Sync with main app logic
+  user.stars += winAmount;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
+  updateBalances();
+
+  const gameArea = document.getElementById('crash-game-area');
+  const mainBtn = document.getElementById('crash-main-btn');
+
+  gameArea.classList.add('cashout-anim');
+  setTimeout(() => gameArea.classList.remove('cashout-anim'), 300);
+
+  mainBtn.innerText = `WON ${winAmount.toFixed(2)}`;
+  mainBtn.className = 'crash-main-btn disabled';
+}
+
+function handleCrashMainBtn() {
+  if (crashState.status === 'waiting') {
+    if (!crashState.hasBet) placeCrashBet();
+    else cancelCrashBet();
+  } else if (crashState.status === 'flying') {
+    if (crashState.hasBet && !crashState.hasCashedOut) {
+      handleCrashCashOut();
+    }
+  }
+}
+
+function placeCrashBet() {
+  const betInput = document.getElementById('crash-bet-input');
+  const mainBtn = document.getElementById('crash-main-btn');
+  const bet = parseInt(betInput.value) || 1;
+
+  if (user.stars < bet) {
+    showToast('رصيدك غير كافٍ!');
+    return;
+  }
+
+  // Sync with main app
+  user.stars -= bet;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
+  updateBalances();
+
+  crashState.activeBet = bet;
+  crashState.hasBet = true;
+  
+  mainBtn.innerText = 'Cancel bet';
+  mainBtn.className = 'crash-main-btn cancel';
+}
+
+function cancelCrashBet() {
+  const mainBtn = document.getElementById('crash-main-btn');
+  
+  // Sync with main app (refund)
+  user.stars += crashState.activeBet;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(crashState.activeBet) });
+  updateBalances();
+
+  crashState.activeBet = 0;
+  crashState.hasBet = false;
+  
+  mainBtn.innerText = 'Place bet';
+  mainBtn.className = 'crash-main-btn';
+}
+
+function validateCrashBet() {
+  const input = document.getElementById('crash-bet-input');
+  let val = parseInt(input.value) || 1;
+  if (val < 1) val = 1;
+  if (val > 100) val = 100;
+  input.value = val;
+}
+
+function addCrashBet(amount) {
+  const input = document.getElementById('crash-bet-input');
+  let current = parseInt(input.value) || 0;
+  let newVal = current + amount;
+  if (newVal > 100) newVal = 100;
+  input.value = newVal;
+}
+
+function toggleCrashAutoPlay(checkbox) {
+  crashState.autoPlay = checkbox.checked;
+  if (crashState.autoPlay && crashState.status === 'waiting' && !crashState.hasBet) {
+    placeCrashBet();
+  }
+}
+
+document.getElementById('crash-auto-cashout-toggle').addEventListener('change', (e) => {
+  crashState.autoCashout = e.target.checked;
+});
+
+
 /* ================= TASKS & DAILY LOGIN ================= */
+// ... (Keep existing functions)
 function formatRemain(ms) {
   if (ms <= 0) return '00:00:00';
   const h = Math.floor(ms / 3600000);
@@ -1904,6 +2444,7 @@ async function checkTaskAction() {
 }
 
 /* ================= DEPOSIT & WITHDRAW ================= */
+// ... (Keep existing functions)
 function adjustInputWidth(input) {
   if (!input) return;
   input.style.width = 'auto';
