@@ -174,7 +174,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   flex-shrink: 0;
   overflow: hidden;
 }
-.live-icon-slot video { width: 100%; height: 100%; object-fit: contain; }
+.live-icon-slot img { width: 100%; height: 100%; object-fit: contain; }
 
 /* ============ HOME CARDS ============ */
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
@@ -246,7 +246,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .spin-track {
   display: flex; gap: 16px;
-  transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 5s cubic-bezier(0.1, 0.9, 0.2, 1);
   will-change: transform;
 }
 
@@ -259,7 +259,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid var(--border);
   position: relative; overflow: hidden;
 }
-.spin-item video {
+.spin-item img {
   width: 90px; height: 90px; object-fit: contain;
 }
 .spin-item .val {
@@ -672,7 +672,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid var(--border);
 }
 .spin-win-modal .modal-icon { width: 100px; height: 100px; margin: 0 auto 20px; }
-.spin-win-modal .modal-icon video { width: 100%; height: 100%; object-fit: contain; }
+.spin-win-modal .modal-icon img { width: 100%; height: 100%; object-fit: contain; }
 .spin-win-modal .win-value {
   font-size: 32px; font-weight: 900; color: var(--star-color);
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -694,7 +694,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 10px 16px; margin-bottom: 8px; border: 1px solid var(--border);
 }
 .prize-info { display: flex; align-items: center; gap: 12px; }
-.prize-info video { width: 40px; height: 40px; object-fit: contain; }
+.prize-info img { width: 40px; height: 40px; object-fit: contain; }
 .prize-details h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
 .prize-details p { font-size: 12px; color: var(--text-secondary); }
 .prize-chance { font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 8px; }
@@ -715,7 +715,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   left: 4px; bottom: 4px; background-color: white;
   transition: .4s; border-radius: 50%;
 }
-input:checked + .slider { background-color: var(--primary-blue); }
+input:checked + .slider { background-color: var(--gradient-blue); }
 input:checked + .slider:before { transform: translateX(22px); }
 
 .toast {
@@ -798,7 +798,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="live-strip">
         <div class="live-badge">LIVE</div>
         <div class="live-icons-wrapper">
-          <div class="live-icons-track" id="liveIcons"></div>
+          <div class="live-icons-track" id="liveIconsHome"></div>
         </div>
       </div>
       
@@ -841,6 +841,14 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <!-- View: Spin Game -->
     <div class="view" id="view-spin">
+      <!-- LIVE Strip inside Spin Game -->
+      <div class="live-strip" style="width: 100%; margin-bottom: 10px;">
+        <div class="live-badge">LIVE</div>
+        <div class="live-icons-wrapper">
+          <div class="live-icons-track" id="liveIconsSpin"></div>
+        </div>
+      </div>
+
       <div class="spin-track-wrapper">
         <div class="spin-indicator"></div>
         <div class="spin-track" id="spin-track">
@@ -1317,37 +1325,21 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-const PRIZES = [
-  { id: 1, value: 39760, webm: 'gifts_by_StickerEmojiRobot-078.webm' },
-  { id: 2, value: 7129, webm: 'Cars_by_StickerEmojiRobot-045.webm' },
-  { id: 3, value: 3877, webm: 'gifts_by_StickerEmojiRobot-069.webm' },
-  { id: 4, value: 623, webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm' },
-  { id: 5, value: 453, webm: 'Cars_by_StickerEmojiRobot-036.webm' },
-  { id: 6, value: 100, webm: 'gifts_by_StickerEmojiRobot-041.webm' },
-  { id: 7, value: 50, webm: 'Cars_by_StickerEmojiRobot-033.webm' },
-  { id: 8, value: 25, webm: 'Cars_by_StickerEmojiRobot-040.webm' },
-  { id: 9, value: 15, webm: 'Cars_by_StickerEmojiRobot-042.webm' },
-  { id: 10, value: 10, webm: 'Cars_by_StickerEmojiRobot-043.webm' },
-  { id: 11, value: 5, webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm' }
-];
-
+// الجوائز الجديدة مرتبة من الأصغر للأكبر
 const WINNING_TABLE = [
-  // 2% للنجوم الكبيرة (10 إلى 500)
-  { id: 'p1', webm: 'gifts_by_StickerEmojiRobot-078.webm', value: 500, type: 'star', weight: 0.5 },
-  { id: 'p2', webm: 'Cars_by_StickerEmojiRobot-045.webm', value: 100, type: 'star', weight: 0.5 },
-  { id: 'p3', webm: 'gifts_by_StickerEmojiRobot-069.webm', value: 50, type: 'star', weight: 0.5 },
-  { id: 'p4', webm: 'Artisan_Brick_by_StickerEmojiRobot-018.webm', value: 10, type: 'star', weight: 0.5 },
-  
-  // 48% للنجوم الصغيرة (0.01 إلى 9.99)
-  { id: 'p5', webm: 'Cars_by_StickerEmojiRobot-036.webm', value: 5, type: 'star', weight: 12 },
-  { id: 'p6', webm: 'gifts_by_StickerEmojiRobot-041.webm', value: 1, type: 'star', weight: 18 },
-  { id: 'p7', webm: 'Cars_by_StickerEmojiRobot-033.webm', value: 0.5, type: 'star', weight: 10 },
-  { id: 'p8', webm: 'Cars_by_StickerEmojiRobot-040.webm', value: 0.1, type: 'star', weight: 8 },
-  
-  // 50% للتذاكر (1 إلى 50)
-  { id: 'p9', webm: 'Cars_by_StickerEmojiRobot-042.webm', value: 10, type: 'ticket', weight: 15 },
-  { id: 'p10', webm: 'Cars_by_StickerEmojiRobot-043.webm', value: 5, type: 'ticket', weight: 20 },
-  { id: 'p11', webm: 'HeartLocketStickersByAutoGiftNews_by_StickerEmoj.webm', value: 1, type: 'ticket', weight: 15 }
+  // 2% للنجوم الكبيرة
+  { id: 'p10', img: 'IMG_20261029_171453_689.png', value: 500, type: 'star', weight: 0.5 },
+  { id: 'p9', img: 'IMG_20261029_171514_869.png', value: 50, type: 'star', weight: 0.5 },
+  { id: 'p8', img: 'IMG_20261029_172042_619.png', value: 10, type: 'ticket', weight: 0.5 },
+  { id: 'p7', img: 'IMG_20261029_171539_567.png', value: 10, type: 'star', weight: 0.5 },
+
+  // 48% للنجوم الصغيرة
+  { id: 'p6', img: 'IMG_20261029_172134_616.png', value: 5, type: 'ticket', weight: 12 },
+  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, type: 'star', weight: 12 },
+  { id: 'p4', img: 'IMG_20261029_171631_362.png', value: 1, type: 'ticket', weight: 12 },
+  { id: 'p3', img: 'IMG_20261029_171802_634.png', value: 1, type: 'star', weight: 12 },
+  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, type: 'star', weight: 6 },
+  { id: 'p1', img: 'IMG_20261029_171638_229.png', value: 0.1, type: 'star', weight: 6 }
 ];
 
 let user = {
@@ -1384,6 +1376,7 @@ let tasksCache = [];
 let spinState = { isSpinning: false, soundOn: true };
 let pendingPrize = null;
 let audioCtx = null;
+let spinTickTimeout = null;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1540,20 +1533,31 @@ function updateBalances() {
 
 /* ================= LIVE STRIP (MARQUEE) ================= */
 function initLiveStrip() {
-  const container = document.getElementById('liveIcons');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  // نكرر المصفوفة مرتين لضمان التمرير المستمر
-  const itemsToRender = [...PRIZES, ...PRIZES];
-  
-  itemsToRender.forEach(prize => {
-    const div = document.createElement('div');
-    div.className = 'live-icon-slot';
-    div.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
-    container.appendChild(div);
-  });
+  // إضافة الشريط في الصفحة الرئيسية
+  const containerHome = document.getElementById('liveIconsHome');
+  if (containerHome) {
+    containerHome.innerHTML = '';
+    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
+    itemsToRender.forEach(prize => {
+      const div = document.createElement('div');
+      div.className = 'live-icon-slot';
+      div.innerHTML = `<img src="${prize.img}" alt="Live Prize">`;
+      containerHome.appendChild(div);
+    });
+  }
+
+  // إضافة الشريط داخل لعبة Spin
+  const containerSpin = document.getElementById('liveIconsSpin');
+  if (containerSpin) {
+    containerSpin.innerHTML = '';
+    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
+    itemsToRender.forEach(prize => {
+      const div = document.createElement('div');
+      div.className = 'live-icon-slot';
+      div.innerHTML = `<img src="${prize.img}" alt="Live Prize">`;
+      containerSpin.appendChild(div);
+    });
+  }
 }
 
 function renderProfile() {
@@ -1569,8 +1573,8 @@ function renderProfile() {
 function initSpinGame() {
   const track = document.getElementById('spin-track');
   track.innerHTML = '';
-  // إضافة 5 عناصر عشوائية
-  for (let i = 0; i < 5; i++) {
+  // إضافة 10 عناصر عشوائية كبداية
+  for (let i = 0; i < 10; i++) {
     const prize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
     track.appendChild(createSpinItem(prize));
   }
@@ -1581,7 +1585,7 @@ function createSpinItem(prize) {
   div.className = 'spin-item';
   const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
   div.innerHTML = `
-    <video src="${prize.webm}" autoplay loop muted playsinline></video>
+    <img src="${prize.img}" alt="Prize">
     <div class="val">
       <img src="${icon}"> ${prize.value}
     </div>
@@ -1619,15 +1623,14 @@ function startSpin() {
   const winner = pickPrizeByWeight();
   pendingPrize = winner;
 
-  playTickSound(0.1, 100);
-
   const track = document.getElementById('spin-track');
   track.innerHTML = '';
   track.style.transition = 'none';
   track.style.transform = 'translateX(0px)';
 
-  const totalItems = 40;
-  const winnerIndex = 35;
+  // إنشاء 100 بطاقة لضمان عدم نفاذها أبداً أثناء الدوران
+  const totalItems = 100;
+  const winnerIndex = 80; // الفائز سيكون في البطاقة 80
 
   for (let i = 0; i < totalItems; i++) {
     const prize = i === winnerIndex ? winner : WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
@@ -1635,44 +1638,37 @@ function startSpin() {
   }
 
   const ITEM_WIDTH = 156; // 140 + 16 gap
-  const centerOffset = window.innerWidth / 2 - 70; // 70 is half of 140
+  const centerOffset = window.innerWidth / 2 - 70;
   const targetX = -(winnerIndex * ITEM_WIDTH - centerOffset);
   const randomOffset = (Math.random() - 0.5) * 30; 
   const finalTranslate = targetX + randomOffset;
 
   void track.offsetWidth; 
-  track.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.2, 1)';
+  
+  // حركة الدوران لمدة 5 ثوان
+  track.style.transition = 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)';
   track.style.transform = `translateX(${finalTranslate}px)`;
 
-  let tickDelay = 100;
-  let totalElapsed = 0;
-  const playTicks = () => {
-    if (totalElapsed > 4000) return;
-    playTickSound(0.05, 800);
-    totalElapsed += tickDelay;
-    tickDelay = 100 + (totalElapsed * 0.5); 
-    if (totalElapsed < 4000) setTimeout(playTicks, tickDelay);
-  };
-  setTimeout(playTicks, 200);
+  // تشغيل الصوت المتسارع
+  playAcceleratingTickSound(5000);
 
   setTimeout(() => {
     spinState.isSpinning = false;
     showSpinWinModal(winner);
-  }, 4100);
+  }, 5100); // 5.1 ثانية لضمان انتهاء الحركة
 }
 
 function showSpinWinModal(prize) {
   const winIcon = document.getElementById('win-icon');
   const winValue = document.getElementById('win-value');
   
-  winIcon.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
+  winIcon.innerHTML = `<img src="${prize.img}" alt="Win">`;
   
   const icon = prize.type === 'star' ? ASSETS.star : ASSETS.ticket;
   winValue.innerHTML = `<img src="${icon}"> ${prize.value}`;
   winValue.style.color = prize.type === 'star' ? '#FFD700' : '#9d4edd';
 
   openModal('spin-win-modal');
-  playWinSound();
 }
 
 function claimSpinReward() {
@@ -1699,46 +1695,41 @@ function toggleSpinSound(checkbox) {
   localStorage.setItem('spinSoundOn', spinState.soundOn);
 }
 
-function playTickSound(volume, freq) {
+function playAcceleratingTickSound(durationMs) {
   if (!spinState.soundOn) return;
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
     
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    
-    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
-  } catch (e) { console.warn('Audio error', e); }
-}
+    let elapsed = 0;
+    let delay = 150; // يبدأ بطيئاً
 
-function playWinSound() {
-  if (!spinState.soundOn) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523.25, 659.25, 783.99]; 
-    notes.forEach((freq, i) => {
-      setTimeout(() => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.3);
-      }, i * 100);
-    });
+    const tick = () => {
+      if (elapsed >= durationMs) return;
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+
+      // تسريع الصوت تدريجياً
+      elapsed += delay;
+      delay = Math.max(30, delay * 0.85); // يقل التأخير ليصبح أسرع
+      
+      spinTickTimeout = setTimeout(tick, delay);
+    };
+    
+    tick();
+
   } catch (e) { console.warn('Audio error', e); }
 }
 
@@ -1756,7 +1747,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     div.innerHTML = `
       <div class="prize-info">
-        <video src="${prize.webm}" autoplay loop muted playsinline></video>
+        <img src="${prize.img}" alt="Prize">
         <div class="prize-details">
           <h4 style="display:flex; align-items:center; gap:4px;">
             ${prize.value} <img src="${icon}" style="width:14px; height:14px;">
