@@ -289,6 +289,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
 }
+.start-btn:disabled {
+  background: var(--bg-soft); color: var(--text-secondary);
+  cursor: not-allowed;
+}
 
 /* ============ DEPOSIT & WITHDRAW ============ */
 .tabs {
@@ -345,13 +349,13 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .dep-bottom-section {
   display: flex;
   flex-direction: column;
-  gap: 40px; /* زيادة التباعد بين المبالغ المقترحة وزر الشحن */
+  gap: 40px;
   margin-top: 20px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: var(--bg-card); /* لون رمادي مثل البطاقات */
+  background: var(--bg-card);
   border: 1px solid var(--border);
   padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
   font-weight: 700; font-size: 15px; cursor: pointer;
@@ -367,16 +371,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .topup-btn:active { transform: scale(0.97); }
 
+/* Updated Withdraw History Button */
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: #FFFFFF; color: #000000;
+  background: var(--bg-card); /* لون رمادي مثل بطاقة الاختيار */
+  color: var(--text-primary);
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.2s;
 }
-.btn-secondary:active { background: #e5e5ea; }
-.btn-secondary i { font-size: 16px; color: #000000; }
+.btn-secondary:active { background: var(--bg-soft); }
+.btn-secondary i { font-size: 16px; color: var(--text-secondary); }
 
 .manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
@@ -571,7 +577,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .bottom-sheet-overlay.show { display: flex; }
 .bottom-sheet {
-  background: #1C1C1E; /* Dark gray matching image */
+  background: #1C1C1E;
   width: 100%; max-width: 480px;
   border-top-left-radius: 24px; border-top-right-radius: 24px;
   padding: 30px 24px calc(24px + env(safe-area-inset-bottom));
@@ -586,7 +592,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .task-modal-icon {
   width: 80px; height: 80px; border-radius: 50%;
-  background: #229ED9; /* Telegram blue default */
+  background: #229ED9;
   margin: 0 auto 20px;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
@@ -1158,7 +1164,8 @@ let user = {
   totalWithdrawn: 0,
   lastDailyClaim: 0,
   nextDailyClaim: 0,
-  dailyStreak: 0
+  dailyStreak: 0,
+  completedTasks: [] // تتبع المهام المكتملة
 };
 
 let depositAmount = 200;
@@ -1241,11 +1248,13 @@ async function fetchUserData() {
       user.lastDailyClaim = data.lastDailyClaim || 0;
       user.nextDailyClaim = data.nextDailyClaim || 0;
       user.dailyStreak = data.dailyStreak || 0;
+      user.completedTasks = data.completedTasks || []; // جلب المهام المكتملة
     } else {
       await docRef.set({
         telegramId: user.id, name: user.name, photoUrl: user.photo,
         stars: 0, tickets: 0, referralCount: 0,
         lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0,
+        completedTasks: [],
         createdAt: Date.now()
       });
     }
@@ -1497,6 +1506,7 @@ async function loadTasks() {
     tasksCache.forEach(task => {
       const isTicket = task.rewardType === 'ticket';
       const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
+      const isCompleted = user.completedTasks.includes(task.id);
       
       let iconHtml = '';
       if (task.imageUrl) {
@@ -1504,6 +1514,11 @@ async function loadTasks() {
       } else {
         iconHtml = `<i class="fab fa-telegram"></i>`;
       }
+
+      // If task is completed, show disabled button
+      let actionBtn = isCompleted 
+        ? `<button class="start-btn" style="background: var(--bg-soft); color: var(--text-secondary);" disabled>تم</button>`
+        : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
 
       html += `
         <div class="task-item">
@@ -1514,7 +1529,7 @@ async function loadTasks() {
               <div class="task-reward"><img src="${rewardIcon}"> ${task.rewardAmount}</div>
             </div>
           </div>
-          <button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>
+          ${actionBtn}
         </div>
       `;
     });
@@ -1531,8 +1546,13 @@ function openTaskSheet(taskId) {
   const task = tasksCache.find(t => t.id === taskId);
   if (!task) return;
   
+  if (user.completedTasks.includes(taskId)) {
+    showToast('لقد قمت بإكمال هذه المهمة بالفعل');
+    return;
+  }
+  
   currentTask = task;
-  taskStartTime = 0; // Reset timer
+  taskStartTime = 0;
   
   document.getElementById('tsTitle').innerText = task.title;
   
@@ -1554,7 +1574,6 @@ function closeTaskSheet() {
 function startTaskAction() {
   if (!currentTask) return;
   
-  // Open link
   if (tg) {
     tg.openLink(currentTask.link);
   } else {
@@ -1568,6 +1587,12 @@ function startTaskAction() {
 async function checkTaskAction() {
   if (!currentTask) return;
   
+  if (user.completedTasks.includes(currentTask.id)) {
+    showToast('لقد قمت بإكمال هذه المهمة بالفعل');
+    closeTaskSheet();
+    return;
+  }
+
   if (!taskStartTime) {
     return showToast('يجب الضغط على Start أولاً');
   }
@@ -1577,7 +1602,6 @@ async function checkTaskAction() {
     return showToast('لم تمر 5 ثوانٍ بعد، يرجى المحاولة لاحقاً');
   }
   
-  // Success logic
   const btn = event.target;
   btn.disabled = true;
   btn.innerText = 'جاري التحقق...';
@@ -1592,21 +1616,22 @@ async function checkTaskAction() {
       user.stars += amount;
     }
     
+    user.completedTasks.push(currentTask.id);
     updateBalances();
     
-    const updates = {};
+    const updates = {
+      completedTasks: firebase.firestore.FieldValue.arrayUnion(currentTask.id)
+    };
+    
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     
     await syncUserData(updates);
     
-    // TODO: Ideally, mark task as completed in DB so user can't repeat it.
-    // await db.collection('puppy_completed_tasks').add({userId: user.id, taskId: currentTask.id, date: Date.now()});
-
     showToast(`تم إكمال المهمة بنجاح! +${amount} ${isTicket ? 'تيكت' : 'نجمة'}`);
     closeTaskSheet();
     
-    // Optionally remove task from UI
+    // Re-render tasks to show the "Done" state
     loadTasks(); 
     
   } catch (e) {
