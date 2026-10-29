@@ -84,7 +84,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   z-index: 50; padding-top: var(--safe-top);
 }
 
-/* ============ BALANCE PILLS (Fully Rounded) ============ */
+/* ============ BALANCE PILLS ============ */
 .floating-balances {
   position: absolute;
   top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
@@ -98,7 +98,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px; /* زوايا دائرية بالكامل */
+  border-radius: 999px;
   padding: 4px 10px;
   gap: 8px;
   color: var(--text-primary);
@@ -182,6 +182,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card:active { transform: scale(0.97); }
 
 .home-card.card-free { background: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%); border: 1px solid var(--border); }
+.home-card.card-crash { background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%); }
 .home-card.card-cases { background: linear-gradient(135deg, #DC07AF 0%, #661797 100%); }
 .home-card.referral { background: linear-gradient(135deg, #661797 0%, #DC07AF 100%); }
 
@@ -195,6 +196,13 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   object-fit: contain;
   margin-left: -5px;
   transform: scale(1.1);
+}
+.home-card .card-video-icon {
+  width: 95px; 
+  height: 95px;
+  object-fit: contain;
+  margin-left: -5px;
+  transform: scale(1.3);
 }
 
 /* ============ TASKS & DAILY LOGIN ============ */
@@ -264,9 +272,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .task-icon {
   width: 50px; height: 50px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; font-size: 24px;
+  background: var(--bg-soft);
+  overflow: hidden;
 }
-.task-icon-img { width: 34px; height: 50px; border-radius: 8px; background:#000; display: flex; align-items: center; justify-content: center; overflow: hidden;}
-.task-icon-img img { width: 100%; height: 100%; object-fit: contain; }
+.task-icon img { width: 100%; height: 100%; object-fit: cover; }
+.task-icon i { color: #229ED9; font-size: 28px; }
 .task-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
 .task-reward {
   display: flex; align-items: center; gap: 6px;
@@ -278,10 +288,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 10px 20px; border-radius: 14px;
   font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
-}
-.start-btn.timer {
-  background: var(--bg-soft); color: var(--text-secondary);
-  font-family: monospace; font-size: 13px;
 }
 
 /* ============ DEPOSIT & WITHDRAW ============ */
@@ -339,14 +345,15 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .dep-bottom-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 10px;
+  gap: 40px; /* زيادة التباعد بين المبالغ المقترحة وزر الشحن */
+  margin-top: 20px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: #FFFFFF; border: 1px solid var(--border);
-  padding: 12px 20px; border-radius: 16px; color: #000000;
+  background: var(--bg-card); /* لون رمادي مثل البطاقات */
+  border: 1px solid var(--border);
+  padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
   font-weight: 700; font-size: 15px; cursor: pointer;
   transition: transform 0.1s;
 }
@@ -555,6 +562,49 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .modal-btn:active { transform: scale(0.97); }
 
+/* ============ BOTTOM SHEET (Task Verification) ============ */
+.bottom-sheet-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  z-index: 2000; display: none;
+  align-items: flex-end; justify-content: center;
+}
+.bottom-sheet-overlay.show { display: flex; }
+.bottom-sheet {
+  background: #1C1C1E; /* Dark gray matching image */
+  width: 100%; max-width: 480px;
+  border-top-left-radius: 24px; border-top-right-radius: 24px;
+  padding: 30px 24px calc(24px + env(safe-area-inset-bottom));
+  position: relative;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.close-sheet {
+  position: absolute; top: 16px; right: 16px;
+  color: var(--text-secondary); font-size: 20px;
+}
+.task-modal-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: #229ED9; /* Telegram blue default */
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.task-modal-icon i { font-size: 40px; color: #fff; }
+.task-modal-icon img { width: 100%; height: 100%; object-fit: cover; }
+.bottom-sheet h3 {
+  font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #fff;
+  line-height: 1.4; padding: 0 10px;
+}
+.sheet-btn {
+  width: 100%; padding: 16px; border-radius: 16px;
+  font-size: 16px; font-weight: 800; margin-bottom: 12px;
+  cursor: pointer; border: none;
+}
+.sheet-btn.primary { background: #007AFF; color: #fff; }
+.sheet-btn.secondary { background: #2C2C2E; color: #fff; }
+
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
   background: var(--bg-card); color: var(--text-primary);
@@ -646,6 +696,15 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift">
         </div>
 
+        <!-- Crash Card Added Here -->
+        <div class="home-card card-crash" onclick="showToast('قريباً')">
+          <div class="card-text">
+            <h3>Crash</h3>
+            <p>لعبة السرعة</p>
+          </div>
+          <video src="gifts_by_StickerEmojiRobot-010.webm" autoplay loop muted playsinline class="card-video-icon"></video>
+        </div>
+
         <div class="home-card card-cases" onclick="showToast('قريباً')">
           <div class="card-text">
             <h3>Cases</h3>
@@ -682,89 +741,16 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <span id="streakCount">0</span>
           </div>
         </div>
-        <div class="daily-week-days" id="dailyWeekDays">
-          <!-- Will be injected via JS -->
-        </div>
+        <div class="daily-week-days" id="dailyWeekDays"></div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
           <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 18px; height: 18px;">
           <span id="claimBtnText">جاري التحقق...</span>
         </button>
       </div>
       
-      <div class="task-group">
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon-img"><img src="https://img.icons8.com/color/96/iphone.png" alt="App"></div>
-            <div class="task-text">
-              <h4>الشاشة الرئيسية</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-link"></i></div>
-            <div class="task-text">
-              <h4>الرابط</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#34C759; color:#fff;"><i class="fas fa-camera"></i></div>
-            <div class="task-text">
-              <h4>القصة</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-      </div>
-
-      <div class="task-group">
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
-            <div class="task-text">
-              <h4>اشترك في قناتنا</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
-            <div class="task-text">
-              <h4>اشترك في يوتيوب</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
-            <div class="task-text">
-              <h4>انضم إلى الدردشة</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon" style="background:#fff; color:#000;"><i class="fab fa-instagram"></i></div>
-            <div class="task-text">
-              <h4>اشترك في انستغرام</h4>
-              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
-            </div>
-          </div>
-          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
-        </div>
+      <!-- Dynamic Tasks Container -->
+      <div id="tasksContainer">
+        <div style="text-align:center; padding:30px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المهام...</div>
       </div>
     </div>
 
@@ -930,7 +916,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
 
-      <!-- Gram Withdrawal Tab -->
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
           <input type="number" id="wdGramAmount" placeholder="0" oninput="updateWdUI('gram', this)">
@@ -1068,6 +1053,17 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 </div>
 
+<!-- Task Verification Bottom Sheet -->
+<div class="bottom-sheet-overlay" id="taskSheet">
+  <div class="bottom-sheet">
+    <button class="close-sheet" onclick="closeTaskSheet()"><i class="fas fa-times"></i></button>
+    <div class="task-modal-icon" id="tsIcon"></div>
+    <h3 id="tsTitle">اسم المهمة</h3>
+    <button class="sheet-btn primary" id="tsStartBtn" onclick="startTaskAction()">Start</button>
+    <button class="sheet-btn secondary" onclick="checkTaskAction()">Check task</button>
+  </div>
+</div>
+
 <!-- Modals -->
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
@@ -1176,6 +1172,11 @@ let liveStripInterval = null;
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
 
+// Task System Variables
+let currentTask = null;
+let taskStartTime = 0;
+let tasksCache = [];
+
 const tg = window.Telegram?.WebApp;
 let db = null;
 
@@ -1221,6 +1222,7 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     fetchUserData();
+    loadTasks();
   } catch (e) {
     showToast('خطأ في الاتصال بقاعدة البيانات');
   }
@@ -1476,6 +1478,146 @@ async function claimDailyReward() {
   initDailyLogin();
 }
 
+/* ================= TASKS LOGIC ================= */
+async function loadTasks() {
+  const container = document.getElementById('tasksContainer');
+  if (!db) return;
+  
+  try {
+    const q = await db.collection('puppy_tasks').get();
+    tasksCache = [];
+    q.forEach(doc => tasksCache.push({ id: doc.id, ...doc.data() }));
+    
+    if (tasksCache.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-secondary);">لا توجد مهام متاحة حالياً</div>';
+      return;
+    }
+
+    let html = '<div class="task-group">';
+    tasksCache.forEach(task => {
+      const isTicket = task.rewardType === 'ticket';
+      const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
+      
+      let iconHtml = '';
+      if (task.imageUrl) {
+        iconHtml = `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">`;
+      } else {
+        iconHtml = `<i class="fab fa-telegram"></i>`;
+      }
+
+      html += `
+        <div class="task-item">
+          <div class="task-info">
+            <div class="task-icon">${iconHtml}</div>
+            <div class="task-text">
+              <h4>${task.title}</h4>
+              <div class="task-reward"><img src="${rewardIcon}"> ${task.rewardAmount}</div>
+            </div>
+          </div>
+          <button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>
+        </div>
+      `;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+
+  } catch(e) {
+    console.error(e);
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--danger);">تعذر تحميل المهام</div>';
+  }
+}
+
+function openTaskSheet(taskId) {
+  const task = tasksCache.find(t => t.id === taskId);
+  if (!task) return;
+  
+  currentTask = task;
+  taskStartTime = 0; // Reset timer
+  
+  document.getElementById('tsTitle').innerText = task.title;
+  
+  const iconContainer = document.getElementById('tsIcon');
+  if (task.imageUrl) {
+    iconContainer.innerHTML = `<img src="${task.imageUrl}" onerror="this.innerHTML='<i class=\\'fab fa-telegram\\'></i>'">`;
+  } else {
+    iconContainer.innerHTML = `<i class="fab fa-telegram"></i>`;
+  }
+
+  document.getElementById('taskSheet').classList.add('show');
+}
+
+function closeTaskSheet() {
+  document.getElementById('taskSheet').classList.remove('show');
+  currentTask = null;
+}
+
+function startTaskAction() {
+  if (!currentTask) return;
+  
+  // Open link
+  if (tg) {
+    tg.openLink(currentTask.link);
+  } else {
+    window.open(currentTask.link, '_blank');
+  }
+  
+  taskStartTime = Date.now();
+  showToast('يرجى العودة بعد 5 ثوانٍ للتحقق');
+}
+
+async function checkTaskAction() {
+  if (!currentTask) return;
+  
+  if (!taskStartTime) {
+    return showToast('يجب الضغط على Start أولاً');
+  }
+  
+  const elapsed = (Date.now() - taskStartTime) / 1000;
+  if (elapsed < 5) {
+    return showToast('لم تمر 5 ثوانٍ بعد، يرجى المحاولة لاحقاً');
+  }
+  
+  // Success logic
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerText = 'جاري التحقق...';
+  
+  try {
+    const isTicket = currentTask.rewardType === 'ticket';
+    const amount = Number(currentTask.rewardAmount);
+    
+    if (isTicket) {
+      user.tickets += amount;
+    } else {
+      user.stars += amount;
+    }
+    
+    updateBalances();
+    
+    const updates = {};
+    if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
+    else updates.stars = firebase.firestore.FieldValue.increment(amount);
+    
+    await syncUserData(updates);
+    
+    // TODO: Ideally, mark task as completed in DB so user can't repeat it.
+    // await db.collection('puppy_completed_tasks').add({userId: user.id, taskId: currentTask.id, date: Date.now()});
+
+    showToast(`تم إكمال المهمة بنجاح! +${amount} ${isTicket ? 'تيكت' : 'نجمة'}`);
+    closeTaskSheet();
+    
+    // Optionally remove task from UI
+    loadTasks(); 
+    
+  } catch (e) {
+    showToast('حدث خطأ أثناء التحقق');
+  } finally {
+    btn.disabled = false;
+    btn.innerText = 'Check task';
+  }
+}
+
+/* ================= DEPOSIT & WITHDRAW ================= */
 function adjustInputWidth(input) {
   if (!input) return;
   input.style.width = 'auto';
@@ -1926,37 +2068,6 @@ function copyText(text) {
 
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-function completeTask(btn) {
-  if (btn.innerText === 'ابدأ') {
-    btn.className = 'start-btn timer';
-    let time = 3600;
-    const interval = setInterval(() => {
-      time--;
-      const h = Math.floor(time / 3600);
-      const m = Math.floor((time % 3600) / 60);
-      const s = time % 60;
-      btn.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-      if (time <= 0) {
-        clearInterval(interval);
-        btn.innerText = 'استلام';
-        btn.className = 'start-btn';
-        btn.style.background = 'var(--success)';
-        btn.style.color = '#000';
-        btn.onclick = () => {
-          user.tickets += 1;
-          updateBalances();
-          syncUserData({ tickets: user.tickets });
-          btn.innerText = 'تم';
-          btn.style.background = 'var(--bg-soft)';
-          btn.style.color = 'var(--text-secondary)';
-          btn.disabled = true;
-          showToast('+1 تيكت');
-        };
-      }
-    }, 1000);
-  }
-}
 </script>
 
 </body>
