@@ -191,20 +191,37 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .live-icon-slot video { width: 100%; height: 100%; object-fit: contain; }
 
-/* ============ HOME CARDS ============ */
-.home-cards { display: flex; flex-direction: column; gap: 14px; }
+/* ============ NEW HOME CARDS ============ */
+.home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
-  border-radius: 24px; padding: 24px;
+  border-radius: 28px; 
+  padding: 18px 24px;
   display: flex; align-items: center; justify-content: space-between;
   cursor: pointer; transition: transform 0.2s var(--spring);
   position: relative; overflow: hidden;
+  min-height: 105px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 .home-card:active { transform: scale(0.97); }
-.home-card.tasks { background: var(--gradient-purple); }
-.home-card.referral { background: var(--gradient-blue); }
-.home-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #fff; }
-.home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
-.home-card .icon { font-size: 32px; opacity: 0.9; color: #fff; }
+
+/* ألوان البطاقات */
+.home-card.card-free { background: linear-gradient(135deg, #3a3a3c 0%, #1C1C1E 100%); }
+.home-card.card-cases { background: linear-gradient(135deg, #007AFF 0%, #0055CC 100%); }
+.home-card.referral { background: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%); }
+
+.home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
+.home-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; color: #fff; letter-spacing: -0.5px; }
+.home-card p { font-size: 15px; color: rgba(255,255,255,0.65); font-weight: 600; }
+
+/* صور كبيرة */
+.home-card .card-icon {
+  width: 95px; 
+  height: 95px;
+  object-fit: contain;
+  margin-left: -5px;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+  transform: scale(1.1); /* تكبير إضافي بسيط */
+}
 
 /* ============ TASKS & DAILY LOGIN ============ */
 .page-header { margin-bottom: 24px; }
@@ -330,7 +347,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   gap: 8px; width: 100%;
 }
 .amount-display input {
-  font-size: 3rem; /* slightly smaller */
+  font-size: 3rem;
   font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 200px; outline: none;
@@ -424,7 +441,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .wd-input:focus { border-color: #007AFF; }
 
-/* ============ WITHDRAW HISTORY (UPDATED DESIGN) ============ */
+/* ============ WITHDRAW HISTORY ============ */
 .history-modal {
   max-width: 380px !important; padding: 22px 18px 16px !important;
 }
@@ -678,19 +695,34 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
       </div>
       
       <div class="home-cards">
-        <div class="home-card tasks" onclick="go('tasks')">
-          <div>
-            <h3>المهام</h3>
-            <p>أكمل المهام واربح التذاكر</p>
+        <!-- بطاقة Free الجديدة -->
+        <div class="home-card card-free" onclick="showToast('قريباً')">
+          <div class="card-text">
+            <h3>Free</h3>
+            <p>2 cases</p>
           </div>
-          <i class="fas fa-tasks icon"></i>
+          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131022_938.png -->
+          <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift">
         </div>
+
+        <!-- بطاقة Cases الجديدة -->
+        <div class="home-card card-cases" onclick="showToast('قريباً')">
+          <div class="card-text">
+            <h3>Cases</h3>
+            <p>20 cases</p>
+          </div>
+          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131039_955.png -->
+          <img src="IMG_20261029_131039_955.png" class="card-icon" alt="Cases">
+        </div>
+
+        <!-- بطاقة الدعوة -->
         <div class="home-card referral" onclick="go('referral')">
-          <div>
+          <div class="card-text">
             <h3>دعوة الأصدقاء</h3>
             <p>اربح 2 تيكت عن كل صديق</p>
           </div>
-          <i class="fas fa-users icon"></i>
+          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131620_989.png -->
+          <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral">
         </div>
       </div>
     </div>
@@ -1211,11 +1243,10 @@ async function calibrateServerTime() {
 
 function serverNow() { return Date.now() + serverOffset; }
 
-// Function to get the exact timestamp of the next midnight (12:00 AM)
 function getNextMidnight() {
   const now = new Date(serverNow());
   const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0); // Sets to next day at 00:00:00
+  midnight.setHours(24, 0, 0, 0);
   return midnight.getTime();
 }
 
@@ -1238,7 +1269,6 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     fetchUserData();
-    // We will calibrate inside initDailyLogin
   } catch (e) {
     showToast('خطأ في الاتصال بقاعدة البيانات');
   }
@@ -1266,7 +1296,7 @@ async function fetchUserData() {
       });
     }
     updateBalances();
-    initDailyLogin(); // Init after user data is fetched
+    initDailyLogin();
     loadWithdrawalHistory();
     renderProfile();
     
@@ -1430,7 +1460,6 @@ async function initDailyLogin() {
   const streakCount = document.getElementById('streakCount');
   if (!container || !btn) return;
 
-  // Prevent flickering: Show loading until time is calibrated
   btn.disabled = true;
   btnText.innerText = 'جاري التحقق...';
   container.innerHTML = '<div style="text-align:center; width:100%; color:var(--text-secondary); padding-top:10px;"><i class="fas fa-spinner fa-spin"></i></div>';
@@ -1439,7 +1468,6 @@ async function initDailyLogin() {
     await calibrateServerTime();
   }
 
-  // Small delay to ensure DOM updates
   setTimeout(() => {
     const now = serverNow();
     const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
@@ -1502,7 +1530,6 @@ async function claimDailyReward() {
   const btn = document.getElementById('dailyClaimBtn');
   btn.disabled = true;
 
-  // Set next claim to exactly midnight
   const nextClaim = getNextMidnight();
   
   user.tickets += 1;
@@ -1534,10 +1561,9 @@ function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('dep-tab-' + tab).style.display = 'flex'; // Keep flex for dep-layout
+  document.getElementById('dep-tab-' + tab).style.display = 'flex';
 }
 
-// STRICT INTEGER ONLY FOR STARS
 function updateDepositUI(input) {
   let val = parseInt(input.value) || 0;
   if (val < 0) val = 0;
@@ -1553,7 +1579,6 @@ function addChip(amount) {
   updateDepositUI(input);
 }
 
-// STRICT ONE DECIMAL ONLY FOR CRYPTO
 function updateCryptoUI(input) {
   let raw = input.value;
   raw = raw.replace(/[^0-9.]/g, '');
@@ -1783,7 +1808,6 @@ function renderWithdrawHistory() {
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
     const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
 
-    // Add date header if it's a new date
     if (dateStr !== lastDate) {
       const dateHeader = document.createElement('div');
       dateHeader.className = 'history-date-header';
