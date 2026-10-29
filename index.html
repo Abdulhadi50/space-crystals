@@ -185,68 +185,282 @@ input { font: inherit; color: inherit; }
 .home-card p { font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 600; }
 .home-card .icon { font-size: 32px; opacity: 0.9; }
 
-/* ============ SPIN GAME (STANDALONE DESIGN) ============ */
+/* ============ SPIN GAME (NEW PROFESSIONAL DESIGN) ============ */
 #view-spin {
-  background: var(--gradient-spin);
-  margin: -20px -16px -40px -16px;
-  padding: 20px 16px 40px 16px;
-  min-height: calc(100dvh - var(--top-bar-height) - var(--safe-top));
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(94, 92, 230, 0.55) 0%, transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(0, 122, 255, 0.4) 0%, transparent 55%),
+    radial-gradient(circle at 20% 50%, rgba(255, 165, 0, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.15) 0%, transparent 40%),
+    linear-gradient(180deg, #0a0a1f 0%, #000000 100%);
+  display: none;
+  flex-direction: column;
+  padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--dock-height) + 20px + var(--safe-bottom));
+  overflow: hidden;
 }
-.spin-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;}
+#view-spin.active {
+  display: flex;
+  animation: spinIn 0.45s ease;
+}
+@keyframes spinIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Ambient stars background */
+#view-spin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 70%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 80% 20%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90% 50%, #fff, transparent),
+    radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 30% 90%, #fff, transparent),
+    radial-gradient(1px 1px at 50% 10%, #fff, transparent),
+    radial-gradient(1px 1px at 85% 85%, rgba(255,215,0,0.8), transparent),
+    radial-gradient(1px 1px at 15% 15%, rgba(255,215,0,0.6), transparent);
+  background-size: 200px 200px;
+  animation: twinkle 3.5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes twinkle {
+  0% { opacity: 0.4; }
+  100% { opacity: 0.95; }
+}
+
+/* Floating top controls */
+.spin-top-bar {
+  position: absolute;
+  top: calc(var(--top-bar-height) + var(--safe-top) + 12px);
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+}
+.spin-float-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.spin-float-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.18); }
+.spin-float-btn i { font-size: 15px; color: #FFD700; }
+
+/* Main spin container */
+.spin-container {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.spin-title {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.spin-title h1 {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(255, 165, 0, 0.4));
+  letter-spacing: 0.5px;
+}
+.spin-title p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
 .spin-track-wrapper {
-  width: 100%; overflow: hidden; position: relative;
-  padding: 50px 0; margin-bottom: 20px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 40px 0;
+  border-radius: 24px;
 }
+.spin-track-wrapper::before,
+.spin-track-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 60px;
+  z-index: 3;
+  pointer-events: none;
+}
+.spin-track-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(10,10,31,0.95) 0%, transparent 100%);
+}
+.spin-track-wrapper::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(10,10,31,0.95) 0%, transparent 100%);
+}
+
 .spin-indicator {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
-  background: #fff; transform: translateX(-50%);
-  z-index: 2; box-shadow: 0 0 16px rgba(255, 255, 255, 1);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, transparent 0%, #FFD700 20%, #fff 50%, #FFD700 80%, transparent 100%);
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 1),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.3);
   border-radius: 2px;
+  animation: indicatorPulse 1.5s ease-in-out infinite alternate;
 }
+.spin-indicator::before,
+.spin-indicator::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: #FFD700;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+}
+.spin-indicator::before { top: -7px; }
+.spin-indicator::after { bottom: -7px; }
+@keyframes indicatorPulse {
+  0% { box-shadow: 0 0 20px rgba(255,215,0,1), 0 0 40px rgba(255,215,0,0.6), 0 0 60px rgba(255,215,0,0.3); }
+  100% { box-shadow: 0 0 30px rgba(255,215,0,1), 0 0 60px rgba(255,215,0,0.8), 0 0 90px rgba(255,215,0,0.5); }
+}
+
 .spin-track {
-  display: flex; gap: 16px;
+  display: flex;
+  gap: 16px;
   transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
 }
 .spin-item {
-  width: 120px; height: 140px; background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border-radius: 20px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: var(--shadow);
+  width: 120px;
+  height: 140px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
 }
-.spin-item video { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));}
+.spin-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+  pointer-events: none;
+}
+.spin-item video {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+}
 .spin-item .val {
-  font-size: 14px; font-weight: 800; margin-top: 10px; color: #fff;
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  margin-top: 10px;
+  color: #FFD700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,0,0,0.5);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,215,0,0.3);
 }
-.spin-item .val img { width: 14px; height: 14px; border-radius: 50%; object-fit: cover; }
+.spin-item .val img {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
 
-.spin-controls {
-  display: flex; gap: 12px; width: 100%; margin-bottom: 16px;
-}
-.spin-ctrl-btn {
-  flex: 1; background: rgba(255, 255, 255, 0.15);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  color: #fff; border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 14px; border-radius: 16px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 0.1s;
-}
-.spin-ctrl-btn:active { transform: scale(0.96); }
-
+/* Big spin button */
 .spin-btn {
-  width: 100%; background: #007AFF; color: #fff;
-  border: none; padding: 20px; border-radius: 20px;
-  font-size: 20px; font-weight: 800; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  transition: transform 0.1s var(--spring);
-  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.5);
+  width: 100%;
+  max-width: 340px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+  color: #000;
+  border: none;
+  padding: 20px;
+  border-radius: 22px;
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.15s var(--spring);
+  box-shadow:
+    0 8px 24px rgba(255, 165, 0, 0.45),
+    0 4px 12px rgba(255, 215, 0, 0.3),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.15),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
 }
-.spin-btn:active { transform: scale(0.97); }
-.spin-btn img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.spin-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+.spin-btn:active { transform: scale(0.96); }
+.spin-btn img { width: 24px; height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
+.spin-btn:disabled::before { animation: none; }
 
 /* ============ TASKS ============ */
 .page-header { margin-bottom: 24px; }
@@ -303,65 +517,37 @@ input { font: inherit; color: inherit; }
 .tab.active { background: var(--bg-soft); color: var(--text-primary); }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 
-/* ==== Amount display: close together + dynamic width ==== */
 .amount-display {
   text-align: center;
-  margin: 20px 0 22px;
+  margin: 20px 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
 }
 .amount-display input {
-  font-size: 4.5rem;
-  font-weight: 800;
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  text-align: center;
-  width: auto;
-  min-width: 1ch;
-  max-width: 240px;
-  outline: none;
-  padding: 0;
+  font-size: 3.5rem; font-weight: 800; background: transparent;
+  border: none; color: var(--text-primary); text-align: center;
+  width: auto; max-width: 200px; outline: none;
   field-sizing: content;
-  font-family: inherit;
+  transition: width 0.1s;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
+.amount-display .dollar-sign {
+  font-size: 3.5rem; font-weight: 800; color: var(--text-primary);
 }
-.amount-display .currency-symbol {
-  font-size: 4.5rem;
-  font-weight: 800;
-  flex-shrink: 0;
-  line-height: 1;
-}
+.amount-display img { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
 
-/* ==== Small white result (replaces big calc-result) ==== */
-.small-amount-result {
+.calc-subtext {
   text-align: center;
   font-size: 15px;
   font-weight: 700;
   color: #fff;
-  margin: 0 auto 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  opacity: 0.88;
+  margin-top: 0px;
+  margin-bottom: 24px;
   min-height: 22px;
-}
-.small-amount-result img {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
@@ -382,30 +568,41 @@ input { font: inherit; color: inherit; }
 }
 .topup-btn:active { transform: scale(0.97); }
 
+/* Secondary button (no shadow / no glow) */
+.btn-secondary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 800;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+.btn-secondary:active { background: var(--bg-soft); }
+.btn-secondary i { font-size: 16px; color: var(--text-secondary); }
+
 .manual-instructions { background: var(--bg-card); padding: 20px; border-radius: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.6; }
 
-/* ==== Warning box: white & at bottom ==== */
 .warning-box {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 14px 16px;
-  border-radius: 14px;
-  color: rgba(255, 255, 255, 0.8);
+  border: none;
+  padding: 0;
+  color: #fff;
   font-size: 12px;
   font-weight: 600;
   margin-top: 16px;
-  margin-bottom: 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  line-height: 1.6;
+  display: flex; align-items: flex-start; gap: 8px;
+  line-height: 1.5;
 }
-.warning-box i {
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 3px;
-  flex-shrink: 0;
-}
+.warning-box i { color: var(--warning); margin-top: 3px; }
 
 .copy-box {
   display: flex; align-items: center; justify-content: space-between;
@@ -445,50 +642,56 @@ input { font: inherit; color: inherit; }
 }
 .wd-input:focus { border-color: var(--blue, #007AFF); }
 
-/* History (inside modal now) */
-.history-list { display: flex; flex-direction: column; gap: 10px; }
-.history-item {
-  background: var(--bg-soft); padding: 16px; border-radius: 16px;
-  display: flex; justify-content: space-between; align-items: center;
-  border: 1px solid var(--border);
+/* ============ WITHDRAW HISTORY (NEW COMPACT DESIGN) ============ */
+.history-modal {
+  max-width: 360px;
+  padding: 22px;
 }
-.history-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #fff; }
-.history-info p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-.status { padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+.history-item {
+  background: var(--bg-soft);
+  padding: 12px 14px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  gap: 10px;
+}
+.history-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; color: #fff; }
+.history-info p { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.status { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
 .st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
-.wd-history-more {
-  width: 100%; padding: 12px; margin-top: 10px;
-  border: 1px solid var(--border); border-radius: 13px;
-  background: var(--bg-card); color: var(--text-primary);
-  font-size: 13px; font-weight: 800; cursor: pointer;
-}
 
-/* History button */
-.history-btn {
+.show-all-btn {
   width: 100%;
-  margin-top: 30px;
-  padding: 16px;
-  border-radius: 16px;
-  background: var(--bg-card);
+  padding: 12px;
+  background: var(--bg-soft);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  font-size: 15px;
+  border-radius: 12px;
   font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 10px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform 0.1s;
+  display: none;
 }
-.history-btn:active { transform: scale(0.98); }
+.show-all-btn.visible { display: block; }
+.show-all-btn:active { background: var(--bg-card); }
 
 /* ============ REFERRAL ============ */
 .referral-header { text-align: center; margin-bottom: 24px; }
-.referral-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.referral-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; line-height: 1.4; }
 .referral-header p { color: var(--text-secondary); font-size: 14px; font-weight: 600; }
 
 .ref-stats { display: flex; gap: 14px; margin-bottom: 24px; }
@@ -608,7 +811,7 @@ input { font: inherit; color: inherit; }
   font-size: 12px; font-weight: 800; margin-top: 6px;
   display: flex; align-items: center; gap: 4px;
 }
-.prize-item img { width: 14px; height: 14px; border-radius: 50%; object-fit: cover; }
+.prize-item img { width: 14px; height: 14px; border-radius: 50%; }
 
 /* Toast */
 .toast {
@@ -621,7 +824,7 @@ input { font: inherit; color: inherit; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ CLONED DOCK ============ */
+/* ============ DOCK ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -703,13 +906,11 @@ input { font: inherit; color: inherit; }
 <!-- App Container -->
 <div class="app-container" id="app">
   
-  <!-- Top App Bar -->
   <header class="top-app-bar"></header>
   
-  <!-- Floating Balances -->
   <div class="floating-balances">
     <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/1793229802411.jpg" alt="Stars">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
       <span id="topStars">0</span>
       <button class="add-btn" onclick="go('deposit')">+</button>
     </div>
@@ -719,21 +920,16 @@ input { font: inherit; color: inherit; }
     </div>
   </div>
 
-  <!-- Main Scroll Area -->
   <main class="main-scroll" id="mainScroll">
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
-      
-      <!-- Daily Login Card -->
       <div class="daily-login-card">
         <div class="daily-header">
           <div class="daily-title">تسجيل الدخول اليومي</div>
           <div class="daily-timer" id="dailyTimer">00:00:00</div>
         </div>
-        <div class="daily-days" id="dailyDaysContainer">
-          <!-- Injected via JS -->
-        </div>
+        <div class="daily-days" id="dailyDaysContainer"></div>
       </div>
 
       <div class="live-strip" id="live-strip"></div>
@@ -748,7 +944,7 @@ input { font: inherit; color: inherit; }
         </div>
         <div class="home-card tasks" onclick="go('tasks')">
           <div>
-            <h3>المهام (Tasks)</h3>
+            <h3>المهام</h3>
             <p>أكمل المهام واربح التذاكر</p>
           </div>
           <i class="fas fa-tasks icon"></i>
@@ -763,25 +959,36 @@ input { font: inherit; color: inherit; }
       </div>
     </div>
 
-    <!-- View: Spin Game (Standalone) -->
+    <!-- View: Spin Game (REDESIGNED) -->
     <div class="view" id="view-spin">
+      
+      <!-- Floating top controls -->
+      <div class="spin-top-bar">
+        <button class="spin-float-btn" onclick="openModal('modalPrizes')">
+          <i class="fas fa-gift"></i>
+          <span>الجوائز</span>
+        </button>
+        <button class="spin-float-btn" onclick="toggleSpinSound()">
+          <i class="fas fa-volume-up" id="soundIcon"></i>
+          <span id="soundText">الصوت</span>
+        </button>
+      </div>
+
       <div class="spin-container">
+        <div class="spin-title">
+          <h1>🎰 عجلة الحظ</h1>
+          <p>جرب حظك الآن واربح جوائز فورية</p>
+        </div>
+
         <div class="spin-track-wrapper">
           <div class="spin-indicator"></div>
           <div class="spin-track" id="spinTrack"></div>
         </div>
-        
-        <div class="spin-controls">
-          <button class="spin-ctrl-btn" onclick="toggleSpinSound()">
-            <i class="fas" id="soundIcon">fa-volume-up</i> <span id="soundText">الصوت</span>
-          </button>
-          <button class="spin-ctrl-btn" onclick="openModal('modalPrizes')">
-            <i class="fas fa-gift"></i> الجوائز
-          </button>
-        </div>
 
         <button class="spin-btn" id="spinBtn" onclick="startSpin()">
-          Spin for <span>399</span> <img src="https://up6.cc/2026/10/1793229802411.jpg">
+          <i class="fas fa-star"></i>
+          العب الآن — 399
+          <img src="https://up6.cc/2026/10/17932600818491.png">
         </button>
       </div>
     </div>
@@ -798,31 +1005,31 @@ input { font: inherit; color: inherit; }
           <div class="task-info">
             <div class="task-icon-img"><img src="https://img.icons8.com/color/96/iphone.png" alt="App"></div>
             <div class="task-text">
-              <h4>Home screen</h4>
+              <h4>الشاشة الرئيسية</h4>
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-envelope"></i></div>
+            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-link"></i></div>
             <div class="task-text">
-              <h4>Link</h4>
+              <h4>الرابط</h4>
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
             <div class="task-icon" style="background:#34C759; color:#fff;"><i class="fas fa-camera"></i></div>
             <div class="task-text">
-              <h4>Story</h4>
+              <h4>القصة</h4>
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
       </div>
 
@@ -835,7 +1042,7 @@ input { font: inherit; color: inherit; }
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
@@ -845,7 +1052,7 @@ input { font: inherit; color: inherit; }
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
@@ -855,7 +1062,7 @@ input { font: inherit; color: inherit; }
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
@@ -865,7 +1072,7 @@ input { font: inherit; color: inherit; }
               <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
             </div>
           </div>
-          <button class="start-btn" onclick="completeTask(this)">Start</button>
+          <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
       </div>
     </div>
@@ -878,29 +1085,29 @@ input { font: inherit; color: inherit; }
       
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)">
-          <img src="https://up6.cc/2026/10/1793229802411.jpg"> Stars
+          <img src="https://up6.cc/2026/10/17932600818491.png"> نجوم
         </div>
-        <div class="tab" onclick="switchDepositTab('crypto', this)"><i class="fab fa-bitcoin"></i> Crypto</div>
+        <div class="tab" onclick="switchDepositTab('crypto', this)"><i class="fab fa-bitcoin"></i> كريبتو</div>
         <div class="tab" onclick="switchDepositTab('binance', this)">
           <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
         </div>
         <div class="tab" onclick="switchDepositTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> Sham
+          <img src="https://up6.cc/2026/09/178975725154411.png"> شام
         </div>
       </div>
 
       <!-- Stars Tab -->
       <div id="dep-tab-stars" class="dep-tab-content">
         <div class="amount-display">
-          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI()">
-          <img src="https://up6.cc/2026/10/1793229802411.jpg">
+          <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
         </div>
         <div class="quick-chips">
           <button class="chip" onclick="addChip(500)">+ 500</button>
           <button class="chip" onclick="addChip(2000)">+ 2,000</button>
           <button class="chip" onclick="addChip(5000)">+ 5,000</button>
         </div>
-        <button class="topup-btn" onclick="processDeposit('stars')">Top up</button>
+        <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
       </div>
 
       <!-- Crypto Tab -->
@@ -912,22 +1119,24 @@ input { font: inherit; color: inherit; }
             <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
           </div>
           <div class="crypto-pending-actions">
-            <button class="crypto-btn check" onclick="checkCryptoStatus()"><i class="fas fa-rotate"></i> تحقق</button>
+            <button class="crypto-btn check" onclick="checkCryptoStatus(this)"><i class="fas fa-rotate"></i> تحقق</button>
             <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()"><i class="fas fa-xmark"></i> إلغاء</button>
           </div>
         </div>
 
         <div class="amount-display">
-          <span class="currency-symbol">$</span>
-          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI()">
+          <span class="dollar-sign">$</span>
+          <input type="number" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
         </div>
-        <div class="small-amount-result" id="cryptoCalcResult">100 <img src="https://up6.cc/2026/10/1793229802411.jpg"></div>
+        <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
+          100 <img src="https://up6.cc/2026/10/17932600818491.png" style="width:16px; height:16px; border-radius:50%;">
+        </div>
         <div class="quick-chips">
           <button class="chip" onclick="addCryptoChip(1)">+ $1</button>
           <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
           <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
         </div>
-        <button class="topup-btn" onclick="processDeposit('crypto')">Pay with Crypto</button>
+        <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
         <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
       </div>
 
@@ -944,11 +1153,10 @@ input { font: inherit; color: inherit; }
             <span id="binanceUserId">123456789</span>
             <button class="copy-btn" onclick="copyText(document.getElementById('binanceUserId').innerText)">نسخ</button>
           </div>
-          <p style="color:var(--text-secondary); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
-        </div>
-        <div class="warning-box">
-          <i class="fas fa-exclamation-triangle"></i>
-          <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          </div>
         </div>
       </div>
 
@@ -965,11 +1173,10 @@ input { font: inherit; color: inherit; }
             <span id="shamUserId">123456789</span>
             <button class="copy-btn" onclick="copyText(document.getElementById('shamUserId').innerText)">نسخ</button>
           </div>
-          <p style="color:var(--text-secondary); font-size:12px; margin-top:16px;"><i class="fas fa-info-circle"></i> سيتم التحقق من الحوالة وإضافة الرصيد خلال 24 ساعة.</p>
-        </div>
-        <div class="warning-box">
-          <i class="fas fa-exclamation-triangle"></i>
-          <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية. إذا قمت بتحويل مبلغ أقل، لن تتم إضافة الرصيد ولن يتم استرداد المبلغ.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -985,45 +1192,44 @@ input { font: inherit; color: inherit; }
           <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
         </div>
         <div class="tab" onclick="switchWithdrawTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> Sham Cash
+          <img src="https://up6.cc/2026/09/178975725154411.png"> شام كاش
         </div>
       </div>
 
       <div id="wd-tab-binance" class="wd-tab-content">
         <div class="amount-display">
-          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance')">
-          <img src="https://up6.cc/2026/10/1793229802411.jpg">
+          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance', this)">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
         </div>
-        <div class="small-amount-result" id="wdBinanceResult">$0.00</div>
+        <div class="calc-subtext" id="wdBinanceResult">$0.00</div>
         
         <div class="wd-input-group">
           <label>معرّف Binance Pay</label>
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
         
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = $0.10 | الحد الأدنى للسحب 50 نجمة</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى للسحب 50 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
       </div>
 
       <div id="wd-tab-sham" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
-          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham')">
-          <img src="https://up6.cc/2026/10/1793229802411.jpg">
+          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham', this)">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
         </div>
-        <div class="small-amount-result" id="wdShamResult">0</div>
+        <div class="calc-subtext" id="wdShamResult">0 ل.س</div>
 
         <div class="wd-input-group">
           <label>معرّف شام كاش</label>
           <input type="text" class="wd-input" placeholder="Sham Cash ID" id="wdShamId">
         </div>
 
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = 10 SYP | الحد الأدنى للسحب 50 نجمة</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 10 ل.س | الحد الأدنى للسحب 50 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
 
-      <button class="history-btn" onclick="openWithdrawHistory()">
-        <i class="fas fa-history"></i>
-        <span>سجل السحوبات</span>
+      <button class="btn-secondary" style="margin-top: 20px;" onclick="openWithdrawHistory()">
+        <i class="fas fa-history"></i> سجل السحوبات
       </button>
     </div>
 
@@ -1035,40 +1241,38 @@ input { font: inherit; color: inherit; }
         <div class="tab" onclick="switchRefTab('ranking', this)">التصنيفات</div>
       </div>
 
-      <!-- Invite Tab -->
       <div id="ref-tab-invite" class="ref-tab-content">
         <div class="referral-header">
-          <h2>Invite friends and earn 2 Tickets</h2>
-          <p>احصل على 2 تيكت مقابل كل صديق ينضم عبر رابطك!</p>
+          <h2>ادعُ أصدقاءك واربح تذكرتين</h2>
+          <p>احصل على تذكرتين مقابل كل صديق ينضم عبر رابطك!</p>
         </div>
         
         <div class="ref-stats">
           <div class="ref-stat-box">
             <h3 id="refInvited">0</h3>
-            <p>Invited</p>
+            <p>المدعوين</p>
           </div>
           <div class="ref-stat-box">
             <h3 id="refEarned">0</h3>
-            <p>Tickets Earned</p>
+            <p>التذاكر المكتسبة</p>
           </div>
         </div>
 
-        <button class="topup-btn" onclick="shareReferral()" style="margin-bottom: 24px;"><i class="fas fa-share-alt"></i> Share Link</button>
+        <button class="topup-btn" onclick="shareReferral()" style="margin-bottom: 24px;"><i class="fas fa-share-alt"></i> شارك الرابط</button>
         
         <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;">رابط الدعوة</h3>
         <div class="link-box">
           <div class="link-box-text" id="refLinkText">...</div>
-          <button class="btn-copy" onclick="copyText(document.getElementById('refLinkText').innerText)"><i class="fas fa-copy"></i> Copy</button>
+          <button class="btn-copy" onclick="copyText(document.getElementById('refLinkText').innerText)"><i class="fas fa-copy"></i> نسخ</button>
         </div>
 
         <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;">معرف الدعوة الخاص بك</h3>
         <div class="link-box">
           <div class="link-box-id" id="refIdText">...</div>
-          <button class="btn-copy" onclick="copyText(document.getElementById('refIdText').innerText)"><i class="fas fa-copy"></i> Copy</button>
+          <button class="btn-copy" onclick="copyText(document.getElementById('refIdText').innerText)"><i class="fas fa-copy"></i> نسخ</button>
         </div>
       </div>
 
-      <!-- Ranking Tab -->
       <div id="ref-tab-ranking" class="ref-tab-content" style="display:none;">
         <div class="ranking-list" id="rankingList">
           <div style="text-align:center; padding:20px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i></div>
@@ -1083,30 +1287,30 @@ input { font: inherit; color: inherit; }
         <div class="profile-avatar" id="profileAvatar">
           <i class="fas fa-user"></i>
         </div>
-        <h2 id="profileName">User Name</h2>
-        <p id="profileId">ID: 123456789</p>
+        <h2 id="profileName">اسم المستخدم</h2>
+        <p id="profileId">المعرف: 123456789</p>
       </div>
       
       <div class="stats-grid">
         <div class="stat-card">
-          <img src="https://up6.cc/2026/10/1793229802411.jpg">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
           <div class="stat-info">
             <h3 id="statStars">0</h3>
-            <p>Stars</p>
+            <p>النجوم</p>
           </div>
         </div>
         <div class="stat-card">
           <i class="fas fa-ticket-alt" style="font-size:28px; color:#5E5CE6;"></i>
           <div class="stat-info">
             <h3 id="statTickets">0</h3>
-            <p>Tickets</p>
+            <p>التذاكر</p>
           </div>
         </div>
         <div class="stat-card">
           <i class="fas fa-users" style="font-size:28px; color:#007AFF;"></i>
           <div class="stat-info">
             <h3 id="statRefs">0</h3>
-            <p>Referrals</p>
+            <p>الإحالات</p>
           </div>
         </div>
       </div>
@@ -1114,7 +1318,7 @@ input { font: inherit; color: inherit; }
 
   </main>
 
-  <!-- Bottom Dock (Cloned) -->
+  <!-- Bottom Dock -->
   <div class="dock">
     <div class="dock-nav">
       <div class="nav-item active" data-view="home" onclick="go('home')">
@@ -1144,18 +1348,18 @@ input { font: inherit; color: inherit; }
 <!-- Modal: Insufficient Balance -->
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
-    <h3>Not enough balance!</h3>
-    <p>You're short of <span id="shortAmount" style="color:#FF3B30; font-weight:800;">999</span> stars. Please top up your balance.</p>
-    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">Top up</button>
+    <h3>رصيدك غير كافٍ!</h3>
+    <p>تحتاج <span id="shortAmount" style="color:#FF3B30; font-weight:800;">999</span> نجمة إضافية. يرجى شحن رصيدك.</p>
+    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">شحن الرصيد</button>
   </div>
 </div>
 
 <!-- Modal: Prizes List -->
 <div class="modal-overlay" id="modalPrizes">
   <div class="modal-content" style="max-width: 400px;">
-    <h3 style="margin-bottom: 20px;">Possible prizes</h3>
+    <h3 style="margin-bottom: 20px;">الجوائز المحتملة</h3>
     <div class="prizes-grid" id="prizesGrid"></div>
-    <button class="modal-btn" onclick="closeModal('modalPrizes')">Close</button>
+    <button class="modal-btn" onclick="closeModal('modalPrizes')">إغلاق</button>
   </div>
 </div>
 
@@ -1187,27 +1391,25 @@ input { font: inherit; color: inherit; }
   </div>
 </div>
 
-<!-- Modal: Withdraw History -->
+<!-- Modal: Withdraw History (NEW COMPACT DESIGN) -->
 <div class="modal-overlay" id="modalWithdrawHistory">
-  <div class="modal-content" style="max-width: 400px; max-height: 80vh; overflow-y: auto; text-align: right;">
-    <h3 style="text-align: center; margin-bottom: 20px;">سجل السحوبات</h3>
-    <div class="history-list" id="withdrawHistory"></div>
-    <button class="wd-history-more" id="wdHistoryMore" type="button" style="display:none;" onclick="loadMoreHistory()">عرض المزيد</button>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')" style="margin-top: 20px;">إغلاق</button>
+  <div class="modal-content history-modal">
+    <h3 style="margin-bottom: 16px; font-size: 18px;">سجل السحوبات</h3>
+    <div class="history-list" id="withdrawHistoryList"></div>
+    <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">عرض الكل</button>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
   </div>
 </div>
 
 <!-- Toast Notification -->
-<div class="toast" id="toast">Message</div>
+<div class="toast" id="toast">رسالة</div>
 
 <script>
 'use strict';
 
 // ===================== CONFIG & ASSETS =====================
-const STAR_ICON = 'https://up6.cc/2026/10/1793229802411.jpg';
-
 const ASSETS = {
-  star: STAR_ICON,
+  star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
   sham: 'https://up6.cc/2026/09/178975725154411.png'
 };
@@ -1240,7 +1442,7 @@ const PRIZES = [
 // ===================== STATE =====================
 let user = {
   id: '123456789',
-  name: 'Player',
+  name: 'لاعب',
   photo: '',
   stars: 1000, 
   tickets: 0,
@@ -1252,20 +1454,15 @@ let user = {
 let spinState = { isSpinning: false, soundOn: true };
 let depositAmount = 200;
 let withdrawalHistory = [];
-let wdDisplayCount = 5;
+let wdShowAll = false;
 let globalRankingLoaded = false;
 let dailyTimerInterval = null;
 
-// Crypto Pending State
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
 
-// Audio for spin
 const spinAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
 spinAudio.loop = true;
-
-// Field sizing feature detection
-const HAS_FIELD_SIZING = (typeof CSS !== 'undefined' && CSS.supports && CSS.supports('field-sizing', 'content'));
 
 // ===================== TELEGRAM & FIREBASE =====================
 const tg = window.Telegram?.WebApp;
@@ -1279,7 +1476,7 @@ function initTelegram() {
     if (tg.setBackgroundColor) tg.setBackgroundColor('#0f0f11');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
-      user.name = tg.initDataUnsafe.user.first_name;
+      user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
   }
@@ -1345,23 +1542,6 @@ async function syncUserData(updates) {
   }
 }
 
-// ===================== AUTO-SIZE AMOUNT INPUTS =====================
-function autoSizeInput(input) {
-  if (!input) return;
-  if (HAS_FIELD_SIZING) return; // CSS handles it
-  const len = Math.max(1, (input.value || '').length);
-  input.style.width = (len * 0.6 + 0.5) + 'em';
-}
-
-function initAutoSizeInputs() {
-  ['depositAmountInput','cryptoAmountInput','wdBinanceAmount','wdShamAmount'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    autoSizeInput(el);
-    el.addEventListener('input', () => autoSizeInput(el));
-  });
-}
-
 // ===================== APP INITIALIZATION =====================
 window.onload = () => {
   initTelegram();
@@ -1374,7 +1554,10 @@ window.onload = () => {
     updateBalances();
     renderLiveStrip();
     renderPrizesModal();
-    initAutoSizeInputs();
+    
+    adjustInputWidth(document.getElementById('depositAmountInput'));
+    adjustInputWidth(document.getElementById('cryptoAmountInput'));
+    
   }, 2000);
 };
 
@@ -1403,9 +1586,6 @@ function go(viewName) {
 
   document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
 
-  if (viewName === 'referral' && !globalRankingLoaded) {
-    globalRankingLoaded = false; 
-  }
   if (viewName === 'withdraw') {
     loadWithdrawalHistory();
   }
@@ -1427,16 +1607,14 @@ function updateBalances() {
 }
 
 function renderLiveStrip() {
-  const strips = [document.getElementById('live-strip')];
-  strips.forEach(strip => {
-    if (!strip) return;
-    strip.innerHTML = '';
-    PRIZES.slice(0, 6).forEach(prize => {
-      const div = document.createElement('div');
-      div.className = 'live-item';
-      div.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
-      strip.appendChild(div);
-    });
+  const strip = document.getElementById('live-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+  PRIZES.slice(0, 6).forEach(prize => {
+    const div = document.createElement('div');
+    div.className = 'live-item';
+    div.innerHTML = `<video src="${prize.webm}" autoplay loop muted playsinline></video>`;
+    strip.appendChild(div);
   });
 }
 
@@ -1456,7 +1634,7 @@ function renderPrizesModal() {
 
 function renderProfile() {
   document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = 'ID: ' + user.id;
+  document.getElementById('profileId').innerText = 'المعرف: ' + user.id;
   const avatar = document.getElementById('profileAvatar');
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
@@ -1527,8 +1705,8 @@ function initDailyLogin() {
       timerEl.style.color = 'var(--warning)';
     }, 1000);
   } else if (user.lastDailyClaim === 0) {
-      timerEl.innerText = 'جاهز للاستلام!';
-      timerEl.style.color = 'var(--success)';
+    timerEl.innerText = 'جاهز للاستلام!';
+    timerEl.style.color = 'var(--success)';
   }
 }
 
@@ -1593,7 +1771,7 @@ function startSpin() {
   track.innerHTML = '';
   
   const totalItems = 40;
-  const itemWidth = 136;
+  const itemWidth = 136; // 120px width + 16px gap
   const centerOffset = window.innerWidth / 2 - 60; 
   
   const winnerIndex = 35;
@@ -1636,6 +1814,14 @@ function startSpin() {
   }, 4100);
 }
 
+// ===================== UTILS =====================
+function adjustInputWidth(input) {
+  if (!input) return;
+  input.style.width = 'auto';
+  const len = input.value.length || 1;
+  input.style.width = Math.max(1, len) + 'ch';
+}
+
 // ===================== DEPOSIT =====================
 function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
@@ -1645,30 +1831,28 @@ function switchDepositTab(tab, el) {
   document.getElementById('dep-tab-' + tab).style.display = 'block';
 }
 
-function updateDepositUI() {
-  const inp = document.getElementById('depositAmountInput');
-  const val = parseInt(inp.value) || 0;
+function updateDepositUI(input) {
+  adjustInputWidth(input);
+  const val = parseInt(input.value) || 0;
   depositAmount = val;
-  autoSizeInput(inp);
 }
 
 function addChip(amount) {
   const input = document.getElementById('depositAmountInput');
   let current = parseInt(input.value) || 0;
   input.value = current + amount;
-  updateDepositUI();
+  updateDepositUI(input);
 }
 
-function updateCryptoUI() {
-  const inp = document.getElementById('cryptoAmountInput');
-  let val = parseFloat(inp.value) || 0;
+function updateCryptoUI(input) {
+  adjustInputWidth(input);
+  let val = parseFloat(input.value) || 0;
   if (val > 1000) {
     val = 1000;
-    inp.value = 1000;
+    input.value = 1000;
   }
   const stars = Math.floor(val * 100);
-  document.getElementById('cryptoCalcResult').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}">`;
-  autoSizeInput(inp);
+  document.getElementById('cryptoCalcSubtext').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
 }
 
 function addCryptoChip(amount) {
@@ -1677,7 +1861,7 @@ function addCryptoChip(amount) {
   let newVal = current + amount;
   if (newVal > 1000) newVal = 1000;
   input.value = newVal;
-  updateCryptoUI();
+  updateCryptoUI(input);
 }
 
 async function processDeposit(type) {
@@ -1721,28 +1905,68 @@ async function processDeposit(type) {
     try {
       const amountCents = Math.round(amount * 100);
       const starsToAdd = Math.floor(amount * 100);
+      const payload = { 
+        userId: user.id, 
+        amount_usd_cents: amountCents, 
+        stars: starsToAdd, 
+        idempotency_key: 'pm_' + user.id + '_' + Date.now()
+      };
+      
+      console.log('[Crypto] Creating invoice:', payload);
+      
       const resp = await fetch(`${API_BASE}/api/shieldz/create-invoice`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId: user.id, 
-          amount_usd_cents: amountCents, 
-          stars: starsToAdd, 
-          idempotency_key: 'pm_' + user.id + '_' + Date.now()
-        })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
-      const data = await resp.json();
-      if (!data.ok || !data.pay_url) throw new Error(data.error || 'فشل الاتصال');
+      
+      console.log('[Crypto] Response status:', resp.status);
+      
+      let data;
+      try {
+        data = await resp.json();
+      } catch (parseErr) {
+        const rawText = await resp.text().catch(() => '');
+        console.error('[Crypto] Non-JSON response:', rawText);
+        throw new Error('استجابة غير صالحة من الخادم');
+      }
+      
+      console.log('[Crypto] Response data:', data);
+      
+      if (!resp.ok) {
+        throw new Error(data.error || data.message || `خطأ في الخادم (${resp.status})`);
+      }
+      
+      if (!data.ok && !data.pay_url) {
+        throw new Error(data.error || data.message || 'لم يتم استلام رابط الدفع');
+      }
+      
+      const payUrl = data.pay_url || data.payment_url || data.url;
+      if (!payUrl) {
+        throw new Error('رابط الدفع غير متوفر');
+      }
       
       cryptoPendingInvoice = {
-        id: data.invoice_id,
+        id: data.invoice_id || data.id,
         createdAt: Date.now()
       };
       
       startCryptoTimer();
-      tg.openLink(data.pay_url);
+      
+      try {
+        tg.openLink(payUrl, { try_instant_view: false });
+      } catch (openErr) {
+        console.warn('[Crypto] openLink fallback:', openErr);
+        window.open(payUrl, '_blank');
+      }
+      
+      showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
       
     } catch(e) {
+      console.error('[Crypto] Deposit error:', e);
       showToast(e.message || 'تعذر بدء الدفع');
     }
   }
@@ -1780,9 +2004,8 @@ function cancelCryptoInvoice() {
   if (cryptoTimerInterval) clearInterval(cryptoTimerInterval);
 }
 
-async function checkCryptoStatus() {
+async function checkCryptoStatus(btn) {
   if (!cryptoPendingInvoice) return;
-  const btn = event.target.closest('button');
   const oldTxt = btn.innerHTML;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   btn.disabled = true;
@@ -1791,7 +2014,7 @@ async function checkCryptoStatus() {
     const resp = await fetch(`${API_BASE}/api/shieldz/invoice/${cryptoPendingInvoice.id}`);
     const data = await resp.json();
     
-    if (data.status === 'paid') {
+    if (data.status === 'paid' || data.paid === true) {
       showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
@@ -1802,6 +2025,7 @@ async function checkCryptoStatus() {
       showToast('الفاتورة لا تزال قيد الانتظار');
     }
   } catch (e) {
+    console.error('[Crypto] Check status error:', e);
     showToast('تعذر التحقق');
   } finally {
     btn.innerHTML = oldTxt;
@@ -1818,25 +2042,18 @@ function switchWithdrawTab(tab, el) {
   document.getElementById('wd-tab-' + tab).style.display = 'block';
 }
 
-function updateWdUI(method) {
+function updateWdUI(method, input) {
+  adjustInputWidth(input);
+  let stars = 0;
   if (method === 'binance') {
-    const inp = document.getElementById('wdBinanceAmount');
-    const stars = parseInt(inp.value) || 0;
+    stars = parseInt(input.value) || 0;
     const usd = (stars * 0.01).toFixed(2);
     document.getElementById('wdBinanceResult').innerText = `$${usd}`;
-    autoSizeInput(inp);
   } else {
-    const inp = document.getElementById('wdShamAmount');
-    const stars = parseInt(inp.value) || 0;
+    stars = parseInt(input.value) || 0;
     const syp = (stars * 1).toFixed(0);
-    document.getElementById('wdShamResult').innerText = syp;
-    autoSizeInput(inp);
+    document.getElementById('wdShamResult').innerText = `${syp} ل.س`;
   }
-}
-
-function openWithdrawHistory() {
-  openModal('modalWithdrawHistory');
-  loadWithdrawalHistory();
 }
 
 async function loadWithdrawalHistory() {
@@ -1857,15 +2074,27 @@ async function loadWithdrawalHistory() {
   }
 }
 
+function openWithdrawHistory() {
+  wdShowAll = false;
+  renderWithdrawHistory();
+  openModal('modalWithdrawHistory');
+}
+
+function showAllWithdrawals() {
+  wdShowAll = true;
+  renderWithdrawHistory();
+}
+
 function renderWithdrawHistory() {
-  const list = document.getElementById('withdrawHistory');
-  const moreBtn = document.getElementById('wdHistoryMore');
+  const list = document.getElementById('withdrawHistoryList');
+  const showAllBtn = document.getElementById('showAllWdBtn');
   if (!list) return;
+  
   list.innerHTML = '';
   
   if (withdrawalHistory.length === 0) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:20px;">لا يوجد سجل سحب بعد</p>';
-    if (moreBtn) moreBtn.style.display = 'none';
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:16px; font-size:13px;">لا يوجد سجل سحب بعد</p>';
+    if (showAllBtn) showAllBtn.classList.remove('visible');
     return;
   }
 
@@ -1876,15 +2105,17 @@ function renderWithdrawHistory() {
     rejected: { text: 'مرفوض', class: 'st-rejected' }
   };
 
-  const slice = withdrawalHistory.slice(0, wdDisplayCount);
-  slice.forEach(w => {
+  const itemsToShow = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
+
+  itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
+    const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
     const div = document.createElement('div');
     div.className = 'history-item';
     div.innerHTML = `
       <div class="history-info">
-        <h4>${w.amount} نجوم (${w.method === 'binance' ? 'Binance' : 'شام كاش'})</h4>
+        <h4>${w.amount} نجمة · ${methodName}</h4>
         <p>${dateStr}</p>
       </div>
       <div class="status ${st.class}">${st.text}</div>
@@ -1892,14 +2123,14 @@ function renderWithdrawHistory() {
     list.appendChild(div);
   });
 
-  if (moreBtn) {
-    moreBtn.style.display = withdrawalHistory.length > wdDisplayCount ? 'block' : 'none';
+  if (showAllBtn) {
+    if (withdrawalHistory.length > 5 && !wdShowAll) {
+      showAllBtn.classList.add('visible');
+      showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
+    } else {
+      showAllBtn.classList.remove('visible');
+    }
   }
-}
-
-function loadMoreHistory() {
-  wdDisplayCount += 5;
-  renderWithdrawHistory();
 }
 
 async function processWithdraw(method) {
@@ -1951,8 +2182,11 @@ async function processWithdraw(method) {
     document.getElementById('wdBinanceAmount').value = '';
     document.getElementById('wdShamId').value = '';
     document.getElementById('wdShamAmount').value = '';
-    updateWdUI('binance');
-    updateWdUI('sham');
+    
+    adjustInputWidth(document.getElementById('wdBinanceAmount'));
+    adjustInputWidth(document.getElementById('wdShamAmount'));
+    updateWdUI('binance', document.getElementById('wdBinanceAmount'));
+    updateWdUI('sham', document.getElementById('wdShamAmount'));
     
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
@@ -2010,7 +2244,7 @@ async function loadGlobalRanking() {
         <div class="ranking-rank ${rankClass}">${index}</div>
         <div class="ranking-avatar">${avatar}</div>
         <div class="ranking-info">
-          <div class="ranking-name">${data.name || 'Player'} ${isMe ? '(أنت)' : ''}</div>
+          <div class="ranking-name">${data.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div>
           <div class="ranking-count">${data.referralCount} إحالة</div>
         </div>
       `;
@@ -2028,7 +2262,7 @@ async function loadGlobalRanking() {
 }
 
 function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=Join Cute Bee Stars and win big!`;
+  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=انضم إلى Cute Bee Stars واربح جوائز كبيرة!`;
   if (tg) tg.openTelegramLink(url);
   else window.open(url, '_blank');
 }
@@ -2049,7 +2283,7 @@ function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 function completeTask(btn) {
-  if (btn.innerText === 'Start') {
+  if (btn.innerText === 'ابدأ') {
     btn.className = 'start-btn timer';
     let time = 3600;
     
@@ -2062,14 +2296,14 @@ function completeTask(btn) {
       
       if (time <= 0) {
         clearInterval(interval);
-        btn.innerText = 'Claim';
+        btn.innerText = 'استلام';
         btn.className = 'start-btn';
         btn.style.background = 'var(--success)';
         btn.onclick = () => {
           user.tickets += 1;
           updateBalances();
           syncUserData({ tickets: user.tickets });
-          btn.innerText = 'Done';
+          btn.innerText = 'تم';
           btn.style.background = 'var(--bg-soft)';
           btn.style.color = 'var(--text-secondary)';
           btn.disabled = true;
@@ -2079,6 +2313,7 @@ function completeTask(btn) {
     }, 1000);
   }
 }
+
 </script>
 
 </body>
