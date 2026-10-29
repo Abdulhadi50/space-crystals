@@ -52,7 +52,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   position: fixed; inset: 0; z-index: 9999;
   background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: 10vh; transition: opacity 0.6s ease;
+  padding-bottom: 10vh; transition: opacity 0.3s ease;
 }
 .splash.hide { opacity: 0; pointer-events: none; }
 .loader-bar {
@@ -61,7 +61,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .loader-fill {
   width: 0%; height: 100%; background: #FFFFFF;
-  border-radius: 3px; animation: load 2s forwards;
+  border-radius: 3px; animation: load 1s forwards; /* تم تسريع الحركة */
 }
 @keyframes load { to { width: 100%; } }
 
@@ -149,18 +149,14 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card p { font-size: 15px; color: rgba(255,255,255,0.7); font-weight: 600; }
 
 .home-card .card-icon {
-  width: 95px; 
-  height: 95px;
+  width: 95px; height: 95px;
   object-fit: contain;
-  margin-left: -5px;
-  transform: scale(1.1);
+  margin-left: -5px; transform: scale(1.1);
 }
 .home-card .card-video-icon {
-  width: 95px; 
-  height: 95px;
+  width: 95px; height: 95px;
   object-fit: contain;
-  margin-left: -5px;
-  transform: scale(1.3);
+  margin-left: -5px; transform: scale(1.3);
 }
 
 /* ============ SPIN GAME VIEW ============ */
@@ -171,7 +167,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   justify-content: flex-start;
   min-height: 80vh;
 }
-
 #view-spin.active {
   display: flex;
   animation: viewIn 0.3s var(--spring);
@@ -182,58 +177,40 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .spin-card-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  padding: 20px 0;
+  display: flex; justify-content: center;
+  margin-bottom: 30px; padding: 20px 0;
 }
 
 .spin-card {
-  width: 200px;
-  height: 230px;
+  width: 200px; height: 230px;
   background: var(--bg-card);
   border-radius: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   border: 2px solid var(--border);
   box-shadow: 0 0 40px rgba(0, 122, 255, 0.2);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
 }
 
 .spin-card img {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
+  width: 120px; height: 120px; object-fit: contain;
 }
-
 .spin-card .val {
-  font-size: 20px;
-  font-weight: 900;
-  margin-top: 15px;
-  color: #FFD700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 20px; font-weight: 900;
+  margin-top: 15px; color: #FFD700;
+  display: flex; align-items: center; gap: 6px;
   background: var(--bg-soft);
-  padding: 6px 16px;
-  border-radius: 16px;
+  padding: 6px 16px; border-radius: 16px;
   border: 1px solid var(--border);
 }
-
 .spin-card .val img { width: 20px; height: 20px; border-radius: 50%; }
 
 .spin-btn {
   width: 100%; 
   background: var(--gradient-blue);
-  color: #fff;
-  border: none;
-  padding: 20px;
-  border-radius: 22px;
-  font-size: 20px;
-  font-weight: 800;
+  color: #fff; border: none;
+  padding: 20px; border-radius: 22px;
+  font-size: 20px; font-weight: 800;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   transition: transform 0.1s;
@@ -244,17 +221,13 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .spin-btn .spin-cost { font-size: 22px; font-weight: 900; }
 
 .spin-ctrl-btn {
-  flex: 1; 
-  background: var(--bg-card);
+  flex: 1; background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  padding: 14px;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 700;
+  padding: 14px; border-radius: 16px;
+  font-size: 15px; font-weight: 700;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  cursor: pointer;
-  transition: transform 0.1s;
+  cursor: pointer; transition: transform 0.1s;
 }
 .spin-ctrl-btn:active { transform: scale(0.96); }
 
@@ -279,8 +252,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 800; font-size: 13px;
 }
 .daily-week-days {
-  display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px;
-  min-height: 40px;
+  display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px; min-height: 40px;
 }
 .daily-day-circle {
   flex: 1; aspect-ratio: 1; border-radius: 50%;
@@ -290,8 +262,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   transition: all 0.3s var(--spring); position: relative;
 }
 .daily-day-circle.active {
-  border-color: var(--success);
-  background: rgba(52, 199, 89, 0.15);
+  border-color: var(--success); background: rgba(52, 199, 89, 0.15);
   color: var(--success); transform: scale(1.05);
 }
 .daily-day-circle.claimed {
@@ -325,8 +296,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .task-icon {
   width: 50px; height: 50px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; font-size: 24px;
-  background: var(--bg-soft);
-  overflow: hidden;
+  background: var(--bg-soft); overflow: hidden;
 }
 .task-icon img { width: 100%; height: 100%; object-fit: cover; }
 .task-icon i { color: #229ED9; font-size: 28px; }
@@ -365,26 +335,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; object-fit: contain; }
 
 .dep-layout {
-  display: flex;
-  flex-direction: column;
-  padding-top: 15px;
+  display: flex; flex-direction: column; padding-top: 15px;
 }
 .dep-top-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 30px 0;
-  margin-bottom: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px 0; margin-bottom: 10px;
 }
 .amount-display {
-  text-align: center;
-  display: flex; align-items: center; justify-content: center;
+  text-align: center; display: flex; align-items: center; justify-content: center;
   gap: 8px; width: 100%;
 }
 .amount-display input {
-  font-size: 3rem;
-  font-weight: 800; background: transparent;
+  font-size: 3rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 200px; outline: none;
   field-sizing: content; transition: width 0.1s;
@@ -400,35 +362,28 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 
 .dep-bottom-section {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  margin-top: 20px;
+  display: flex; flex-direction: column; gap: 40px; margin-top: 20px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--bg-card); border: 1px solid var(--border);
   padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
-  font-weight: 700; font-size: 15px; cursor: pointer;
-  transition: transform 0.1s;
+  font-weight: 700; font-size: 15px; cursor: pointer; transition: transform 0.1s;
 }
 .chip:active { transform: scale(0.95); }
 
 .topup-btn {
   width: 100%; background: #FFFFFF; color: #000000;
   border: none; padding: 18px; border-radius: 20px;
-  font-size: 18px; font-weight: 800; cursor: pointer;
-  transition: transform 0.1s;
+  font-size: 18px; font-weight: 800; cursor: pointer; transition: transform 0.1s;
 }
 .topup-btn:active { transform: scale(0.97); }
 
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: var(--bg-card);
-  color: var(--text-primary);
+  background: var(--bg-card); color: var(--text-primary);
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.2s;
@@ -480,24 +435,15 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .wd-input:focus { border-color: #FFFFFF; }
 
 /* ============ WITHDRAW HISTORY ============ */
-.history-modal {
-  max-width: 380px !important; padding: 22px 18px 16px !important;
-}
+.history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
 .history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
-.history-list {
-  display: flex; flex-direction: column;
-  max-height: 320px; overflow-y: auto; margin-bottom: 12px;
-}
-.history-date-header {
-  font-size: 12px; color: var(--text-secondary);
-  margin: 12px 4px 6px; font-weight: 700;
-}
+.history-list { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
+.history-date-header { font-size: 12px; color: var(--text-secondary); margin: 12px 4px 6px; font-weight: 700; }
 .history-date-header:first-child { margin-top: 0; }
 .history-item {
   background: var(--bg-soft); padding: 12px 14px;
   border-radius: 14px; display: flex; justify-content: space-between;
-  align-items: center; border: 1px solid var(--border); gap: 10px;
-  margin-bottom: 8px;
+  align-items: center; border: 1px solid var(--border); gap: 10px; margin-bottom: 8px;
 }
 .history-main { display: flex; flex-direction: column; gap: 2px; }
 .history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); }
@@ -529,8 +475,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ref-stat-box p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 .link-box {
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 6px; display: flex;
-  align-items: center; margin-bottom: 12px;
+  border-radius: 20px; padding: 6px; display: flex; align-items: center; margin-bottom: 12px;
 }
 .link-box-text {
   flex: 1; font-size: 13px; color: var(--text-secondary); padding: 8px 12px;
@@ -558,8 +503,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-row.me { border-color: #FFFFFF; }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center;
+  background: var(--bg-soft); display: flex; align-items: center; justify-content: center;
   font-weight: 800; color: var(--text-primary); flex-shrink: 0; font-size: 13px;
 }
 .ranking-rank.top1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
@@ -567,8 +511,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-rank.top3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
 .ranking-avatar {
   width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
-  background: var(--bg-soft); display: flex;
-  align-items: center; justify-content: center;
+  background: var(--bg-soft); display: flex; align-items: center; justify-content: center;
   color: var(--text-secondary); flex-shrink: 0; border: 1px solid var(--border);
 }
 .ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -615,64 +558,35 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .modal-btn {
   width: 100%; padding: 16px; border-radius: 16px;
   background: #FFFFFF; color: #000000;
-  border: none; font-size: 16px; font-weight: 800; cursor: pointer;
-  transition: transform 0.1s;
+  border: none; font-size: 16px; font-weight: 800; cursor: pointer; transition: transform 0.1s;
 }
 .modal-btn:active { transform: scale(0.97); }
 
 /* Spin Specific Modals */
-.spin-win-modal {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-}
+.spin-win-modal { background: var(--bg-card); border: 1px solid var(--border); }
 .spin-win-modal .modal-icon { width: 100px; height: 100px; margin: 0 auto 20px; }
 .spin-win-modal .modal-icon img { width: 100%; height: 100%; object-fit: contain; }
 .spin-win-modal .win-value {
   font-size: 32px; font-weight: 900; color: var(--star-color);
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;
 }
 .spin-win-modal .win-value img { width: 32px; height: 32px; }
 
 /* New Prizes Grid */
 .prizes-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-  max-height: 50vh;
-  overflow-y: auto;
-  padding: 4px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 20px; max-height: 50vh; overflow-y: auto; padding: 4px;
 }
-
 .prize-grid-item {
-  background: #3b1f68;
-  border-radius: 16px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: #3b1f68; border-radius: 16px;
+  padding: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   border: 1px solid rgba(255,255,255,0.1);
 }
-
-.prize-grid-item img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  margin-bottom: 8px;
-}
-
+.prize-grid-item img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
 .prize-val {
-  background: rgba(0,0,0,0.4);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #fff;
+  background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 20px;
+  font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: #fff;
 }
 
 .switch-row {
@@ -688,8 +602,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .slider:before {
   position: absolute; content: ""; height: 20px; width: 20px;
-  left: 4px; bottom: 4px; background-color: white;
-  transition: .4s; border-radius: 50%;
+  left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;
 }
 input:checked + .slider { background-color: var(--gradient-blue); }
 input:checked + .slider:before { transform: translateX(22px); }
@@ -778,7 +691,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <h3>Free</h3>
             <p>2 cases</p>
           </div>
-          <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift">
+          <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
         <!-- Crash Card -->
@@ -795,7 +708,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <h3>Cases</h3>
             <p>20 cases</p>
           </div>
-          <img src="IMG_20261029_131039_955.png" class="card-icon" alt="Cases">
+          <img src="IMG_20261029_131039_955.png" class="card-icon" alt="Cases" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
@@ -803,7 +716,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <h3>دعوة الأصدقاء</h3>
             <p>اربح 2 تيكت عن كل صديق</p>
           </div>
-          <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral">
+          <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
       </div>
     </div>
@@ -1284,38 +1197,29 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-// جدول الجوائز الجديد - نجوم فقط
 const WINNING_TABLE = [
-  // جوائز صغيرة 90% (مجموع الأوزان 90)
-  { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.1, weight: 15 },
-  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 15 },
-  { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 1, weight: 15 },
-  { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 2, weight: 15 },
-  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 15 },
-  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 15 },
+  // جوائز صغيرة 97% (مجموع الأوزان 97)
+  { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.1, weight: 20 },
+  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 20 },
+  { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 1, weight: 20 },
+  { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 2, weight: 20 },
+  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 17 },
 
-  // جوائز كبيرة 10% (مجموع الأوزان 10)
-  { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 25, weight: 2 },
-  { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 66, weight: 2 },
-  { id: 'p9', img: 'IMG_20261029_180050_512.png', value: 105, weight: 1.5 },
-  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 150, weight: 1.5 },
-  { id: 'p11', img: 'IMG_20261029_180056_326.png', value: 200, weight: 1 },
-  { id: 'p12', img: 'IMG_20261029_171514_869.png', value: 350, weight: 1 },
-  { id: 'p13', img: 'IMG_20261029_171453_689.png', value: 500, weight: 1 }
+  // جوائز كبيرة 3% (مجموع الأوزان 3) من 10 إلى 500
+  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 0.5 },
+  { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 25, weight: 0.5 },
+  { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 66, weight: 0.5 },
+  { id: 'p9', img: 'IMG_20261029_180050_512.png', value: 105, weight: 0.5 },
+  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 150, weight: 0.5 },
+  { id: 'p11', img: 'IMG_20261029_180056_326.png', value: 200, weight: 0.25 },
+  { id: 'p12', img: 'IMG_20261029_171514_869.png', value: 350, weight: 0.125 },
+  { id: 'p13', img: 'IMG_20261029_171453_689.png', value: 500, weight: 0.125 }
 ];
 
 let user = {
-  id: '123456789',
-  name: 'لاعب',
-  photo: '',
-  stars: 25,
-  tickets: 20,
-  referrals: 0,
-  totalWithdrawn: 0,
-  lastDailyClaim: 0,
-  nextDailyClaim: 0,
-  dailyStreak: 0,
-  completedTasks: []
+  id: '123456789', name: 'لاعب', photo: '',
+  stars: 25, tickets: 20, referrals: 0, totalWithdrawn: 0,
+  lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: []
 };
 
 let depositAmount = 200;
@@ -1329,12 +1233,10 @@ let isClaimingDaily = false;
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
 
-// Task System Variables
 let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 
-// Spin System Variables
 let spinState = { isSpinning: false, soundOn: true };
 let pendingPrize = null;
 let audioCtx = null;
@@ -1383,10 +1285,33 @@ function initFirebase() {
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
-    fetchUserData();
-    loadTasks();
+    
+    // تفعيل التخزين المؤقت لتسريع الفتح القادم
+    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
+      console.warn("Persistence error:", err.code);
+    });
+
+    // جلب البيانات بالتوازي
+    Promise.all([
+      fetchUserData(),
+      loadTasks(),
+      loadWithdrawalHistory(),
+      calibrateServerTime()
+    ]).then(() => {
+      // إخفاء شاشة البداية بمجرد انتهاء الجلب
+      document.getElementById('splash').classList.add('hide');
+      document.getElementById('app').classList.add('ready');
+    }).catch((err) => {
+      console.error("Init error:", err);
+      // في حال الفشل نفتح التطبيق بأي حال
+      document.getElementById('splash').classList.add('hide');
+      document.getElementById('app').classList.add('ready');
+    });
+
   } catch (e) {
-    showToast('خطأ في الاتصال بقاعدة البيانات');
+    console.error(e);
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('app').classList.add('ready');
   }
 }
 
@@ -1415,14 +1340,15 @@ async function fetchUserData() {
     }
     updateBalances();
     initDailyLogin();
-    loadWithdrawalHistory();
     renderProfile();
     
     document.getElementById('binanceUserId').innerText = user.id;
     document.getElementById('shamUserId').innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error fetching user:', e);
+  }
 }
 
 async function syncUserData(updates) {
@@ -1432,20 +1358,20 @@ async function syncUserData(updates) {
   } catch (e) {}
 }
 
-window.onload = () => {
+// تشغيل التطبيق فوراً بمجرد تحميل الـ DOM
+document.addEventListener('DOMContentLoaded', () => {
   initTelegram();
+  initSpinGame();
+  adjustInputWidth(document.getElementById('depositAmountInput'));
+  adjustInputWidth(document.getElementById('cryptoAmountInput'));
+  initFirebase(); // لا ينتظر، يعمل في الخلفية
   
+  // إخفاء شاشة البداية فوراً (بدون انتظار تأخير)
   setTimeout(() => {
     document.getElementById('splash').classList.add('hide');
     document.getElementById('app').classList.add('ready');
-    
-    initFirebase();
-    updateBalances();
-    initSpinGame();
-    adjustInputWidth(document.getElementById('depositAmountInput'));
-    adjustInputWidth(document.getElementById('cryptoAmountInput'));
-  }, 2000);
-};
+  }, 500); 
+});
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && db) {
@@ -1502,11 +1428,9 @@ function renderProfile() {
 
 /* ================= SPIN GAME ================= */
 function initSpinGame() {
-  // تعيين الصورة الافتراضية للبطاقة
   document.getElementById('spin-img').src = WINNING_TABLE[0].img;
   document.getElementById('spin-val').innerText = WINNING_TABLE[0].value;
 
-  // تحميل الصور مسبقاً لمنع وميض الشاشة أثناء الدوران
   WINNING_TABLE.forEach(p => { const img = new Image(); img.src = p.img; });
 }
 
@@ -1529,7 +1453,6 @@ function startSpin() {
     return;
   }
 
-  // خصم التذاكر
   user.tickets -= 10;
   updateBalances();
   syncUserData({ tickets: firebase.firestore.FieldValue.increment(-10) });
@@ -1541,14 +1464,13 @@ function startSpin() {
   pendingPrize = winner;
 
   let startTime = Date.now();
-  let duration = 4000; // مدة الدوران 4 ثوانٍ
+  let duration = 4000;
 
   function animate() {
     const now = Date.now();
     const progress = (now - startTime) / duration;
 
     if (progress >= 1) {
-      // التوقف عند الجائزة
       document.getElementById('spin-img').src = winner.img;
       document.getElementById('spin-val').innerText = winner.value;
       spinState.isSpinning = false;
@@ -1556,14 +1478,12 @@ function startSpin() {
       return;
     }
 
-    // تغيير الصورة بشكل عشوائي أثناء الدوران
     const tempPrize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
     document.getElementById('spin-img').src = tempPrize.img;
     document.getElementById('spin-val').innerText = tempPrize.value;
 
     playTickSound();
 
-    // تباطؤ تدريجي (Easing)
     const nextDelay = 50 + Math.pow(progress, 3) * 400;
     setTimeout(animate, nextDelay);
   }
@@ -1575,19 +1495,16 @@ function playTickSound() {
   if (!spinState.soundOn) return;
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
     osc.type = 'square';
     osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-    
     gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
     
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
     osc.start();
     osc.stop(audioCtx.currentTime + 0.05);
   } catch (e) {}
@@ -1614,7 +1531,6 @@ function claimSpinReward() {
   
   pendingPrize = null;
   closeModal('spin-win-modal');
-  
   document.getElementById('spin-btn').disabled = false;
 }
 
@@ -1628,14 +1544,13 @@ function renderPrizesGrid() {
   if (!container) return;
   container.innerHTML = '';
 
-  // ترتيب الجوائز من الأصغر للأكبر
   const sortedPrizes = [...WINNING_TABLE].sort((a, b) => a.value - b.value);
 
   sortedPrizes.forEach(prize => {
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
     div.innerHTML = `
-      <img src="${prize.img}" alt="${prize.value}">
+      <img src="${prize.img}" alt="${prize.value}" onerror="this.src='${ASSETS.star}'">
       <div class="prize-val">
         <img src="${ASSETS.star}" style="width:14px; height:14px; border-radius:50%;"> ${prize.value}
       </div>
@@ -1646,8 +1561,6 @@ function renderPrizesGrid() {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderPrizesGrid();
-  
-  // Set initial sound toggle
   const savedSound = localStorage.getItem('spinSoundOn');
   if (savedSound !== null) {
     spinState.soundOn = savedSound === 'true';
@@ -1683,25 +1596,18 @@ async function initDailyLogin() {
   const activeDay = (claimsThisWeek % 7) + 1;
 
   streakCount.innerText = streak;
-
   container.innerHTML = '';
+
   for (let i = 1; i <= 7; i++) {
     const circle = document.createElement('div');
     circle.className = 'daily-day-circle';
-
-    if (canClaim && i === activeDay) {
-      circle.classList.add('active');
-    } else if (!canClaim && i <= claimsThisWeek) {
-      circle.classList.add('claimed');
-    } else if (canClaim && i < activeDay) {
-      circle.classList.add('claimed');
-    }
-
-    if (circle.classList.contains('claimed')) {
-      circle.innerHTML = '<i class="fas fa-check"></i>';
-    } else {
-      circle.innerText = i;
-    }
+    if (canClaim && i === activeDay) circle.classList.add('active');
+    else if (!canClaim && i <= claimsThisWeek) circle.classList.add('claimed');
+    else if (canClaim && i < activeDay) circle.classList.add('claimed');
+    
+    if (circle.classList.contains('claimed')) circle.innerHTML = '<i class="fas fa-check"></i>';
+    else circle.innerText = i;
+    
     container.appendChild(circle);
   }
 
@@ -1754,14 +1660,9 @@ async function claimDailyReward() {
     await db.runTransaction(async (transaction) => {
       const doc = await transaction.get(userRef);
       if (!doc.exists) throw new Error("User not found");
-      
       const data = doc.data();
-      const serverTime = serverNow();
-      const nextClaim = data.nextDailyClaim || 0;
-
-      if (serverTime < nextClaim) {
-        throw new Error("Too early");
-      }
+      
+      if (serverNow() < (data.nextDailyClaim || 0)) throw new Error("Too early");
 
       const nextClaimTime = getNextMidnight();
       const newStreak = (data.dailyStreak || 0) + 1;
@@ -1783,12 +1684,8 @@ async function claimDailyReward() {
     initDailyLogin();
 
   } catch (e) {
-    if (e.message === "Too early") {
-      showToast('لم يحن وقت الاستلام بعد (تم رفض المحاولة)');
-    } else {
-      showToast('حدث خطأ أثناء الاستلام');
-      console.error(e);
-    }
+    if (e.message === "Too early") showToast('لم يحن وقت الاستلام بعد');
+    else showToast('حدث خطأ أثناء الاستلام');
     initDailyLogin();
   } finally {
     isClaimingDaily = false;
@@ -1815,12 +1712,9 @@ async function loadTasks() {
       const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
       const isCompleted = user.completedTasks.includes(task.id);
       
-      let iconHtml = '';
-      if (task.imageUrl) {
-        iconHtml = `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">`;
-      } else {
-        iconHtml = `<i class="fab fa-telegram"></i>`;
-      }
+      let iconHtml = task.imageUrl 
+        ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` 
+        : `<i class="fab fa-telegram"></i>`;
 
       let actionBtn = isCompleted 
         ? `<button class="start-btn" style="background: var(--bg-soft); color: var(--text-secondary);" disabled>تم</button>`
@@ -1861,13 +1755,9 @@ function openTaskSheet(taskId) {
   taskStartTime = 0;
   
   document.getElementById('tsTitle').innerText = task.title;
-  
   const iconContainer = document.getElementById('tsIcon');
-  if (task.imageUrl) {
-    iconContainer.innerHTML = `<img src="${task.imageUrl}" onerror="this.innerHTML='<i class=\\'fab fa-telegram\\'></i>'">`;
-  } else {
-    iconContainer.innerHTML = `<i class="fab fa-telegram"></i>`;
-  }
+  if (task.imageUrl) iconContainer.innerHTML = `<img src="${task.imageUrl}" onerror="this.innerHTML='<i class=\\'fab fa-telegram\\'></i>'">`;
+  else iconContainer.innerHTML = `<i class="fab fa-telegram"></i>`;
 
   openModal('taskSheet');
 }
@@ -1880,11 +1770,8 @@ function closeTaskSheet() {
 function startTaskAction() {
   if (!currentTask) return;
   
-  if (tg) {
-    tg.openLink(currentTask.link);
-  } else {
-    window.open(currentTask.link, '_blank');
-  }
+  if (tg) tg.openLink(currentTask.link);
+  else window.open(currentTask.link, '_blank');
   
   taskStartTime = Date.now();
   showToast('يرجى العودة بعد 5 ثوانٍ للتحقق');
@@ -1899,14 +1786,10 @@ async function checkTaskAction() {
     return;
   }
 
-  if (!taskStartTime) {
-    return showToast('يجب الضغط على Start أولاً');
-  }
+  if (!taskStartTime) return showToast('يجب الضغط على Start أولاً');
   
   const elapsed = (Date.now() - taskStartTime) / 1000;
-  if (elapsed < 5) {
-    return showToast('لم تمر 5 ثوانٍ بعد، يرجى المحاولة لاحقاً');
-  }
+  if (elapsed < 5) return showToast('لم تمر 5 ثوانٍ بعد، يرجى المحاولة لاحقاً');
   
   const btn = event.target;
   btn.disabled = true;
@@ -1916,19 +1799,13 @@ async function checkTaskAction() {
     const isTicket = currentTask.rewardType === 'ticket';
     const amount = Number(currentTask.rewardAmount);
     
-    if (isTicket) {
-      user.tickets += amount;
-    } else {
-      user.stars += amount;
-    }
+    if (isTicket) user.tickets += amount;
+    else user.stars += amount;
     
     user.completedTasks.push(currentTask.id);
     updateBalances();
     
-    const updates = {
-      completedTasks: firebase.firestore.FieldValue.arrayUnion(currentTask.id)
-    };
-    
+    const updates = { completedTasks: firebase.firestore.FieldValue.arrayUnion(currentTask.id) };
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     
