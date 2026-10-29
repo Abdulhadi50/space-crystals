@@ -52,7 +52,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   position: fixed; inset: 0; z-index: 9999;
   background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: 10vh; transition: opacity 0.4s ease;
+  padding-bottom: 10vh; transition: opacity 0.6s ease;
 }
 .splash.hide { opacity: 0; pointer-events: none; }
 .loader-bar {
@@ -61,7 +61,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .loader-fill {
   width: 0%; height: 100%; background: #FFFFFF;
-  border-radius: 3px; animation: load 1.5s forwards;
+  border-radius: 3px; animation: load 2s forwards;
 }
 @keyframes load { to { width: 100%; } }
 
@@ -149,12 +149,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card p { font-size: 15px; color: rgba(255,255,255,0.7); font-weight: 600; }
 
 .home-card .card-icon {
-  width: 95px; height: 95px; object-fit: contain;
-  margin-left: -5px; transform: scale(1.1);
+  width: 95px; 
+  height: 95px;
+  object-fit: contain;
+  margin-left: -5px;
+  transform: scale(1.1);
 }
 .home-card .card-video-icon {
-  width: 95px; height: 95px; object-fit: contain;
-  margin-left: -5px; transform: scale(1.3);
+  width: 95px; 
+  height: 95px;
+  object-fit: contain;
+  margin-left: -5px;
+  transform: scale(1.3);
 }
 
 /* ============ SPIN GAME VIEW ============ */
@@ -162,71 +168,75 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: none;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(180deg, #0f1c3f 0%, #050a17 100%);
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 80px);
-  padding-bottom: calc(var(--dock-height) + 20px + var(--safe-bottom));
-  overflow: hidden;
+  justify-content: flex-start;
+  min-height: 80vh;
 }
+
 #view-spin.active {
   display: flex;
   animation: viewIn 0.3s var(--spring);
+  background: linear-gradient(180deg, #1e3a8a 0%, rgba(15,15,17,0) 100%);
+  border-radius: 28px;
+  padding: 20px 10px;
 }
 
-.spin-content {
+.spin-card-container {
   width: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; flex: 1; justify-content: center;
-  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
 }
 
-.spin-track-wrapper {
-  width: 100%; overflow: hidden; position: relative;
-  padding: 30px 0; margin-bottom: 30px;
-}
-.spin-indicator {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
-  background: #fff; transform: translateX(-50%);
-  z-index: 2; border-radius: 2px; box-shadow: 0 0 16px rgba(255, 255, 255, 1);
-}
-.spin-indicator::before, .spin-indicator::after {
-  content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-  width: 12px; height: 12px; background: #fff; border-radius: 50%;
-  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
-}
-.spin-indicator::before { top: -6px; }
-.spin-indicator::after { bottom: -6px; }
-
-.spin-track {
-  display: flex; gap: 16px;
-  transition: transform 5s cubic-bezier(0.1, 0.9, 0.2, 1);
-  will-change: transform;
+.spin-card {
+  width: 200px;
+  height: 230px;
+  background: var(--bg-card);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 40px rgba(0, 122, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.spin-item {
-  width: 140px; height: 160px;
-  background: var(--bg-card); border-radius: 20px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex-shrink: 0; border: 1px solid var(--border);
-  position: relative; overflow: hidden;
+.spin-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
 }
-.spin-item img { width: 80px; height: 80px; object-fit: contain; }
-.spin-item .val {
-  font-size: 14px; font-weight: 800; margin-top: 10px; color: #FFD700;
-  display: flex; align-items: center; gap: 5px;
-  background: var(--bg-soft); padding: 4px 10px; border-radius: 12px;
+
+.spin-card .val {
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 15px;
+  color: #FFD700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-soft);
+  padding: 6px 16px;
+  border-radius: 16px;
   border: 1px solid var(--border);
 }
-.spin-item .val img { width: 16px; height: 16px; border-radius: 50%; }
+
+.spin-card .val img { width: 20px; height: 20px; border-radius: 50%; }
 
 .spin-btn {
-  width: 100%; background: var(--gradient-blue); color: #fff;
-  border: none; padding: 20px; border-radius: 22px;
-  font-size: 20px; font-weight: 800; cursor: pointer;
+  width: 100%; 
+  background: var(--gradient-blue);
+  color: #fff;
+  border: none;
+  padding: 20px;
+  border-radius: 22px;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: transform 0.1s; margin-bottom: 20px;
+  transition: transform 0.1s;
 }
 .spin-btn:active { transform: scale(0.97); }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
@@ -234,11 +244,17 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .spin-btn .spin-cost { font-size: 22px; font-weight: 900; }
 
 .spin-ctrl-btn {
-  flex: 1; background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-primary); padding: 14px; border-radius: 16px;
-  font-size: 15px; font-weight: 700;
+  flex: 1; 
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  cursor: pointer; transition: transform 0.1s;
+  cursor: pointer;
+  transition: transform 0.1s;
 }
 .spin-ctrl-btn:active { transform: scale(0.96); }
 
@@ -263,7 +279,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 800; font-size: 13px;
 }
 .daily-week-days {
-  display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px; min-height: 40px;
+  display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px;
+  min-height: 40px;
 }
 .daily-day-circle {
   flex: 1; aspect-ratio: 1; border-radius: 50%;
@@ -273,7 +290,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   transition: all 0.3s var(--spring); position: relative;
 }
 .daily-day-circle.active {
-  border-color: var(--success); background: rgba(52, 199, 89, 0.15);
+  border-color: var(--success);
+  background: rgba(52, 199, 89, 0.15);
   color: var(--success); transform: scale(1.05);
 }
 .daily-day-circle.claimed {
@@ -307,7 +325,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .task-icon {
   width: 50px; height: 50px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; font-size: 24px;
-  background: var(--bg-soft); overflow: hidden;
+  background: var(--bg-soft);
+  overflow: hidden;
 }
 .task-icon img { width: 100%; height: 100%; object-fit: cover; }
 .task-icon i { color: #229ED9; font-size: 28px; }
@@ -346,18 +365,26 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; object-fit: contain; }
 
 .dep-layout {
-  display: flex; flex-direction: column; padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
 }
 .dep-top-section {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 30px 0; margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+  margin-bottom: 10px;
 }
 .amount-display {
-  text-align: center; display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  display: flex; align-items: center; justify-content: center;
   gap: 8px; width: 100%;
 }
 .amount-display input {
-  font-size: 3rem; font-weight: 800; background: transparent;
+  font-size: 3rem;
+  font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 200px; outline: none;
   field-sizing: content; transition: width 0.1s;
@@ -373,28 +400,35 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 
 .dep-bottom-section {
-  display: flex; flex-direction: column; gap: 40px; margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 20px;
 }
 
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: var(--bg-card); border: 1px solid var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   padding: 12px 20px; border-radius: 16px; color: var(--text-primary);
-  font-weight: 700; font-size: 15px; cursor: pointer; transition: transform 0.1s;
+  font-weight: 700; font-size: 15px; cursor: pointer;
+  transition: transform 0.1s;
 }
 .chip:active { transform: scale(0.95); }
 
 .topup-btn {
   width: 100%; background: #FFFFFF; color: #000000;
   border: none; padding: 18px; border-radius: 20px;
-  font-size: 18px; font-weight: 800; cursor: pointer; transition: transform 0.1s;
+  font-size: 18px; font-weight: 800; cursor: pointer;
+  transition: transform 0.1s;
 }
 .topup-btn:active { transform: scale(0.97); }
 
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: var(--bg-card); color: var(--text-primary);
+  background: var(--bg-card);
+  color: var(--text-primary);
   border: 1px solid var(--border); cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.2s;
@@ -446,15 +480,24 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .wd-input:focus { border-color: #FFFFFF; }
 
 /* ============ WITHDRAW HISTORY ============ */
-.history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
+.history-modal {
+  max-width: 380px !important; padding: 22px 18px 16px !important;
+}
 .history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
-.history-list { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
-.history-date-header { font-size: 12px; color: var(--text-secondary); margin: 12px 4px 6px; font-weight: 700; }
+.history-list {
+  display: flex; flex-direction: column;
+  max-height: 320px; overflow-y: auto; margin-bottom: 12px;
+}
+.history-date-header {
+  font-size: 12px; color: var(--text-secondary);
+  margin: 12px 4px 6px; font-weight: 700;
+}
 .history-date-header:first-child { margin-top: 0; }
 .history-item {
   background: var(--bg-soft); padding: 12px 14px;
   border-radius: 14px; display: flex; justify-content: space-between;
-  align-items: center; border: 1px solid var(--border); gap: 10px; margin-bottom: 8px;
+  align-items: center; border: 1px solid var(--border); gap: 10px;
+  margin-bottom: 8px;
 }
 .history-main { display: flex; flex-direction: column; gap: 2px; }
 .history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); }
@@ -486,7 +529,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ref-stat-box p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 .link-box {
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 6px; display: flex; align-items: center; margin-bottom: 12px;
+  border-radius: 20px; padding: 6px; display: flex;
+  align-items: center; margin-bottom: 12px;
 }
 .link-box-text {
   flex: 1; font-size: 13px; color: var(--text-secondary); padding: 8px 12px;
@@ -514,7 +558,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-row.me { border-color: #FFFFFF; }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--bg-soft); display: flex; align-items: center; justify-content: center;
+  background: var(--bg-soft); display: flex;
+  align-items: center; justify-content: center;
   font-weight: 800; color: var(--text-primary); flex-shrink: 0; font-size: 13px;
 }
 .ranking-rank.top1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
@@ -522,7 +567,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-rank.top3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; }
 .ranking-avatar {
   width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
-  background: var(--bg-soft); display: flex; align-items: center; justify-content: center;
+  background: var(--bg-soft); display: flex;
+  align-items: center; justify-content: center;
   color: var(--text-secondary); flex-shrink: 0; border: 1px solid var(--border);
 }
 .ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -569,45 +615,64 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .modal-btn {
   width: 100%; padding: 16px; border-radius: 16px;
   background: #FFFFFF; color: #000000;
-  border: none; font-size: 16px; font-weight: 800; cursor: pointer; transition: transform 0.1s;
+  border: none; font-size: 16px; font-weight: 800; cursor: pointer;
+  transition: transform 0.1s;
 }
 .modal-btn:active { transform: scale(0.97); }
 
 /* Spin Specific Modals */
-.spin-win-modal { background: var(--bg-card); border: 1px solid var(--border); }
+.spin-win-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
 .spin-win-modal .modal-icon { width: 100px; height: 100px; margin: 0 auto 20px; }
 .spin-win-modal .modal-icon img { width: 100%; height: 100%; object-fit: contain; }
 .spin-win-modal .win-value {
   font-size: 32px; font-weight: 900; color: var(--star-color);
-  display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 24px;
 }
 .spin-win-modal .win-value img { width: 32px; height: 32px; }
 
-/* Prizes Grid Modal */
-.prizes-grid-modal {
-  background: #1C1C1E; border-radius: 24px; padding: 20px;
-  width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border);
+/* New Prizes Grid */
+.prizes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 4px;
 }
-.prizes-grid-modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #fff; }
-.prizes-grid-container {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 12px; max-height: 50vh; overflow-y: auto; padding-bottom: 15px;
+
+.prize-grid-item {
+  background: #3b1f68;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.1);
 }
-.prize-card {
-  background: #2d2d30; border-radius: 16px;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 12px 6px; position: relative; border: 1px solid rgba(255,255,255,0.05);
+
+.prize-grid-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 8px;
 }
-.prize-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
-.prize-card .price-pill {
-  background: rgba(255, 255, 255, 0.12); border-radius: 20px;
-  padding: 4px 10px; display: flex; align-items: center; gap: 4px;
-  font-size: 13px; font-weight: 800; color: #fff; width: 90%; justify-content: center;
-}
-.prize-card .price-pill img { width: 14px; height: 14px; margin-bottom: 0; }
-.prizes-grid-modal .modal-btn {
-  background: rgba(255,255,255,0.1); color: #fff;
-  border-radius: 16px; padding: 14px; font-size: 16px; margin-top: 10px;
+
+.prize-val {
+  background: rgba(0,0,0,0.4);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
 }
 
 .switch-row {
@@ -623,7 +688,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .slider:before {
   position: absolute; content: ""; height: 20px; width: 20px;
-  left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;
+  left: 4px; bottom: 4px; background-color: white;
+  transition: .4s; border-radius: 50%;
 }
 input:checked + .slider { background-color: var(--gradient-blue); }
 input:checked + .slider:before { transform: translateX(22px); }
@@ -744,29 +810,28 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <!-- View: Spin Game -->
     <div class="view" id="view-spin">
-      <div class="spin-content">
-        <div class="spin-track-wrapper">
-          <div class="spin-indicator"></div>
-          <div class="spin-track" id="spin-track">
-            <!-- Populated by JS -->
+      
+      <div class="spin-card-container">
+          <div class="spin-card" id="spin-card">
+              <img src="https://up6.cc/2026/10/17932600818491.png" id="spin-img" alt="Prize">
+              <div class="val"><img src="https://up6.cc/2026/10/17932600818491.png"> <span id="spin-val">0</span></div>
           </div>
-        </div>
-        
-        <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 20px;">
-          <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
-            <i class="fas fa-cog"></i> Settings
-          </button>
-          <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
-            <i class="fas fa-gift"></i> Prizes
-          </button>
-        </div>
-
-        <button class="spin-btn" id="spin-btn" onclick="startSpin()">
-          <span>Spin</span>
-          <span class="spin-cost">— 10</span>
-          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+      </div>
+      
+      <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 16px;">
+        <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
+          <i class="fas fa-cog"></i> Settings
+        </button>
+        <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
+          <i class="fas fa-gift"></i> Prizes
         </button>
       </div>
+
+      <button class="spin-btn" id="spin-btn" onclick="startSpin()">
+        <span>Spin</span>
+        <span class="spin-cost">— 10</span>
+        <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+      </button>
     </div>
 
     <!-- View: Tasks -->
@@ -1119,14 +1184,14 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Spin Prizes Modal (NEW GRID DESIGN) -->
+<!-- Spin Prizes Modal -->
 <div class="modal-overlay" id="spin-prizes-modal">
-  <div class="prizes-grid-modal">
-    <h3>Possible prizes</h3>
-    <div class="prizes-grid-container" id="prizes-grid-container">
-      <!-- Cards injected here -->
+  <div class="modal-content" style="max-width: 400px; padding: 20px;">
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <div class="prizes-grid" id="prizes-grid-container">
+      <!-- Populated by JS -->
     </div>
-    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">Close</button>
+    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">إغلاق</button>
   </div>
 </div>
 
@@ -1219,23 +1284,24 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-// الجوائز
+// جدول الجوائز الجديد - نجوم فقط
 const WINNING_TABLE = [
-  { id: 'n5', img: 'IMG_20261029_180056_326.png', value: 198, weight: 1 },
-  { id: 'n4', img: 'IMG_20261029_180053_502.png', value: 156, weight: 2 },
-  { id: 'n3', img: 'IMG_20261029_180050_512.png', value: 124, weight: 3 },
-  { id: 'n2', img: 'IMG_20261029_180048_586.png', value: 89, weight: 5 },
-  { id: 'n1', img: 'IMG_20261029_180047_113.png', value: 47, weight: 9 },
-  { id: 'p8', img: 'IMG_20261029_172042_619.png', value: 50, weight: 5 },
-  { id: 'p6', img: 'IMG_20261029_172134_616.png', value: 25, weight: 10 },
-  { id: 'p4', img: 'IMG_20261029_171631_362.png', value: 15, weight: 15 },
-  { id: 'p10', img: 'IMG_20261029_171453_689.png', value: 500, weight: 0.5 },
-  { id: 'p9', img: 'IMG_20261029_171514_869.png', value: 50, weight: 0.5 },
-  { id: 'p7', img: 'IMG_20261029_171539_567.png', value: 10, weight: 10 },
+  // جوائز صغيرة 90% (مجموع الأوزان 90)
+  { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.1, weight: 15 },
+  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 15 },
+  { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 1, weight: 15 },
+  { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 2, weight: 15 },
   { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 15 },
-  { id: 'p3', img: 'IMG_20261029_171802_634.png', value: 1, weight: 15 },
-  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 5 },
-  { id: 'p1', img: 'IMG_20261029_171638_229.png', value: 0.1, weight: 4 }
+  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 15 },
+
+  // جوائز كبيرة 10% (مجموع الأوزان 10)
+  { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 25, weight: 2 },
+  { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 66, weight: 2 },
+  { id: 'p9', img: 'IMG_20261029_180050_512.png', value: 105, weight: 1.5 },
+  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 150, weight: 1.5 },
+  { id: 'p11', img: 'IMG_20261029_180056_326.png', value: 200, weight: 1 },
+  { id: 'p12', img: 'IMG_20261029_171514_869.png', value: 350, weight: 1 },
+  { id: 'p13', img: 'IMG_20261029_171453_689.png', value: 500, weight: 1 }
 ];
 
 let user = {
@@ -1263,14 +1329,15 @@ let isClaimingDaily = false;
 let cryptoPendingInvoice = null;
 let cryptoTimerInterval = null;
 
+// Task System Variables
 let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 
+// Spin System Variables
 let spinState = { isSpinning: false, soundOn: true };
 let pendingPrize = null;
 let audioCtx = null;
-let spinTickTimeout = null;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1316,25 +1383,10 @@ function initFirebase() {
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
-    
-    db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
-      console.warn("Persistence error:", err.code);
-    });
-
-    Promise.all([
-      fetchUserData(),
-      loadTasks(),
-      loadWithdrawalHistory(),
-      calibrateServerTime()
-    ]).then(() => {
-      document.getElementById('splash').classList.add('hide');
-      document.getElementById('app').classList.add('ready');
-    });
-
+    fetchUserData();
+    loadTasks();
   } catch (e) {
     showToast('خطأ في الاتصال بقاعدة البيانات');
-    document.getElementById('splash').classList.add('hide');
-    document.getElementById('app').classList.add('ready');
   }
 }
 
@@ -1363,15 +1415,14 @@ async function fetchUserData() {
     }
     updateBalances();
     initDailyLogin();
+    loadWithdrawalHistory();
     renderProfile();
     
     document.getElementById('binanceUserId').innerText = user.id;
     document.getElementById('shamUserId').innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-  } catch (e) {
-    console.error('Error fetching user:', e);
-  }
+  } catch (e) {}
 }
 
 async function syncUserData(updates) {
@@ -1383,10 +1434,17 @@ async function syncUserData(updates) {
 
 window.onload = () => {
   initTelegram();
-  initFirebase();
-  initSpinGame();
-  adjustInputWidth(document.getElementById('depositAmountInput'));
-  adjustInputWidth(document.getElementById('cryptoAmountInput'));
+  
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('app').classList.add('ready');
+    
+    initFirebase();
+    updateBalances();
+    initSpinGame();
+    adjustInputWidth(document.getElementById('depositAmountInput'));
+    adjustInputWidth(document.getElementById('cryptoAmountInput'));
+  }, 2000);
 };
 
 document.addEventListener('visibilitychange', () => {
@@ -1444,24 +1502,12 @@ function renderProfile() {
 
 /* ================= SPIN GAME ================= */
 function initSpinGame() {
-  const track = document.getElementById('spin-track');
-  track.innerHTML = '';
-  for (let i = 0; i < 10; i++) {
-    const prize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-    track.appendChild(createSpinItem(prize));
-  }
-}
+  // تعيين الصورة الافتراضية للبطاقة
+  document.getElementById('spin-img').src = WINNING_TABLE[0].img;
+  document.getElementById('spin-val').innerText = WINNING_TABLE[0].value;
 
-function createSpinItem(prize) {
-  const div = document.createElement('div');
-  div.className = 'spin-item';
-  div.innerHTML = `
-    <img src="${prize.img}" loading="lazy" alt="Prize">
-    <div class="val">
-      <img src="${ASSETS.star}"> ${prize.value}
-    </div>
-  `;
-  return div;
+  // تحميل الصور مسبقاً لمنع وميض الشاشة أثناء الدوران
+  WINNING_TABLE.forEach(p => { const img = new Image(); img.src = p.img; });
 }
 
 function pickPrizeByWeight() {
@@ -1483,6 +1529,7 @@ function startSpin() {
     return;
   }
 
+  // خصم التذاكر
   user.tickets -= 10;
   updateBalances();
   syncUserData({ tickets: firebase.firestore.FieldValue.increment(-10) });
@@ -1493,36 +1540,57 @@ function startSpin() {
   const winner = pickPrizeByWeight();
   pendingPrize = winner;
 
-  const track = document.getElementById('spin-track');
-  track.innerHTML = '';
-  track.style.transition = 'none';
-  track.style.transform = 'translateX(0px)';
+  let startTime = Date.now();
+  let duration = 4000; // مدة الدوران 4 ثوانٍ
 
-  const totalItems = 100;
-  const winnerIndex = 80;
+  function animate() {
+    const now = Date.now();
+    const progress = (now - startTime) / duration;
 
-  for (let i = 0; i < totalItems; i++) {
-    const prize = i === winnerIndex ? winner : WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-    track.appendChild(createSpinItem(prize));
+    if (progress >= 1) {
+      // التوقف عند الجائزة
+      document.getElementById('spin-img').src = winner.img;
+      document.getElementById('spin-val').innerText = winner.value;
+      spinState.isSpinning = false;
+      setTimeout(() => showSpinWinModal(winner), 300);
+      return;
+    }
+
+    // تغيير الصورة بشكل عشوائي أثناء الدوران
+    const tempPrize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    document.getElementById('spin-img').src = tempPrize.img;
+    document.getElementById('spin-val').innerText = tempPrize.value;
+
+    playTickSound();
+
+    // تباطؤ تدريجي (Easing)
+    const nextDelay = 50 + Math.pow(progress, 3) * 400;
+    setTimeout(animate, nextDelay);
   }
 
-  const ITEM_WIDTH = 156; 
-  const centerOffset = window.innerWidth / 2 - 70;
-  const targetX = -(winnerIndex * ITEM_WIDTH - centerOffset);
-  const randomOffset = (Math.random() - 0.5) * 30; 
-  const finalTranslate = targetX + randomOffset;
+  animate();
+}
 
-  void track.offsetWidth; 
-  
-  track.style.transition = 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)';
-  track.style.transform = `translateX(${finalTranslate}px)`;
-
-  playAcceleratingTickSound(5000);
-
-  setTimeout(() => {
-    spinState.isSpinning = false;
-    showSpinWinModal(winner);
-  }, 5100); 
+function playTickSound() {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  } catch (e) {}
 }
 
 function showSpinWinModal(prize) {
@@ -1555,61 +1623,31 @@ function toggleSpinSound(checkbox) {
   localStorage.setItem('spinSoundOn', spinState.soundOn);
 }
 
-function playAcceleratingTickSound(durationMs) {
-  if (!spinState.soundOn) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    let elapsed = 0;
-    let delay = 150;
+function renderPrizesGrid() {
+  const container = document.getElementById('prizes-grid-container');
+  if (!container) return;
+  container.innerHTML = '';
 
-    const tick = () => {
-      if (elapsed >= durationMs) return;
-      
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      
-      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-      
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
+  // ترتيب الجوائز من الأصغر للأكبر
+  const sortedPrizes = [...WINNING_TABLE].sort((a, b) => a.value - b.value);
 
-      elapsed += delay;
-      delay = Math.max(30, delay * 0.85); 
-      
-      spinTickTimeout = setTimeout(tick, delay);
-    };
-    
-    tick();
-
-  } catch (e) { console.warn('Audio error', e); }
-}
-
-/* Populate Prizes Modal List (NEW GRID) */
-document.addEventListener('DOMContentLoaded', () => {
-  const gridContainer = document.getElementById('prizes-grid-container');
-
-  WINNING_TABLE.forEach(prize => {
+  sortedPrizes.forEach(prize => {
     const div = document.createElement('div');
-    div.className = 'prize-card';
-    
+    div.className = 'prize-grid-item';
     div.innerHTML = `
-      <img src="${prize.img}" alt="Prize">
-      <div class="price-pill">
-        <img src="${ASSETS.star}"> ${prize.value}
+      <img src="${prize.img}" alt="${prize.value}">
+      <div class="prize-val">
+        <img src="${ASSETS.star}" style="width:14px; height:14px; border-radius:50%;"> ${prize.value}
       </div>
     `;
-
-    gridContainer.appendChild(div);
+    container.appendChild(div);
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderPrizesGrid();
   
+  // Set initial sound toggle
   const savedSound = localStorage.getItem('spinSoundOn');
   if (savedSound !== null) {
     spinState.soundOn = savedSound === 'true';
