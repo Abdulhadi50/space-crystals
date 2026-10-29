@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0f0f11">
+<meta name="theme-color" content="#120617">
 <title>Cute Bee Stars</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -12,15 +12,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 :root {
-  --bg-main: #0f0f11;
-  --bg-card: #1C1C1E;
-  --bg-soft: #2C2C2E;
+  --bg-main: #120617;
+  --bg-card: #1e0d24;
+  --bg-soft: #2d1435;
   --text-primary: #FFFFFF;
-  --text-secondary: #8E8E93;
-  --border: rgba(255, 255, 255, 0.08);
-  --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
-  --gradient-purple: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%);
-  --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
+  --text-secondary: #b39eb8;
+  --border: rgba(220, 7, 175, 0.15);
+  --gradient-pink-purple: linear-gradient(135deg, #DC07AF 0%, #661797 100%);
+  --gradient-dark: linear-gradient(135deg, #2d1435 0%, #1e0d24 100%);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
@@ -30,22 +29,22 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --nav-bg: rgba(28, 28, 30, 0.85);
-  --nav-border: rgba(255,255,255,0.08);
-  --nav-indicator-bg: rgba(255,255,255,0.1);
+  --nav-bg: rgba(30, 13, 36, 0.85);
+  --nav-border: rgba(220, 7, 175, 0.2);
+  --nav-indicator-bg: rgba(220, 7, 175, 0.2);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
 }
 
 [data-theme="light"] {
-  --bg-main: #f2f2f7;
+  --bg-main: #fcf0fb;
   --bg-card: #ffffff;
-  --bg-soft: #e5e5ea;
+  --bg-soft: #f0d5ee;
   --text-primary: #1c1c1e;
-  --text-secondary: #6c6c70;
-  --border: rgba(0, 0, 0, 0.08);
+  --text-secondary: #7a5a7a;
+  --border: rgba(102, 23, 151, 0.1);
   --nav-bg: rgba(255, 255, 255, 0.85);
-  --nav-border: rgba(0,0,0,0.08);
-  --nav-indicator-bg: rgba(0,0,0,0.06);
+  --nav-border: rgba(220, 7, 175, 0.15);
+  --nav-indicator-bg: rgba(220, 7, 175, 0.1);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.9);
 }
 
@@ -76,7 +75,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-radius: 3px; overflow: hidden;
 }
 .loader-fill {
-  width: 0%; height: 100%; background: var(--gradient-blue);
+  width: 0%; height: 100%; background: var(--gradient-pink-purple);
   border-radius: 3px; animation: load 2s forwards;
 }
 @keyframes load { to { width: 100%; } }
@@ -112,10 +111,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .balance-pill {
   display: flex; align-items: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(220, 7, 175, 0.08);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(220, 7, 175, 0.2);
   border-radius: 14px;
   padding: 4px 10px;
   gap: 8px;
@@ -124,12 +123,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-size: 17px;
 }
 [data-theme="light"] .balance-pill {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(102, 23, 151, 0.15);
 }
 .balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
 .deposit-mini-btn {
-  background: var(--gradient-blue); color: #fff;
+  background: var(--gradient-pink-purple); color: #fff;
   width: 22px; height: 22px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 800; line-height: 1;
@@ -162,7 +161,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   text-orientation: mixed;
   transform: rotate(180deg);
   font-size: 14px; font-weight: 900; letter-spacing: 2px;
-  color: #FF3B30;
+  color: #DC07AF;
   display: flex; align-items: center; justify-content: center; gap: 4px;
   flex-shrink: 0;
   padding: 4px 0;
@@ -170,7 +169,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .live-badge::before {
   content: '';
   width: 8px; height: 8px;
-  background: #FF3B30; border-radius: 50%;
+  background: #DC07AF; border-radius: 50%;
   animation: pulse 1s infinite alternate;
 }
 @keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(0.8); } }
@@ -191,7 +190,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .live-icon-slot video { width: 100%; height: 100%; object-fit: contain; }
 
-/* ============ NEW HOME CARDS ============ */
+/* ============ NEW HOME CARDS (No Shadow) ============ */
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
   border-radius: 28px; 
@@ -200,27 +199,25 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer; transition: transform 0.2s var(--spring);
   position: relative; overflow: hidden;
   min-height: 105px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  /* تم إزالة الظل */
 }
 .home-card:active { transform: scale(0.97); }
 
 /* ألوان البطاقات */
-.home-card.card-free { background: linear-gradient(135deg, #3a3a3c 0%, #1C1C1E 100%); }
-.home-card.card-cases { background: linear-gradient(135deg, #007AFF 0%, #0055CC 100%); }
-.home-card.referral { background: linear-gradient(135deg, #5E5CE6 0%, #3634A3 100%); }
+.home-card.card-free { background: var(--gradient-dark); border: 1px solid var(--border); }
+.home-card.card-cases { background: var(--gradient-pink-purple); }
+.home-card.referral { background: linear-gradient(135deg, #661797 0%, #DC07AF 100%); }
 
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; color: #fff; letter-spacing: -0.5px; }
-.home-card p { font-size: 15px; color: rgba(255,255,255,0.65); font-weight: 600; }
+.home-card p { font-size: 15px; color: rgba(255,255,255,0.7); font-weight: 600; }
 
-/* صور كبيرة */
 .home-card .card-icon {
   width: 95px; 
   height: 95px;
   object-fit: contain;
   margin-left: -5px;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
-  transform: scale(1.1); /* تكبير إضافي بسيط */
+  transform: scale(1.1);
 }
 
 /* ============ TASKS & DAILY LOGIN ============ */
@@ -239,7 +236,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .daily-title-area p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
 .daily-streak-badge {
   display: flex; align-items: center; gap: 5px;
-  background: linear-gradient(135deg, #FF9500, #FF3B30);
+  background: var(--gradient-pink-purple);
   color: #fff; padding: 6px 12px; border-radius: 20px;
   font-weight: 800; font-size: 13px;
 }
@@ -298,9 +295,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex; align-items: center; gap: 6px;
   font-size: 14px; color: var(--text-secondary); font-weight: 700;
 }
-.task-reward i { font-size: 16px; color: #5E5CE6; }
+.task-reward img { width: 16px; height: 16px; object-fit: contain; }
 .start-btn {
-  background: #007AFF; color: #fff; border: none;
+  background: var(--gradient-pink-purple); color: #fff; border: none;
   padding: 10px 20px; border-radius: 14px;
   font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
@@ -327,7 +324,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; object-fit: contain; }
 
-/* Updated Deposit Layout */
 .dep-layout {
   display: flex;
   flex-direction: column;
@@ -380,7 +376,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .chip:active { transform: scale(0.95); }
 
 .topup-btn {
-  width: 100%; background: var(--gradient-blue); color: #fff;
+  width: 100%; background: var(--gradient-pink-purple); color: #fff;
   border: none; padding: 18px; border-radius: 20px;
   font-size: 18px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
@@ -429,7 +425,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .crypto-pending-timer { font-family: monospace; font-weight: 800; font-size: 16px; color: var(--text-primary); }
 .crypto-pending-actions { display: flex; gap: 10px; }
 .crypto-btn { flex: 1; padding: 12px; border-radius: 14px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
-.crypto-btn.check { background: var(--gradient-blue); color: #fff; }
+.crypto-btn.check { background: var(--gradient-pink-purple); color: #fff; }
 .crypto-btn.cancel { background: var(--bg-soft); color: var(--text-secondary); }
 
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
@@ -439,7 +435,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none; text-align: center;
 }
-.wd-input:focus { border-color: #007AFF; }
+.wd-input:focus { border-color: #DC07AF; }
 
 /* ============ WITHDRAW HISTORY ============ */
 .history-modal {
@@ -467,7 +463,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .status { padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
-.st-processing { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
+.st-processing { background: rgba(220, 7, 175, 0.15); color: #DC07AF; }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
 
@@ -504,7 +500,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 800; direction: ltr; text-align: left; letter-spacing: 1px;
 }
 .btn-copy {
-  background: var(--gradient-blue); color: #fff;
+  background: var(--gradient-pink-purple); color: #fff;
   border: none; padding: 12px 18px; border-radius: 14px;
   font-weight: 800; font-family: inherit; font-size: 13px;
   cursor: pointer; display: flex; align-items: center; gap: 6px;
@@ -517,7 +513,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 12px 14px; background: var(--bg-card);
   border: 1px solid var(--border); border-radius: 20px;
 }
-.ranking-row.me { border-color: #007AFF; }
+.ranking-row.me { border-color: #DC07AF; }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--bg-soft); display: flex;
@@ -564,8 +560,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .setting-item {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px; cursor: pointer;
+  padding: 16px; cursor: pointer; border-bottom: 1px solid var(--border);
 }
+.setting-item:last-child { border-bottom: none; }
 .setting-left { display: flex; align-items: center; gap: 14px; }
 .setting-icon {
   width: 40px; height: 40px; border-radius: 12px; background: var(--bg-soft);
@@ -584,12 +581,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   width: 20px; height: 20px; background: #fff; border-radius: 50%;
   transition: transform 0.3s var(--spring);
 }
-.theme-switch.active { background: #34C759; }
+.theme-switch.active { background: var(--gradient-pink-purple); }
 .theme-switch.active .theme-switch-knob { transform: translateX(-20px); }
 
 /* ============ MODALS & DOCK ============ */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
 }
@@ -605,7 +602,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .modal-content p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; font-weight: 600; line-height: 1.5; }
 .modal-btn {
   width: 100%; padding: 16px; border-radius: 16px;
-  background: var(--gradient-blue); color: #fff;
+  background: var(--gradient-pink-purple); color: #fff;
   border: none; font-size: 16px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
 }
@@ -650,7 +647,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
-.nav-item.active { color: var(--text-primary); }
+.nav-item.active { color: #DC07AF; }
+[data-theme="light"] .nav-item.active { color: #661797; }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: var(--bg-card); border: 2px solid var(--nav-border);
@@ -660,7 +658,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
-.nav-profile.active { border-color: #007AFF; color: var(--text-primary); }
+.nav-profile.active { border-color: #DC07AF; color: #DC07AF; }
 </style>
 </head>
 <body>
@@ -695,33 +693,27 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
       </div>
       
       <div class="home-cards">
-        <!-- بطاقة Free الجديدة -->
         <div class="home-card card-free" onclick="showToast('قريباً')">
           <div class="card-text">
             <h3>Free</h3>
             <p>2 cases</p>
           </div>
-          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131022_938.png -->
           <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift">
         </div>
 
-        <!-- بطاقة Cases الجديدة -->
         <div class="home-card card-cases" onclick="showToast('قريباً')">
           <div class="card-text">
             <h3>Cases</h3>
             <p>20 cases</p>
           </div>
-          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131039_955.png -->
           <img src="IMG_20261029_131039_955.png" class="card-icon" alt="Cases">
         </div>
 
-        <!-- بطاقة الدعوة -->
         <div class="home-card referral" onclick="go('referral')">
           <div class="card-text">
             <h3>دعوة الأصدقاء</h3>
             <p>اربح 2 تيكت عن كل صديق</p>
           </div>
-          <!-- استبدل الرابط أدناه برابط الصورة IMG_20261029_131620_989.png -->
           <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral">
         </div>
       </div>
@@ -746,10 +738,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           </div>
         </div>
         <div class="daily-week-days" id="dailyWeekDays">
-          <!-- Will be injected via JS, shows loading first -->
+          <!-- Will be injected via JS -->
         </div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
-          <i class="fas fa-ticket-alt"></i>
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 18px; height: 18px;">
           <span id="claimBtnText">جاري التحقق...</span>
         </button>
       </div>
@@ -760,17 +752,17 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon-img"><img src="https://img.icons8.com/color/96/iphone.png" alt="App"></div>
             <div class="task-text">
               <h4>الشاشة الرئيسية</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
         </div>
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-link"></i></div>
+            <div class="task-icon" style="background:var(--gradient-pink-purple); color:#fff;"><i class="fas fa-link"></i></div>
             <div class="task-text">
               <h4>الرابط</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -780,7 +772,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon" style="background:#34C759; color:#fff;"><i class="fas fa-camera"></i></div>
             <div class="task-text">
               <h4>القصة</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -793,7 +785,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
             <div class="task-text">
               <h4>اشترك في قناتنا</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -803,7 +795,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
             <div class="task-text">
               <h4>اشترك في يوتيوب</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -813,7 +805,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon" style="background:#229ED9; color:#fff;"><i class="fab fa-telegram"></i></div>
             <div class="task-text">
               <h4>انضم إلى الدردشة</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -823,7 +815,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="task-icon" style="background:#fff; color:#000;"><i class="fab fa-instagram"></i></div>
             <div class="task-text">
               <h4>اشترك في انستغرام</h4>
-              <div class="task-reward"><i class="fas fa-ticket-alt"></i> 1</div>
+              <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
             </div>
           </div>
           <button class="start-btn" onclick="completeTask(this)">ابدأ</button>
@@ -1060,17 +1052,25 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           </div>
         </div>
         <div class="stat-card">
-          <i class="fas fa-ticket-alt" style="font-size:28px; color:#5E5CE6;"></i>
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 32px; height: 32px;">
           <div class="stat-info">
             <h3 id="statTickets">0</h3>
             <p>التذاكر</p>
           </div>
         </div>
         <div class="stat-card">
-          <i class="fas fa-users" style="font-size:28px; color:#007AFF;"></i>
+          <i class="fas fa-users" style="font-size:28px; color:#DC07AF;"></i>
           <div class="stat-info">
             <h3 id="statRefs">0</h3>
             <p>الإحالات</p>
+          </div>
+        </div>
+        <!-- بطاقة إجمالي السحوبات الجديدة -->
+        <div class="stat-card">
+          <i class="fas fa-money-bill-transfer" style="font-size:28px; color:var(--success);"></i>
+          <div class="stat-info">
+            <h3 id="statTotalWithdrawn">0</h3>
+            <p>إجمالي السحوبات</p>
           </div>
         </div>
       </div>
@@ -1088,6 +1088,18 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
             <div class="theme-switch-knob"></div>
           </div>
         </div>
+        
+        <!-- زر اللغة الجديد -->
+        <div class="setting-item" onclick="toggleLanguage()">
+          <div class="setting-left">
+            <div class="setting-icon"><i class="fas fa-globe"></i></div>
+            <div class="setting-text">
+              <h4>اللغة</h4>
+              <p id="langLabel">العربية</p>
+            </div>
+          </div>
+          <i class="fas fa-chevron-left" style="color:var(--text-secondary); font-size:12px;"></i>
+        </div>
       </div>
     </div>
 
@@ -1097,19 +1109,19 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     <div class="dock-nav">
       <div class="nav-item active" data-view="home" onclick="go('home')">
         <i class="fas fa-home"></i>
-        <span>الرئيسية</span>
+        <span class="nav-text">الرئيسية</span>
       </div>
       <div class="nav-item" data-view="tasks" onclick="go('tasks')">
         <i class="fas fa-tasks"></i>
-        <span>المهام</span>
+        <span class="nav-text">المهام</span>
       </div>
       <div class="nav-item" data-view="deposit" onclick="go('deposit')">
         <i class="fas fa-wallet"></i>
-        <span>إيداع</span>
+        <span class="nav-text">إيداع</span>
       </div>
       <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
         <i class="fas fa-money-bill-transfer"></i>
-        <span>سحب</span>
+        <span class="nav-text">سحب</span>
       </div>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
@@ -1172,7 +1184,8 @@ document.addEventListener('dragstart', e => {
 const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
-  sham: 'https://up6.cc/2026/09/178975725154411.png'
+  sham: 'https://up6.cc/2026/09/178975725154411.png',
+  ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png'
 };
 
 const FIREBASE_CONFIG = {
@@ -1208,11 +1221,13 @@ let user = {
   stars: 1000,
   tickets: 0,
   referrals: 0,
+  totalWithdrawn: 0,
   lastDailyClaim: 0,
   nextDailyClaim: 0,
   dailyStreak: 0
 };
 
+let currentLanguage = 'ar';
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdShowAll = false;
@@ -1254,8 +1269,8 @@ function initTelegram() {
   if (tg) {
     tg.ready();
     tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#1C1C1E');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#0f0f11');
+    if (tg.setHeaderColor) tg.setHeaderColor('#120617');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#120617');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
       user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
@@ -1340,17 +1355,17 @@ document.addEventListener('visibilitychange', () => {
 function applyLightTheme() {
   document.documentElement.setAttribute('data-theme', 'light');
   document.getElementById('themeIcon').className = 'fas fa-sun';
-  document.getElementById('themeLabel').innerText = 'الوضع الفاتح';
+  document.getElementById('themeLabel').innerText = currentLanguage === 'ar' ? 'الوضع الفاتح' : 'Light Mode';
   document.getElementById('themeSwitch').classList.add('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#FFFFFF');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#fcf0fb');
 }
 
 function applyDarkTheme() {
   document.documentElement.removeAttribute('data-theme');
   document.getElementById('themeIcon').className = 'fas fa-moon';
-  document.getElementById('themeLabel').innerText = 'الوضع الداكن';
+  document.getElementById('themeLabel').innerText = currentLanguage === 'ar' ? 'الوضع الداكن' : 'Dark Mode';
   document.getElementById('themeSwitch').classList.remove('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#1C1C1E');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#120617');
 }
 
 function toggleTheme() {
@@ -1360,6 +1375,36 @@ function toggleTheme() {
   } else {
     applyLightTheme(); localStorage.setItem('theme', 'light');
   }
+}
+
+function toggleLanguage() {
+  currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+  document.getElementById('langLabel').innerText = currentLanguage === 'ar' ? 'العربية' : 'English';
+  
+  // تغيير اتجاه الصفحة
+  document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLanguage;
+  
+  // ترجمة العناصر الأساسية
+  const navItems = document.querySelectorAll('.nav-text');
+  if (currentLanguage === 'en') {
+    navItems[0].innerText = 'Home';
+    navItems[1].innerText = 'Tasks';
+    navItems[2].innerText = 'Deposit';
+    navItems[3].innerText = 'Withdraw';
+    // تحديث عناوين الصفحات إن لزم الأمر (يمكنك إضافة المزيد)
+  } else {
+    navItems[0].innerText = 'الرئيسية';
+    navItems[1].innerText = 'المهام';
+    navItems[2].innerText = 'إيداع';
+    navItems[3].innerText = 'سحب';
+  }
+  
+  // تحديث نصوص الثيم الحالية
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) applyLightTheme(); else applyDarkTheme();
+  
+  showToast(currentLanguage === 'ar' ? 'تم تغيير اللغة للعربية' : 'Language changed to English');
 }
 
 function go(viewName) {
@@ -1395,6 +1440,7 @@ function updateBalances() {
   document.getElementById('statStars').innerText = f(user.stars);
   document.getElementById('statTickets').innerText = f(user.tickets);
   document.getElementById('statRefs').innerText = user.referrals;
+  document.getElementById('statTotalWithdrawn').innerText = f(user.totalWithdrawn);
   document.getElementById('refInvited').innerText = user.referrals;
   document.getElementById('refEarned').innerText = user.referrals * 2;
 }
@@ -1438,7 +1484,7 @@ function initLiveStrip() {
 
 function renderProfile() {
   document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = 'المعرف: ' + user.id;
+  document.getElementById('profileId').innerText = (currentLanguage === 'ar' ? 'المعرف: ' : 'ID: ') + user.id;
   const avatar = document.getElementById('profileAvatar');
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
@@ -1461,7 +1507,7 @@ async function initDailyLogin() {
   if (!container || !btn) return;
 
   btn.disabled = true;
-  btnText.innerText = 'جاري التحقق...';
+  btnText.innerText = currentLanguage === 'ar' ? 'جاري التحقق...' : 'Checking...';
   container.innerHTML = '<div style="text-align:center; width:100%; color:var(--text-secondary); padding-top:10px;"><i class="fas fa-spinner fa-spin"></i></div>';
 
   if (serverOffset === 0) {
@@ -1502,7 +1548,7 @@ async function initDailyLogin() {
     
     if (canClaim) {
       btn.disabled = false;
-      btnText.innerText = 'استلام المكافأة';
+      btnText.innerText = currentLanguage === 'ar' ? 'استلام المكافأة' : 'Claim Reward';
     } else {
       btn.disabled = true;
       const updateTimer = () => {
@@ -1512,7 +1558,7 @@ async function initDailyLogin() {
           initDailyLogin();
           return;
         }
-        btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
+        btnText.innerText = (currentLanguage === 'ar' ? 'يتجدد خلال ' : 'Resets in ') + formatRemain(remain);
       };
       updateTimer();
       dailyTimerInterval = setInterval(updateTimer, 1000);
@@ -1523,7 +1569,7 @@ async function initDailyLogin() {
 async function claimDailyReward() {
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
-    showToast('لم يحن وقت الاستلام بعد');
+    showToast(currentLanguage === 'ar' ? 'لم يحن وقت الاستلام بعد' : 'Not time to claim yet');
     return;
   }
 
@@ -1546,7 +1592,7 @@ async function claimDailyReward() {
     dailyStreak: user.dailyStreak
   });
   
-  showToast('تم استلام التيكت اليومي بنجاح!');
+  showToast(currentLanguage === 'ar' ? 'تم استلام التيكت اليومي بنجاح!' : 'Daily ticket claimed!');
   initDailyLogin();
 }
 
@@ -1613,10 +1659,10 @@ function addCryptoChip(amount) {
 
 async function processDeposit(type) {
   if (type === 'stars') {
-    if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
+    if (depositAmount < 1) return showToast(currentLanguage === 'ar' ? 'أدخل مبلغاً صحيحاً' : 'Enter valid amount');
     if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
     
-    showToast('جاري إنشاء الفاتورة...');
+    showToast(currentLanguage === 'ar' ? 'جاري إنشاء الفاتورة...' : 'Creating invoice...');
     try {
       const resp = await fetch(`${API_BASE}/api/create-invoice`, {
         method: 'POST',
@@ -1631,12 +1677,12 @@ async function processDeposit(type) {
           user.stars += depositAmount;
           updateBalances();
           syncUserData({ stars: user.stars });
-          showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
+          showToast(currentLanguage === 'ar' ? `تمت إضافة ${depositAmount} نجمة بنجاح!` : `${depositAmount} stars added!`);
           go('home');
         } else if (status === 'cancelled') {
-          showToast('تم إلغاء الدفع');
+          showToast(currentLanguage === 'ar' ? 'تم إلغاء الدفع' : 'Payment cancelled');
         } else {
-          showToast('فشل الدفع');
+          showToast(currentLanguage === 'ar' ? 'فشل الدفع' : 'Payment failed');
         }
       });
     } catch (e) {
@@ -1644,11 +1690,11 @@ async function processDeposit(type) {
     }
   } else if (type === 'crypto') {
     const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast('الحد الأدنى $1');
-    if (amount > 1000) return showToast('الحد الأقصى $1000');
+    if (!amount || amount < 1) return showToast(currentLanguage === 'ar' ? 'الحد الأدنى $1' : 'Min $1');
+    if (amount > 1000) return showToast(currentLanguage === 'ar' ? 'الحد الأقصى $1000' : 'Max $1000');
     if (!tg || !tg.openLink) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
     
-    showToast('جاري إنشاء الفاتورة...');
+    showToast(currentLanguage === 'ar' ? 'جاري إنشاء الفاتورة...' : 'Creating invoice...');
     try {
       const payload = {
         userId: user.id,
@@ -1676,7 +1722,7 @@ async function processDeposit(type) {
       
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch (e) { window.open(payUrl, '_blank'); }
       
-      showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
+      showToast(currentLanguage === 'ar' ? 'تم إنشاء الفاتورة، يرجى إكمال الدفع' : 'Invoice created, please complete payment');
     } catch(e) {
       showToast(e.message || 'تعذر بدء الدفع');
     }
@@ -1695,7 +1741,7 @@ function startCryptoTimer() {
     if (remain <= 0) {
       clearInterval(cryptoTimerInterval);
       cancelCryptoInvoice();
-      showToast('انتهت صلاحية الفاتورة');
+      showToast(currentLanguage === 'ar' ? 'انتهت صلاحية الفاتورة' : 'Invoice expired');
       return;
     }
     const mins = Math.floor(remain / 60000);
@@ -1721,17 +1767,17 @@ async function checkCryptoStatus(btn) {
     const data = await resp.json();
     
     if (data.status === 'paid' || data.paid === true) {
-      showToast('تم استلام الدفع بنجاح!');
+      showToast(currentLanguage === 'ar' ? 'تم استلام الدفع بنجاح!' : 'Payment received!');
       fetchUserData();
       cancelCryptoInvoice();
     } else if (data.status === 'expired' || data.status === 'failed') {
-      showToast('انتهت الفاتورة أو فشلت');
+      showToast(currentLanguage === 'ar' ? 'انتهت الفاتورة أو فشلت' : 'Invoice expired or failed');
       cancelCryptoInvoice();
     } else {
-      showToast('الفاتورة لا تزال قيد الانتظار');
+      showToast(currentLanguage === 'ar' ? 'الفاتورة لا تزال قيد الانتظار' : 'Invoice still pending');
     }
   } catch (e) {
-    showToast('تعذر التحقق');
+    showToast(currentLanguage === 'ar' ? 'تعذر التحقق' : 'Verification failed');
   } finally {
     btn.innerHTML = oldTxt;
     btn.disabled = false;
@@ -1764,6 +1810,11 @@ async function loadWithdrawalHistory() {
     q.forEach(doc => rows.push(doc.data()));
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
+    
+    // حساب إجمالي السحوبات
+    user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
+    document.getElementById('statTotalWithdrawn').innerText = user.totalWithdrawn.toLocaleString('en-US');
+    
     renderWithdrawHistory();
   } catch(e) {
     renderWithdrawHistory();
@@ -1788,16 +1839,16 @@ function renderWithdrawHistory() {
   list.innerHTML = '';
   
   if (withdrawalHistory.length === 0) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:16px; font-size:13px;">لا يوجد سجل سحب بعد</p>';
+    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:16px; font-size:13px;">${currentLanguage === 'ar' ? 'لا يوجد سجل سحب بعد' : 'No withdrawal history yet'}</p>`;
     if (showAllBtn) showAllBtn.classList.remove('visible');
     return;
   }
 
   const statusMap = {
-    pending: { text: 'قيد المراجعة', class: 'st-pending' },
-    processing: { text: 'قيد التنفيذ', class: 'st-processing' },
-    completed: { text: 'مكتمل', class: 'st-completed' },
-    rejected: { text: 'مرفوض', class: 'st-rejected' }
+    pending: { text: currentLanguage === 'ar' ? 'قيد المراجعة' : 'Pending', class: 'st-pending' },
+    processing: { text: currentLanguage === 'ar' ? 'قيد التنفيذ' : 'Processing', class: 'st-processing' },
+    completed: { text: currentLanguage === 'ar' ? 'مكتمل' : 'Completed', class: 'st-completed' },
+    rejected: { text: currentLanguage === 'ar' ? 'مرفوض' : 'Rejected', class: 'st-rejected' }
   };
 
   const itemsToShow = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
@@ -1805,8 +1856,8 @@ function renderWithdrawHistory() {
 
   itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
-    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
-    const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
+    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString(currentLanguage === 'ar' ? 'ar-EG' : 'en-GB') : (currentLanguage === 'ar' ? 'مؤخراً' : 'Recently');
+    const methodName = w.method === 'binance' ? 'Binance' : (currentLanguage === 'ar' ? 'شام كاش' : 'Sham Cash');
 
     if (dateStr !== lastDate) {
       const dateHeader = document.createElement('div');
@@ -1820,7 +1871,7 @@ function renderWithdrawHistory() {
     div.className = 'history-item';
     div.innerHTML = `
       <div class="history-main">
-        <div class="history-amount">${w.amount} نجمة</div>
+        <div class="history-amount">${w.amount} ${currentLanguage === 'ar' ? 'نجمة' : 'Stars'}</div>
         <div class="history-method">${methodName}</div>
       </div>
       <div class="status ${st.class}">${st.text}</div>
@@ -1831,7 +1882,7 @@ function renderWithdrawHistory() {
   if (showAllBtn) {
     if (withdrawalHistory.length > 5 && !wdShowAll) {
       showAllBtn.classList.add('visible');
-      showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
+      showAllBtn.innerText = currentLanguage === 'ar' ? `عرض الكل (${withdrawalHistory.length})` : `Show All (${withdrawalHistory.length})`;
     } else {
       showAllBtn.classList.remove('visible');
     }
@@ -1850,14 +1901,14 @@ async function processWithdraw(method) {
     payoutStr = (amount * 1).toFixed(0) + ' ل.س';
   }
 
-  if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
-  if (!amount || amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
-  if (amount > 5000) return showToast('الحد الأقصى للسحب 5000 نجمة');
-  if (amount > user.stars) return showToast('رصيدك غير كافٍ');
+  if (!id || id.length < 4) return showToast(currentLanguage === 'ar' ? 'أدخل معرّف محفظة صحيح' : 'Enter valid wallet ID');
+  if (!amount || amount < 50) return showToast(currentLanguage === 'ar' ? 'الحد الأدنى للسحب 50 نجمة' : 'Min withdrawal is 50 stars');
+  if (amount > 5000) return showToast(currentLanguage === 'ar' ? 'الحد الأقصى للسحب 5000 نجمة' : 'Max withdrawal is 5000 stars');
+  if (amount > user.stars) return showToast(currentLanguage === 'ar' ? 'رصيدك غير كافٍ' : 'Insufficient balance');
 
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = 'جاري الإرسال...';
+  btn.innerText = currentLanguage === 'ar' ? 'جاري الإرسال...' : 'Sending...';
 
   try {
     user.stars -= amount;
@@ -1892,12 +1943,12 @@ async function processWithdraw(method) {
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
   } catch(e) {
-    showToast('حدث خطأ أثناء السحب');
+    showToast(currentLanguage === 'ar' ? 'حدث خطأ أثناء السحب' : 'Error processing withdrawal');
     user.stars += amount;
     updateBalances();
   } finally {
     btn.disabled = false;
-    btn.innerText = 'تقديم الطلب';
+    btn.innerText = currentLanguage === 'ar' ? 'تقديم الطلب' : 'Submit Request';
   }
 }
 
@@ -1912,13 +1963,13 @@ function switchRefTab(tab, el) {
 async function loadGlobalRanking() {
   const list = document.getElementById('rankingList');
   if (!db) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
+    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'تعذر تحميل التصنيف' : 'Failed to load ranking'}</p>`;
     return;
   }
   try {
     const q = await db.collection('puppy_users').orderBy('referralCount', 'desc').limit(20).get();
     if (q.empty) {
-      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
+      list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'لا توجد تصنيفات بعد' : 'No ranking yet'}</p>`;
       return;
     }
     list.innerHTML = '';
@@ -1937,22 +1988,23 @@ async function loadGlobalRanking() {
         <div class="ranking-rank ${rankClass}">${index}</div>
         <div class="ranking-avatar">${avatar}</div>
         <div class="ranking-info">
-          <div class="ranking-name">${data.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div>
-          <div class="ranking-count">${data.referralCount} إحالة</div>
+          <div class="ranking-name">${data.name || (currentLanguage === 'ar' ? 'لاعب' : 'Player')} ${isMe ? (currentLanguage === 'ar' ? '(أنت)' : '(You)') : ''}</div>
+          <div class="ranking-count">${data.referralCount} ${currentLanguage === 'ar' ? 'إحالة' : 'referrals'}</div>
         </div>
       `;
       list.appendChild(div);
       index++;
     });
-    if (index === 1) list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
+    if (index === 1) list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'لا توجد تصنيفات بعد' : 'No ranking yet'}</p>`;
     globalRankingLoaded = true;
   } catch(e) {
-    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
+    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'تعذر تحميل التصنيف' : 'Failed to load ranking'}</p>`;
   }
 }
 
 function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=انضم إلى Cute Bee Stars واربح جوائز كبيرة!`;
+  const text = currentLanguage === 'ar' ? 'انضم إلى Cute Bee Stars واربح جوائز كبيرة!' : 'Join Cute Bee Stars and win big!';
+  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=${encodeURIComponent(text)}`;
   if (tg) tg.openTelegramLink(url);
   else window.open(url, '_blank');
 }
@@ -1965,14 +2017,18 @@ function showToast(msg) {
 }
 
 function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => showToast('تم النسخ بنجاح!'));
+  navigator.clipboard.writeText(text).then(() => showToast(currentLanguage === 'ar' ? 'تم النسخ بنجاح!' : 'Copied successfully!'));
 }
 
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 function completeTask(btn) {
-  if (btn.innerText === 'ابدأ') {
+  const startTxt = currentLanguage === 'ar' ? 'ابدأ' : 'Start';
+  const claimTxt = currentLanguage === 'ar' ? 'استلام' : 'Claim';
+  const doneTxt = currentLanguage === 'ar' ? 'تم' : 'Done';
+
+  if (btn.innerText === startTxt) {
     btn.className = 'start-btn timer';
     let time = 3600;
     const interval = setInterval(() => {
@@ -1983,18 +2039,18 @@ function completeTask(btn) {
       btn.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       if (time <= 0) {
         clearInterval(interval);
-        btn.innerText = 'استلام';
+        btn.innerText = claimTxt;
         btn.className = 'start-btn';
         btn.style.background = 'var(--success)';
         btn.onclick = () => {
           user.tickets += 1;
           updateBalances();
           syncUserData({ tickets: user.tickets });
-          btn.innerText = 'تم';
+          btn.innerText = doneTxt;
           btn.style.background = 'var(--bg-soft)';
           btn.style.color = 'var(--text-secondary)';
           btn.disabled = true;
-          showToast('+1 تيكت');
+          showToast(currentLanguage === 'ar' ? '+1 تيكت' : '+1 Ticket');
         };
       }
     }, 1000);
