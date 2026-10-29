@@ -127,55 +127,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .view.active { display: block; animation: viewIn 0.3s var(--spring); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ LIVE STRIP (MARQUEE) ============ */
-.live-strip {
-  display: flex; align-items: stretch; gap: 12px;
-  background: var(--bg-card); border-radius: 20px;
-  padding: 12px 16px; margin-bottom: 20px;
-  border: 1px solid var(--border);
-  overflow: hidden;
-  min-height: 72px;
-}
-.live-badge {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  font-size: 14px; font-weight: 900; letter-spacing: 2px;
-  color: #FF3B30;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
-  flex-shrink: 0;
-  padding: 4px 0;
-}
-.live-badge::before {
-  content: '';
-  width: 8px; height: 8px;
-  background: #FF3B30; border-radius: 50%;
-  animation: pulse 1s infinite alternate;
-}
-@keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(0.8); } }
-
-.live-icons-wrapper {
-  flex: 1; overflow: hidden; position: relative;
-  display: flex; align-items: center;
-}
-.live-icons-track {
-  display: flex; gap: 8px;
-  animation: slideMarquee 20s linear infinite;
-  width: max-content;
-}
-@keyframes slideMarquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.live-icon-slot {
-  width: 48px; height: 48px;
-  background: var(--bg-soft); border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.live-icon-slot img { width: 100%; height: 100%; object-fit: contain; }
-
 /* ============ HOME CARDS ============ */
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
@@ -217,77 +168,62 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: none;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(180deg, #0f1c3f 0%, #050a17 100%);
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 80px);
-  padding-bottom: calc(var(--dock-height) + 20px + var(--safe-bottom));
-  overflow: hidden; /* Prevent scrolling */
+  justify-content: flex-start;
+  min-height: 80vh;
 }
+
 #view-spin.active {
   display: flex;
   animation: viewIn 0.3s var(--spring);
+  background: linear-gradient(180deg, #1e3a8a 0%, rgba(15,15,17,0) 100%);
+  border-radius: 28px;
+  padding: 20px 10px;
 }
 
-/* Padding between live and spin track */
-.spin-content {
+.spin-card-container {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+}
+
+.spin-card {
+  width: 200px;
+  height: 230px;
+  background: var(--bg-card);
+  border-radius: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
   justify-content: center;
-  padding: 0 16px;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 40px rgba(0, 122, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.spin-track-wrapper {
-  width: 100%; overflow: hidden; position: relative;
-  padding: 30px 0;
-  margin-bottom: 30px; /* Spacing */
-}
-.spin-indicator {
-  position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
-  background: #fff; transform: translateX(-50%);
-  z-index: 2;
-  border-radius: 2px;
-  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
-}
-.spin-indicator::before, .spin-indicator::after {
-  content: '';
-  position: absolute; left: 50%; transform: translateX(-50%);
-  width: 12px; height: 12px; background: #fff; border-radius: 50%;
-  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
-}
-.spin-indicator::before { top: -6px; }
-.spin-indicator::after { bottom: -6px; }
-
-.spin-track {
-  display: flex; gap: 16px;
-  transition: transform 5s cubic-bezier(0.1, 0.9, 0.2, 1);
-  will-change: transform;
+.spin-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
 }
 
-.spin-item {
-  width: 140px; height: 160px;
-  background: var(--bg-card);
-  border-radius: 20px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid var(--border);
-  position: relative; overflow: hidden;
-}
-.spin-item img {
-  width: 80px; height: 80px; object-fit: contain;
-}
-.spin-item .val {
-  font-size: 14px; font-weight: 800; margin-top: 10px;
+.spin-card .val {
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 15px;
   color: #FFD700;
-  display: flex; align-items: center; gap: 5px;
-  background: var(--bg-soft); padding: 4px 10px; border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-soft);
+  padding: 6px 16px;
+  border-radius: 16px;
   border: 1px solid var(--border);
 }
-.spin-item .val img { width: 16px; height: 16px; border-radius: 50%; }
+
+.spin-card .val img { width: 20px; height: 20px; border-radius: 50%; }
 
 .spin-btn {
   width: 100%; 
@@ -301,7 +237,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   transition: transform 0.1s;
-  margin-bottom: 20px;
 }
 .spin-btn:active { transform: scale(0.97); }
 .spin-btn:disabled { opacity: 0.6; pointer-events: none; }
@@ -699,63 +634,45 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .spin-win-modal .win-value img { width: 32px; height: 32px; }
 
-/* NEW: Prizes Grid Modal */
-.prizes-grid-modal {
-  background: #1C1C1E; /* Dark background matching image */
-  border-radius: 24px; padding: 20px;
-  width: 100%; max-width: 400px; text-align: center;
-  border: 1px solid var(--border);
-}
-.prizes-grid-modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #fff; }
-.prizes-grid-container {
+/* New Prizes Grid */
+.prizes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+  margin-bottom: 20px;
   max-height: 50vh;
   overflow-y: auto;
-  padding-bottom: 15px;
+  padding: 4px;
 }
-.prize-card {
-  background: #2d2d30; /* Dark gray box */
+
+.prize-grid-item {
+  background: #3b1f68; /* لون بنفسجي مطابق للصورة */
   border-radius: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 6px;
-  position: relative;
-  border: 1px solid rgba(255,255,255,0.05);
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.1);
 }
-.prize-card img {
+
+.prize-grid-item img {
   width: 60px;
   height: 60px;
   object-fit: contain;
   margin-bottom: 8px;
 }
-.prize-card .price-pill {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
+
+.prize-val {
+  background: rgba(0,0,0,0.4);
   padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 13px;
-  font-weight: 800;
   color: #fff;
-  width: 90%;
-  justify-content: center;
-}
-.prize-card .price-pill img {
-  width: 14px;
-  height: 14px;
-  margin-bottom: 0;
-}
-.prizes-grid-modal .modal-btn {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border-radius: 16px;
-  padding: 14px;
-  font-size: 16px;
-  margin-top: 10px;
 }
 
 .switch-row {
@@ -854,13 +771,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     
     <!-- View: Home -->
     <div class="view active" id="view-home">
-      <div class="live-strip">
-        <div class="live-badge">LIVE</div>
-        <div class="live-icons-wrapper">
-          <div class="live-icons-track" id="liveIconsHome"></div>
-        </div>
-      </div>
-      
       <div class="home-cards">
         <!-- Free Card Links to Spin -->
         <div class="home-card card-free" onclick="go('spin')">
@@ -900,36 +810,28 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <!-- View: Spin Game -->
     <div class="view" id="view-spin">
-      <div class="live-strip" style="width: 100%; margin-bottom: 20px; box-shadow: none;">
-        <div class="live-badge">LIVE</div>
-        <div class="live-icons-wrapper">
-          <div class="live-icons-track" id="liveIconsSpin"></div>
-        </div>
-      </div>
-
-      <div class="spin-content">
-        <div class="spin-track-wrapper">
-          <div class="spin-indicator"></div>
-          <div class="spin-track" id="spin-track">
-            <!-- Populated by JS -->
+      
+      <div class="spin-card-container">
+          <div class="spin-card" id="spin-card">
+              <img src="https://up6.cc/2026/10/17932600818491.png" id="spin-img" alt="Prize">
+              <div class="val"><img src="https://up6.cc/2026/10/17932600818491.png"> <span id="spin-val">0</span></div>
           </div>
-        </div>
-        
-        <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 20px;">
-          <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
-            <i class="fas fa-cog"></i> Settings
-          </button>
-          <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
-            <i class="fas fa-gift"></i> Prizes
-          </button>
-        </div>
-
-        <button class="spin-btn" id="spin-btn" onclick="startSpin()">
-          <span>Spin</span>
-          <span class="spin-cost">— 10</span>
-          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+      </div>
+      
+      <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 16px;">
+        <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
+          <i class="fas fa-cog"></i> Settings
+        </button>
+        <button class="spin-ctrl-btn" onclick="openModal('spin-prizes-modal')">
+          <i class="fas fa-gift"></i> Prizes
         </button>
       </div>
+
+      <button class="spin-btn" id="spin-btn" onclick="startSpin()">
+        <span>Spin</span>
+        <span class="spin-cost">— 10</span>
+        <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
+      </button>
     </div>
 
     <!-- View: Tasks -->
@@ -1282,14 +1184,14 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Spin Prizes Modal (NEW GRID DESIGN) -->
+<!-- Spin Prizes Modal -->
 <div class="modal-overlay" id="spin-prizes-modal">
-  <div class="prizes-grid-modal">
-    <h3>Possible prizes</h3>
-    <div class="prizes-grid-container" id="prizes-grid-container">
-      <!-- Cards injected here -->
+  <div class="modal-content" style="max-width: 400px; padding: 20px;">
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <div class="prizes-grid" id="prizes-grid-container">
+      <!-- Populated by JS -->
     </div>
-    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">Close</button>
+    <button class="modal-btn" onclick="closeModal('spin-prizes-modal')">إغلاق</button>
   </div>
 </div>
 
@@ -1382,25 +1284,24 @@ const FIREBASE_CONFIG = {
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-// الجوائز الجديدة (نجوم فقط) - مرتبة حسب القيمة
+// جدول الجوائز الجديد - نجوم فقط
 const WINNING_TABLE = [
-  { id: 'n5', img: 'IMG_20261029_180056_326.png', value: 198, weight: 1 }, // 1%
-  { id: 'n4', img: 'IMG_20261029_180053_502.png', value: 156, weight: 2 }, // 2%
-  { id: 'n3', img: 'IMG_20261029_180050_512.png', value: 124, weight: 3 }, // 3%
-  { id: 'n2', img: 'IMG_20261029_180048_586.png', value: 89, weight: 5 },  // 5%
-  { id: 'n1', img: 'IMG_20261029_180047_113.png', value: 47, weight: 9 },  // 9%
-  
-  { id: 'p8', img: 'IMG_20261029_172042_619.png', value: 50, weight: 5 },  // تم تحويله من تذاكر
-  { id: 'p6', img: 'IMG_20261029_172134_616.png', value: 25, weight: 10 }, // تم تحويله من تذاكر
-  { id: 'p4', img: 'IMG_20261029_171631_362.png', value: 15, weight: 15 }, // تم تحويله من تذاكر
-  
-  { id: 'p10', img: 'IMG_20261029_171453_689.png', value: 500, weight: 0.5 },
-  { id: 'p9', img: 'IMG_20261029_171514_869.png', value: 50, weight: 0.5 },
-  { id: 'p7', img: 'IMG_20261029_171539_567.png', value: 10, weight: 10 },
+  // جوائز صغيرة 90% (مجموع الأوزان 90)
+  { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.1, weight: 15 },
+  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 15 },
+  { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 1, weight: 15 },
+  { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 2, weight: 15 },
   { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 15 },
-  { id: 'p3', img: 'IMG_20261029_171802_634.png', value: 1, weight: 15 },
-  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.5, weight: 5 },
-  { id: 'p1', img: 'IMG_20261029_171638_229.png', value: 0.1, weight: 4 }
+  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 15 },
+
+  // جوائز كبيرة 10% (مجموع الأوزان 10)
+  { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 25, weight: 2 },
+  { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 66, weight: 2 },
+  { id: 'p9', img: 'IMG_20261029_180050_512.png', value: 105, weight: 1.5 },
+  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 150, weight: 1.5 },
+  { id: 'p11', img: 'IMG_20261029_180056_326.png', value: 200, weight: 1 },
+  { id: 'p12', img: 'IMG_20261029_171514_869.png', value: 350, weight: 1 },
+  { id: 'p13', img: 'IMG_20261029_171453_689.png', value: 500, weight: 1 }
 ];
 
 let user = {
@@ -1437,7 +1338,6 @@ let tasksCache = [];
 let spinState = { isSpinning: false, soundOn: true };
 let pendingPrize = null;
 let audioCtx = null;
-let spinTickTimeout = null;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1541,7 +1441,6 @@ window.onload = () => {
     
     initFirebase();
     updateBalances();
-    initLiveStrip();
     initSpinGame();
     adjustInputWidth(document.getElementById('depositAmountInput'));
     adjustInputWidth(document.getElementById('cryptoAmountInput'));
@@ -1592,36 +1491,6 @@ function updateBalances() {
   document.getElementById('refEarned').innerText = user.referrals * 2;
 }
 
-/* ================= LIVE STRIP (MARQUEE) ================= */
-function initLiveStrip() {
-  // إضافة الشريط في الصفحة الرئيسية
-  const containerHome = document.getElementById('liveIconsHome');
-  if (containerHome) {
-    containerHome.innerHTML = '';
-    // نضاعف المصفوفة 4 مرات لضمان عدم انتهائها أبداً
-    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
-    itemsToRender.forEach(prize => {
-      const div = document.createElement('div');
-      div.className = 'live-icon-slot';
-      div.innerHTML = `<img src="${prize.img}" alt="Live Prize">`;
-      containerHome.appendChild(div);
-    });
-  }
-
-  // إضافة الشريط داخل لعبة Spin
-  const containerSpin = document.getElementById('liveIconsSpin');
-  if (containerSpin) {
-    containerSpin.innerHTML = '';
-    const itemsToRender = [...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE, ...WINNING_TABLE];
-    itemsToRender.forEach(prize => {
-      const div = document.createElement('div');
-      div.className = 'live-icon-slot';
-      div.innerHTML = `<img src="${prize.img}" alt="Live Prize">`;
-      containerSpin.appendChild(div);
-    });
-  }
-}
-
 function renderProfile() {
   document.getElementById('profileName').innerText = user.name;
   document.getElementById('profileId').innerText = 'المعرف: ' + user.id;
@@ -1633,25 +1502,12 @@ function renderProfile() {
 
 /* ================= SPIN GAME ================= */
 function initSpinGame() {
-  const track = document.getElementById('spin-track');
-  track.innerHTML = '';
-  // إضافة 10 عناصر عشوائية كبداية
-  for (let i = 0; i < 10; i++) {
-    const prize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-    track.appendChild(createSpinItem(prize));
-  }
-}
+  // تعيين الصورة الافتراضية للبطاقة
+  document.getElementById('spin-img').src = WINNING_TABLE[0].img;
+  document.getElementById('spin-val').innerText = WINNING_TABLE[0].value;
 
-function createSpinItem(prize) {
-  const div = document.createElement('div');
-  div.className = 'spin-item';
-  div.innerHTML = `
-    <img src="${prize.img}" alt="Prize">
-    <div class="val">
-      <img src="${ASSETS.star}"> ${prize.value}
-    </div>
-  `;
-  return div;
+  // تحميل الصور مسبقاً لمنع وميض الشاشة أثناء الدوران
+  WINNING_TABLE.forEach(p => { const img = new Image(); img.src = p.img; });
 }
 
 function pickPrizeByWeight() {
@@ -1673,7 +1529,7 @@ function startSpin() {
     return;
   }
 
-  // Deduct tickets
+  // خصم التذاكر
   user.tickets -= 10;
   updateBalances();
   syncUserData({ tickets: firebase.firestore.FieldValue.increment(-10) });
@@ -1684,39 +1540,57 @@ function startSpin() {
   const winner = pickPrizeByWeight();
   pendingPrize = winner;
 
-  const track = document.getElementById('spin-track');
-  track.innerHTML = '';
-  track.style.transition = 'none';
-  track.style.transform = 'translateX(0px)';
+  let startTime = Date.now();
+  let duration = 4000; // مدة الدوران 4 ثوانٍ
 
-  // إنشاء 200 بطاقة لضمان عدم نفاذها أبداً
-  const totalItems = 200;
-  const winnerIndex = 150;
+  function animate() {
+    const now = Date.now();
+    const progress = (now - startTime) / duration;
 
-  for (let i = 0; i < totalItems; i++) {
-    const prize = i === winnerIndex ? winner : WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-    track.appendChild(createSpinItem(prize));
+    if (progress >= 1) {
+      // التوقف عند الجائزة
+      document.getElementById('spin-img').src = winner.img;
+      document.getElementById('spin-val').innerText = winner.value;
+      spinState.isSpinning = false;
+      setTimeout(() => showSpinWinModal(winner), 300);
+      return;
+    }
+
+    // تغيير الصورة بشكل عشوائي أثناء الدوران
+    const tempPrize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    document.getElementById('spin-img').src = tempPrize.img;
+    document.getElementById('spin-val').innerText = tempPrize.value;
+
+    playTickSound();
+
+    // تباطؤ تدريجي (Easing)
+    const nextDelay = 50 + Math.pow(progress, 3) * 400;
+    setTimeout(animate, nextDelay);
   }
 
-  const ITEM_WIDTH = 156; // 140 + 16 gap
-  const centerOffset = window.innerWidth / 2 - 70;
-  const targetX = -(winnerIndex * ITEM_WIDTH - centerOffset);
-  const randomOffset = (Math.random() - 0.5) * 30; 
-  const finalTranslate = targetX + randomOffset;
+  animate();
+}
 
-  void track.offsetWidth; 
-  
-  // حركة الدوران لمدة 5 ثوان
-  track.style.transition = 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)';
-  track.style.transform = `translateX(${finalTranslate}px)`;
-
-  // تشغيل الصوت المتسارع
-  playAcceleratingTickSound(5000);
-
-  setTimeout(() => {
-    spinState.isSpinning = false;
-    showSpinWinModal(winner);
-  }, 5100); 
+function playTickSound() {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  } catch (e) {}
 }
 
 function showSpinWinModal(prize) {
@@ -1749,60 +1623,29 @@ function toggleSpinSound(checkbox) {
   localStorage.setItem('spinSoundOn', spinState.soundOn);
 }
 
-function playAcceleratingTickSound(durationMs) {
-  if (!spinState.soundOn) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    let elapsed = 0;
-    let delay = 150;
+function renderPrizesGrid() {
+  const container = document.getElementById('prizes-grid-container');
+  if (!container) return;
+  container.innerHTML = '';
 
-    const tick = () => {
-      if (elapsed >= durationMs) return;
-      
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      
-      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-      
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
+  // ترتيب الجوائز من الأصغر للأكبر
+  const sortedPrizes = [...WINNING_TABLE].sort((a, b) => a.value - b.value);
 
-      elapsed += delay;
-      delay = Math.max(30, delay * 0.85); 
-      
-      spinTickTimeout = setTimeout(tick, delay);
-    };
-    
-    tick();
-
-  } catch (e) { console.warn('Audio error', e); }
-}
-
-/* Populate Prizes Modal List (NEW GRID) */
-document.addEventListener('DOMContentLoaded', () => {
-  const gridContainer = document.getElementById('prizes-grid-container');
-
-  WINNING_TABLE.forEach(prize => {
+  sortedPrizes.forEach(prize => {
     const div = document.createElement('div');
-    div.className = 'prize-card';
-    
+    div.className = 'prize-grid-item';
     div.innerHTML = `
-      <img src="${prize.img}" alt="Prize">
-      <div class="price-pill">
-        <img src="${ASSETS.star}"> ${prize.value}
+      <img src="${prize.img}" alt="${prize.value}">
+      <div class="prize-val">
+        <img src="${ASSETS.star}" style="width:14px; height:14px; border-radius:50%;"> ${prize.value}
       </div>
     `;
-
-    gridContainer.appendChild(div);
+    container.appendChild(div);
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderPrizesGrid();
   
   // Set initial sound toggle
   const savedSound = localStorage.getItem('spinSoundOn');
