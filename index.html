@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#120617">
+<meta name="theme-color" content="#0f0f11">
 <title>Cute Bee Stars</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -12,14 +12,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 :root {
-  --bg-main: #120617;
-  --bg-card: #1e0d24;
-  --bg-soft: #2d1435;
+  --bg-main: #0f0f11;
+  --bg-card: #1C1C1E;
+  --bg-soft: #2C2C2E;
   --text-primary: #FFFFFF;
-  --text-secondary: #b39eb8;
-  --border: rgba(220, 7, 175, 0.15);
-  --gradient-pink-purple: linear-gradient(135deg, #DC07AF 0%, #661797 100%);
-  --gradient-dark: linear-gradient(135deg, #2d1435 0%, #1e0d24 100%);
+  --text-secondary: #8E8E93;
+  --border: rgba(255, 255, 255, 0.08);
+  --button-color: #DC07AF; /* لون الأزرار الجديد */
+  --gradient-dark: linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
@@ -29,22 +29,22 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --nav-bg: rgba(30, 13, 36, 0.85);
-  --nav-border: rgba(220, 7, 175, 0.2);
-  --nav-indicator-bg: rgba(220, 7, 175, 0.2);
+  --nav-bg: rgba(28, 28, 30, 0.85);
+  --nav-border: rgba(255,255,255,0.08);
+  --nav-indicator-bg: rgba(255,255,255,0.1);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
 }
 
 [data-theme="light"] {
-  --bg-main: #fcf0fb;
+  --bg-main: #f2f2f7;
   --bg-card: #ffffff;
-  --bg-soft: #f0d5ee;
+  --bg-soft: #e5e5ea;
   --text-primary: #1c1c1e;
-  --text-secondary: #7a5a7a;
-  --border: rgba(102, 23, 151, 0.1);
+  --text-secondary: #6c6c70;
+  --border: rgba(0, 0, 0, 0.08);
   --nav-bg: rgba(255, 255, 255, 0.85);
-  --nav-border: rgba(220, 7, 175, 0.15);
-  --nav-indicator-bg: rgba(220, 7, 175, 0.1);
+  --nav-border: rgba(0,0,0,0.08);
+  --nav-indicator-bg: rgba(0,0,0,0.06);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.9);
 }
 
@@ -75,7 +75,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-radius: 3px; overflow: hidden;
 }
 .loader-fill {
-  width: 0%; height: 100%; background: var(--gradient-pink-purple);
+  width: 0%; height: 100%; background: var(--button-color);
   border-radius: 3px; animation: load 2s forwards;
 }
 @keyframes load { to { width: 100%; } }
@@ -111,10 +111,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .balance-pill {
   display: flex; align-items: center;
-  background: rgba(220, 7, 175, 0.08);
+  background: rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(220, 7, 175, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 4px 10px;
   gap: 8px;
@@ -123,12 +123,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-size: 17px;
 }
 [data-theme="light"] .balance-pill {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(102, 23, 151, 0.15);
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.05);
 }
 .balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
 .deposit-mini-btn {
-  background: var(--gradient-pink-purple); color: #fff;
+  background: var(--button-color); color: #fff;
   width: 22px; height: 22px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 800; line-height: 1;
@@ -161,7 +161,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   text-orientation: mixed;
   transform: rotate(180deg);
   font-size: 14px; font-weight: 900; letter-spacing: 2px;
-  color: #DC07AF;
+  color: #FF3B30;
   display: flex; align-items: center; justify-content: center; gap: 4px;
   flex-shrink: 0;
   padding: 4px 0;
@@ -169,7 +169,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .live-badge::before {
   content: '';
   width: 8px; height: 8px;
-  background: #DC07AF; border-radius: 50%;
+  background: #FF3B30; border-radius: 50%;
   animation: pulse 1s infinite alternate;
 }
 @keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(0.8); } }
@@ -190,7 +190,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .live-icon-slot video { width: 100%; height: 100%; object-fit: contain; }
 
-/* ============ NEW HOME CARDS (No Shadow) ============ */
+/* ============ HOME CARDS ============ */
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
   border-radius: 28px; 
@@ -203,9 +203,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .home-card:active { transform: scale(0.97); }
 
-/* ألوان البطاقات */
+/* ألوان البطاقات (بقيت كما هي) */
 .home-card.card-free { background: var(--gradient-dark); border: 1px solid var(--border); }
-.home-card.card-cases { background: var(--gradient-pink-purple); }
+.home-card.card-cases { background: linear-gradient(135deg, #DC07AF 0%, #661797 100%); }
 .home-card.referral { background: linear-gradient(135deg, #661797 0%, #DC07AF 100%); }
 
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
@@ -236,7 +236,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .daily-title-area p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
 .daily-streak-badge {
   display: flex; align-items: center; gap: 5px;
-  background: var(--gradient-pink-purple);
+  background: var(--button-color);
   color: #fff; padding: 6px 12px; border-radius: 20px;
   font-weight: 800; font-size: 13px;
 }
@@ -263,7 +263,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .daily-day-circle.claimed i { font-size: 14px; }
 .daily-claim-btn {
   width: 100%; padding: 16px; border-radius: 18px;
-  background: linear-gradient(135deg, #34C759, #28a745); color: #fff;
+  background: var(--button-color); color: #fff;
   border: none; font-size: 15px; font-weight: 800;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   cursor: pointer; transition: transform 0.1s, background 0.3s;
@@ -297,7 +297,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .task-reward img { width: 16px; height: 16px; object-fit: contain; }
 .start-btn {
-  background: var(--gradient-pink-purple); color: #fff; border: none;
+  background: var(--button-color); color: #fff; border: none;
   padding: 10px 20px; border-radius: 14px;
   font-weight: 700; font-size: 14px; cursor: pointer;
   transition: background 0.2s;
@@ -376,7 +376,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .chip:active { transform: scale(0.95); }
 
 .topup-btn {
-  width: 100%; background: var(--gradient-pink-purple); color: #fff;
+  width: 100%; background: var(--button-color); color: #fff;
   border: none; padding: 18px; border-radius: 20px;
   font-size: 18px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
@@ -425,7 +425,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .crypto-pending-timer { font-family: monospace; font-weight: 800; font-size: 16px; color: var(--text-primary); }
 .crypto-pending-actions { display: flex; gap: 10px; }
 .crypto-btn { flex: 1; padding: 12px; border-radius: 14px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
-.crypto-btn.check { background: var(--gradient-pink-purple); color: #fff; }
+.crypto-btn.check { background: var(--button-color); color: #fff; }
 .crypto-btn.cancel { background: var(--bg-soft); color: var(--text-secondary); }
 
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
@@ -435,7 +435,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none; text-align: center;
 }
-.wd-input:focus { border-color: #DC07AF; }
+.wd-input:focus { border-color: var(--button-color); }
 
 /* ============ WITHDRAW HISTORY ============ */
 .history-modal {
@@ -463,7 +463,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 
 .status { padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
-.st-processing { background: rgba(220, 7, 175, 0.15); color: #DC07AF; }
+.st-processing { background: rgba(220, 7, 175, 0.15); color: var(--button-color); }
 .st-completed { background: rgba(52, 199, 89, 0.15); color: var(--success); }
 .st-rejected { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
 
@@ -500,7 +500,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   font-weight: 800; direction: ltr; text-align: left; letter-spacing: 1px;
 }
 .btn-copy {
-  background: var(--gradient-pink-purple); color: #fff;
+  background: var(--button-color); color: #fff;
   border: none; padding: 12px 18px; border-radius: 14px;
   font-weight: 800; font-family: inherit; font-size: 13px;
   cursor: pointer; display: flex; align-items: center; gap: 6px;
@@ -513,7 +513,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 12px 14px; background: var(--bg-card);
   border: 1px solid var(--border); border-radius: 20px;
 }
-.ranking-row.me { border-color: #DC07AF; }
+.ranking-row.me { border-color: var(--button-color); }
 .ranking-rank {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--bg-soft); display: flex;
@@ -581,12 +581,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   width: 20px; height: 20px; background: #fff; border-radius: 50%;
   transition: transform 0.3s var(--spring);
 }
-.theme-switch.active { background: var(--gradient-pink-purple); }
+.theme-switch.active { background: var(--button-color); }
 .theme-switch.active .theme-switch-knob { transform: translateX(-20px); }
 
 /* ============ MODALS & DOCK ============ */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
 }
@@ -602,7 +602,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .modal-content p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; font-weight: 600; line-height: 1.5; }
 .modal-btn {
   width: 100%; padding: 16px; border-radius: 16px;
-  background: var(--gradient-pink-purple); color: #fff;
+  background: var(--button-color); color: #fff;
   border: none; font-size: 16px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
 }
@@ -647,8 +647,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
-.nav-item.active { color: #DC07AF; }
-[data-theme="light"] .nav-item.active { color: #661797; }
+.nav-item.active { color: var(--button-color); }
+[data-theme="light"] .nav-item.active { color: var(--button-color); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: var(--bg-card); border: 2px solid var(--nav-border);
@@ -658,7 +658,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
-.nav-profile.active { border-color: #DC07AF; color: #DC07AF; }
+.nav-profile.active { border-color: var(--button-color); color: var(--button-color); }
 </style>
 </head>
 <body>
@@ -759,7 +759,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
         </div>
         <div class="task-item">
           <div class="task-info">
-            <div class="task-icon" style="background:var(--gradient-pink-purple); color:#fff;"><i class="fas fa-link"></i></div>
+            <div class="task-icon" style="background:#007AFF; color:#fff;"><i class="fas fa-link"></i></div>
             <div class="task-text">
               <h4>الرابط</h4>
               <div class="task-reward"><img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png"> 1</div>
@@ -1059,13 +1059,12 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           </div>
         </div>
         <div class="stat-card">
-          <i class="fas fa-users" style="font-size:28px; color:#DC07AF;"></i>
+          <i class="fas fa-users" style="font-size:28px; color:#007AFF;"></i>
           <div class="stat-info">
             <h3 id="statRefs">0</h3>
             <p>الإحالات</p>
           </div>
         </div>
-        <!-- بطاقة إجمالي السحوبات الجديدة -->
         <div class="stat-card">
           <i class="fas fa-money-bill-transfer" style="font-size:28px; color:var(--success);"></i>
           <div class="stat-info">
@@ -1087,18 +1086,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
           <div class="theme-switch" id="themeSwitch">
             <div class="theme-switch-knob"></div>
           </div>
-        </div>
-        
-        <!-- زر اللغة الجديد -->
-        <div class="setting-item" onclick="toggleLanguage()">
-          <div class="setting-left">
-            <div class="setting-icon"><i class="fas fa-globe"></i></div>
-            <div class="setting-text">
-              <h4>اللغة</h4>
-              <p id="langLabel">العربية</p>
-            </div>
-          </div>
-          <i class="fas fa-chevron-left" style="color:var(--text-secondary); font-size:12px;"></i>
         </div>
       </div>
     </div>
@@ -1227,7 +1214,6 @@ let user = {
   dailyStreak: 0
 };
 
-let currentLanguage = 'ar';
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdShowAll = false;
@@ -1269,8 +1255,8 @@ function initTelegram() {
   if (tg) {
     tg.ready();
     tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#120617');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#120617');
+    if (tg.setHeaderColor) tg.setHeaderColor('#1C1C1E');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#0f0f11');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
       user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
@@ -1355,17 +1341,17 @@ document.addEventListener('visibilitychange', () => {
 function applyLightTheme() {
   document.documentElement.setAttribute('data-theme', 'light');
   document.getElementById('themeIcon').className = 'fas fa-sun';
-  document.getElementById('themeLabel').innerText = currentLanguage === 'ar' ? 'الوضع الفاتح' : 'Light Mode';
+  document.getElementById('themeLabel').innerText = 'الوضع الفاتح';
   document.getElementById('themeSwitch').classList.add('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#fcf0fb');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#FFFFFF');
 }
 
 function applyDarkTheme() {
   document.documentElement.removeAttribute('data-theme');
   document.getElementById('themeIcon').className = 'fas fa-moon';
-  document.getElementById('themeLabel').innerText = currentLanguage === 'ar' ? 'الوضع الداكن' : 'Dark Mode';
+  document.getElementById('themeLabel').innerText = 'الوضع الداكن';
   document.getElementById('themeSwitch').classList.remove('active');
-  if (tg?.setHeaderColor) tg.setHeaderColor('#120617');
+  if (tg?.setHeaderColor) tg.setHeaderColor('#1C1C1E');
 }
 
 function toggleTheme() {
@@ -1375,36 +1361,6 @@ function toggleTheme() {
   } else {
     applyLightTheme(); localStorage.setItem('theme', 'light');
   }
-}
-
-function toggleLanguage() {
-  currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-  document.getElementById('langLabel').innerText = currentLanguage === 'ar' ? 'العربية' : 'English';
-  
-  // تغيير اتجاه الصفحة
-  document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.lang = currentLanguage;
-  
-  // ترجمة العناصر الأساسية
-  const navItems = document.querySelectorAll('.nav-text');
-  if (currentLanguage === 'en') {
-    navItems[0].innerText = 'Home';
-    navItems[1].innerText = 'Tasks';
-    navItems[2].innerText = 'Deposit';
-    navItems[3].innerText = 'Withdraw';
-    // تحديث عناوين الصفحات إن لزم الأمر (يمكنك إضافة المزيد)
-  } else {
-    navItems[0].innerText = 'الرئيسية';
-    navItems[1].innerText = 'المهام';
-    navItems[2].innerText = 'إيداع';
-    navItems[3].innerText = 'سحب';
-  }
-  
-  // تحديث نصوص الثيم الحالية
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  if (isLight) applyLightTheme(); else applyDarkTheme();
-  
-  showToast(currentLanguage === 'ar' ? 'تم تغيير اللغة للعربية' : 'Language changed to English');
 }
 
 function go(viewName) {
@@ -1484,7 +1440,7 @@ function initLiveStrip() {
 
 function renderProfile() {
   document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = (currentLanguage === 'ar' ? 'المعرف: ' : 'ID: ') + user.id;
+  document.getElementById('profileId').innerText = 'المعرف: ' + user.id;
   const avatar = document.getElementById('profileAvatar');
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
@@ -1507,7 +1463,7 @@ async function initDailyLogin() {
   if (!container || !btn) return;
 
   btn.disabled = true;
-  btnText.innerText = currentLanguage === 'ar' ? 'جاري التحقق...' : 'Checking...';
+  btnText.innerText = 'جاري التحقق...';
   container.innerHTML = '<div style="text-align:center; width:100%; color:var(--text-secondary); padding-top:10px;"><i class="fas fa-spinner fa-spin"></i></div>';
 
   if (serverOffset === 0) {
@@ -1548,7 +1504,7 @@ async function initDailyLogin() {
     
     if (canClaim) {
       btn.disabled = false;
-      btnText.innerText = currentLanguage === 'ar' ? 'استلام المكافأة' : 'Claim Reward';
+      btnText.innerText = 'استلام المكافأة';
     } else {
       btn.disabled = true;
       const updateTimer = () => {
@@ -1558,7 +1514,7 @@ async function initDailyLogin() {
           initDailyLogin();
           return;
         }
-        btnText.innerText = (currentLanguage === 'ar' ? 'يتجدد خلال ' : 'Resets in ') + formatRemain(remain);
+        btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
       };
       updateTimer();
       dailyTimerInterval = setInterval(updateTimer, 1000);
@@ -1569,7 +1525,7 @@ async function initDailyLogin() {
 async function claimDailyReward() {
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
-    showToast(currentLanguage === 'ar' ? 'لم يحن وقت الاستلام بعد' : 'Not time to claim yet');
+    showToast('لم يحن وقت الاستلام بعد');
     return;
   }
 
@@ -1592,7 +1548,7 @@ async function claimDailyReward() {
     dailyStreak: user.dailyStreak
   });
   
-  showToast(currentLanguage === 'ar' ? 'تم استلام التيكت اليومي بنجاح!' : 'Daily ticket claimed!');
+  showToast('تم استلام التيكت اليومي بنجاح!');
   initDailyLogin();
 }
 
@@ -1659,10 +1615,10 @@ function addCryptoChip(amount) {
 
 async function processDeposit(type) {
   if (type === 'stars') {
-    if (depositAmount < 1) return showToast(currentLanguage === 'ar' ? 'أدخل مبلغاً صحيحاً' : 'Enter valid amount');
+    if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
     if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
     
-    showToast(currentLanguage === 'ar' ? 'جاري إنشاء الفاتورة...' : 'Creating invoice...');
+    showToast('جاري إنشاء الفاتورة...');
     try {
       const resp = await fetch(`${API_BASE}/api/create-invoice`, {
         method: 'POST',
@@ -1677,12 +1633,12 @@ async function processDeposit(type) {
           user.stars += depositAmount;
           updateBalances();
           syncUserData({ stars: user.stars });
-          showToast(currentLanguage === 'ar' ? `تمت إضافة ${depositAmount} نجمة بنجاح!` : `${depositAmount} stars added!`);
+          showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
           go('home');
         } else if (status === 'cancelled') {
-          showToast(currentLanguage === 'ar' ? 'تم إلغاء الدفع' : 'Payment cancelled');
+          showToast('تم إلغاء الدفع');
         } else {
-          showToast(currentLanguage === 'ar' ? 'فشل الدفع' : 'Payment failed');
+          showToast('فشل الدفع');
         }
       });
     } catch (e) {
@@ -1690,11 +1646,11 @@ async function processDeposit(type) {
     }
   } else if (type === 'crypto') {
     const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast(currentLanguage === 'ar' ? 'الحد الأدنى $1' : 'Min $1');
-    if (amount > 1000) return showToast(currentLanguage === 'ar' ? 'الحد الأقصى $1000' : 'Max $1000');
+    if (!amount || amount < 1) return showToast('الحد الأدنى $1');
+    if (amount > 1000) return showToast('الحد الأقصى $1000');
     if (!tg || !tg.openLink) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
     
-    showToast(currentLanguage === 'ar' ? 'جاري إنشاء الفاتورة...' : 'Creating invoice...');
+    showToast('جاري إنشاء الفاتورة...');
     try {
       const payload = {
         userId: user.id,
@@ -1722,7 +1678,7 @@ async function processDeposit(type) {
       
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch (e) { window.open(payUrl, '_blank'); }
       
-      showToast(currentLanguage === 'ar' ? 'تم إنشاء الفاتورة، يرجى إكمال الدفع' : 'Invoice created, please complete payment');
+      showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
     } catch(e) {
       showToast(e.message || 'تعذر بدء الدفع');
     }
@@ -1741,7 +1697,7 @@ function startCryptoTimer() {
     if (remain <= 0) {
       clearInterval(cryptoTimerInterval);
       cancelCryptoInvoice();
-      showToast(currentLanguage === 'ar' ? 'انتهت صلاحية الفاتورة' : 'Invoice expired');
+      showToast('انتهت صلاحية الفاتورة');
       return;
     }
     const mins = Math.floor(remain / 60000);
@@ -1767,17 +1723,17 @@ async function checkCryptoStatus(btn) {
     const data = await resp.json();
     
     if (data.status === 'paid' || data.paid === true) {
-      showToast(currentLanguage === 'ar' ? 'تم استلام الدفع بنجاح!' : 'Payment received!');
+      showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
     } else if (data.status === 'expired' || data.status === 'failed') {
-      showToast(currentLanguage === 'ar' ? 'انتهت الفاتورة أو فشلت' : 'Invoice expired or failed');
+      showToast('انتهت الفاتورة أو فشلت');
       cancelCryptoInvoice();
     } else {
-      showToast(currentLanguage === 'ar' ? 'الفاتورة لا تزال قيد الانتظار' : 'Invoice still pending');
+      showToast('الفاتورة لا تزال قيد الانتظار');
     }
   } catch (e) {
-    showToast(currentLanguage === 'ar' ? 'تعذر التحقق' : 'Verification failed');
+    showToast('تعذر التحقق');
   } finally {
     btn.innerHTML = oldTxt;
     btn.disabled = false;
@@ -1839,16 +1795,16 @@ function renderWithdrawHistory() {
   list.innerHTML = '';
   
   if (withdrawalHistory.length === 0) {
-    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:16px; font-size:13px;">${currentLanguage === 'ar' ? 'لا يوجد سجل سحب بعد' : 'No withdrawal history yet'}</p>`;
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary); font-weight:600; padding:16px; font-size:13px;">لا يوجد سجل سحب بعد</p>';
     if (showAllBtn) showAllBtn.classList.remove('visible');
     return;
   }
 
   const statusMap = {
-    pending: { text: currentLanguage === 'ar' ? 'قيد المراجعة' : 'Pending', class: 'st-pending' },
-    processing: { text: currentLanguage === 'ar' ? 'قيد التنفيذ' : 'Processing', class: 'st-processing' },
-    completed: { text: currentLanguage === 'ar' ? 'مكتمل' : 'Completed', class: 'st-completed' },
-    rejected: { text: currentLanguage === 'ar' ? 'مرفوض' : 'Rejected', class: 'st-rejected' }
+    pending: { text: 'قيد المراجعة', class: 'st-pending' },
+    processing: { text: 'قيد التنفيذ', class: 'st-processing' },
+    completed: { text: 'مكتمل', class: 'st-completed' },
+    rejected: { text: 'مرفوض', class: 'st-rejected' }
   };
 
   const itemsToShow = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
@@ -1856,8 +1812,8 @@ function renderWithdrawHistory() {
 
   itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
-    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString(currentLanguage === 'ar' ? 'ar-EG' : 'en-GB') : (currentLanguage === 'ar' ? 'مؤخراً' : 'Recently');
-    const methodName = w.method === 'binance' ? 'Binance' : (currentLanguage === 'ar' ? 'شام كاش' : 'Sham Cash');
+    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
+    const methodName = w.method === 'binance' ? 'Binance' : 'شام كاش';
 
     if (dateStr !== lastDate) {
       const dateHeader = document.createElement('div');
@@ -1871,7 +1827,7 @@ function renderWithdrawHistory() {
     div.className = 'history-item';
     div.innerHTML = `
       <div class="history-main">
-        <div class="history-amount">${w.amount} ${currentLanguage === 'ar' ? 'نجمة' : 'Stars'}</div>
+        <div class="history-amount">${w.amount} نجمة</div>
         <div class="history-method">${methodName}</div>
       </div>
       <div class="status ${st.class}">${st.text}</div>
@@ -1882,7 +1838,7 @@ function renderWithdrawHistory() {
   if (showAllBtn) {
     if (withdrawalHistory.length > 5 && !wdShowAll) {
       showAllBtn.classList.add('visible');
-      showAllBtn.innerText = currentLanguage === 'ar' ? `عرض الكل (${withdrawalHistory.length})` : `Show All (${withdrawalHistory.length})`;
+      showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
     } else {
       showAllBtn.classList.remove('visible');
     }
@@ -1901,14 +1857,14 @@ async function processWithdraw(method) {
     payoutStr = (amount * 1).toFixed(0) + ' ل.س';
   }
 
-  if (!id || id.length < 4) return showToast(currentLanguage === 'ar' ? 'أدخل معرّف محفظة صحيح' : 'Enter valid wallet ID');
-  if (!amount || amount < 50) return showToast(currentLanguage === 'ar' ? 'الحد الأدنى للسحب 50 نجمة' : 'Min withdrawal is 50 stars');
-  if (amount > 5000) return showToast(currentLanguage === 'ar' ? 'الحد الأقصى للسحب 5000 نجمة' : 'Max withdrawal is 5000 stars');
-  if (amount > user.stars) return showToast(currentLanguage === 'ar' ? 'رصيدك غير كافٍ' : 'Insufficient balance');
+  if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
+  if (!amount || amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
+  if (amount > 5000) return showToast('الحد الأقصى للسحب 5000 نجمة');
+  if (amount > user.stars) return showToast('رصيدك غير كافٍ');
 
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = currentLanguage === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+  btn.innerText = 'جاري الإرسال...';
 
   try {
     user.stars -= amount;
@@ -1943,12 +1899,12 @@ async function processWithdraw(method) {
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
   } catch(e) {
-    showToast(currentLanguage === 'ar' ? 'حدث خطأ أثناء السحب' : 'Error processing withdrawal');
+    showToast('حدث خطأ أثناء السحب');
     user.stars += amount;
     updateBalances();
   } finally {
     btn.disabled = false;
-    btn.innerText = currentLanguage === 'ar' ? 'تقديم الطلب' : 'Submit Request';
+    btn.innerText = 'تقديم الطلب';
   }
 }
 
@@ -1963,13 +1919,13 @@ function switchRefTab(tab, el) {
 async function loadGlobalRanking() {
   const list = document.getElementById('rankingList');
   if (!db) {
-    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'تعذر تحميل التصنيف' : 'Failed to load ranking'}</p>`;
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
     return;
   }
   try {
     const q = await db.collection('puppy_users').orderBy('referralCount', 'desc').limit(20).get();
     if (q.empty) {
-      list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'لا توجد تصنيفات بعد' : 'No ranking yet'}</p>`;
+      list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
       return;
     }
     list.innerHTML = '';
@@ -1988,23 +1944,22 @@ async function loadGlobalRanking() {
         <div class="ranking-rank ${rankClass}">${index}</div>
         <div class="ranking-avatar">${avatar}</div>
         <div class="ranking-info">
-          <div class="ranking-name">${data.name || (currentLanguage === 'ar' ? 'لاعب' : 'Player')} ${isMe ? (currentLanguage === 'ar' ? '(أنت)' : '(You)') : ''}</div>
-          <div class="ranking-count">${data.referralCount} ${currentLanguage === 'ar' ? 'إحالة' : 'referrals'}</div>
+          <div class="ranking-name">${data.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div>
+          <div class="ranking-count">${data.referralCount} إحالة</div>
         </div>
       `;
       list.appendChild(div);
       index++;
     });
-    if (index === 1) list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'لا توجد تصنيفات بعد' : 'No ranking yet'}</p>`;
+    if (index === 1) list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
     globalRankingLoaded = true;
   } catch(e) {
-    list.innerHTML = `<p style="text-align:center; color:var(--text-secondary);">${currentLanguage === 'ar' ? 'تعذر تحميل التصنيف' : 'Failed to load ranking'}</p>`;
+    list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">تعذر تحميل التصنيف</p>';
   }
 }
 
 function shareReferral() {
-  const text = currentLanguage === 'ar' ? 'انضم إلى Cute Bee Stars واربح جوائز كبيرة!' : 'Join Cute Bee Stars and win big!';
-  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=${encodeURIComponent(text)}`;
+  const url = `https://t.me/share/url?url=https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}&text=انضم إلى Cute Bee Stars واربح جوائز كبيرة!`;
   if (tg) tg.openTelegramLink(url);
   else window.open(url, '_blank');
 }
@@ -2017,18 +1972,14 @@ function showToast(msg) {
 }
 
 function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => showToast(currentLanguage === 'ar' ? 'تم النسخ بنجاح!' : 'Copied successfully!'));
+  navigator.clipboard.writeText(text).then(() => showToast('تم النسخ بنجاح!'));
 }
 
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 function completeTask(btn) {
-  const startTxt = currentLanguage === 'ar' ? 'ابدأ' : 'Start';
-  const claimTxt = currentLanguage === 'ar' ? 'استلام' : 'Claim';
-  const doneTxt = currentLanguage === 'ar' ? 'تم' : 'Done';
-
-  if (btn.innerText === startTxt) {
+  if (btn.innerText === 'ابدأ') {
     btn.className = 'start-btn timer';
     let time = 3600;
     const interval = setInterval(() => {
@@ -2039,18 +1990,18 @@ function completeTask(btn) {
       btn.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       if (time <= 0) {
         clearInterval(interval);
-        btn.innerText = claimTxt;
+        btn.innerText = 'استلام';
         btn.className = 'start-btn';
         btn.style.background = 'var(--success)';
         btn.onclick = () => {
           user.tickets += 1;
           updateBalances();
           syncUserData({ tickets: user.tickets });
-          btn.innerText = doneTxt;
+          btn.innerText = 'تم';
           btn.style.background = 'var(--bg-soft)';
           btn.style.color = 'var(--text-secondary)';
           btn.disabled = true;
-          showToast(currentLanguage === 'ar' ? '+1 تيكت' : '+1 Ticket');
+          showToast('+1 تيكت');
         };
       }
     }, 1000);
