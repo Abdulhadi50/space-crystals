@@ -17,15 +17,12 @@
   --bg-soft: #2C2C2E;
   --text-primary: #FFFFFF;
   --text-secondary: #8E8E93;
-  --text-tertiary: #636366;
   --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
   --success: #34C759;
   --danger: #FF3B30;
   --warning: #FF9500;
-  --primary: #007AFF;
   --usdt: #26A17B;
-  --usdt-dark: #1B7A5E;
+  --primary: #007AFF;
   --safe-bottom: env(safe-area-inset-bottom, 20px);
   --safe-top: env(safe-area-inset-top, 20px);
   --dock-height: 64px;
@@ -35,12 +32,6 @@
   --nav-border: rgba(255,255,255,0.08);
   --nav-indicator-bg: rgba(255,255,255,0.1);
   --nav-indicator-shadow: inset 0 1px rgba(255,255,255,0.1);
-  --gradient-blue: linear-gradient(135deg, #007AFF 0%, #0055CC 100%);
-  --gradient-usdt: linear-gradient(135deg, #26A17B 0%, #1B7A5E 100%);
-  --gradient-success: linear-gradient(135deg, #34C759 0%, #28A745 100%);
-  --gradient-warning: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%);
-  --gradient-purple: linear-gradient(135deg, #BF5AF2 0%, #8A3AB9 100%);
-  --gradient-dark: linear-gradient(135deg, #1C1C1E 0%, #3A3A3C 100%);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
@@ -48,23 +39,33 @@ body {
   font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   background: var(--bg-main); color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
-  overscroll-behavior: none; user-select: none; -webkit-user-select: none; direction: rtl;
+  overscroll-behavior: none; user-select: none; -webkit-user-select: none;
+  direction: rtl;
 }
-body[dir="ltr"] {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-}
+html[dir="ltr"] body { direction: ltr; }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input, textarea { font: inherit; color: inherit; user-select: text; -webkit-user-select: text; }
 img, video { pointer-events: none; -webkit-touch-callout: none; }
 ::-webkit-scrollbar { display: none; }
 
-.splash { position: fixed; inset: 0; z-index: 9999; background: url('https://up6.cc/2026/10/179321381738671.png') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 10vh; transition: opacity 0.3s ease; }
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg-main);
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  gap: 20px; transition: opacity 0.3s ease;
+}
 .splash.hide { opacity: 0; pointer-events: none; }
-.loader-bar { width: 60%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
-.loader-fill { width: 0%; height: 100%; background: #FFFFFF; border-radius: 3px; animation: load 1s forwards; }
+.splash .logo-text { font-size: 36px; font-weight: 800; letter-spacing: 2px; }
+.splash .logo-text span { color: var(--usdt); }
+.loader-bar { width: 60%; height: 4px; background: var(--bg-soft); border-radius: 3px; overflow: hidden; }
+.loader-fill { width: 0%; height: 100%; background: var(--usdt); border-radius: 3px; animation: load 1s forwards; }
 @keyframes load { to { width: 100%; } }
 
-.app-container { display: flex; flex-direction: column; height: 100dvh; position: relative; max-width: 480px; margin: 0 auto; overflow: hidden; display: none; }
+.app-container {
+  display: flex; flex-direction: column; height: 100dvh;
+  position: relative; max-width: 480px; margin: 0 auto; overflow: hidden;
+  display: none;
+}
 .app-container.ready { display: flex; }
 
 .top-app-bar {
@@ -76,1518 +77,992 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
   border-bottom: 1px solid var(--nav-border);
   z-index: 50; padding-top: var(--safe-top);
+  display: flex; align-items: center; justify-content: space-between;
+  padding-left: 20px; padding-right: 20px;
 }
+.logo-text { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+.logo-text span { color: var(--usdt); }
+.lang-toggle {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  color: var(--text-primary); padding: 6px 14px; border-radius: 12px;
+  font-weight: 800; font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.lang-toggle:active { transform: scale(0.95); }
+.lang-toggle i { font-size: 14px; }
 
-/* ============ FLOATING BALANCES ============ */
-.floating-balances {
+/* ============ GLASSY USDT PILL ============ */
+.floating-balance {
   position: absolute;
-  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
+  top: calc(var(--top-bar-height) + var(--safe-top) + 12px);
   left: 16px; right: 16px;
-  display: flex; justify-content: space-between; align-items: center;
-  z-index: 51; gap: 10px;
+  z-index: 51;
 }
-.balance-pill-luxury {
-  display: flex; align-items: center;
-  background: linear-gradient(135deg, rgba(38, 161, 123, 0.35) 0%, rgba(38, 161, 123, 0.12) 50%, rgba(38, 161, 123, 0.28) 100%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid rgba(38, 161, 123, 0.55);
-  border-radius: 999px;
-  padding: 8px 16px;
-  gap: 10px;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 17px;
+.usdt-pill {
   position: relative;
-  overflow: hidden;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  border-radius: 24px;
+  background: linear-gradient(135deg,
+    rgba(38, 161, 123, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(38, 161, 123, 0.08) 100%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 10px 32px rgba(38, 161, 123, 0.25),
-    0 0 0 1px rgba(255,255,255,0.05) inset,
-    0 1px 0 rgba(255,255,255,0.15) inset,
-    0 -1px 0 rgba(0,0,0,0.1) inset;
-  font-family: system-ui, -apple-system, sans-serif;
-  flex: 1;
-  max-width: 260px;
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(38, 161, 123, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
-.balance-pill-luxury::before {
+.usdt-pill::before {
   content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+  position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(38, 161, 123, 0.25) 0%, transparent 40%);
   pointer-events: none;
-  border-radius: 999px 999px 0 0;
+  animation: pillShine 8s ease-in-out infinite;
 }
-.balance-pill-luxury img {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  position: relative; z-index: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+@keyframes pillShine {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.5; }
+  50% { transform: translate(10%, 10%) rotate(20deg); opacity: 0.8; }
 }
-.balance-pill-luxury .bal-text {
-  position: relative; z-index: 1;
-  display: flex; align-items: baseline; gap: 4px;
-}
-.balance-pill-luxury .bal-text .num {
-  font-size: 17px; font-weight: 800;
-  letter-spacing: -0.3px;
-}
-.balance-pill-luxury .bal-text .unit {
-  font-size: 11px; font-weight: 700;
-  opacity: 0.85;
-}
-.balance-pill-luxury .add-bal-btn {
-  background: rgba(255,255,255,0.95);
-  color: var(--usdt-dark);
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 800; line-height: 1;
-  cursor: pointer; margin-inline-start: 4px;
-  position: relative; z-index: 1;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: transform 0.1s;
-  padding-bottom: 2px;
-}
-.balance-pill-luxury .add-bal-btn:active { transform: scale(0.9); }
-
-.lang-toggle-btn {
+.usdt-pill > * { position: relative; z-index: 1; }
+.usdt-pill img.usdt-icon {
   width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--nav-bg);
-  border: 1px solid var(--nav-border);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800;
-  color: var(--text-primary);
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-  transition: transform 0.15s;
-  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(38, 161, 123, 0.5));
 }
-.lang-toggle-btn:active { transform: scale(0.92); }
+.usdt-pill .usdt-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.usdt-pill .usdt-label {
+  font-size: 12px; font-weight: 700;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.usdt-pill .usdt-value {
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.usdt-pill .usdt-value small { font-size: 15px; font-weight: 700; color: var(--usdt); margin-inline-start: 4px; }
+.deposit-mini-btn {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--usdt) 0%, #1a7d5f 100%);
+  color: #fff; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(38, 161, 123, 0.4);
+  transition: transform 0.15s;
+}
+.deposit-mini-btn:active { transform: scale(0.9); }
 
 .main-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: calc(var(--top-bar-height) + var(--safe-top) + 70px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
+  padding: calc(var(--top-bar-height) + var(--safe-top) + 110px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
 }
 .view { display: none; }
 .view.active { display: block; animation: viewIn 0.3s var(--spring); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ HERO USDT CARD ============ */
-.usdt-hero-card {
-  background: linear-gradient(135deg, #26A17B 0%, #1B7A5E 60%, #166B52 100%);
-  border-radius: 28px;
-  padding: 26px 24px;
-  color: #FFFFFF;
-  margin-bottom: 18px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 12px 36px rgba(38, 161, 123, 0.32);
+.section-title {
+  font-size: 18px; font-weight: 800; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px; justify-content: space-between;
 }
-.usdt-hero-card::before {
-  content: '';
-  position: absolute;
-  top: -40%; right: -30%;
-  width: 260px; height: 260px;
-  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.usdt-hero-card::after {
-  content: '';
-  position: absolute;
-  bottom: -50%; left: -20%;
-  width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.usdt-hero-label {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; font-weight: 700;
-  opacity: 0.95;
-  margin-bottom: 10px;
-  position: relative; z-index: 1;
-}
-.usdt-hero-label img { width: 20px; height: 20px; border-radius: 50%; }
-.usdt-hero-amount {
-  font-size: 42px; font-weight: 800;
-  letter-spacing: -1.5px;
-  display: flex; align-items: baseline; gap: 8px;
-  position: relative; z-index: 1;
-  font-family: system-ui, -apple-system, sans-serif;
-}
-.usdt-hero-amount .usdt-suffix {
-  font-size: 16px; font-weight: 700; opacity: 0.85;
-}
-.usdt-hero-actions {
-  display: flex; gap: 10px; margin-top: 22px;
-  position: relative; z-index: 1;
-}
-.usdt-hero-btn {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.3);
-  padding: 12px;
-  border-radius: 14px;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: transform 0.1s;
-}
-.usdt-hero-btn:active { transform: scale(0.96); }
-.usdt-hero-btn.solid {
-  background: #FFFFFF;
-  color: #26A17B;
-  border: 1px solid #FFFFFF;
-}
+.section-title .see-all { font-size: 13px; color: var(--usdt); font-weight: 700; cursor: pointer; }
 
-/* ============ QUICK ACTIONS ============ */
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 22px;
-}
-.action-tile {
+/* Quick actions */
+.quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.qa-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 16px 6px;
+  padding: 16px 8px;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
-  cursor: pointer;
-  transition: transform 0.15s;
+  cursor: pointer; transition: all 0.15s;
 }
-.action-tile:active { transform: scale(0.95); }
-.action-tile .icon {
-  width: 42px; height: 42px;
-  border-radius: 12px;
+.qa-card:active { transform: scale(0.94); background: var(--bg-soft); }
+.qa-card i { font-size: 22px; color: var(--usdt); }
+.qa-card.blue i { color: var(--primary); }
+.qa-card.orange i { color: var(--warning); }
+.qa-card.purple i { color: #A855F7; }
+.qa-card span { font-size: 12px; font-weight: 700; text-align: center; color: var(--text-primary); }
+
+/* Hero welcome */
+.hero-welcome {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--border); border-radius: 22px;
+  padding: 20px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hero-welcome .hero-icon {
+  width: 50px; height: 50px; border-radius: 15px;
+  background: linear-gradient(135deg, rgba(38,161,123,0.2), rgba(38,161,123,0.05));
   display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  color: #FFFFFF;
+  font-size: 24px; color: var(--usdt);
 }
-.action-tile .icon.usdt { background: var(--gradient-usdt); }
-.action-tile .icon.blue { background: var(--gradient-blue); }
-.action-tile .icon.success { background: var(--gradient-success); }
-.action-tile .icon.purple { background: var(--gradient-purple); }
-.action-tile .label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-align: center;
-}
+.hero-welcome .hero-text h3 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
+.hero-welcome .hero-text p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 
-/* ============ ACTIVE PLAN BANNER ============ */
-.active-plan-banner {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.15s;
-}
-.active-plan-banner:active { transform: scale(0.98); }
-.active-plan-banner::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 5px; height: 100%;
-  background: var(--gradient-usdt);
-}
-.active-plan-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 14px;
-}
-.active-plan-name {
-  font-size: 18px; font-weight: 800; color: var(--text-primary);
-  display: flex; align-items: center; gap: 8px;
-}
-.active-plan-name .vip-badge {
-  background: var(--gradient-usdt);
-  color: #FFFFFF;
-  padding: 3px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-}
-.active-plan-status {
-  background: rgba(52, 199, 89, 0.15);
-  color: var(--success);
-  padding: 5px 12px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  display: flex; align-items: center; gap: 5px;
-}
-.active-plan-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.plan-stat-mini {
-  background: var(--bg-soft);
-  border-radius: 14px;
-  padding: 12px;
-  text-align: center;
-}
-.plan-stat-mini .val {
-  font-size: 18px; font-weight: 800; color: var(--text-primary);
-  font-family: system-ui;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
-}
-.plan-stat-mini .val img { width: 14px; height: 14px; }
-.plan-stat-mini .lbl {
-  font-size: 11px; color: var(--text-secondary); font-weight: 700;
-  margin-top: 4px;
-}
-
-/* ============ SECTION HEADERS ============ */
-.section-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 14px;
-}
-.section-title {
-  font-size: 20px; font-weight: 800; color: var(--text-primary);
-}
-.section-link {
-  font-size: 13px; font-weight: 700; color: var(--primary);
-  cursor: pointer;
-  display: flex; align-items: center; gap: 4px;
-}
-
-/* ============ PLANS ============ */
+/* Active plans */
 .plan-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 22px;
-  padding: 20px;
+  padding: 18px;
   margin-bottom: 14px;
-  cursor: pointer;
-  transition: transform 0.15s;
   position: relative;
   overflow: hidden;
 }
-.plan-card:active { transform: scale(0.98); }
-.plan-card-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 16px;
+.plan-card.active-plan {
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(38, 161, 123, 0.08) 100%);
+  border-color: rgba(38, 161, 123, 0.3);
 }
-.plan-vip-name {
-  display: flex; align-items: center; gap: 10px;
-}
-.plan-vip-badge {
-  padding: 6px 14px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-.plan-vip-badge.tier-green { background: var(--gradient-success); }
-.plan-vip-badge.tier-blue { background: var(--gradient-blue); }
-.plan-vip-badge.tier-purple { background: var(--gradient-purple); }
-.plan-vip-badge.tier-warning { background: var(--gradient-warning); }
-.plan-vip-badge.tier-dark {
-  background: linear-gradient(135deg, #1C1C1E 0%, #3A3A3C 100%);
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  color: #FFD700;
-}
-.plan-price-tag {
-  background: var(--bg-soft);
-  border-radius: 12px;
-  padding: 8px 14px;
-  text-align: center;
-}
-.plan-price-tag .num {
-  font-size: 18px; font-weight: 800; color: var(--text-primary);
-  font-family: system-ui;
-}
-.plan-price-tag .lbl {
-  font-size: 10px; color: var(--text-secondary); font-weight: 700;
-}
-.plan-stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
-  margin-bottom: 14px;
-}
-.plan-stat-box {
-  background: var(--bg-soft);
-  border-radius: 12px;
-  padding: 10px;
-  text-align: center;
-}
-.plan-stat-box .val {
-  font-size: 15px; font-weight: 800; color: var(--text-primary);
-  font-family: system-ui;
-}
-.plan-stat-box .val.usdt-green { color: var(--usdt); }
-.plan-stat-box .lbl {
-  font-size: 10px; color: var(--text-secondary); font-weight: 700;
-  margin-top: 3px;
-}
-.plan-buy-btn {
-  width: 100%;
-  background: var(--gradient-usdt);
-  color: #FFFFFF;
-  padding: 13px;
-  border-radius: 14px;
-  font-weight: 800;
-  font-size: 15px;
-  transition: transform 0.1s;
-}
-.plan-buy-btn:active { transform: scale(0.97); }
-.plan-buy-btn.active-plan {
-  background: var(--bg-soft);
-  color: var(--text-secondary);
-  pointer-events: none;
-}
-
-/* ============ PLAN DETAIL ============ */
-.plan-detail-card {
-  background: var(--gradient-dark);
-  border-radius: 26px;
-  padding: 28px 24px;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-}
-.plan-detail-card::before {
-  content: '';
-  position: absolute;
-  top: -40%; left: -30%;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(38,161,123,0.3) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.plan-detail-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 20px;
-  position: relative; z-index: 1;
-}
-.plan-detail-title {
-  font-size: 24px; font-weight: 800;
-  display: flex; align-items: center; gap: 10px;
-}
-.plan-detail-title .badge {
-  background: var(--gradient-usdt);
-  color: #FFFFFF;
-  padding: 5px 12px;
-  border-radius: 10px;
-  font-size: 12px; font-weight: 800;
-}
-.plan-detail-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  position: relative; z-index: 1;
-}
-.plan-detail-stat {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-}
-.plan-detail-stat .val {
-  font-size: 20px; font-weight: 800;
-  font-family: system-ui;
-}
-.plan-detail-stat .val.usdt-green { color: var(--usdt); }
-.plan-detail-stat .lbl {
-  font-size: 11px; opacity: 0.75; margin-top: 4px; font-weight: 700;
-}
-
-.task-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 22px;
-  margin-bottom: 18px;
-}
-.task-section-title {
-  font-size: 17px; font-weight: 800; margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.task-section-title i { color: var(--usdt); }
-.task-reward-preview {
-  background: linear-gradient(135deg, rgba(38,161,123,0.1) 0%, rgba(38,161,123,0.05) 100%);
-  border: 1px solid rgba(38,161,123,0.2);
-  border-radius: 14px;
-  padding: 16px;
+.plan-card .plan-header {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 16px;
 }
-.task-reward-preview .label { font-size: 13px; color: var(--text-secondary); font-weight: 700; }
-.task-reward-preview .amount {
-  font-size: 22px; font-weight: 800; color: var(--usdt);
-  font-family: system-ui;
-  display: flex; align-items: center; gap: 6px;
+.plan-card .plan-name {
+  font-size: 20px; font-weight: 800;
+  background: linear-gradient(135deg, var(--usdt) 0%, #4ade80 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.task-reward-preview .amount img { width: 20px; height: 20px; }
-.task-btn {
-  width: 100%;
-  background: var(--gradient-usdt);
-  color: #FFFFFF;
-  padding: 15px;
-  border-radius: 16px;
-  font-weight: 800;
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 0.1s;
+.plan-card .plan-badge {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
-.task-btn:active { transform: scale(0.97); }
-.task-btn:disabled {
-  background: var(--bg-soft);
-  color: var(--text-secondary);
-  cursor: not-allowed;
+.plan-badge.active { background: rgba(52, 199, 89, 0.15); color: var(--success); }
+.plan-badge.locked { background: var(--bg-soft); color: var(--text-secondary); }
+
+.plan-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 16px;
 }
-.task-btn.timer {
-  font-family: system-ui, -apple-system, sans-serif;
+.plan-stat {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.plan-stat .ps-label {
+  font-size: 11px; color: var(--text-secondary);
+  font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+.plan-stat .ps-value {
+  font-size: 18px; font-weight: 800; color: var(--text-primary);
+  display: flex; align-items: center; gap: 4px;
+}
+.plan-stat .ps-value img { width: 16px; height: 16px; }
+.plan-stat .ps-value.highlight { color: var(--usdt); }
 
-/* ============ TABS ============ */
-.tabs {
-  display: flex; background: var(--bg-card); border-radius: 16px;
-  padding: 4px; margin-bottom: 24px;
+.plan-days-bar {
+  height: 6px; background: var(--bg-soft);
+  border-radius: 3px; overflow: hidden;
+  margin-bottom: 8px;
+}
+.plan-days-fill {
+  height: 100%; background: linear-gradient(90deg, var(--usdt), #4ade80);
+  border-radius: 3px; transition: width 0.5s ease;
+}
+.plan-days-text {
+  font-size: 12px; color: var(--text-secondary);
+  font-weight: 600; text-align: center; margin-bottom: 16px;
+}
+
+.task-section {
+  background: rgba(0,0,0,0.3);
+  border-radius: 16px;
+  padding: 14px;
   border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
 }
-.tab {
-  flex: 1; text-align: center; padding: 12px 8px;
-  border-radius: 12px; color: var(--text-secondary);
-  font-weight: 700; font-size: 14px;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: all 0.2s; cursor: pointer;
+.task-section .task-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.task-section .task-info .t-title { font-size: 14px; font-weight: 800; }
+.task-section .task-info .t-reward {
+  font-size: 13px; color: var(--usdt); font-weight: 700;
+  display: flex; align-items: center; gap: 5px;
 }
-.tab.active {
-  background: var(--bg-soft);
-  color: var(--text-primary);
+.task-section .task-info .t-reward img { width: 14px; height: 14px; }
+.task-section .task-info .t-timer {
+  font-size: 12px; color: var(--warning); font-weight: 700;
+  font-family: monospace;
+}
+.task-section button {
+  padding: 11px 18px; border-radius: 12px;
+  background: var(--usdt); color: #fff;
+  font-weight: 800; font-size: 13px;
+  border: none; cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.task-section button:active { transform: scale(0.95); }
+.task-section button:disabled {
+  background: var(--bg-soft); color: var(--text-secondary); cursor: not-allowed;
 }
 
-/* ============ AMOUNT DISPLAY ============ */
+.buy-plan-btn {
+  width: 100%; padding: 14px;
+  background: var(--usdt); color: #fff;
+  border-radius: 14px; border: none;
+  font-size: 15px; font-weight: 800;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.buy-plan-btn:active { transform: scale(0.97); }
+.buy-plan-btn img { width: 18px; height: 18px; }
+
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 22px;
+}
+.empty-state i { font-size: 44px; color: var(--text-secondary); margin-bottom: 14px; opacity: 0.5; }
+.empty-state h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-bottom: 18px; }
+.empty-state button {
+  background: var(--usdt); color: #fff;
+  padding: 12px 24px; border-radius: 14px;
+  font-weight: 800; font-size: 14px; border: none; cursor: pointer;
+}
+
+/* Tabs */
+.tabs { display: flex; background: var(--bg-card); border-radius: 16px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); overflow-x: auto; }
+.tab {
+  flex: 1; text-align: center; padding: 12px 8px; white-space: nowrap;
+  border-radius: 12px; color: var(--text-secondary);
+  font-weight: 700; font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.2s;
+}
+.tab.active { background: var(--bg-soft); color: var(--text-primary); }
+.tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
+
+/* Deposit / Withdraw */
 .amount-display {
-  text-align: center;
-  display: flex; align-items: center; justify-content: center;
-  gap: 8px; width: 100%;
-  padding: 24px 0;
+  text-align: center; display: flex; align-items: center;
+  justify-content: center; gap: 8px; width: 100%;
+  padding: 20px 0;
 }
 .amount-display input {
-  font-size: 3rem; font-weight: 800;
-  background: transparent; border: none;
-  color: var(--text-primary); text-align: center;
-  width: auto; max-width: 220px; outline: none;
+  font-size: 2.5rem; font-weight: 800; background: transparent;
+  border: none; color: var(--text-primary); text-align: center;
+  width: auto; max-width: 240px; outline: none;
   field-sizing: content;
-  font-family: system-ui;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display .suffix {
-  font-size: 1.2rem; font-weight: 700; color: var(--text-secondary);
-}
+.amount-display .dollar-sign { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); }
 .amount-display img { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
 
 .calc-subtext {
   text-align: center; font-size: 15px; font-weight: 700;
-  color: var(--text-secondary); margin-top: 4px;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
+  color: var(--usdt); margin-bottom: 24px; min-height: 22px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
 }
-.calc-subtext img { width: 16px; height: 16px; border-radius: 50%; }
-.calc-subtext .star-icon { width: 18px; height: 18px; }
+.calc-subtext img { width: 16px; height: 16px; }
 
-/* ============ QUICK CHIPS ============ */
-.quick-chips {
-  display: flex; gap: 10px; justify-content: center;
-  flex-wrap: wrap; margin: 20px 0;
-}
+.quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
 .chip {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  padding: 11px 18px;
-  border-radius: 14px;
-  color: var(--text-primary);
-  font-weight: 700; font-size: 14px;
-  cursor: pointer;
-  transition: transform 0.1s;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 12px 20px; border-radius: 16px;
+  color: var(--text-primary); font-weight: 700; font-size: 15px;
+  cursor: pointer; transition: transform 0.1s;
 }
-.chip:active { transform: scale(0.95); }
+.chip:active { transform: scale(0.95); background: var(--bg-soft); }
 
-/* ============ BUTTONS ============ */
-.primary-btn {
-  width: 100%;
-  background: var(--gradient-usdt);
-  color: #FFFFFF;
-  padding: 18px;
-  border-radius: 18px;
-  font-size: 17px;
-  font-weight: 800;
-  cursor: pointer;
+.topup-btn {
+  width: 100%; background: var(--usdt); color: #fff;
+  border: none; padding: 18px; border-radius: 20px;
+  font-size: 16px; font-weight: 800; cursor: pointer;
   transition: transform 0.1s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.primary-btn:active { transform: scale(0.97); }
-.primary-btn:disabled { opacity: 0.5; pointer-events: none; }
+.topup-btn:active { transform: scale(0.97); }
+.topup-btn:disabled { background: var(--bg-soft); color: var(--text-secondary); cursor: not-allowed; }
 
-.secondary-btn {
-  width: 100%;
-  padding: 15px;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 800;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: background 0.2s;
+.info-box {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 16px; margin-bottom: 20px;
+  display: flex; flex-direction: column; gap: 8px;
 }
-.secondary-btn:active { background: var(--bg-soft); }
+.info-box .info-row {
+  display: flex; justify-content: space-between;
+  font-size: 13px; font-weight: 600;
+}
+.info-box .info-row span:first-child { color: var(--text-secondary); }
+.info-box .info-row span:last-child { color: var(--text-primary); font-weight: 700; }
 
-/* ============ INSTRUCTIONS ============ */
-.instructions {
-  background: var(--bg-card);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 16px;
-  border: 1px solid var(--border);
+.copy-box {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-soft); padding: 12px 16px;
+  border-radius: 14px; margin-bottom: 14px;
+  gap: 10px;
 }
-.instructions p { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-bottom: 10px; line-height: 1.6; }
-.instructions p:last-child { margin-bottom: 0; }
-.instructions strong { color: var(--text-primary); }
-.instructions .instr-title {
-  color: var(--text-primary);
-  font-weight: 800;
-  font-size: 14px;
-  margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
+.copy-box span {
+  font-family: monospace; font-size: 13px; font-weight: 700;
+  color: var(--text-primary); word-break: break-all;
 }
-.instructions .instr-title i { color: var(--primary); }
+.copy-btn {
+  background: var(--usdt); border: none; color: #fff;
+  padding: 8px 14px; border-radius: 10px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  flex-shrink: 0;
+}
+.copy-btn:active { transform: scale(0.95); }
 
-.warning-box {
-  color: var(--text-primary);
-  font-size: 12px; font-weight: 600;
-  margin-top: 14px;
-  display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
-}
-.warning-box i { color: var(--warning); margin-top: 3px; flex-shrink: 0; }
-
-.wd-input-group { margin: 20px 0; }
+.wd-input-group { margin-bottom: 16px; }
 .wd-input-group label {
   display: block; margin-bottom: 8px;
   color: var(--text-secondary); font-weight: 700; font-size: 13px;
-  text-align: center;
 }
 .wd-input {
-  width: 100%; padding: 14px;
-  border-radius: 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  font-size: 14px; outline: none;
-  text-align: center;
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-primary); font-size: 15px; font-weight: 600;
+  outline: none; font-family: monospace;
+  direction: ltr;
 }
-.wd-input.mono { font-family: monospace; direction: ltr; }
+.wd-input:focus { border-color: var(--usdt); }
 
-/* ============ REFERRAL ============ */
-.referral-hero {
-  background: var(--gradient-blue);
-  border-radius: 26px;
-  padding: 26px 22px;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  text-align: center;
+.warning-box {
+  display: flex; align-items: flex-start; gap: 8px;
+  color: var(--text-secondary); font-size: 12px;
+  font-weight: 600; margin-top: 12px; line-height: 1.5;
+}
+.warning-box i { color: var(--warning); margin-top: 2px; }
+
+/* Profile */
+.profile-header {
+  text-align: center; margin-bottom: 24px;
+  padding: 24px 20px;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--border); border-radius: 24px;
   position: relative;
-  overflow: hidden;
 }
-.referral-hero::before {
-  content: '';
-  position: absolute;
-  top: -40%; right: -30%;
-  width: 260px; height: 260px;
-  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%);
-}
-.referral-hero h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
-.referral-hero p { font-size: 14px; opacity: 0.92; font-weight: 600; position: relative; z-index: 1; }
-
-.ref-tiers {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.ref-tier-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 16px 10px;
-  text-align: center;
-}
-.ref-tier-card .tier-label {
-  font-size: 11px; color: var(--text-secondary); font-weight: 700;
-  margin-bottom: 4px;
-}
-.ref-tier-card .tier-percent {
-  font-size: 24px; font-weight: 800;
-  font-family: system-ui;
-}
-.ref-tier-card .tier-percent.l1 { color: var(--usdt); }
-.ref-tier-card .tier-percent.l2 { color: var(--primary); }
-.ref-tier-card .tier-percent.l3 { color: #BF5AF2; }
-.ref-tier-card .tier-desc {
-  font-size: 10px; color: var(--text-secondary); font-weight: 600;
-  margin-top: 4px;
-}
-
-.ref-stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  margin-bottom: 20px;
-}
-.ref-stat-big {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px;
-  text-align: center;
-}
-.ref-stat-big .val {
-  font-size: 26px; font-weight: 800;
-  font-family: system-ui;
-  color: var(--text-primary);
-}
-.ref-stat-big .val.usdt-green { color: var(--usdt); }
-.ref-stat-big .lbl {
-  font-size: 12px; color: var(--text-secondary); font-weight: 700;
-  margin-top: 4px;
-}
-
-.ref-link-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 14px;
-}
-.ref-link-box label {
-  font-size: 12px; color: var(--text-secondary); font-weight: 700;
-  display: block; margin-bottom: 10px;
-}
-.ref-link-input {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg-soft);
-  border-radius: 12px;
-  padding: 10px 14px;
-  margin-bottom: 10px;
-  gap: 8px;
-}
-.ref-link-input span {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  direction: ltr; text-align: left;
-  flex: 1;
-  min-width: 0;
-}
-.copy-btn {
-  background: #FFFFFF;
-  border: none; color: #000000;
-  padding: 8px 12px; border-radius: 10px;
-  font-size: 11px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; gap: 4px;
-  flex-shrink: 0;
-}
-.qr-container {
-  display: flex; justify-content: center;
-  padding: 16px 0;
-}
-.qr-container img {
-  width: 180px; height: 180px;
-  border-radius: 16px;
-  background: #FFFFFF;
-  padding: 10px;
-}
-
-/* ============ PROFILE ============ */
-.profile-hero {
-  text-align: center;
-  margin-bottom: 24px;
-}
-.profile-avatar-lg {
-  width: 96px; height: 96px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  margin: 0 auto 14px;
+.profile-avatar {
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--bg-soft); margin: 0 auto 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px;
-  overflow: hidden;
-  border: 3px solid var(--bg-soft);
+  font-size: 36px; overflow: hidden;
+  border: 3px solid rgba(38, 161, 123, 0.4);
+  box-shadow: 0 8px 24px rgba(38, 161, 123, 0.2);
 }
-.profile-avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
-.profile-hero h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-.profile-hero .uid-row {
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-header h2 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.profile-id-row {
   display: inline-flex; align-items: center; gap: 8px;
-  background: var(--bg-card);
-  padding: 6px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  background: var(--bg-soft); padding: 6px 14px;
+  border-radius: 20px; margin-top: 8px;
   font-size: 13px; font-weight: 700;
   color: var(--text-secondary);
 }
-.profile-hero .uid-row .uid-copy {
-  background: #FFFFFF;
-  color: #000000;
-  width: 22px; height: 22px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px;
-  cursor: pointer;
+.profile-id-row .copy-icon {
+  color: var(--usdt); cursor: pointer; padding: 2px;
 }
 
-.profile-usdt-card {
-  background: var(--gradient-usdt);
-  border-radius: 22px;
-  padding: 22px;
-  color: #FFFFFF;
-  margin-bottom: 22px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 24px;
 }
-.profile-usdt-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; right: -30%;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  border-radius: 50%;
+.stat-card {
+  background: var(--bg-card); padding: 16px;
+  border-radius: 18px; border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
 }
-.profile-usdt-card .label {
-  font-size: 12px; font-weight: 700;
-  opacity: 0.9;
-  margin-bottom: 6px;
-  position: relative; z-index: 1;
-}
-.profile-usdt-card .amount {
-  font-size: 32px; font-weight: 800;
-  font-family: system-ui;
-  display: flex; align-items: baseline; justify-content: center; gap: 6px;
-  position: relative; z-index: 1;
-}
-.profile-usdt-card .amount .suffix {
-  font-size: 14px; font-weight: 700; opacity: 0.85;
-}
+.stat-card i { font-size: 20px; color: var(--usdt); }
+.stat-card .stat-val { font-size: 20px; font-weight: 800; }
+.stat-card .stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 700; }
 
-.profile-menu {
-  display: flex; flex-direction: column; gap: 10px;
-  margin-bottom: 20px;
+.menu-list {
+  display: flex; flex-direction: column; gap: 8px;
 }
 .menu-item {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-.menu-item:active { transform: scale(0.98); }
-.menu-item-left {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 16px 18px;
   display: flex; align-items: center; gap: 14px;
+  cursor: pointer; transition: all 0.15s;
 }
-.menu-item-icon {
-  width: 40px; height: 40px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  color: #FFFFFF;
-}
-.menu-item-icon.support { background: var(--gradient-success); }
-.menu-item-icon.education { background: var(--gradient-purple); }
-.menu-item-icon.share { background: var(--gradient-blue); }
-.menu-item-icon.history { background: var(--gradient-warning); }
-.menu-item-icon.lang { background: var(--gradient-dark); border: 1px solid var(--border-strong); }
-.menu-item-text {
-  display: flex; flex-direction: column; gap: 2px;
-}
-.menu-item-text .title { font-size: 15px; font-weight: 800; color: var(--text-primary); }
-.menu-item-text .sub { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-.menu-item i.fa-chevron-left, .menu-item i.fa-chevron-right {
-  color: var(--text-tertiary);
-  font-size: 14px;
-}
-
-/* ============ MODALS ============ */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  z-index: 1000; display: none;
-  align-items: center; justify-content: center;
-  padding: 20px;
-}
-.modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal-content {
-  background: var(--bg-card);
-  border-radius: 24px;
-  padding: 28px 24px;
-  width: 100%; max-width: 360px;
-  text-align: center;
-  animation: popInModal 0.3s var(--spring);
-  border: 1px solid var(--border);
-  max-height: 85vh;
-  overflow-y: auto;
-}
-@keyframes popInModal {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.modal-content h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; color: var(--text-primary); }
-.modal-content p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; font-weight: 600; line-height: 1.5; }
-.modal-btn {
-  width: 100%; padding: 15px;
-  border-radius: 16px;
-  background: #FFFFFF;
-  color: #000000;
-  border: none; font-size: 15px; font-weight: 800;
-  cursor: pointer; transition: transform 0.1s;
-}
-.modal-btn:active { transform: scale(0.97); }
-.modal-btn.green { background: var(--gradient-usdt); color: #FFFFFF; }
-.modal-btn.outline {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-strong);
-}
-
-.modal-icon-lg {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  font-size: 36px;
-}
-.modal-icon-lg.danger { background: rgba(255,59,48,0.15); color: var(--danger); }
-.modal-icon-lg.success { background: rgba(52,199,89,0.15); color: var(--success); }
-.modal-icon-lg.purple { background: var(--gradient-purple); color: #FFFFFF; }
-.modal-icon-lg.warning { background: rgba(255,149,0,0.15); color: var(--warning); }
-
-/* Task Modal */
-.task-prize-box {
+.menu-item:active { transform: scale(0.98); background: var(--bg-soft); }
+.menu-item .menu-icon {
+  width: 40px; height: 40px; border-radius: 12px;
   background: var(--bg-soft);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--usdt);
+  flex-shrink: 0;
 }
-.task-prize-img {
-  width: 100px; height: 100px;
-  object-fit: contain;
+.menu-item .menu-icon.blue { color: var(--primary); }
+.menu-item .menu-icon.orange { color: var(--warning); }
+.menu-item .menu-text { flex: 1; }
+.menu-item .menu-text h4 { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.menu-item .menu-text p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.menu-item > i.fa-chevron-right, .menu-item > i.fa-chevron-left {
+  color: var(--text-secondary); font-size: 14px;
+}
+html[dir="rtl"] .menu-item > .chevron { transform: rotate(180deg); }
+
+/* Referral */
+.ref-header {
+  text-align: center; padding: 24px 20px;
+  background: linear-gradient(135deg, rgba(38,161,123,0.15) 0%, rgba(38,161,123,0.03) 100%);
+  border: 1px solid rgba(38,161,123,0.25);
+  border-radius: 24px; margin-bottom: 20px;
+}
+.ref-header .ref-icon {
+  width: 64px; height: 64px; border-radius: 20px;
+  background: rgba(38,161,123,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; color: var(--usdt);
   margin: 0 auto 12px;
-  display: block;
 }
-.task-prize-name {
-  font-size: 18px; font-weight: 800; margin-bottom: 6px;
-  color: var(--text-primary);
+.ref-header h2 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+.ref-header p { font-size: 13px; color: var(--text-secondary); font-weight: 600; line-height: 1.5; }
+
+.ref-levels {
+  display: flex; gap: 10px; margin-bottom: 20px;
 }
-.task-prize-desc {
-  font-size: 12px; color: var(--text-secondary); font-weight: 600;
+.ref-level-card {
+  flex: 1; background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 10px;
+  text-align: center;
+  display: flex; flex-direction: column; gap: 4px;
 }
-.task-price-row {
-  display: flex; justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  background: var(--bg-soft);
-  border-radius: 12px;
+.ref-level-card .lvl { font-size: 11px; color: var(--text-secondary); font-weight: 700; }
+.ref-level-card .pct { font-size: 20px; font-weight: 800; color: var(--usdt); }
+.ref-level-card .earned { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+
+.ref-link-box {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px;
+  margin-bottom: 14px;
+}
+.ref-link-box .rlb-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.ref-link-box .rlb-value {
+  font-family: monospace; font-size: 13px; font-weight: 700;
+  color: var(--text-primary); word-break: break-all;
+  direction: ltr; text-align: left;
   margin-bottom: 10px;
 }
-.task-price-row .label { font-size: 13px; color: var(--text-secondary); font-weight: 700; }
-.task-price-row .val {
-  font-size: 18px; font-weight: 800; color: var(--text-primary);
-  font-family: system-ui;
-  display: flex; align-items: center; gap: 4px;
+.ref-link-box .rlb-actions {
+  display: flex; gap: 8px;
 }
-.task-price-row .val img { width: 16px; height: 16px; border-radius: 50%; }
-.task-price-row .val.green { color: var(--usdt); }
+.ref-link-box .rlb-actions button {
+  flex: 1; padding: 10px;
+  border-radius: 10px; font-weight: 800; font-size: 13px;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.ref-link-box .rlb-actions .btn-copy-link { background: var(--usdt); color: #fff; }
+.ref-link-box .rlb-actions .btn-share-link { background: var(--bg-soft); color: var(--text-primary); border: 1px solid var(--border); }
 
-.task-success-box {
-  background: rgba(52,199,89,0.1);
-  border: 1px solid rgba(52,199,89,0.25);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  margin: 16px 0;
+.qr-container {
+  background: #fff; padding: 14px;
+  border-radius: 16px; display: flex;
+  justify-content: center; margin-bottom: 14px;
 }
-.task-success-box .icon {
-  width: 60px; height: 60px;
-  background: var(--success);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 12px;
-  color: #FFFFFF; font-size: 28px;
-}
-.task-success-box h4 {
-  font-size: 18px; font-weight: 800; color: var(--success);
-  margin-bottom: 6px;
-}
-.task-success-box p {
-  font-size: 14px; color: var(--text-primary); font-weight: 700;
-  margin: 0;
-}
-.task-success-box p span {
-  color: var(--usdt); font-family: system-ui;
-}
+.qr-container img { width: 200px; height: 200px; }
 
-/* Ex Pro */
-.ex-pro-content {
-  text-align: start;
-  background: var(--bg-soft);
-  padding: 16px;
-  border-radius: 14px;
-  margin-bottom: 20px;
-}
-.ex-pro-content .ex-pro-title {
-  font-size: 13px;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-  font-weight: 700;
-}
-.ex-pro-content .ex-pro-item {
-  font-size: 12px;
-  margin-bottom: 6px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-/* Withdraw History */
-.wd-history-item {
-  background: var(--bg-soft);
-  padding: 12px 14px;
-  border-radius: 12px;
-  margin-bottom: 8px;
-}
-.wd-history-item .wd-top {
-  display: flex; justify-content: space-between; align-items: center;
-}
-.wd-history-item .wd-amount {
-  font-weight: 800; font-size: 15px; color: var(--usdt);
-  font-family: system-ui;
-}
-.wd-history-item .wd-meta {
-  font-size: 11px; color: var(--text-secondary); margin-top: 2px;
-}
-.wd-status-badge {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-}
-.wd-status-badge.pending { background: rgba(255,149,0,0.15); color: var(--warning); }
-.wd-status-badge.completed { background: rgba(52,199,89,0.15); color: var(--success); }
-.wd-status-badge.rejected { background: rgba(255,59,48,0.15); color: var(--danger); }
-
-/* ============ TOAST ============ */
-.toast {
-  position: fixed; top: 20px; left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: var(--bg-card); color: var(--text-primary);
-  padding: 14px 24px;
-  border-radius: 30px;
-  font-size: 14px; font-weight: 700;
-  z-index: 2000;
-  transition: transform 0.3s var(--spring);
-  border: 1px solid var(--border);
-  max-width: 90%; text-align: center;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.5);
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ============ DOCK ============ */
-.dock {
-  position: absolute;
-  bottom: calc(14px + env(safe-area-inset-bottom));
-  left: 14px; right: 14px;
-  display: flex; align-items: center; gap: 10px;
-  z-index: 100;
-}
+/* Dock */
+.dock { position: absolute; bottom: calc(14px + env(safe-area-inset-bottom)); left: 14px; right: 14px; display: flex; align-items: center; gap: 10px; z-index: 100; }
 .dock-nav {
-  flex: 1; height: 64px;
-  position: relative;
-  isolation: isolate; overflow: hidden;
-  --nav-index: 0;
-  background: var(--nav-bg);
-  border: 1px solid var(--nav-border);
-  border-radius: 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 6px;
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  backdrop-filter: blur(20px) saturate(155%);
+  flex: 1; height: 64px; position: relative;
+  isolation: isolate; overflow: hidden; --nav-index: 0;
+  background: var(--nav-bg); border: 1px solid var(--nav-border);
+  border-radius: 32px; display: flex; align-items: center; justify-content: space-between;
+  padding: 6px; -webkit-backdrop-filter: blur(20px) saturate(155%); backdrop-filter: blur(20px) saturate(155%);
 }
 .dock-nav::before {
-  content: '';
-  position: absolute; z-index: 0;
+  content: ''; position: absolute; z-index: 0;
   top: 6px; bottom: 6px; right: 6px;
-  width: calc((100% - 14px) / 4);
-  border-radius: 26px;
-  background: var(--nav-indicator-bg);
-  box-shadow: var(--nav-indicator-shadow);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  width: calc((100% - 14px) / 4); border-radius: 26px;
+  background: var(--nav-indicator-bg); box-shadow: var(--nav-indicator-shadow);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   transform: translateX(calc(var(--nav-index) * -100%));
   transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
   pointer-events: none;
 }
-body[dir="ltr"] .dock-nav::before {
-  right: auto;
-  left: 6px;
+html[dir="ltr"] .dock-nav::before {
+  right: auto; left: 6px;
   transform: translateX(calc(var(--nav-index) * 100%));
 }
 .nav-item {
-  flex: 1; height: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 4px;
-  color: var(--text-secondary);
-  font-size: 10px; font-weight: 700;
-  border-radius: 26px;
-  transition: color 0.25s;
-  cursor: pointer;
-  position: relative; z-index: 1;
+  flex: 1; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  color: var(--text-secondary); font-size: 10px; font-weight: 700;
+  border-radius: 26px; transition: color 0.25s; cursor: pointer;
+  position: relative; z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
 .nav-item.active { color: var(--text-primary); }
 .nav-profile {
-  width: 56px; height: 56px;
-  padding: 3px;
-  background: var(--bg-card);
-  border: 2px solid var(--nav-border);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s;
-  color: var(--text-secondary);
-  font-size: 20px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: 56px; height: 56px; padding: 3px;
+  background: var(--bg-card); border: 2px solid var(--nav-border);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.25s;
+  color: var(--text-secondary); font-size: 20px; overflow: hidden; flex-shrink: 0;
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .nav-profile.active { border-color: var(--usdt); color: var(--text-primary); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+  background: var(--bg-card); border-radius: 24px; padding: 26px 22px;
+  width: 100%; max-width: 360px; text-align: center;
+  animation: popInModal 0.3s var(--spring); border: 1px solid var(--border);
+  max-height: 88vh; overflow-y: auto;
+}
+@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-content h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.modal-content p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; font-weight: 600; line-height: 1.6; }
+.modal-btn {
+  width: 100%; padding: 15px; border-radius: 16px;
+  background: var(--usdt); color: #fff;
+  border: none; font-size: 15px; font-weight: 800; cursor: pointer;
+  transition: transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.modal-btn:active { transform: scale(0.97); }
+.modal-btn:disabled { background: var(--bg-soft); color: var(--text-secondary); cursor: not-allowed; }
+.modal-btn.secondary { background: var(--bg-soft); color: var(--text-primary); border: 1px solid var(--border); margin-top: 8px; }
+.modal-btn.danger { background: var(--danger); }
+
+.task-modal-icon {
+  width: 80px; height: 80px; border-radius: 24px;
+  background: linear-gradient(135deg, rgba(38,161,123,0.3), rgba(38,161,123,0.1));
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; color: var(--usdt);
+}
+.task-reward-box {
+  background: rgba(38,161,123,0.1);
+  border: 1px solid rgba(38,161,123,0.3);
+  border-radius: 16px; padding: 16px; margin-bottom: 20px;
+}
+.task-reward-box .tr-label {
+  font-size: 12px; color: var(--text-secondary);
+  font-weight: 700; margin-bottom: 6px;
+}
+.task-reward-box .tr-value {
+  font-size: 28px; font-weight: 800; color: var(--usdt);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.task-reward-box .tr-value img { width: 26px; height: 26px; }
+
+.plan-detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.plan-detail-row:last-child { border-bottom: none; }
+.plan-detail-row .pdr-label { color: var(--text-secondary); font-weight: 600; }
+.plan-detail-row .pdr-value { color: var(--text-primary); font-weight: 800; display: flex; align-items: center; gap: 4px; }
+.plan-detail-row .pdr-value img { width: 16px; height: 16px; }
+
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-card); color: var(--text-primary);
+  padding: 14px 24px; border-radius: 30px; font-size: 14px; font-weight: 700;
+  z-index: 2000; transition: transform 0.3s var(--spring);
+  border: 1px solid var(--border); max-width: 90%; text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.loading-inline {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spinLoad 0.7s linear infinite;
+  margin-right: 8px;
+}
+@keyframes spinLoad { to { transform: rotate(360deg); } }
+
+.back-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+}
+.back-btn {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-primary); font-size: 16px;
+}
+.back-btn:active { transform: scale(0.9); }
 </style>
 </head>
 <body>
 
 <div class="splash" id="splash">
+  <div class="logo-text">EX <span>PRO</span></div>
   <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
 <div class="app-container" id="app">
-  <header class="top-app-bar"></header>
-  
-  <div class="floating-balances">
-    <div class="balance-pill-luxury" onclick="go('deposit')">
-      <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
-      <div class="bal-text">
-        <span class="num" id="topUsdt">0.00</span>
-        <span class="unit">USDT</span>
-      </div>
-      <button class="add-bal-btn" onclick="event.stopPropagation(); go('deposit')">+</button>
-    </div>
-    <button class="lang-toggle-btn" id="langToggleBtn" onclick="toggleLanguage()">
-      <span id="langLabel">EN</span>
+  <header class="top-app-bar">
+    <div class="logo-text">EX <span>PRO</span></div>
+    <button class="lang-toggle" onclick="toggleLang()">
+      <i class="fas fa-globe"></i>
+      <span id="langBtnText">EN</span>
     </button>
+  </header>
+
+  <div class="floating-balance">
+    <div class="usdt-pill">
+      <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" class="usdt-icon" alt="USDT">
+      <div class="usdt-info">
+        <div class="usdt-label" data-i18n="usdt_balance">رصيد USDT</div>
+        <div class="usdt-value"><span id="topUsdt">0.00</span><small>USDT</small></div>
+      </div>
+      <button class="deposit-mini-btn" onclick="go('deposit')"><i class="fas fa-plus"></i></button>
+    </div>
   </div>
 
   <main class="main-scroll" id="mainScroll">
-    
+
     <!-- HOME -->
     <div class="view active" id="view-home">
-      <div class="usdt-hero-card">
-        <div class="usdt-hero-label">
-          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png">
-          <span data-i18n="home_usdt_balance">رصيد USDT</span>
-        </div>
-        <div class="usdt-hero-amount">
-          <span id="heroUsdt">0.00</span>
-          <span class="usdt-suffix">USDT</span>
-        </div>
-        <div class="usdt-hero-actions">
-          <button class="usdt-hero-btn" onclick="go('deposit')">
-            <i class="fas fa-arrow-down"></i> <span data-i18n="home_deposit">إيداع</span>
-          </button>
-          <button class="usdt-hero-btn solid" onclick="go('withdraw')">
-            <i class="fas fa-arrow-up"></i> <span data-i18n="home_withdraw">سحب</span>
-          </button>
+      <div class="hero-welcome">
+        <div class="hero-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="hero-text">
+          <h3 data-i18n="welcome_back">مرحباً بعودتك</h3>
+          <p data-i18n="welcome_sub">ابدأ رحلتك الاستثمارية اليوم</p>
         </div>
       </div>
 
+      <div class="section-title">
+        <span data-i18n="quick_actions">إجراءات سريعة</span>
+      </div>
       <div class="quick-actions">
-        <div class="action-tile" onclick="go('plans')">
-          <div class="icon usdt"><i class="fas fa-crown"></i></div>
-          <span class="label" data-i18n="home_plans">الخطط</span>
+        <div class="qa-card" onclick="go('plans')">
+          <i class="fas fa-crown"></i>
+          <span data-i18n="plans">الخطط</span>
         </div>
-        <div class="action-tile" onclick="go('deposit')">
-          <div class="icon success"><i class="fas fa-arrow-down"></i></div>
-          <span class="label" data-i18n="home_deposit">إيداع</span>
+        <div class="qa-card blue" onclick="go('deposit')">
+          <i class="fas fa-wallet"></i>
+          <span data-i18n="deposit">إيداع</span>
         </div>
-        <div class="action-tile" onclick="go('withdraw')">
-          <div class="icon blue"><i class="fas fa-arrow-up"></i></div>
-          <span class="label" data-i18n="home_withdraw">سحب</span>
+        <div class="qa-card orange" onclick="go('withdraw')">
+          <i class="fas fa-money-bill-transfer"></i>
+          <span data-i18n="withdraw">سحب</span>
         </div>
-        <div class="action-tile" onclick="go('referral')">
-          <div class="icon purple"><i class="fas fa-users"></i></div>
-          <span class="label" data-i18n="home_referral">الإحالة</span>
+        <div class="qa-card purple" onclick="go('referral')">
+          <i class="fas fa-user-plus"></i>
+          <span data-i18n="referral">إحالة</span>
         </div>
       </div>
 
-      <div id="homeActivePlan"></div>
-
-      <div class="section-header">
-        <h2 class="section-title" data-i18n="home_plans_section">خطط مقترحة</h2>
-        <span class="section-link" onclick="go('plans')">
-          <span data-i18n="home_view_all">عرض الكل</span>
-          <i class="fas fa-chevron-left" style="font-size:11px;" class="chevron-icon"></i>
-        </span>
+      <div class="section-title">
+        <span data-i18n="active_plans">خططي النشطة</span>
+        <span class="see-all" onclick="go('plans')" data-i18n="browse_plans">تصفح الخطط</span>
       </div>
-      <div id="homePlansPreview"></div>
+      <div id="activePlansHome"></div>
     </div>
 
     <!-- PLANS -->
     <div class="view" id="view-plans">
-      <div class="page-header" style="margin-bottom: 20px;">
-        <h2 class="section-title" style="font-size: 26px;" data-i18n="plans_title">خطط الاستثمار</h2>
-        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px; font-weight: 600;" data-i18n="plans_subtitle">
-          اختر الخطة المناسبة وابدأ بربح يومي لمدة 365 يوم
-        </p>
+      <div class="section-title">
+        <span data-i18n="investment_plans">خطط الاستثمار</span>
       </div>
-      <div id="plansContainer"></div>
-    </div>
+      <p style="color:var(--text-secondary); font-size:13px; font-weight:600; margin-bottom:20px;" data-i18n="plans_subtitle">
+        اختر خطة VIP المناسبة وابدأ بكسب الأرباح اليومية
+      </p>
+      <div id="plansList"></div>
 
-    <!-- PLAN DETAIL -->
-    <div class="view" id="view-plan-detail">
-      <div id="planDetailContainer"></div>
+      <div class="section-title" style="margin-top:28px;">
+        <span data-i18n="active_plans">خططي النشطة</span>
+      </div>
+      <div id="activePlansList"></div>
     </div>
 
     <!-- DEPOSIT -->
     <div class="view" id="view-deposit">
-      <div class="page-header" style="text-align: center; margin-bottom: 20px;">
-        <h2 class="section-title" style="font-size: 26px; justify-content: center;" data-i18n="deposit_title">إيداع</h2>
+      <div class="section-title">
+        <span data-i18n="deposit_usdt">إيداع USDT</span>
       </div>
 
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('crypto', this)">
-          <img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" style="width:18px;height:18px;">
-          <span data-i18n="deposit_tab_crypto">كريبتو</span>
+          <i class="fas fa-coins"></i> <span data-i18n="crypto">كريبتو</span>
         </div>
         <div class="tab" onclick="switchDepositTab('stars', this)">
-          <img src="https://up6.cc/2026/10/17932600818491.png" style="width:18px;height:18px;border-radius:50%;">
-          <span data-i18n="deposit_tab_stars">نجوم تيليجرام</span>
+          <i class="fas fa-star" style="color:#FFD700;"></i> <span data-i18n="telegram_stars">نجوم تيليجرام</span>
         </div>
       </div>
 
+      <!-- Crypto BEP20 -->
       <div id="dep-tab-crypto">
-        <div id="cryptoPendingBanner" class="instructions" style="display:none; border-color: var(--warning);">
-          <p style="color: var(--warning); font-weight: 800; display: flex; justify-content: space-between; align-items: center;">
-            <span><i class="fas fa-clock"></i> <span data-i18n="deposit_invoice_pending">فاتورة معلقة</span></span>
-            <span id="cryptoPendingTimer" style="font-family: monospace; font-size: 16px;">30:00</span>
-          </p>
-          <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <button class="chip" style="flex:1;" onclick="checkCryptoStatus(this)">
-              <i class="fas fa-rotate"></i> <span data-i18n="deposit_check">تحقق</span>
-            </button>
-            <button class="chip" style="flex:1;" onclick="cancelCryptoInvoice()">
-              <i class="fas fa-xmark"></i> <span data-i18n="deposit_cancel">إلغاء</span>
-            </button>
+        <div class="info-box">
+          <div class="info-row">
+            <span data-i18n="network">الشبكة</span>
+            <span>BEP20 (BSC)</span>
+          </div>
+          <div class="info-row">
+            <span data-i18n="currency">العملة</span>
+            <span>USDT</span>
+          </div>
+        </div>
+
+        <label style="display:block; font-size:13px; color:var(--text-secondary); font-weight:700; margin-bottom:8px;" data-i18n="usdt_address_label">عنوان محفظة USDT (BEP20)</label>
+        <div class="copy-box">
+          <span id="bep20Address">0x0000000000000000000000000000000000000000</span>
+          <button class="copy-btn" onclick="copyAddress()" data-i18n="copy">نسخ</button>
+        </div>
+        <div class="warning-box">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div data-i18n="bep20_warning">أرسل USDT فقط على شبكة BEP20 إلى هذا العنوان. الأصول المرسلة على شبكة أخرى لن تُسترد.</div>
+        </div>
+      </div>
+
+      <!-- Telegram Stars -->
+      <div id="dep-tab-stars" style="display:none;">
+        <div class="info-box">
+          <div class="info-row">
+            <span data-i18n="conversion_rate">سعر التحويل</span>
+            <span style="color:var(--usdt);">100 ⭐ = 1.50 USDT</span>
+          </div>
+          <div class="info-row">
+            <span data-i18n="min_amount">الحد الأدنى</span>
+            <span>100 ⭐ = 1.50 USDT</span>
           </div>
         </div>
 
         <div class="amount-display">
-          <span class="suffix">$</span>
-          <input type="text" inputmode="decimal" id="cryptoAmountInput" value="10" oninput="updateCryptoUI(this)">
-          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png">
+          <input type="number" id="starsInput" value="100" min="100" oninput="updateStarsCalc()" inputmode="numeric">
+          <span style="font-size:2rem;">⭐</span>
         </div>
-        <div class="calc-subtext" id="cryptoCalcSubtext" style="color: var(--usdt); font-weight: 800; font-size: 16px;">
-          = 10.00 USDT
-        </div>
-
-        <div class="quick-chips">
-          <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
-          <button class="chip" onclick="addCryptoChip(50)">+ $50</button>
-          <button class="chip" onclick="addCryptoChip(100)">+ $100</button>
-          <button class="chip" onclick="addCryptoChip(500)">+ $500</button>
-        </div>
-
-        <button class="primary-btn" onclick="processDeposit('crypto')" style="margin-top: 10px;">
-          <i class="fas fa-credit-card"></i> <span data-i18n="deposit_submit_crypto">إيداع بالكريبتو</span>
-        </button>
-
-        <div class="instructions" style="margin-top: 16px;">
-          <p class="instr-title"><i class="fas fa-info-circle"></i> <span data-i18n="deposit_notes_title">ملاحظات</span></p>
-          <p>• <span data-i18n="deposit_note1">الحد الأدنى للإيداع: 1 USDT</span></p>
-          <p>• <span data-i18n="deposit_note2">الحد الأقصى: 1000 USDT</span></p>
-          <p>• <span data-i18n="deposit_note3">سيتم تحويلك لبوابة الدفع لإتمام العملية</span></p>
-        </div>
-      </div>
-
-      <div id="dep-tab-stars" style="display:none;">
-        <div class="instructions" style="border-color: var(--warning); background: rgba(255,149,0,0.08);">
-          <p style="display:flex; align-items:center; gap:8px; color: var(--warning); font-weight:800; margin:0;">
-            <i class="fas fa-star"></i>
-            <span data-i18n="deposit_stars_rate">100 نجمة = 1.50 USDT</span>
-          </p>
-        </div>
-
-        <div class="amount-display">
-          <span class="suffix">$</span>
-          <input type="number" id="starsDepositUsdtInput" value="5" oninput="updateStarsDepositUI(this)">
-          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png">
-        </div>
-        <div class="calc-subtext" id="starsDepositResult" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-          <img src="https://up6.cc/2026/10/17932600818491.png" class="star-icon">
-          <span data-i18n="deposit_stars_you_need">تحتاج</span>
-          <span id="starsNeededValue" style="font-weight:800; color: var(--warning);">334</span>
-          <span data-i18n="deposit_stars_unit">نجمة</span>
+        <div class="calc-subtext" id="starsCalc">
+          <span>= 1.50</span>
+          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
         </div>
 
         <div class="quick-chips">
-          <button class="chip" onclick="addStarsDepositChip(1.5)">+ $1.50</button>
-          <button class="chip" onclick="addStarsDepositChip(3)">+ $3</button>
-          <button class="chip" onclick="addStarsDepositChip(7.5)">+ $7.50</button>
-          <button class="chip" onclick="addStarsDepositChip(15)">+ $15</button>
+          <button class="chip" onclick="setStars(100)">100</button>
+          <button class="chip" onclick="setStars(200)">200</button>
+          <button class="chip" onclick="setStars(500)">500</button>
+          <button class="chip" onclick="setStars(1000)">1000</button>
         </div>
 
-        <button class="primary-btn" onclick="processDeposit('stars')" style="margin-top: 10px;">
-          <img src="https://up6.cc/2026/10/17932600818491.png" style="width:18px;height:18px;border-radius:50%;">
-          <span data-i18n="deposit_submit_stars">شراء بالنجوم</span>
+        <button class="topup-btn" onclick="depositWithStars()">
+          <i class="fas fa-star"></i>
+          <span data-i18n="pay_with_stars">ادفع بالنجوم</span>
         </button>
-
-        <div class="instructions" style="margin-top: 16px;">
-          <p class="instr-title"><i class="fas fa-info-circle"></i> <span data-i18n="deposit_notes_title">ملاحظات</span></p>
-          <p>• <span data-i18n="deposit_note1">الحد الأدنى للإيداع: 1 USDT</span></p>
-          <p>• <span data-i18n="deposit_stars_note2">سيتم خصم النجوم من حسابك في تيليجرام</span></p>
-          <p>• <span data-i18n="deposit_stars_note3">يضاف رصيد USDT فوراً بعد الدفع</span></p>
-        </div>
       </div>
     </div>
 
     <!-- WITHDRAW -->
     <div class="view" id="view-withdraw">
-      <div class="page-header" style="text-align: center; margin-bottom: 20px;">
-        <h2 class="section-title" style="font-size: 26px; justify-content: center;" data-i18n="withdraw_title">سحب USDT</h2>
+      <div class="section-title">
+        <span data-i18n="withdraw_usdt">سحب USDT</span>
+      </div>
+
+      <div class="info-box">
+        <div class="info-row">
+          <span data-i18n="min_withdraw">الحد الأدنى</span>
+          <span>1.00 USDT</span>
+        </div>
+        <div class="info-row">
+          <span data-i18n="max_withdraw">الحد الأقصى</span>
+          <span>1,000,000.00 USDT</span>
+        </div>
+        <div class="info-row">
+          <span data-i18n="fee_range">الرسوم</span>
+          <span>5% - 30%</span>
+        </div>
+        <div class="info-row">
+          <span data-i18n="daily_limit_info">التكرار</span>
+          <span data-i18n="three_times">3 مرات يومياً</span>
+        </div>
       </div>
 
       <div class="tabs">
         <div class="tab active" onclick="switchWithdrawTab('bep20', this)">
-          <i class="fas fa-network-wired"></i> <span>BEP20</span>
+          <i class="fas fa-link"></i> BEP20
         </div>
         <div class="tab" onclick="switchWithdrawTab('binance', this)">
-          <img src="https://up6.cc/2026/09/178982889076391.png" style="width:18px;height:18px;border-radius:50%;"> <span>Binance</span>
+          <i class="fas fa-exchange-alt"></i> Binance
         </div>
       </div>
 
       <div id="wd-tab-bep20">
         <div class="amount-display">
-          <input type="number" id="wdBep20Amount" placeholder="0" oninput="updateWdUI('bep20', this)">
-          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png">
+          <span class="dollar-sign">$</span>
+          <input type="number" id="wdAmount" placeholder="0.00" min="1" oninput="updateWithdrawCalc()">
+          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
         </div>
-        <div class="calc-subtext" id="wdBep20Result" style="color: var(--usdt); font-weight: 800;">
-          <span data-i18n="withdraw_receive">ستستلم</span> 0.00 USDT
+        <div class="calc-subtext" id="wdCalc">
+          <span data-i18n="fee">الرسوم</span>: $0.00 · <span data-i18n="you_receive">ستستلم</span>: $0.00
         </div>
 
         <div class="wd-input-group">
-          <label data-i18n="withdraw_wallet_bep20">عنوان محفظة BEP20</label>
-          <input type="text" class="wd-input mono" placeholder="0x..." id="wdBep20Address">
+          <label data-i18n="wallet_address">عنوان المحفظة</label>
+          <input type="text" class="wd-input" id="wdAddress" placeholder="0x...">
         </div>
 
-        <button class="primary-btn" onclick="processWithdraw('bep20')">
-          <i class="fas fa-paper-plane"></i> <span data-i18n="withdraw_submit">تقديم طلب السحب</span>
+        <button class="topup-btn" onclick="submitWithdraw()">
+          <i class="fas fa-paper-plane"></i>
+          <span data-i18n="submit_withdraw">تقديم الطلب</span>
         </button>
       </div>
 
       <div id="wd-tab-binance" style="display:none;">
         <div class="amount-display">
-          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance', this)">
-          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png">
+          <span class="dollar-sign">$</span>
+          <input type="number" id="wdAmountBinance" placeholder="0.00" min="1" oninput="updateWithdrawCalcBinance()">
+          <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
         </div>
-        <div class="calc-subtext" id="wdBinanceResult" style="color: var(--usdt); font-weight: 800;">
-          <span data-i18n="withdraw_receive">ستستلم</span> 0.00 USDT
+        <div class="calc-subtext" id="wdCalcBinance">
+          <span data-i18n="fee">الرسوم</span>: $0.00 · <span data-i18n="you_receive">ستستلم</span>: $0.00
         </div>
 
         <div class="wd-input-group">
-          <label data-i18n="withdraw_wallet_binance">معرّف Binance Pay</label>
-          <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
+          <label data-i18n="binance_pay_id">معرف Binance Pay</label>
+          <input type="text" class="wd-input" id="wdBinanceId" placeholder="123456789">
         </div>
 
-        <button class="primary-btn" onclick="processWithdraw('binance')">
-          <i class="fas fa-paper-plane"></i> <span data-i18n="withdraw_submit">تقديم طلب السحب</span>
+        <button class="topup-btn" onclick="submitWithdrawBinance()">
+          <i class="fas fa-paper-plane"></i>
+          <span data-i18n="submit_withdraw">تقديم الطلب</span>
         </button>
       </div>
 
-      <div class="instructions" style="margin-top: 20px;">
-        <p class="instr-title"><i class="fas fa-info-circle"></i> <span data-i18n="withdraw_instructions_title">تعليمات السحب</span></p>
-        <p><strong data-i18n="withdraw_min_label">الحد الأدنى:</strong> <span data-i18n="withdraw_min_value">1.00 USDT</span></p>
-        <p><strong data-i18n="withdraw_max_label">الحد الأقصى:</strong> <span data-i18n="withdraw_max_value">1,000,000.00 USDT</span></p>
-        <p><strong data-i18n="withdraw_fees_label">رسوم السحب:</strong> <span data-i18n="withdraw_fees_value">من 5% إلى 30% حسب الشبكة</span></p>
-        <p><strong data-i18n="withdraw_limit_label">تكرار السحب:</strong> <span data-i18n="withdraw_limit_value">يمكنك السحب 3 مرات يومياً</span></p>
-        <div class="warning-box">
-          <i class="fas fa-exclamation-triangle"></i>
-          <div data-i18n="withdraw_warning">سيتم مراجعة طلبك ومعالجته خلال 24 ساعة. تأكد من صحة عنوان المحفظة قبل الإرسال.</div>
-        </div>
+      <div class="warning-box">
+        <i class="fas fa-info-circle"></i>
+        <div data-i18n="withdraw_note">تتم معالجة طلبات السحب خلال 24 ساعة. تأكد من صحة العنوان قبل الإرسال.</div>
       </div>
-
-      <button class="secondary-btn" style="margin-top: 16px;" onclick="openWithdrawHistory()">
-        <i class="fas fa-history"></i> <span data-i18n="withdraw_history_btn">سجل السحوبات</span>
-      </button>
-    </div>
-
-    <!-- REFERRAL -->
-    <div class="view" id="view-referral">
-      <div class="referral-hero">
-        <h2 data-i18n="referral_title">دعوة الأصدقاء</h2>
-        <p data-i18n="referral_subtitle">اربح من إيداعات أصدقائك بنسبة تصل إلى 10%</p>
-      </div>
-
-      <div class="ref-tiers">
-        <div class="ref-tier-card">
-          <div class="tier-label" data-i18n="referral_level1">المستوى 1</div>
-          <div class="tier-percent l1">10%</div>
-          <div class="tier-desc" data-i18n="referral_level1_desc">من الإيداعات المباشرة</div>
-        </div>
-        <div class="ref-tier-card">
-          <div class="tier-label" data-i18n="referral_level2">المستوى 2</div>
-          <div class="tier-percent l2">4%</div>
-          <div class="tier-desc" data-i18n="referral_level2_desc">من إيداعات أصدقاء أصدقائك</div>
-        </div>
-        <div class="ref-tier-card">
-          <div class="tier-label" data-i18n="referral_level3">المستوى 3</div>
-          <div class="tier-percent l3">2%</div>
-          <div class="tier-desc" data-i18n="referral_level3_desc">من إيداعات المستوى 3</div>
-        </div>
-      </div>
-
-      <div class="ref-stats-grid">
-        <div class="ref-stat-big">
-          <div class="val" id="refTotalCount">0</div>
-          <div class="lbl" data-i18n="referral_total_invited">إجمالي المدعوين</div>
-        </div>
-        <div class="ref-stat-big">
-          <div class="val usdt-green" id="refEarnings">0.00</div>
-          <div class="lbl" data-i18n="referral_earnings">أرباحي من الإحالات (USDT)</div>
-        </div>
-      </div>
-
-      <div class="ref-link-box">
-        <label><i class="fas fa-link"></i> <span data-i18n="referral_link">رابط الدعوة</span></label>
-        <div class="ref-link-input">
-          <span id="refLinkText">...</span>
-          <button class="copy-btn" onclick="copyText(document.getElementById('refLinkText').innerText)">
-            <i class="fas fa-copy"></i> <span data-i18n="referral_copy">نسخ</span>
-          </button>
-        </div>
-        <label><i class="fas fa-id-card"></i> <span data-i18n="referral_id">معرف الدعوة</span></label>
-        <div class="ref-link-input">
-          <span id="refIdText">...</span>
-          <button class="copy-btn" onclick="copyText(document.getElementById('refIdText').innerText)">
-            <i class="fas fa-copy"></i> <span data-i18n="referral_copy">نسخ</span>
-          </button>
-        </div>
-        <div class="qr-container">
-          <img id="refQrImg" src="" alt="QR Code">
-        </div>
-      </div>
-
-      <button class="primary-btn" onclick="shareReferral()" style="margin-top: 12px;">
-        <i class="fas fa-share-alt"></i> <span data-i18n="referral_share">مشاركة رابط الدعوة</span>
-      </button>
     </div>
 
     <!-- PROFILE -->
     <div class="view" id="view-profile">
-      <div class="profile-hero">
-        <div class="profile-avatar-lg" id="profileAvatar">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatar">
           <i class="fas fa-user"></i>
         </div>
-        <h2 id="profileName">لاعب</h2>
-        <div class="uid-row">
-          <i class="fas fa-fingerprint" style="color: var(--usdt);"></i>
-          <span id="profileId">123456789</span>
-          <div class="uid-copy" onclick="copyText(document.getElementById('profileId').innerText)">
-            <i class="fas fa-copy"></i>
-          </div>
+        <h2 id="profileName">-</h2>
+        <div class="profile-id-row">
+          <span id="profileId">-</span>
+          <i class="fas fa-copy copy-icon" onclick="copyProfileId()"></i>
         </div>
       </div>
 
-      <div class="profile-usdt-card">
-        <div class="label" data-i18n="profile_usdt_balance">رصيد USDT</div>
-        <div class="amount">
-          <span id="profileUsdt">0.00</span>
-          <span class="suffix">USDT</span>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fas fa-wallet"></i>
+          <div class="stat-val" id="statUsdt">0.00</div>
+          <div class="stat-label" data-i18n="balance">الرصيد</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-crown"></i>
+          <div class="stat-val" id="statActive">0</div>
+          <div class="stat-label" data-i18n="active_count">خطط نشطة</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <div class="stat-val" id="statRefs">0</div>
+          <div class="stat-label" data-i18n="referrals">الإحالات</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-money-bill-transfer"></i>
+          <div class="stat-val" id="statWithdrawn">0.00</div>
+          <div class="stat-label" data-i18n="total_withdrawn">إجمالي السحوبات</div>
         </div>
       </div>
 
-      <div class="profile-menu">
-        <div class="menu-item" onclick="contactSupport()">
-          <div class="menu-item-left">
-            <div class="menu-item-icon support"><i class="fas fa-headset"></i></div>
-            <div class="menu-item-text">
-              <div class="title" data-i18n="profile_support">خدمة العملاء</div>
-              <div class="sub" data-i18n="profile_support_sub">تواصل معنا مباشرة</div>
-            </div>
+      <div class="menu-list">
+        <div class="menu-item" onclick="go('referral')">
+          <div class="menu-icon"><i class="fas fa-user-plus"></i></div>
+          <div class="menu-text">
+            <h4 data-i18n="referral_program">برنامج الإحالات</h4>
+            <p data-i18n="referral_menu_sub">اربح من إيداعات أصدقائك</p>
           </div>
-          <i class="fas fa-chevron-left"></i>
+          <i class="fas fa-chevron-right chevron"></i>
+        </div>
+
+        <div class="menu-item" onclick="openSupport()">
+          <div class="menu-icon blue"><i class="fas fa-headset"></i></div>
+          <div class="menu-text">
+            <h4 data-i18n="contact_support">اتصل بالدعم</h4>
+            <p data-i18n="support_sub">فريقنا جاهز لمساعدتك</p>
+          </div>
+          <i class="fas fa-chevron-right chevron"></i>
         </div>
 
         <div class="menu-item" onclick="openExPro()">
-          <div class="menu-item-left">
-            <div class="menu-item-icon education"><i class="fas fa-graduation-cap"></i></div>
-            <div class="menu-item-text">
-              <div class="title" data-i18n="profile_ex_pro">EX PRO — برنامج تعليمي</div>
-              <div class="sub" data-i18n="profile_ex_pro_sub">تعلّم أساسيات الاستثمار</div>
-            </div>
+          <div class="menu-icon orange"><i class="fas fa-graduation-cap"></i></div>
+          <div class="menu-text">
+            <h4 data-i18n="ex_pro_program">برنامج EX PRO التعليمي</h4>
+            <p data-i18n="ex_pro_sub">تعلم أساسيات الاستثمار</p>
           </div>
-          <i class="fas fa-chevron-left"></i>
+          <i class="fas fa-chevron-right chevron"></i>
         </div>
+      </div>
+    </div>
 
-        <div class="menu-item" onclick="go('referral')">
-          <div class="menu-item-left">
-            <div class="menu-item-icon share"><i class="fas fa-user-plus"></i></div>
-            <div class="menu-item-text">
-              <div class="title" data-i18n="profile_referral">دعوة الأصدقاء</div>
-              <div class="sub" data-i18n="profile_referral_sub">اربح من إحالاتك</div>
-            </div>
-          </div>
-          <i class="fas fa-chevron-left"></i>
+    <!-- REFERRAL -->
+    <div class="view" id="view-referral">
+      <div class="back-header">
+        <div class="back-btn" onclick="go('profile')"><i class="fas fa-arrow-right"></i></div>
+        <div class="section-title" style="margin:0;"><span data-i18n="referral_program">برنامج الإحالات</span></div>
+      </div>
+
+      <div class="ref-header">
+        <div class="ref-icon"><i class="fas fa-user-plus"></i></div>
+        <h2 data-i18n="referral_welcome">اربح من دعوة أصدقائك</h2>
+        <p data-i18n="referral_desc">احصل على عمولة من إيداعات أصدقائك على 3 مستويات</p>
+      </div>
+
+      <div class="ref-levels">
+        <div class="ref-level-card">
+          <div class="lvl" data-i18n="level_1">المستوى 1</div>
+          <div class="pct">10%</div>
+          <div class="earned" id="refEarnedL1">$0.00</div>
         </div>
-
-        <div class="menu-item" onclick="openWithdrawHistory()">
-          <div class="menu-item-left">
-            <div class="menu-item-icon history"><i class="fas fa-history"></i></div>
-            <div class="menu-item-text">
-              <div class="title" data-i18n="profile_history">سجل السحوبات</div>
-              <div class="sub" data-i18n="profile_history_sub">عرض كل عمليات السحب</div>
-            </div>
-          </div>
-          <i class="fas fa-chevron-left"></i>
+        <div class="ref-level-card">
+          <div class="lvl" data-i18n="level_2">المستوى 2</div>
+          <div class="pct">4%</div>
+          <div class="earned" id="refEarnedL2">$0.00</div>
         </div>
+        <div class="ref-level-card">
+          <div class="lvl" data-i18n="level_3">المستوى 3</div>
+          <div class="pct">2%</div>
+          <div class="earned" id="refEarnedL3">$0.00</div>
+        </div>
+      </div>
 
-        <div class="menu-item" onclick="toggleLanguage()">
-          <div class="menu-item-left">
-            <div class="menu-item-icon lang"><i class="fas fa-language"></i></div>
-            <div class="menu-item-text">
-              <div class="title" data-i18n="profile_language">تغيير اللغة</div>
-              <div class="sub" id="profileLangSub">English</div>
-            </div>
-          </div>
-          <i class="fas fa-chevron-left"></i>
+      <div class="ref-link-box">
+        <div class="rlb-label" data-i18n="your_referral_link">رابط الإحالة</div>
+        <div class="rlb-value" id="refLinkDisplay">-</div>
+        <div class="rlb-actions">
+          <button class="btn-copy-link" onclick="copyReferralLink()">
+            <i class="fas fa-copy"></i> <span data-i18n="copy">نسخ</span>
+          </button>
+          <button class="btn-share-link" onclick="shareReferral()">
+            <i class="fas fa-share-alt"></i> <span data-i18n="share">مشاركة</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ref-link-box">
+        <div class="rlb-label" data-i18n="qr_code">رمز QR</div>
+        <div class="qr-container">
+          <img id="qrImage" src="" alt="QR">
         </div>
       </div>
     </div>
@@ -1598,19 +1073,19 @@ body[dir="ltr"] .dock-nav::before {
     <div class="dock-nav">
       <div class="nav-item active" data-view="home" onclick="go('home')">
         <i class="fas fa-home"></i>
-        <span class="nav-text" data-i18n="nav_home">الرئيسية</span>
+        <span data-i18n="home">الرئيسية</span>
       </div>
       <div class="nav-item" data-view="plans" onclick="go('plans')">
         <i class="fas fa-crown"></i>
-        <span class="nav-text" data-i18n="nav_plans">الخطط</span>
+        <span data-i18n="plans">الخطط</span>
       </div>
       <div class="nav-item" data-view="deposit" onclick="go('deposit')">
         <i class="fas fa-wallet"></i>
-        <span class="nav-text" data-i18n="nav_deposit">إيداع</span>
+        <span data-i18n="deposit">إيداع</span>
       </div>
       <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
         <i class="fas fa-money-bill-transfer"></i>
-        <span class="nav-text" data-i18n="nav_withdraw">سحب</span>
+        <span data-i18n="withdraw">سحب</span>
       </div>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
@@ -1621,117 +1096,87 @@ body[dir="ltr"] .dock-nav::before {
 
 <!-- MODALS -->
 
-<div class="modal-overlay" id="modalInsufficient">
+<!-- Task modal -->
+<div class="modal-overlay" id="taskModal">
   <div class="modal-content">
-    <div class="modal-icon-lg danger"><i class="fas fa-wallet"></i></div>
-    <h3 data-i18n="modal_insufficient_title">رصيد غير كافٍ</h3>
-    <p>
-      <span data-i18n="modal_insufficient_desc">رصيدك الحالي</span>
-      <span style="color: var(--usdt); font-weight: 800;" id="insufficientCurrent">0.00</span> USDT.
-      <span data-i18n="modal_insufficient_need">تحتاج</span>
-      <span style="color: var(--danger); font-weight: 800;" id="insufficientNeeded">0.00</span> USDT
-      <span data-i18n="modal_insufficient_desc2">إضافية. يرجى إعادة الشحن أولاً.</span>
-    </p>
-    <button class="modal-btn green" onclick="closeModal('modalInsufficient'); go('deposit');" data-i18n="modal_insufficient_btn">إعادة الشحن</button>
-    <button class="modal-btn outline" style="margin-top: 8px;" onclick="closeModal('modalInsufficient')" data-i18n="modal_cancel">إلغاء</button>
+    <div class="task-modal-icon"><i class="fas fa-gift"></i></div>
+    <h3 id="taskModalTitle">-</h3>
+    <p data-i18n="task_modal_desc">أكمل المهمة اليومية لكسب المكافأة</p>
+    <div class="task-reward-box">
+      <div class="tr-label" data-i18n="reward_amount">مبلغ المكافأة</div>
+      <div class="tr-value">
+        <span id="taskRewardValue">+0.00</span>
+        <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
+      </div>
+    </div>
+    <button class="modal-btn" id="taskActionBtn" onclick="handleTaskAction()">
+      <i class="fas fa-shopping-cart"></i> <span data-i18n="buy_prize">شراء الجائزة</span>
+    </button>
+    <button class="modal-btn secondary" onclick="closeModal('taskModal')" data-i18n="close">إغلاق</button>
   </div>
 </div>
 
-<div class="modal-overlay" id="modalPlanConfirm">
+<!-- Insufficient balance -->
+<div class="modal-overlay" id="insufficientModal">
   <div class="modal-content">
-    <h3 id="planConfirmTitle" data-i18n="modal_plan_confirm_title">تأكيد الشراء</h3>
-    <p id="planConfirmText" data-i18n="modal_plan_confirm_desc">هل تريد شراء الخطة؟</p>
-    <div style="background: var(--bg-soft); padding: 16px; border-radius: 14px; margin-bottom: 20px;">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <span style="font-size: 13px; color: var(--text-secondary);" data-i18n="modal_plan_price">سعر الخطة</span>
-        <span style="font-size: 15px; font-weight: 800; color: var(--text-primary);"><span id="planConfirmPrice">0</span> USDT</span>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <span style="font-size: 13px; color: var(--text-secondary);" data-i18n="modal_plan_daily">الربح اليومي</span>
-        <span style="font-size: 15px; font-weight: 800; color: var(--usdt);">+<span id="planConfirmDaily">0</span> USDT</span>
-      </div>
-      <div style="display: flex; justify-content: space-between;">
-        <span style="font-size: 13px; color: var(--text-secondary);" data-i18n="modal_plan_duration">المدة</span>
-        <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);" data-i18n="modal_plan_days">365 يوم</span>
-      </div>
+    <div class="task-modal-icon" style="background:linear-gradient(135deg,rgba(255,59,48,0.3),rgba(255,59,48,0.1)); color:var(--danger);">
+      <i class="fas fa-exclamation-triangle"></i>
     </div>
-    <button class="modal-btn green" onclick="confirmPlanPurchase()" data-i18n="modal_plan_confirm_btn">تأكيد الشراء</button>
-    <button class="modal-btn outline" style="margin-top: 8px;" onclick="closeModal('modalPlanConfirm')" data-i18n="modal_cancel">إلغاء</button>
+    <h3 data-i18n="insufficient_balance">رصيد غير كافٍ</h3>
+    <p data-i18n="recharge_first">يرجى إعادة الشحن أولاً</p>
+    <button class="modal-btn" onclick="closeModal('insufficientModal'); go('deposit');">
+      <i class="fas fa-wallet"></i> <span data-i18n="recharge">إعادة الشحن</span>
+    </button>
+    <button class="modal-btn secondary" onclick="closeModal('insufficientModal')" data-i18n="cancel">إلغاء</button>
   </div>
 </div>
 
-<!-- Task Modal -->
-<div class="modal-overlay" id="modalTask">
+<!-- Buy plan confirm -->
+<div class="modal-overlay" id="buyPlanModal">
   <div class="modal-content">
-    <h3 style="margin-bottom: 6px;" data-i18n="task_title">مهمة اليوم</h3>
-    <p style="margin-bottom: 18px;" data-i18n="task_desc">اشتر جائزة وقم ببيعها لتحقيق الربح</p>
-    
-    <div class="task-prize-box">
-      <img id="taskPrizeImg" class="task-prize-img" src="https://up6.cc/2026/10/17932600818491.png" alt="Prize">
-      <div class="task-prize-name" id="taskPrizeName">جائزة</div>
-      <div class="task-prize-desc" data-i18n="task_prize_desc">جائزة نادرة من مجموعة EX PRO</div>
-    </div>
-
-    <div id="taskSteps">
-      <div class="task-price-row">
-        <span class="label" data-i18n="task_buy_price">سعر الشراء</span>
-        <span class="val"><span id="taskBuyPrice">100</span> <img src="https://img.icons8.com/liquid-glass-color/999/tether.png"></span>
+    <h3 id="buyPlanTitle">-</h3>
+    <p data-i18n="confirm_purchase_desc">هل تريد تأكيد شراء هذه الخطة؟</p>
+    <div style="background:var(--bg-soft); border-radius:14px; padding:14px; margin-bottom:20px;">
+      <div class="plan-detail-row">
+        <span class="pdr-label" data-i18n="price">السعر</span>
+        <span class="pdr-value"><span id="buyPlanPrice">0</span> USDT</span>
       </div>
-      <div class="task-price-row">
-        <span class="label" data-i18n="task_sell_price">سعر البيع</span>
-        <span class="val green"><span id="taskSellPrice">102</span> <img src="https://img.icons8.com/liquid-glass-color/999/tether.png"></span>
+      <div class="plan-detail-row">
+        <span class="pdr-label" data-i18n="daily_reward">المكافأة اليومية</span>
+        <span class="pdr-value"><span id="buyPlanReward">0</span> USDT</span>
       </div>
-      <button class="modal-btn green" id="taskActionBtn" onclick="taskAction()" style="margin-top: 12px;" data-i18n="task_buy_prize">شراء الجائزة</button>
-    </div>
-
-    <div id="taskSuccess" style="display: none;">
-      <div class="task-success-box">
-        <div class="icon"><i class="fas fa-check"></i></div>
-        <h4 data-i18n="task_success_title">تمت العملية بنجاح!</h4>
-        <p><span data-i18n="task_success_earned">ربحت</span> <span id="taskEarned">2.00</span> USDT</p>
+      <div class="plan-detail-row">
+        <span class="pdr-label" data-i18n="duration">المدة</span>
+        <span class="pdr-value">365 <span data-i18n="days">يوم</span></span>
       </div>
-      <button class="modal-btn green" onclick="closeModal('modalTask'); updatePlanDetail();" data-i18n="task_got_it">رائع، استلام</button>
     </div>
+    <button class="modal-btn" onclick="confirmBuyPlan()">
+      <i class="fas fa-check"></i> <span data-i18n="confirm_purchase">تأكيد الشراء</span>
+    </button>
+    <button class="modal-btn secondary" onclick="closeModal('buyPlanModal')" data-i18n="cancel">إلغاء</button>
   </div>
 </div>
 
-<!-- Withdraw Success -->
-<div class="modal-overlay" id="modalWithdrawSuccess">
+<!-- Purchase success -->
+<div class="modal-overlay" id="successModal">
   <div class="modal-content">
-    <div class="modal-icon-lg success"><i class="fas fa-check-circle"></i></div>
-    <h3 data-i18n="wd_success_title">تم تقديم الطلب</h3>
-    <p><span data-i18n="wd_success_desc">قمت بسحب</span> <span id="successWdAmount" style="color: var(--usdt); font-weight: 800;">0.00</span> USDT</p>
-    <div style="background: rgba(255,149,0,0.1); color: var(--warning); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 20px;">
-      <i class="fas fa-clock"></i> <span data-i18n="wd_success_note">سيتم مراجعة الطلب خلال 24 ساعة</span>
+    <div class="task-modal-icon" style="background:linear-gradient(135deg,rgba(52,199,89,0.3),rgba(52,199,89,0.1)); color:var(--success);">
+      <i class="fas fa-check"></i>
     </div>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')" data-i18n="modal_ok">حسناً</button>
+    <h3 id="successTitle">-</h3>
+    <p id="successMessage">-</p>
+    <button class="modal-btn" onclick="closeModal('successModal')" data-i18n="ok">حسناً</button>
   </div>
 </div>
 
-<!-- Withdraw History -->
-<div class="modal-overlay" id="modalWithdrawHistory">
-  <div class="modal-content" style="max-width: 380px;">
-    <h3 data-i18n="wd_history_title">سجل السحوبات</h3>
-    <div id="withdrawHistoryList" style="max-height: 340px; overflow-y: auto; margin: 16px 0; text-align: start;"></div>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')" data-i18n="modal_close">إغلاق</button>
-  </div>
-</div>
-
-<!-- EX PRO Education -->
-<div class="modal-overlay" id="modalExPro">
+<!-- Support / EX PRO info -->
+<div class="modal-overlay" id="infoModal">
   <div class="modal-content">
-    <div class="modal-icon-lg purple"><i class="fas fa-graduation-cap"></i></div>
-    <h3>EX PRO</h3>
-    <p data-i18n="exp_pro_desc">برنامج تعليمي شامل لتعلّم أساسيات الاستثمار الآمن في العملات الرقمية</p>
-    <div class="ex-pro-content">
-      <div class="ex-pro-title">📚 <span data-i18n="exp_pro_content_title">محتويات البرنامج:</span></div>
-      <div class="ex-pro-item">• <span data-i18n="exp_pro_item1">أساسيات USDT والعملات المستقرة</span></div>
-      <div class="ex-pro-item">• <span data-i18n="exp_pro_item2">كيفية اختيار الخطة الاستثمارية</span></div>
-      <div class="ex-pro-item">• <span data-i18n="exp_pro_item3">إدارة المخاطر والأرباح</span></div>
-      <div class="ex-pro-item">• <span data-i18n="exp_pro_item4">سحب الأرباح وإدارة المحفظة</span></div>
-    </div>
-    <button class="modal-btn green" onclick="openExProLink()"><i class="fas fa-play-circle"></i> <span data-i18n="exp_pro_start">ابدأ التعلم</span></button>
-    <button class="modal-btn outline" style="margin-top: 8px;" onclick="closeModal('modalExPro')" data-i18n="modal_close">إغلاق</button>
+    <div class="task-modal-icon" id="infoModalIcon"><i class="fas fa-headset"></i></div>
+    <h3 id="infoModalTitle">-</h3>
+    <p id="infoModalText">-</p>
+    <button class="modal-btn" id="infoModalBtn">-</button>
+    <button class="modal-btn secondary" onclick="closeModal('infoModal')" data-i18n="close">إغلاق</button>
   </div>
 </div>
 
@@ -1740,636 +1185,509 @@ body[dir="ltr"] .dock-nav::before {
 <script>
 'use strict';
 
-/* ================= I18N DICTIONARY ================= */
-const I18N = {
+document.addEventListener('contextmenu', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  e.preventDefault();
+});
+
+// ============ TRANSLATIONS ============
+const T = {
   ar: {
     // Nav
-    nav_home: 'الرئيسية',
-    nav_plans: 'الخطط',
-    nav_deposit: 'إيداع',
-    nav_withdraw: 'سحب',
-    // Home
-    home_usdt_balance: 'رصيد USDT',
-    home_deposit: 'إيداع',
-    home_withdraw: 'سحب',
-    home_referral: 'الإحالة',
-    home_plans: 'الخطط',
-    home_plans_section: 'خطط مقترحة',
-    home_view_all: 'عرض الكل',
-    home_active_plan: 'خطتك الاستثمارية',
-    home_plan_active: 'نشطة',
-    home_daily_profit: 'ربح يومي',
-    home_total_earnings: 'إجمالي الأرباح',
+    home: 'الرئيسية', plans: 'الخطط', deposit: 'إيداع', withdraw: 'سحب',
+    profile: 'حسابي', referral: 'إحالة',
+    // Balance
+    usdt_balance: 'رصيد USDT', balance: 'الرصيد',
+    // Welcome
+    welcome_back: 'مرحباً بعودتك', welcome_sub: 'ابدأ رحلتك الاستثمارية اليوم',
+    quick_actions: 'إجراءات سريعة',
     // Plans
-    plans_title: 'خطط الاستثمار',
-    plans_subtitle: 'اختر الخطة المناسبة وابدأ بربح يومي لمدة 365 يوم',
-    plans_buy: 'شراء',
-    plans_active: 'خطتك النشطة',
-    plans_daily_profit: 'ربح يومي',
-    plans_days: 'يوم',
-    plans_total: 'إجمالي',
-    // Plan detail
-    plan_detail_title: 'خطتك',
-    plan_detail_active: 'نشطة',
-    plan_detail_days_remaining: 'يوم متبقٍ',
-    plan_detail_total_earnings: 'إجمالي الأرباح',
-    plan_detail_daily_profit: 'ربح يومي',
-    plan_detail_price: 'سعر الخطة',
-    plan_detail_task_title: 'مهمة اليوم',
-    plan_detail_task_daily: 'المكافأة اليومية',
-    plan_detail_complete_task: 'اكمال المهمة',
-    plan_detail_back_home: 'العودة للرئيسية',
-    plan_detail_no_plan: 'لا توجد خطة نشطة',
-    plan_detail_no_plan_desc: 'اختر خطة استثمارية للبدء',
-    plan_detail_view_plans: 'عرض الخطط',
-    // Task
-    task_title: 'مهمة اليوم',
-    task_desc: 'اشتر جائزة وقم ببيعها لتحقيق الربح',
-    task_buy_price: 'سعر الشراء',
-    task_sell_price: 'سعر البيع',
-    task_buy_prize: 'شراء الجائزة',
-    task_sell_prize: 'بيع الجائزة',
-    task_success_title: 'تمت العملية بنجاح!',
-    task_success_earned: 'ربحت',
-    task_got_it: 'رائع، استلام',
-    task_prize_desc: 'جائزة نادرة من مجموعة EX PRO',
+    investment_plans: 'خطط الاستثمار',
+    plans_subtitle: 'اختر خطة VIP المناسبة وابدأ بكسب الأرباح اليومية',
+    active_plans: 'خططي النشطة',
+    browse_plans: 'تصفح الخطط',
+    no_active_plans: 'لا توجد خطط نشطة',
+    no_active_plans_desc: 'اشترِ خطة استثمار للبدء في كسب الأرباح اليومية',
+    buy_now: 'اشترِ الآن',
+    price: 'السعر',
+    daily_reward: 'المكافأة اليومية',
+    duration: 'المدة',
+    days: 'يوم',
+    days_remaining: 'يوم متبقي',
+    plan_active: 'نشطة',
+    daily_task: 'المهمة اليومية',
+    complete_task: 'أكمل المهمة',
+    available_in: 'متاحة خلال',
+    // Tasks
+    task_modal_desc: 'أكمل المهمة اليومية لكسب المكافأة',
+    reward_amount: 'مبلغ المكافأة',
+    buy_prize: 'شراء الجائزة',
+    sell_prize: 'بيع الجائزة',
+    buying: 'جاري الشراء...',
+    selling: 'جاري البيع...',
+    task_done: 'تمت المهمة بنجاح',
+    task_reward_added: 'تمت إضافة المكافأة إلى رصيدك',
+    // Insufficient
+    insufficient_balance: 'رصيد غير كافٍ',
+    recharge_first: 'يرجى إعادة الشحن أولاً',
+    recharge: 'إعادة الشحن',
+    confirm_purchase: 'تأكيد الشراء',
+    confirm_purchase_desc: 'هل تريد تأكيد شراء هذه الخطة؟',
+    cancel: 'إلغاء',
+    ok: 'حسناً',
+    close: 'إغلاق',
     // Deposit
-    deposit_title: 'إيداع',
-    deposit_tab_crypto: 'كريبتو',
-    deposit_tab_stars: 'نجوم تيليجرام',
-    deposit_invoice_pending: 'فاتورة معلقة',
-    deposit_check: 'تحقق',
-    deposit_cancel: 'إلغاء',
-    deposit_submit_crypto: 'إيداع بالكريبتو',
-    deposit_submit_stars: 'شراء بالنجوم',
-    deposit_notes_title: 'ملاحظات',
-    deposit_note1: 'الحد الأدنى للإيداع: 1 USDT',
-    deposit_note2: 'الحد الأقصى: 1000 USDT',
-    deposit_note3: 'سيتم تحويلك لبوابة الدفع لإتمام العملية',
-    deposit_stars_rate: '100 نجمة = 1.50 USDT',
-    deposit_stars_you_need: 'تحتاج',
-    deposit_stars_unit: 'نجمة',
-    deposit_stars_note2: 'سيتم خصم النجوم من حسابك في تيليجرام',
-    deposit_stars_note3: 'يضاف رصيد USDT فوراً بعد الدفع',
+    deposit_usdt: 'إيداع USDT',
+    crypto: 'كريبتو',
+    telegram_stars: 'نجوم تيليجرام',
+    network: 'الشبكة',
+    currency: 'العملة',
+    usdt_address_label: 'عنوان محفظة USDT (BEP20)',
+    bep20_warning: 'أرسل USDT فقط على شبكة BEP20 إلى هذا العنوان. الأصول المرسلة على شبكة أخرى لن تُسترد.',
+    conversion_rate: 'سعر التحويل',
+    min_amount: 'الحد الأدنى',
+    pay_with_stars: 'ادفع بالنجوم',
     // Withdraw
-    withdraw_title: 'سحب USDT',
-    withdraw_receive: 'ستستلم',
-    withdraw_wallet_bep20: 'عنوان محفظة BEP20',
-    withdraw_wallet_binance: 'معرّف Binance Pay',
-    withdraw_submit: 'تقديم طلب السحب',
-    withdraw_instructions_title: 'تعليمات السحب',
-    withdraw_min_label: 'الحد الأدنى:',
-    withdraw_min_value: '1.00 USDT',
-    withdraw_max_label: 'الحد الأقصى:',
-    withdraw_max_value: '1,000,000.00 USDT',
-    withdraw_fees_label: 'رسوم السحب:',
-    withdraw_fees_value: 'من 5% إلى 30% حسب الشبكة',
-    withdraw_limit_label: 'تكرار السحب:',
-    withdraw_limit_value: 'يمكنك السحب 3 مرات يومياً',
-    withdraw_warning: 'سيتم مراجعة طلبك ومعالجته خلال 24 ساعة. تأكد من صحة عنوان المحفظة قبل الإرسال.',
-    withdraw_history_btn: 'سجل السحوبات',
-    // Referral
-    referral_title: 'دعوة الأصدقاء',
-    referral_subtitle: 'اربح من إيداعات أصدقائك بنسبة تصل إلى 10%',
-    referral_level1: 'المستوى 1',
-    referral_level2: 'المستوى 2',
-    referral_level3: 'المستوى 3',
-    referral_level1_desc: 'من الإيداعات المباشرة',
-    referral_level2_desc: 'من إيداعات أصدقاء أصدقائك',
-    referral_level3_desc: 'من إيداعات المستوى 3',
-    referral_total_invited: 'إجمالي المدعوين',
-    referral_earnings: 'أرباحي من الإحالات (USDT)',
-    referral_link: 'رابط الدعوة',
-    referral_id: 'معرف الدعوة',
-    referral_copy: 'نسخ',
-    referral_share: 'مشاركة رابط الدعوة',
+    withdraw_usdt: 'سحب USDT',
+    min_withdraw: 'الحد الأدنى',
+    max_withdraw: 'الحد الأقصى',
+    fee_range: 'الرسوم',
+    daily_limit_info: 'التكرار',
+    three_times: '3 مرات يومياً',
+    fee: 'الرسوم',
+    you_receive: 'ستستلم',
+    wallet_address: 'عنوان المحفظة',
+    binance_pay_id: 'معرف Binance Pay',
+    submit_withdraw: 'تقديم الطلب',
+    withdraw_note: 'تتم معالجة طلبات السحب خلال 24 ساعة. تأكد من صحة العنوان قبل الإرسال.',
     // Profile
-    profile_usdt_balance: 'رصيد USDT',
-    profile_support: 'خدمة العملاء',
-    profile_support_sub: 'تواصل معنا مباشرة',
-    profile_ex_pro: 'EX PRO — برنامج تعليمي',
-    profile_ex_pro_sub: 'تعلّم أساسيات الاستثمار',
-    profile_referral: 'دعوة الأصدقاء',
-    profile_referral_sub: 'اربح من إحالاتك',
-    profile_history: 'سجل السحوبات',
-    profile_history_sub: 'عرض كل عمليات السحب',
-    profile_language: 'تغيير اللغة',
-    // Modals
-    modal_insufficient_title: 'رصيد غير كافٍ',
-    modal_insufficient_desc: 'رصيدك الحالي',
-    modal_insufficient_need: 'تحتاج',
-    modal_insufficient_desc2: 'إضافية. يرجى إعادة الشحن أولاً.',
-    modal_insufficient_btn: 'إعادة الشحن',
-    modal_cancel: 'إلغاء',
-    modal_ok: 'حسناً',
-    modal_close: 'إغلاق',
-    modal_plan_confirm_title: 'تأكيد الشراء',
-    modal_plan_confirm_desc: 'هل تريد شراء الخطة؟',
-    modal_plan_price: 'سعر الخطة',
-    modal_plan_daily: 'الربح اليومي',
-    modal_plan_duration: 'المدة',
-    modal_plan_days: '365 يوم',
-    modal_plan_confirm_btn: 'تأكيد الشراء',
-    wd_success_title: 'تم تقديم الطلب',
-    wd_success_desc: 'قمت بسحب',
-    wd_success_note: 'سيتم مراجعة الطلب خلال 24 ساعة',
-    wd_history_title: 'سجل السحوبات',
-    wd_history_empty: 'لا توجد سحوبات بعد',
-    exp_pro_desc: 'برنامج تعليمي شامل لتعلّم أساسيات الاستثمار الآمن في العملات الرقمية',
-    exp_pro_content_title: 'محتويات البرنامج:',
-    exp_pro_item1: 'أساسيات USDT والعملات المستقرة',
-    exp_pro_item2: 'كيفية اختيار الخطة الاستثمارية',
-    exp_pro_item3: 'إدارة المخاطر والأرباح',
-    exp_pro_item4: 'سحب الأرباح وإدارة المحفظة',
-    exp_pro_start: 'ابدأ التعلم',
-    // Toast
-    toast_copied: 'تم النسخ!',
-    toast_copy_fail: 'تعذر النسخ',
-    toast_purchase_success: 'تم شراء الخطة بنجاح!',
-    toast_already_active: 'لديك خطة نشطة بالفعل',
-    toast_task_wait: 'يجب الانتظار حتى يتم تجديد المهمة',
-    toast_daily_limit: 'لقد وصلت للحد الأقصى 3 سحوبات يومياً',
-    toast_enter_wallet: 'أدخل عنوان محفظة صحيح',
-    toast_enter_amount: 'أدخل مبلغاً',
-    toast_invalid_wallet: 'عنوان المحفظة غير صحيح',
-    toast_min_withdraw: 'الحد الأدنى للسحب 1.00 USDT',
-    toast_max_withdraw: 'الحد الأقصى 1,000,000 USDT',
-    toast_insufficient: 'رصيدك غير كافٍ',
-    toast_processing: 'جاري المعالجة...',
-    toast_invoice_created: 'أكمل الدفع من المتصفح',
-    toast_invoice_paid: 'تم استلام الدفع!',
-    toast_invoice_expired: 'انتهت أو فشلت',
-    toast_invoice_waiting: 'قيد الانتظار',
-    toast_error: 'حدث خطأ، حاول مرة أخرى',
-    toast_min_deposit: 'الحد الأدنى 1 USDT',
-    toast_max_deposit: 'الحد الأقصى 1000 USDT',
-    toast_telegram_only: 'يعمل داخل تيليجرام فقط',
-    toast_payment_cancel: 'تم إلغاء الدفع',
-    toast_payment_fail: 'فشل الدفع',
-    toast_usdt_added: 'تمت إضافة {amount} USDT!',
-    toast_stars_added: 'تمت إضافة {amount} USDT بنجاح!',
-    // Misc
-    lang_switch_to_en: 'English',
-    lang_switch_to_ar: 'العربية'
+    active_count: 'خطط نشطة',
+    referrals: 'الإحالات',
+    total_withdrawn: 'إجمالي السحوبات',
+    referral_program: 'برنامج الإحالات',
+    referral_menu_sub: 'اربح من إيداعات أصدقائك',
+    contact_support: 'اتصل بالدعم',
+    support_sub: 'فريقنا جاهز لمساعدتك',
+    ex_pro_program: 'برنامج EX PRO التعليمي',
+    ex_pro_sub: 'تعلم أساسيات الاستثمار',
+    // Referral
+    referral_welcome: 'اربح من دعوة أصدقائك',
+    referral_desc: 'احصل على عمولة من إيداعات أصدقائك على 3 مستويات',
+    level_1: 'المستوى 1', level_2: 'المستوى 2', level_3: 'المستوى 3',
+    your_referral_link: 'رابط الإحالة',
+    qr_code: 'رمز QR',
+    copy: 'نسخ', share: 'مشاركة',
+    // Messages
+    copied: 'تم النسخ بنجاح',
+    error: 'حدث خطأ',
+    success: 'نجاح',
+    plan_purchased_success: 'تم تفعيل خطتك بنجاح',
+    withdraw_submitted: 'تم تقديم طلب السحب بنجاح',
+    daily_limit_reached: 'تم الوصول للحد اليومي (3 مرات)',
+    invalid_amount: 'المبلغ غير صالح',
+    invalid_address: 'العنوان غير صالح',
+    min_withdraw_error: 'الحد الأدنى 1 USDT',
+    max_withdraw_error: 'الحد الأقصى 1,000,000 USDT',
+    insufficient_balance_msg: 'رصيدك غير كافٍ',
+    stars_invoice_created: 'تم إنشاء فاتورة النجوم',
+    stars_payment_success: 'تمت إضافة USDT بنجاح',
+    stars_min: 'الحد الأدنى 100 نجمة',
+    // Info modals
+    support_title: 'اتصل بالدعم',
+    support_text: 'فريق الدعم متاح على مدار الساعة. تواصل معنا عبر تيليجرام:',
+    support_btn: 'مراسلة الدعم',
+    expro_title: 'برنامج EX PRO التعليمي',
+    expro_text: 'تعلم أساسيات الاستثمار والتداول من خلال برنامجنا التعليمي المجاني. اكتسب المعرفة اللازمة لتحقيق أرباح مستدامة.',
+    expro_btn: 'ابدأ التعلم',
+    // Confirm buy
+    your_balance: 'رصيدك الحالي',
+    purchase_success: 'تم الشراء بنجاح',
+    days_remaining_label: 'يوم',
   },
   en: {
-    // Nav
-    nav_home: 'Home',
-    nav_plans: 'Plans',
-    nav_deposit: 'Deposit',
-    nav_withdraw: 'Withdraw',
-    // Home
-    home_usdt_balance: 'USDT Balance',
-    home_deposit: 'Deposit',
-    home_withdraw: 'Withdraw',
-    home_referral: 'Referral',
-    home_plans: 'Plans',
-    home_plans_section: 'Suggested Plans',
-    home_view_all: 'View All',
-    home_active_plan: 'Your Investment Plan',
-    home_plan_active: 'Active',
-    home_daily_profit: 'Daily Profit',
-    home_total_earnings: 'Total Earnings',
-    // Plans
-    plans_title: 'Investment Plans',
-    plans_subtitle: 'Choose the right plan and start earning daily for 365 days',
-    plans_buy: 'Buy',
-    plans_active: 'Your Active Plan',
-    plans_daily_profit: 'Daily Profit',
-    plans_days: 'days',
-    plans_total: 'Total',
-    // Plan detail
-    plan_detail_title: 'Your Plan',
-    plan_detail_active: 'Active',
-    plan_detail_days_remaining: 'Days Remaining',
-    plan_detail_total_earnings: 'Total Earnings',
-    plan_detail_daily_profit: 'Daily Profit',
-    plan_detail_price: 'Plan Price',
-    plan_detail_task_title: 'Today\'s Task',
-    plan_detail_task_daily: 'Daily Reward',
-    plan_detail_complete_task: 'Complete Task',
-    plan_detail_back_home: 'Back to Home',
-    plan_detail_no_plan: 'No Active Plan',
-    plan_detail_no_plan_desc: 'Choose an investment plan to start',
-    plan_detail_view_plans: 'View Plans',
-    // Task
-    task_title: 'Today\'s Task',
-    task_desc: 'Buy a prize and sell it to make profit',
-    task_buy_price: 'Buy Price',
-    task_sell_price: 'Sell Price',
-    task_buy_prize: 'Buy Prize',
-    task_sell_prize: 'Sell Prize',
-    task_success_title: 'Success!',
-    task_success_earned: 'You earned',
-    task_got_it: 'Got it',
-    task_prize_desc: 'Rare prize from EX PRO collection',
-    // Deposit
-    deposit_title: 'Deposit',
-    deposit_tab_crypto: 'Crypto',
-    deposit_tab_stars: 'Telegram Stars',
-    deposit_invoice_pending: 'Pending Invoice',
-    deposit_check: 'Check',
-    deposit_cancel: 'Cancel',
-    deposit_submit_crypto: 'Deposit via Crypto',
-    deposit_submit_stars: 'Buy with Stars',
-    deposit_notes_title: 'Notes',
-    deposit_note1: 'Minimum deposit: 1 USDT',
-    deposit_note2: 'Maximum: 1000 USDT',
-    deposit_note3: 'You will be redirected to payment gateway',
-    deposit_stars_rate: '100 Stars = 1.50 USDT',
-    deposit_stars_you_need: 'You need',
-    deposit_stars_unit: 'Stars',
-    deposit_stars_note2: 'Stars will be deducted from your Telegram account',
-    deposit_stars_note3: 'USDT balance is added instantly after payment',
-    // Withdraw
-    withdraw_title: 'Withdraw USDT',
-    withdraw_receive: 'You will receive',
-    withdraw_wallet_bep20: 'BEP20 Wallet Address',
-    withdraw_wallet_binance: 'Binance Pay ID',
-    withdraw_submit: 'Submit Withdrawal',
-    withdraw_instructions_title: 'Withdrawal Instructions',
-    withdraw_min_label: 'Minimum:',
-    withdraw_min_value: '1.00 USDT',
-    withdraw_max_label: 'Maximum:',
-    withdraw_max_value: '1,000,000.00 USDT',
-    withdraw_fees_label: 'Withdrawal Fees:',
-    withdraw_fees_value: '5% to 30% depending on network',
-    withdraw_limit_label: 'Frequency:',
-    withdraw_limit_value: 'You can withdraw 3 times per day',
-    withdraw_warning: 'Your request will be reviewed within 24 hours. Verify wallet address before submitting.',
-    withdraw_history_btn: 'Withdrawal History',
-    // Referral
-    referral_title: 'Invite Friends',
-    referral_subtitle: 'Earn from your friends\' deposits up to 10%',
-    referral_level1: 'Level 1',
-    referral_level2: 'Level 2',
-    referral_level3: 'Level 3',
-    referral_level1_desc: 'From direct deposits',
-    referral_level2_desc: 'From your friends\' friends',
-    referral_level3_desc: 'From level 3 deposits',
-    referral_total_invited: 'Total Invited',
-    referral_earnings: 'Referral Earnings (USDT)',
-    referral_link: 'Referral Link',
-    referral_id: 'Referral ID',
-    referral_copy: 'Copy',
-    referral_share: 'Share Referral Link',
-    // Profile
-    profile_usdt_balance: 'USDT Balance',
-    profile_support: 'Customer Support',
-    profile_support_sub: 'Contact us directly',
-    profile_ex_pro: 'EX PRO — Education Program',
-    profile_ex_pro_sub: 'Learn investment basics',
-    profile_referral: 'Invite Friends',
-    profile_referral_sub: 'Earn from referrals',
-    profile_history: 'Withdrawal History',
-    profile_history_sub: 'View all withdrawals',
-    profile_language: 'Change Language',
-    // Modals
-    modal_insufficient_title: 'Insufficient Balance',
-    modal_insufficient_desc: 'Your current balance',
-    modal_insufficient_need: 'You need',
-    modal_insufficient_desc2: 'USDT more. Please recharge first.',
-    modal_insufficient_btn: 'Recharge',
-    modal_cancel: 'Cancel',
-    modal_ok: 'OK',
-    modal_close: 'Close',
-    modal_plan_confirm_title: 'Confirm Purchase',
-    modal_plan_confirm_desc: 'Do you want to purchase this plan?',
-    modal_plan_price: 'Plan Price',
-    modal_plan_daily: 'Daily Profit',
-    modal_plan_duration: 'Duration',
-    modal_plan_days: '365 days',
-    modal_plan_confirm_btn: 'Confirm Purchase',
-    wd_success_title: 'Request Submitted',
-    wd_success_desc: 'You withdrew',
-    wd_success_note: 'Request will be reviewed within 24 hours',
-    wd_history_title: 'Withdrawal History',
-    wd_history_empty: 'No withdrawals yet',
-    exp_pro_desc: 'Comprehensive education program to learn safe crypto investment basics',
-    exp_pro_content_title: 'Program Contents:',
-    exp_pro_item1: 'Basics of USDT and stablecoins',
-    exp_pro_item2: 'How to choose investment plans',
-    exp_pro_item3: 'Risk and profit management',
-    exp_pro_item4: 'Withdrawals and wallet management',
-    exp_pro_start: 'Start Learning',
-    // Toast
-    toast_copied: 'Copied!',
-    toast_copy_fail: 'Copy failed',
-    toast_purchase_success: 'Plan purchased successfully!',
-    toast_already_active: 'You already have an active plan',
-    toast_task_wait: 'Please wait for task renewal',
-    toast_daily_limit: 'You reached the daily limit of 3 withdrawals',
-    toast_enter_wallet: 'Enter a valid wallet address',
-    toast_enter_amount: 'Enter an amount',
-    toast_invalid_wallet: 'Invalid wallet address',
-    toast_min_withdraw: 'Minimum withdrawal is 1.00 USDT',
-    toast_max_withdraw: 'Maximum is 1,000,000 USDT',
-    toast_insufficient: 'Insufficient balance',
-    toast_processing: 'Processing...',
-    toast_invoice_created: 'Complete payment in browser',
-    toast_invoice_paid: 'Payment received!',
-    toast_invoice_expired: 'Expired or failed',
-    toast_invoice_waiting: 'Pending',
-    toast_error: 'Error, please try again',
-    toast_min_deposit: 'Minimum 1 USDT',
-    toast_max_deposit: 'Maximum 1000 USDT',
-    toast_telegram_only: 'Works inside Telegram only',
-    toast_payment_cancel: 'Payment cancelled',
-    toast_payment_fail: 'Payment failed',
-    toast_usdt_added: '{amount} USDT added!',
-    toast_stars_added: '{amount} USDT added successfully!',
-    // Misc
-    lang_switch_to_en: 'English',
-    lang_switch_to_ar: 'العربية'
+    home: 'Home', plans: 'Plans', deposit: 'Deposit', withdraw: 'Withdraw',
+    profile: 'Profile', referral: 'Referral',
+    usdt_balance: 'USDT Balance', balance: 'Balance',
+    welcome_back: 'Welcome back', welcome_sub: 'Start your investment journey today',
+    quick_actions: 'Quick Actions',
+    investment_plans: 'Investment Plans',
+    plans_subtitle: 'Choose a VIP plan and start earning daily rewards',
+    active_plans: 'My Active Plans',
+    browse_plans: 'Browse Plans',
+    no_active_plans: 'No Active Plans',
+    no_active_plans_desc: 'Purchase an investment plan to start earning daily rewards',
+    buy_now: 'Buy Now',
+    price: 'Price',
+    daily_reward: 'Daily Reward',
+    duration: 'Duration',
+    days: 'days',
+    days_remaining: 'days left',
+    plan_active: 'Active',
+    daily_task: 'Daily Task',
+    complete_task: 'Complete Task',
+    available_in: 'Available in',
+    task_modal_desc: 'Complete the daily task to earn your reward',
+    reward_amount: 'Reward Amount',
+    buy_prize: 'Buy Prize',
+    sell_prize: 'Sell Prize',
+    buying: 'Buying...',
+    selling: 'Selling...',
+    task_done: 'Task Completed',
+    task_reward_added: 'Reward added to your balance',
+    insufficient_balance: 'Insufficient Balance',
+    recharge_first: 'Please recharge first',
+    recharge: 'Recharge',
+    confirm_purchase: 'Confirm Purchase',
+    confirm_purchase_desc: 'Do you want to confirm purchasing this plan?',
+    cancel: 'Cancel',
+    ok: 'OK',
+    close: 'Close',
+    deposit_usdt: 'Deposit USDT',
+    crypto: 'Crypto',
+    telegram_stars: 'Telegram Stars',
+    network: 'Network',
+    currency: 'Currency',
+    usdt_address_label: 'USDT Wallet Address (BEP20)',
+    bep20_warning: 'Send USDT only on BEP20 network to this address. Assets sent on other networks will not be recovered.',
+    conversion_rate: 'Conversion Rate',
+    min_amount: 'Minimum',
+    pay_with_stars: 'Pay with Stars',
+    withdraw_usdt: 'Withdraw USDT',
+    min_withdraw: 'Minimum',
+    max_withdraw: 'Maximum',
+    fee_range: 'Fee',
+    daily_limit_info: 'Frequency',
+    three_times: '3 times per day',
+    fee: 'Fee',
+    you_receive: 'You receive',
+    wallet_address: 'Wallet Address',
+    binance_pay_id: 'Binance Pay ID',
+    submit_withdraw: 'Submit Request',
+    withdraw_note: 'Withdrawal requests are processed within 24 hours. Verify the address before sending.',
+    active_count: 'Active Plans',
+    referrals: 'Referrals',
+    total_withdrawn: 'Total Withdrawn',
+    referral_program: 'Referral Program',
+    referral_menu_sub: 'Earn from your friends\' deposits',
+    contact_support: 'Contact Support',
+    support_sub: 'Our team is ready to help',
+    ex_pro_program: 'EX PRO Education Program',
+    ex_pro_sub: 'Learn investment fundamentals',
+    referral_welcome: 'Earn by inviting friends',
+    referral_desc: 'Get commissions from your friends\' deposits across 3 levels',
+    level_1: 'Level 1', level_2: 'Level 2', level_3: 'Level 3',
+    your_referral_link: 'Referral Link',
+    qr_code: 'QR Code',
+    copy: 'Copy', share: 'Share',
+    copied: 'Copied successfully',
+    error: 'Error',
+    success: 'Success',
+    plan_purchased_success: 'Your plan has been activated successfully',
+    withdraw_submitted: 'Withdrawal request submitted successfully',
+    daily_limit_reached: 'Daily limit reached (3 times)',
+    invalid_amount: 'Invalid amount',
+    invalid_address: 'Invalid address',
+    min_withdraw_error: 'Minimum 1 USDT',
+    max_withdraw_error: 'Maximum 1,000,000 USDT',
+    insufficient_balance_msg: 'Insufficient balance',
+    stars_invoice_created: 'Stars invoice created',
+    stars_payment_success: 'USDT added successfully',
+    stars_min: 'Minimum 100 stars',
+    support_title: 'Contact Support',
+    support_text: 'Our support team is available 24/7. Reach us on Telegram:',
+    support_btn: 'Message Support',
+    expro_title: 'EX PRO Education Program',
+    expro_text: 'Learn investing and trading fundamentals through our free education program. Gain the knowledge to achieve sustainable profits.',
+    expro_btn: 'Start Learning',
+    your_balance: 'Your Balance',
+    purchase_success: 'Purchase Successful',
+    days_remaining_label: 'days',
   }
 };
 
-let currentLang = 'ar';
+// ============ STATE ============
+let currentLang = localStorage.getItem('expro_lang') || 'ar';
+let currentView = 'home';
 
+const PLANS = [
+  { id: 'vip1', price: 9, reward: 2 },
+  { id: 'vip2', price: 40, reward: 9 },
+  { id: 'vip3', price: 100, reward: 22 },
+  { id: 'vip4', price: 500, reward: 110 },
+  { id: 'vip5', price: 1000, reward: 220 },
+  { id: 'vip6', price: 5000, reward: 1100 },
+  { id: 'vip7', price: 10000, reward: 2200 },
+];
+const PLAN_DURATION_MS = 365 * 24 * 60 * 60 * 1000;
+const TASK_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+const STARS_TO_USDT_RATE = 1.50 / 100; // 100 stars = 1.50 USDT
+
+let user = {
+  id: '',
+  name: '',
+  photo: '',
+  usdt: 0,
+  activePlans: [],
+  referralCount: 0,
+  refEarnedL1: 0,
+  refEarnedL2: 0,
+  refEarnedL3: 0,
+  totalWithdrawn: 0,
+  withdrawToday: { date: '', count: 0 }
+};
+
+let currentTaskPlanIndex = null;
+let taskModalStep = 'buy';
+let currentWithdrawMethod = 'bep20';
+let pendingBuyPlanId = null;
+let timerInterval = null;
+
+const tg = window.Telegram?.WebApp;
+
+// ============ LANGUAGE ============
 function t(key) {
-  return I18N[currentLang]?.[key] || I18N.ar[key] || key;
+  return T[currentLang]?.[key] || T.ar[key] || key;
 }
 
-function tFormat(key, params) {
-  let str = t(key);
-  Object.keys(params || {}).forEach(k => {
-    str = str.replace(`{${k}}`, params[k]);
-  });
-  return str;
-}
-
-function applyLanguage() {
-  document.documentElement.lang = currentLang;
-  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-  document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-  document.body.style.fontFamily = currentLang === 'ar' 
-    ? "'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif"
-    : "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif";
-  
-  // Update all [data-i18n]
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = t(key);
-    if (val) el.textContent = val;
-  });
-  
-  // Update all [data-i18n-placeholder]
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    el.placeholder = t(key);
-  });
-  
-  // Update lang labels
-  const langLabel = document.getElementById('langLabel');
-  const profileLangSub = document.getElementById('profileLangSub');
-  if (langLabel) langLabel.textContent = currentLang === 'ar' ? 'EN' : 'AR';
-  if (profileLangSub) profileLangSub.textContent = currentLang === 'ar' ? 'English' : 'العربية';
-  
-  // Update chevron direction
-  document.querySelectorAll('.menu-item > i.fa-chevron-left, .menu-item > i.fa-chevron-right').forEach(el => {
-    el.className = currentLang === 'ar' ? 'fas fa-chevron-left' : 'fas fa-chevron-right';
-  });
-  document.querySelectorAll('.section-link i').forEach(el => {
-    el.className = currentLang === 'ar' ? 'fas fa-chevron-left' : 'fas fa-chevron-right';
-  });
-  
-  // Re-render dynamic content
-  renderPlans();
-  renderHomeActivePlan();
-  renderHomePlansPreview();
-  if (document.getElementById('view-plan-detail').classList.contains('active')) {
-    renderPlanDetail();
-  }
-  updateTaskButton();
-  updateAllBalances();
-  updateCryptoUI(document.getElementById('cryptoAmountInput'));
-  updateStarsDepositUI(document.getElementById('starsDepositUsdtInput'));
-  updateWdUI('bep20', document.getElementById('wdBep20Amount'));
-  updateWdUI('binance', document.getElementById('wdBinanceAmount'));
-}
-
-function toggleLanguage() {
+function toggleLang() {
   currentLang = currentLang === 'ar' ? 'en' : 'ar';
   localStorage.setItem('expro_lang', currentLang);
   applyLanguage();
 }
 
-/* ================= DATA ================= */
-const ASSETS = {
-  usdt: 'https://img.icons8.com/liquid-glass-color/999/tether.png',
-  star: 'https://up6.cc/2026/10/17932600818491.png',
-  binance: 'https://up6.cc/2026/09/178982889076391.png'
-};
-
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDvhuuNg7ANjHHseUwYGJt2NoYs-SmWrGs",
-  authDomain: "puppy-marge.firebaseapp.com",
-  projectId: "puppy-marge",
-  storageBucket: "puppy-marge.firebasestorage.app",
-  messagingSenderId: "907422647300",
-  appId: "1:907422647300:web:efa524fcfef96288c4a151"
-};
-
-const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
-
-const PLANS = [
-  { id: 'vip1', name: 'VIP 1', price: 9, dailyReward: 2, tier: 'green' },
-  { id: 'vip2', name: 'VIP 2', price: 40, dailyReward: 5, tier: 'green' },
-  { id: 'vip3', name: 'VIP 3', price: 100, dailyReward: 12, tier: 'blue' },
-  { id: 'vip4', name: 'VIP 4', price: 250, dailyReward: 30, tier: 'blue' },
-  { id: 'vip5', name: 'VIP 5', price: 500, dailyReward: 60, tier: 'purple' },
-  { id: 'vip6', name: 'VIP 6', price: 1000, dailyReward: 120, tier: 'purple' },
-  { id: 'vip7', name: 'VIP 7', price: 2500, dailyReward: 300, tier: 'warning' },
-  { id: 'vip8', name: 'VIP 8', price: 5000, dailyReward: 600, tier: 'warning' },
-  { id: 'vip9', name: 'VIP 9', price: 10000, dailyReward: 1200, tier: 'dark' }
-];
-
-const TASK_PRIZES = [
-  { nameAr: 'تفاحة ذهبية', nameEn: 'Golden Apple', img: 'IMG_20261029_171631_362.png' },
-  { nameAr: 'قطعة حلوى', nameEn: 'Candy', img: 'IMG_20261029_172015_445.png' },
-  { nameAr: 'كرزة ياقوت', nameEn: 'Ruby Cherry', img: 'IMG_20261029_171638_229.png' },
-  { nameAr: 'بيتزا', nameEn: 'Pizza', img: 'IMG_20261029_171802_634.png' },
-  { nameAr: 'كعكة فاخرة', nameEn: 'Luxury Cake', img: 'IMG_20261029_171754_159.png' },
-  { nameAr: 'ياقوت أزرق', nameEn: 'Blue Sapphire', img: 'IMG_20261029_171539_567.png' },
-  { nameAr: 'جوهرة', nameEn: 'Jewel', img: 'IMG_20261029_180047_113.png' },
-  { nameAr: 'ألماسة', nameEn: 'Diamond', img: 'IMG_20261029_180048_586.png' },
-  { nameAr: 'تاج ملكي', nameEn: 'Royal Crown', img: 'IMG_20261029_180050_512.png' },
-  { nameAr: 'كأس ذهبي', nameEn: 'Golden Cup', img: 'IMG_20261029_180053_502.png' },
-  { nameAr: 'نجمة ذهبية', nameEn: 'Golden Star', img: 'IMG_20261029_180056_326.png' }
-];
-
-const STARS_TO_USDT_RATE = 0.015; // 100 stars = 1.50 USDT
-const WITHDRAW_FEES = { bep20: 0.05, binance: 0.10 };
-const DAY_MS = 24 * 60 * 60 * 1000;
-const COOLDOWN_MS = DAY_MS;
-
-let user = {
-  id: '123456789', name: 'Player', photo: '',
-  usdt: 0, referrals: 0, referralEarnings: 0,
-  level1Count: 0, level2Count: 0, level3Count: 0,
-  activePlan: null,
-  withdrawalsToday: 0, lastWithdrawalDate: 0
-};
-
-let cryptoPendingInvoice = null;
-let cryptoTimerInterval = null;
-let currentPlanForPurchase = null;
-let currentTaskState = null;
-let planTaskTimerInterval = null;
-let serverOffset = 0;
-let withdrawalHistoryCache = [];
-
-const tg = window.Telegram?.WebApp;
-let db = null;
-
-function serverNow() { return Date.now() + serverOffset; }
-
-async function calibrateServerTime() {
-  if (!db) return;
-  try {
-    const before = Date.now();
-    const ref = db.collection('_serverSync').doc('ping');
-    await ref.set({ t: firebase.firestore.FieldValue.serverTimestamp() });
-    const snap = await ref.get();
-    const after = Date.now();
-    const serverT = snap.data().t.toMillis();
-    const roundTrip = after - before;
-    serverOffset = serverT - (before + roundTrip / 2);
-  } catch (e) {}
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langBtnText').textContent = currentLang === 'ar' ? 'EN' : 'ع';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const txt = t(key);
+    if (txt) el.textContent = txt;
+  });
+  renderAll();
 }
 
+// ============ INIT ============
 function initTelegram() {
   if (tg) {
-    tg.ready(); tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#1C1C1E');
+    tg.ready();
+    tg.expand();
+    if (tg.setHeaderColor) tg.setHeaderColor('#0f0f11');
     if (tg.setBackgroundColor) tg.setBackgroundColor('#0f0f11');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
-      user.name = tg.initDataUnsafe.user.first_name || 'Player';
+      user.name = tg.initDataUnsafe.user.first_name || tg.initDataUnsafe.user.username || 'User';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
   }
-}
-
-function initFirebase() {
-  try {
-    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.firestore();
-    db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    Promise.all([
-      fetchUserData(),
-      calibrateServerTime(),
-      loadWithdrawalHistory()
-    ]).then(() => {
-      document.getElementById('splash').classList.add('hide');
-      document.getElementById('app').classList.add('ready');
-    }).catch(() => {
-      document.getElementById('splash').classList.add('hide');
-      document.getElementById('app').classList.add('ready');
-    });
-  } catch (e) {
-    document.getElementById('splash').classList.add('hide');
-    document.getElementById('app').classList.add('ready');
-  }
-}
-
-async function fetchUserData() {
-  if (!db) return;
-  try {
-    const docRef = db.collection('puppy_users').doc(user.id);
-    const doc = await docRef.get();
-    if (doc.exists) {
-      const data = doc.data();
-      user.usdt = data.usdt || 0;
-      user.referrals = data.referralCount || 0;
-      user.referralEarnings = data.referralEarnings || 0;
-      user.level1Count = data.level1Count || 0;
-      user.level2Count = data.level2Count || 0;
-      user.level3Count = data.level3Count || 0;
-      user.activePlan = data.activePlan || null;
-      user.withdrawalsToday = data.withdrawalsToday || 0;
-      user.lastWithdrawalDate = data.lastWithdrawalDate || 0;
-    } else {
-      await docRef.set({
-        telegramId: user.id, name: user.name, photoUrl: user.photo,
-        usdt: 0, referralCount: 0,
-        referralEarnings: 0, level1Count: 0, level2Count: 0, level3Count: 0,
-        activePlan: null,
-        withdrawalsToday: 0, lastWithdrawalDate: 0,
-        createdAt: Date.now()
-      });
+  if (!user.id) {
+    // Fallback for browser testing
+    const saved = localStorage.getItem('expro_user_id');
+    if (saved) user.id = saved;
+    else {
+      user.id = 'demo_' + Math.floor(Math.random() * 1000000);
+      localStorage.setItem('expro_user_id', user.id);
     }
-    updateAllBalances();
-    renderProfile();
-    renderPlans();
-    renderHomeActivePlan();
-    renderHomePlansPreview();
-    setupReferralUI();
-  } catch (e) {
-    console.error('fetchUserData', e);
+    if (!user.name) user.name = 'Demo User';
   }
 }
 
-async function syncUserData(updates) {
-  if (!db) return;
-  try {
-    await db.collection('puppy_users').doc(user.id).set(updates, { merge: true });
-  } catch (e) {}
+function loadUserData() {
+  const saved = localStorage.getItem('expro_user_' + user.id);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      Object.assign(user, data);
+    } catch(e) { console.warn(e); }
+  }
+  // Cleanup expired plans
+  user.activePlans = (user.activePlans || []).filter(p => p.expiresAt > Date.now());
 }
 
-function updateAllBalances() {
-  const f = n => Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const el = id => document.getElementById(id);
-  if (el('topUsdt')) el('topUsdt').innerText = f(user.usdt);
-  if (el('heroUsdt')) el('heroUsdt').innerText = f(user.usdt);
-  if (el('profileUsdt')) el('profileUsdt').innerText = f(user.usdt);
-  if (el('refTotalCount')) el('refTotalCount').innerText = user.referrals || (user.level1Count + user.level2Count + user.level3Count);
-  if (el('refEarnings')) el('refEarnings').innerText = f(user.referralEarnings || 0);
+function saveUserData() {
+  localStorage.setItem('expro_user_' + user.id, JSON.stringify(user));
+}
+
+// ============ RENDERERS ============
+function updateBalanceUI() {
+  const val = user.usdt.toFixed(2);
+  document.getElementById('topUsdt').textContent = val;
+  document.getElementById('statUsdt').textContent = val;
+  document.getElementById('statWithdrawn').textContent = user.totalWithdrawn.toFixed(2);
+  document.getElementById('statActive').textContent = user.activePlans.length;
+  document.getElementById('statRefs').textContent = user.referralCount || 0;
+  document.getElementById('refEarnedL1').textContent = '$' + (user.refEarnedL1 || 0).toFixed(2);
+  document.getElementById('refEarnedL2').textContent = '$' + (user.refEarnedL2 || 0).toFixed(2);
+  document.getElementById('refEarnedL3').textContent = '$' + (user.refEarnedL3 || 0).toFixed(2);
+}
+
+function renderActivePlans() {
+  const homeContainer = document.getElementById('activePlansHome');
+  const plansContainer = document.getElementById('activePlansList');
+  
+  if (!user.activePlans || user.activePlans.length === 0) {
+    const emptyHTML = `
+      <div class="empty-state">
+        <i class="fas fa-crown"></i>
+        <h3>${t('no_active_plans')}</h3>
+        <p>${t('no_active_plans_desc')}</p>
+        <button onclick="go('plans')">${t('browse_plans')}</button>
+      </div>`;
+    if (homeContainer) homeContainer.innerHTML = emptyHTML;
+    if (plansContainer) plansContainer.innerHTML = emptyHTML;
+    return;
+  }
+  
+  const html = user.activePlans.map((ap, idx) => {
+    const plan = PLANS.find(p => p.id === ap.planId);
+    if (!plan) return '';
+    const now = Date.now();
+    const daysLeft = Math.max(0, Math.ceil((ap.expiresAt - now) / (1000*60*60*24)));
+    const progress = Math.min(100, ((now - ap.purchasedAt) / PLAN_DURATION_MS) * 100);
+    const taskAvailableAt = (ap.lastTaskClaim || 0) + TASK_COOLDOWN_MS;
+    const canClaim = now >= taskAvailableAt;
+    
+    const planName = plan.id.replace('vip', 'VIP ');
+    
+    return `
+      <div class="plan-card active-plan">
+        <div class="plan-header">
+          <div class="plan-name">${planName}</div>
+          <div class="plan-badge active">${t('plan_active')}</div>
+        </div>
+        <div class="plan-stats">
+          <div class="plan-stat">
+            <div class="ps-label">${t('daily_reward')}</div>
+            <div class="ps-value highlight">
+              ${plan.reward}
+              <span style="font-size:12px;color:var(--text-secondary);">USDT</span>
+            </div>
+          </div>
+          <div class="plan-stat">
+            <div class="ps-label">${t('days_remaining')}</div>
+            <div class="ps-value">${daysLeft} <span style="font-size:12px;color:var(--text-secondary);">${t('days')}</span></div>
+          </div>
+        </div>
+        <div class="plan-days-bar">
+          <div class="plan-days-fill" style="width:${progress}%"></div>
+        </div>
+        <div class="task-section">
+          <div class="task-info">
+            <div class="t-title">${t('daily_task')}</div>
+            <div class="t-reward">
+              +${plan.reward}
+              <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">
+            </div>
+            ${canClaim 
+              ? `<div class="t-timer" style="color:var(--success);">● ${t('complete_task')}</div>` 
+              : `<div class="t-timer" data-task-timer="${idx}">${formatCountdown(taskAvailableAt - now)}</div>`}
+          </div>
+          <button onclick="openTaskModal(${idx})" ${canClaim ? '' : 'disabled'}>
+            ${canClaim ? t('complete_task') : '⏱'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+  
+  if (homeContainer) homeContainer.innerHTML = html;
+  if (plansContainer) plansContainer.innerHTML = html;
+}
+
+function renderPlansList() {
+  const container = document.getElementById('plansList');
+  if (!container) return;
+  
+  const ownedIds = user.activePlans.map(p => p.planId);
+  
+  container.innerHTML = PLANS.map(plan => {
+    const isOwned = ownedIds.includes(plan.id);
+    const planName = plan.id.replace('vip', 'VIP ');
+    return `
+      <div class="plan-card">
+        <div class="plan-header">
+          <div class="plan-name">${planName}</div>
+          <div class="plan-badge locked">${plan.price} USDT</div>
+        </div>
+        <div class="plan-stats">
+          <div class="plan-stat">
+            <div class="ps-label">${t('price')}</div>
+            <div class="ps-value">${plan.price} <span style="font-size:12px;color:var(--text-secondary);">USDT</span></div>
+          </div>
+          <div class="plan-stat">
+            <div class="ps-label">${t('daily_reward')}</div>
+            <div class="ps-value highlight">${plan.reward} <span style="font-size:12px;color:var(--text-secondary);">USDT</span></div>
+          </div>
+        </div>
+        <button class="buy-plan-btn" onclick="openBuyPlanModal('${plan.id}')" ${isOwned ? 'disabled style="background:var(--bg-soft);color:var(--text-secondary);"' : ''}>
+          ${isOwned ? '✓ ' + t('plan_active') : '<i class="fas fa-shopping-cart"></i> ' + t('buy_now')}
+        </button>
+      </div>`;
+  }).join('');
 }
 
 function renderProfile() {
-  document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = user.id;
+  document.getElementById('profileName').textContent = user.name || 'User';
+  document.getElementById('profileId').textContent = user.id;
   const avatar = document.getElementById('profileAvatar');
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
   }
+  const navProf = document.querySelector('.nav-profile');
+  if (user.photo) {
+    navProf.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Load saved language
-  const savedLang = localStorage.getItem('expro_lang');
-  if (savedLang && (savedLang === 'ar' || savedLang === 'en')) {
-    currentLang = savedLang;
-  } else {
-    // Auto-detect from Telegram
-    const tgLang = tg?.initDataUnsafe?.user?.language_code;
-    if (tgLang && tgLang.startsWith('en')) currentLang = 'en';
-  }
-  
-  applyLanguage();
-  initTelegram();
-  initFirebase();
-  updateCryptoUI(document.getElementById('cryptoAmountInput'));
-  updateStarsDepositUI(document.getElementById('starsDepositUsdtInput'));
-  
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
-    document.getElementById('app').classList.add('ready');
-  }, 800);
-});
+function renderReferral() {
+  const link = getReferralLink();
+  document.getElementById('refLinkDisplay').textContent = link;
+  document.getElementById('qrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(link) + '&margin=8&color=0f0f11&bgcolor=ffffff';
+}
 
+function renderAll() {
+  updateBalanceUI();
+  renderActivePlans();
+  renderPlansList();
+  renderProfile();
+  renderReferral();
+  updateLangDependentText();
+}
+
+function updateLangDependentText() {
+  // Update task modal title if open
+  if (document.getElementById('taskModal').classList.contains('show') && currentTaskPlanIndex !== null) {
+    const ap = user.activePlans[currentTaskPlanIndex];
+    if (ap) {
+      const plan = PLANS.find(p => p.id === ap.planId);
+      if (plan) {
+        document.getElementById('taskModalTitle').textContent = plan.id.replace('vip', 'VIP ') + ' - ' + t('daily_task');
+        document.getElementById('taskRewardValue').textContent = '+' + plan.reward.toFixed(2);
+      }
+    }
+  }
+  if (document.getElementById('buyPlanModal').classList.contains('show') && pendingBuyPlanId) {
+    const plan = PLANS.find(p => p.id === pendingBuyPlanId);
+    if (plan) {
+      document.getElementById('buyPlanTitle').textContent = plan.id.replace('vip', 'VIP ');
+      document.getElementById('buyPlanPrice').textContent = plan.price;
+      document.getElementById('buyPlanReward').textContent = plan.reward;
+    }
+  }
+}
+
+// ============ NAVIGATION ============
 function go(viewName) {
+  currentView = viewName;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
   if (target) target.classList.add('active');
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
-  
+
   const activeNav = document.querySelector(`.nav-item[data-view="${viewName}"]`);
-  const activeProfile = document.querySelector('.nav-profile[data-view="profile"]');
-  
+  const activeProfile = document.querySelector(`.nav-profile[data-view="${viewName}"]`);
+
   if (activeNav) {
     activeNav.classList.add('active');
     const items = Array.from(document.querySelectorAll('.nav-item'));
@@ -2377,343 +1695,15 @@ function go(viewName) {
     document.querySelector('.dock-nav').style.setProperty('--nav-index', index);
   } else if (activeProfile) {
     activeProfile.classList.add('active');
-  } else {
-    document.querySelector('.dock-nav').style.setProperty('--nav-index', 0);
-    document.querySelector('.nav-item[data-view="home"]')?.classList.add('active');
   }
 
-  document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
-  
-  if (viewName === 'plans') renderPlans();
-  if (viewName === 'plan-detail') renderPlanDetail();
+  const mainScroll = document.getElementById('mainScroll');
+  if (mainScroll) mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
+
+  renderAll();
 }
 
-/* ================= PLANS ================= */
-function renderPlans() {
-  const container = document.getElementById('plansContainer');
-  if (!container) return;
-  container.innerHTML = '';
-
-  PLANS.forEach(plan => {
-    const isActive = user.activePlan && user.activePlan.planId === plan.id;
-    const card = document.createElement('div');
-    card.className = 'plan-card';
-    card.innerHTML = `
-      <div class="plan-card-header">
-        <div class="plan-vip-name">
-          <span class="plan-vip-badge tier-${plan.tier}">${plan.name}</span>
-        </div>
-        <div class="plan-price-tag">
-          <div class="num">${plan.price}</div>
-          <div class="lbl">USDT</div>
-        </div>
-      </div>
-      <div class="plan-stats-grid">
-        <div class="plan-stat-box">
-          <div class="val usdt-green">${plan.dailyReward}</div>
-          <div class="lbl">${t('plans_daily_profit')}</div>
-        </div>
-        <div class="plan-stat-box">
-          <div class="val">365</div>
-          <div class="lbl">${t('plans_days')}</div>
-        </div>
-        <div class="plan-stat-box">
-          <div class="val usdt-green">${(plan.dailyReward * 365).toLocaleString('en-US')}</div>
-          <div class="lbl">${t('plans_total')}</div>
-        </div>
-      </div>
-      <button class="plan-buy-btn ${isActive ? 'active-plan' : ''}" 
-              onclick="${isActive ? "go('plan-detail')" : `requestPlanPurchase('${plan.id}')`}">
-        ${isActive ? `<i class="fas fa-check-circle"></i> ${t('plans_active')}` : `${t('plans_buy')} — ${plan.price} USDT`}
-      </button>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function renderHomePlansPreview() {
-  const container = document.getElementById('homePlansPreview');
-  if (!container) return;
-  const preview = PLANS.slice(0, 3);
-  container.innerHTML = preview.map(plan => `
-    <div class="plan-card" onclick="go('plans')" style="padding: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="plan-vip-badge tier-${plan.tier}">${plan.name}</span>
-        <div style="text-align: end;">
-          <div style="font-size: 18px; font-weight: 800; font-family: system-ui;">${plan.price} USDT</div>
-          <div style="font-size: 11px; color: var(--usdt); font-weight: 700;">+${plan.dailyReward}/${t('plans_days')}</div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderHomeActivePlan() {
-  const container = document.getElementById('homeActivePlan');
-  if (!container) return;
-  if (!user.activePlan) {
-    container.innerHTML = '';
-    return;
-  }
-  const plan = PLANS.find(p => p.id === user.activePlan.planId);
-  if (!plan) return;
-  container.innerHTML = `
-    <div class="active-plan-banner" onclick="go('plan-detail')">
-      <div class="active-plan-header">
-        <div class="active-plan-name">
-          <span class="vip-badge">${plan.name}</span>
-          <span>${t('home_active_plan')}</span>
-        </div>
-        <div class="active-plan-status">
-          <i class="fas fa-circle" style="font-size:8px;"></i> ${t('home_plan_active')}
-        </div>
-      </div>
-      <div class="active-plan-stats">
-        <div class="plan-stat-mini">
-          <div class="val"><img src="${ASSETS.usdt}"> ${plan.dailyReward}</div>
-          <div class="lbl">${t('home_daily_profit')}</div>
-        </div>
-        <div class="plan-stat-mini">
-          <div class="val">${(user.activePlan.totalEarned || 0).toFixed(2)}</div>
-          <div class="lbl">${t('home_total_earnings')}</div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function requestPlanPurchase(planId) {
-  const plan = PLANS.find(p => p.id === planId);
-  if (!plan) return;
-
-  if (user.usdt < plan.price) {
-    document.getElementById('insufficientCurrent').innerText = user.usdt.toFixed(2);
-    document.getElementById('insufficientNeeded').innerText = (plan.price - user.usdt).toFixed(2);
-    openModal('modalInsufficient');
-    return;
-  }
-
-  if (user.activePlan) {
-    showToast(t('toast_already_active'));
-    return;
-  }
-
-  currentPlanForPurchase = plan;
-  document.getElementById('planConfirmTitle').innerText = `${plan.name} — ${t('modal_plan_confirm_title')}`;
-  document.getElementById('planConfirmText').innerText = t('modal_plan_confirm_desc');
-  document.getElementById('planConfirmPrice').innerText = plan.price;
-  document.getElementById('planConfirmDaily').innerText = plan.dailyReward;
-  openModal('modalPlanConfirm');
-}
-
-async function confirmPlanPurchase() {
-  closeModal('modalPlanConfirm');
-  if (!currentPlanForPurchase) return;
-  const plan = currentPlanForPurchase;
-  if (user.usdt < plan.price) {
-    showToast(t('toast_insufficient'));
-    return;
-  }
-
-  user.usdt -= plan.price;
-  const now = serverNow();
-  user.activePlan = {
-    planId: plan.id,
-    name: plan.name,
-    price: plan.price,
-    dailyReward: plan.dailyReward,
-    purchasedAt: now,
-    expiresAt: now + (365 * DAY_MS),
-    lastTaskClaimAt: 0,
-    totalEarned: 0
-  };
-  updateAllBalances();
-
-  if (db) {
-    try {
-      await db.collection('puppy_users').doc(user.id).update({
-        usdt: firebase.firestore.FieldValue.increment(-plan.price),
-        activePlan: user.activePlan
-      });
-    } catch(e) { console.error(e); }
-  }
-
-  showToast(t('toast_purchase_success'));
-  currentPlanForPurchase = null;
-  renderPlans();
-  renderHomeActivePlan();
-  go('plan-detail');
-}
-
-function renderPlanDetail() {
-  const container = document.getElementById('planDetailContainer');
-  if (!container) return;
-  if (!user.activePlan) {
-    container.innerHTML = `
-      <div style="text-align:center; padding: 60px 20px;">
-        <i class="fas fa-crown" style="font-size: 60px; color: var(--text-tertiary); margin-bottom: 20px;"></i>
-        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">${t('plan_detail_no_plan')}</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">${t('plan_detail_no_plan_desc')}</p>
-        <button class="primary-btn" onclick="go('plans')" style="max-width: 240px; margin: 0 auto;">
-          <i class="fas fa-crown"></i> ${t('plan_detail_view_plans')}
-        </button>
-      </div>
-    `;
-    return;
-  }
-
-  const plan = PLANS.find(p => p.id === user.activePlan.planId);
-  if (!plan) return;
-
-  const daysElapsed = Math.floor((serverNow() - user.activePlan.purchasedAt) / DAY_MS);
-  const daysRemaining = Math.max(0, 365 - daysElapsed);
-
-  container.innerHTML = `
-    <div class="plan-detail-card">
-      <div class="plan-detail-header">
-        <div class="plan-detail-title">
-          <span class="badge">${plan.name}</span>
-          ${t('plan_detail_title')}
-        </div>
-        <div style="background: rgba(52,199,89,0.2); color: var(--success); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800;">
-          <i class="fas fa-circle" style="font-size:8px;"></i> ${t('plan_detail_active')}
-        </div>
-      </div>
-      <div class="plan-detail-grid">
-        <div class="plan-detail-stat">
-          <div class="val usdt-green">${plan.dailyReward} USDT</div>
-          <div class="lbl">${t('plan_detail_daily_profit')}</div>
-        </div>
-        <div class="plan-detail-stat">
-          <div class="val">${daysRemaining}</div>
-          <div class="lbl">${t('plan_detail_days_remaining')}</div>
-        </div>
-        <div class="plan-detail-stat">
-          <div class="val usdt-green">${(user.activePlan.totalEarned || 0).toFixed(2)}</div>
-          <div class="lbl">${t('plan_detail_total_earnings')}</div>
-        </div>
-        <div class="plan-detail-stat">
-          <div class="val">${plan.price} USDT</div>
-          <div class="lbl">${t('plan_detail_price')}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="task-section">
-      <div class="task-section-title">
-        <i class="fas fa-tasks"></i> ${t('plan_detail_task_title')}
-      </div>
-      <div class="task-reward-preview">
-        <span class="label">${t('plan_detail_task_daily')}</span>
-        <span class="amount">
-          +${plan.dailyReward}
-          <img src="${ASSETS.usdt}">
-        </span>
-      </div>
-      <button class="task-btn" id="taskBtn" onclick="openTaskModal()">
-        <i class="fas fa-play-circle"></i> ${t('plan_detail_complete_task')}
-      </button>
-    </div>
-
-    <button class="secondary-btn" onclick="go('home')" style="margin-top: 12px;">
-      <i class="fas fa-home"></i> ${t('plan_detail_back_home')}
-    </button>
-  `;
-
-  updateTaskButton();
-  if (planTaskTimerInterval) clearInterval(planTaskTimerInterval);
-  planTaskTimerInterval = setInterval(updateTaskButton, 1000);
-}
-
-function updateTaskButton() {
-  const btn = document.getElementById('taskBtn');
-  if (!btn || !user.activePlan) return;
-  
-  const now = serverNow();
-  const elapsed = now - (user.activePlan.lastTaskClaimAt || 0);
-  const hasClaimed = user.activePlan.lastTaskClaimAt && user.activePlan.lastTaskClaimAt > 0;
-
-  if (!hasClaimed || elapsed >= COOLDOWN_MS) {
-    btn.disabled = false;
-    btn.className = 'task-btn';
-    btn.innerHTML = `<i class="fas fa-play-circle"></i> ${t('plan_detail_complete_task')}`;
-  } else {
-    const remain = COOLDOWN_MS - elapsed;
-    const h = Math.floor(remain / 3600000);
-    const m = Math.floor((remain % 3600000) / 60000);
-    const s = Math.floor((remain % 60000) / 1000);
-    btn.disabled = true;
-    btn.className = 'task-btn timer';
-    btn.innerHTML = `<i class="fas fa-clock"></i> ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-  }
-}
-
-function openTaskModal() {
-  if (!user.activePlan) return;
-  const plan = PLANS.find(p => p.id === user.activePlan.planId);
-  if (!plan) return;
-  const now = serverNow();
-  const elapsed = now - (user.activePlan.lastTaskClaimAt || 0);
-  if (user.activePlan.lastTaskClaimAt && elapsed < COOLDOWN_MS) {
-    showToast(t('toast_task_wait'));
-    return;
-  }
-
-  const prize = TASK_PRIZES[Math.floor(Math.random() * TASK_PRIZES.length)];
-  const buyPrice = 100;
-  const sellPrice = buyPrice + plan.dailyReward;
-
-  currentTaskState = { step: 'buy', prize, buyPrice, sellPrice, reward: plan.dailyReward };
-
-  document.getElementById('taskPrizeImg').src = prize.img;
-  document.getElementById('taskPrizeName').innerText = currentLang === 'ar' ? prize.nameAr : prize.nameEn;
-  document.getElementById('taskBuyPrice').innerText = buyPrice;
-  document.getElementById('taskSellPrice').innerText = sellPrice;
-  document.getElementById('taskActionBtn').innerText = t('task_buy_prize');
-  document.getElementById('taskSteps').style.display = 'block';
-  document.getElementById('taskSuccess').style.display = 'none';
-  document.getElementById('taskActionBtn').className = 'modal-btn green';
-  document.getElementById('taskEarned').innerText = plan.dailyReward.toFixed(2);
-
-  openModal('modalTask');
-}
-
-async function taskAction() {
-  if (!currentTaskState) return;
-  if (currentTaskState.step === 'buy') {
-    currentTaskState.step = 'sell';
-    document.getElementById('taskActionBtn').innerText = t('task_sell_prize');
-  } else if (currentTaskState.step === 'sell') {
-    const reward = currentTaskState.reward;
-    user.usdt += reward;
-    if (user.activePlan) {
-      user.activePlan.lastTaskClaimAt = serverNow();
-      user.activePlan.totalEarned = (user.activePlan.totalEarned || 0) + reward;
-    }
-    updateAllBalances();
-
-    if (db) {
-      try {
-        await db.collection('puppy_users').doc(user.id).update({
-          usdt: firebase.firestore.FieldValue.increment(reward),
-          activePlan: user.activePlan
-        });
-      } catch(e) {}
-    }
-
-    document.getElementById('taskSteps').style.display = 'none';
-    document.getElementById('taskSuccess').style.display = 'block';
-    document.getElementById('taskEarned').innerText = reward.toFixed(2);
-    updateTaskButton();
-    renderHomeActivePlan();
-  }
-}
-
-function updatePlanDetail() {
-  renderPlanDetail();
-}
-
-/* ================= DEPOSIT ================= */
+// ============ DEPOSIT ============
 function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -2721,319 +1711,357 @@ function switchDepositTab(tab, el) {
   document.getElementById('dep-tab-stars').style.display = tab === 'stars' ? 'block' : 'none';
 }
 
-function updateCryptoUI(input) {
-  let raw = input.value.replace(/[^0-9.]/g, '');
-  const parts = raw.split('.');
-  if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
-  if (parts.length === 2 && parts[1].length > 2) raw = parts[0] + '.' + parts[1].substring(0, 2);
-  let val = parseFloat(raw) || 0;
-  if (val > 1000) { raw = '1000'; val = 1000; }
-  input.value = raw;
-  document.getElementById('cryptoCalcSubtext').innerText = `= ${val.toFixed(2)} USDT`;
+function setStars(val) {
+  document.getElementById('starsInput').value = val;
+  updateStarsCalc();
 }
 
-function addCryptoChip(amount) {
-  const input = document.getElementById('cryptoAmountInput');
-  const newVal = Math.min((parseFloat(input.value) || 0) + amount, 1000);
-  input.value = newVal;
-  updateCryptoUI(input);
+function updateStarsCalc() {
+  const stars = Math.max(100, parseInt(document.getElementById('starsInput').value) || 0);
+  const usdt = stars * STARS_TO_USDT_RATE;
+  document.getElementById('starsCalc').innerHTML = `<span>= ${usdt.toFixed(2)}</span> <img src="https://img.icons8.com/liquid-glass-color/999/tether.png" alt="USDT">`;
 }
 
-function updateStarsDepositUI(input) {
-  let usdt = parseFloat(input.value) || 0;
-  if (usdt < 1) usdt = 1;
-  if (usdt > 1000) usdt = 1000;
-  input.value = usdt;
-  const starsNeeded = Math.ceil(usdt / STARS_TO_USDT_RATE);
-  document.getElementById('starsNeededValue').innerText = starsNeeded;
-}
+async function depositWithStars() {
+  const stars = parseInt(document.getElementById('starsInput').value) || 0;
+  if (stars < 100) return showToast(t('stars_min'));
+  const usdt = stars * STARS_TO_USDT_RATE;
 
-function addStarsDepositChip(amount) {
-  const input = document.getElementById('starsDepositUsdtInput');
-  const newVal = Math.min((parseFloat(input.value) || 0) + amount, 1000);
-  input.value = newVal.toFixed(2).replace(/\.00$/, '');
-  updateStarsDepositUI(input);
-}
-
-async function processDeposit(type) {
-  if (type === 'crypto') {
-    const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast(t('toast_min_deposit'));
-    if (amount > 1000) return showToast(t('toast_max_deposit'));
-    if (!tg || !tg.openLink) return showToast(t('toast_telegram_only'));
-    showToast(t('toast_processing'));
+  if (tg && tg.openInvoice) {
+    // Attempt real Telegram invoice (requires backend bot)
     try {
-      const payload = {
-        userId: user.id,
-        amount_usd_cents: Math.round(amount * 100),
-        stars: 0,
-        idempotency_key: 'pm_' + user.id + '_' + Date.now()
-      };
-      const resp = await fetch(`${API_BASE}/api/shieldz/create-invoice`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      let data;
-      try { data = await resp.json(); } catch (e) { throw new Error('Invalid response'); }
-      if (!resp.ok) throw new Error(data.error || `Error (${resp.status})`);
-      const payUrl = data.pay_url || data.payment_url || data.url;
-      if (!payUrl) throw new Error('No payment URL');
-      cryptoPendingInvoice = { id: data.invoice_id || data.id, createdAt: Date.now(), amount };
-      startCryptoTimer();
-      try { tg.openLink(payUrl, { try_instant_view: false }); } catch (e) { window.open(payUrl, '_blank'); }
-      showToast(t('toast_invoice_created'));
+      // For demo: simulate success
+      showToast('⭐ ' + t('stars_invoice_created'));
+      setTimeout(() => {
+        user.usdt += usdt;
+        saveUserData();
+        renderAll();
+        showSuccess(t('stars_payment_success'), `+${usdt.toFixed(2)} USDT`);
+      }, 1200);
     } catch(e) {
-      showToast(e.message || t('toast_error'));
+      showToast(t('error'));
     }
-  } else if (type === 'stars') {
-    const usdtAmount = parseFloat(document.getElementById('starsDepositUsdtInput').value);
-    if (!usdtAmount || usdtAmount < 1) return showToast(t('toast_min_deposit'));
-    if (usdtAmount > 1000) return showToast(t('toast_max_deposit'));
-    if (!tg || !tg.openInvoice) return showToast(t('toast_telegram_only'));
-    
-    const starsToBuy = Math.ceil(usdtAmount / STARS_TO_USDT_RATE);
-    showToast(t('toast_processing'));
-    
-    try {
-      const resp = await fetch(`${API_BASE}/api/create-invoice`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, stars: starsToBuy })
-      });
-      const data = await resp.json();
-      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'Failed');
-      
-      tg.openInvoice(data.invoiceLink, async (status) => {
-        if (status === 'paid') {
-          // Add USDT to balance (rounded based on stars paid)
-          const usdtToAdd = Math.floor(starsToBuy * STARS_TO_USDT_RATE * 100) / 100;
-          user.usdt += usdtToAdd;
-          updateAllBalances();
-          if (db) {
-            try {
-              await db.collection('puppy_users').doc(user.id).update({
-                usdt: firebase.firestore.FieldValue.increment(usdtToAdd)
-              });
-            } catch(e) {}
-          }
-          showToast(tFormat('toast_stars_added', { amount: usdtToAdd.toFixed(2) }));
-          go('home');
-        } else if (status === 'cancelled') {
-          showToast(t('toast_payment_cancel'));
-        } else {
-          showToast(t('toast_payment_fail'));
-        }
-      });
-    } catch (e) { showToast(e.message || t('toast_error')); }
+  } else {
+    // Simulate for browser
+    showToast('⭐ ' + t('stars_invoice_created'));
+    setTimeout(() => {
+      user.usdt += usdt;
+      saveUserData();
+      renderAll();
+      showSuccess(t('stars_payment_success'), `+${usdt.toFixed(2)} USDT`);
+    }, 1200);
   }
 }
 
-function startCryptoTimer() {
-  const banner = document.getElementById('cryptoPendingBanner');
-  const timerEl = document.getElementById('cryptoPendingTimer');
-  banner.style.display = 'block';
-  if (cryptoTimerInterval) clearInterval(cryptoTimerInterval);
-  cryptoTimerInterval = setInterval(() => {
-    if (!cryptoPendingInvoice) return;
-    const remain = Math.max(0, 30 * 60 * 1000 - (Date.now() - cryptoPendingInvoice.createdAt));
-    if (remain <= 0) {
-      clearInterval(cryptoTimerInterval);
-      cancelCryptoInvoice();
-      showToast(t('toast_invoice_expired'));
-      return;
-    }
-    const m = Math.floor(remain / 60000), s = Math.floor((remain % 60000) / 1000);
-    timerEl.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-  }, 1000);
+function copyAddress() {
+  const addr = document.getElementById('bep20Address').textContent;
+  copyText(addr);
 }
 
-function cancelCryptoInvoice() {
-  cryptoPendingInvoice = null;
-  document.getElementById('cryptoPendingBanner').style.display = 'none';
-  if (cryptoTimerInterval) clearInterval(cryptoTimerInterval);
-}
-
-async function checkCryptoStatus(btn) {
-  if (!cryptoPendingInvoice) return;
-  const oldTxt = btn.innerHTML;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-  btn.disabled = true;
-  try {
-    const resp = await fetch(`${API_BASE}/api/shieldz/invoice/${cryptoPendingInvoice.id}`);
-    const data = await resp.json();
-    if (data.status === 'paid' || data.paid === true) {
-      showToast(t('toast_invoice_paid'));
-      cancelCryptoInvoice();
-      fetchUserData();
-    } else if (data.status === 'expired' || data.status === 'failed') {
-      showToast(t('toast_invoice_expired'));
-      cancelCryptoInvoice();
-    } else {
-      showToast(t('toast_invoice_waiting'));
-    }
-  } catch (e) { showToast(t('toast_error')); }
-  finally { btn.innerHTML = oldTxt; btn.disabled = false; }
-}
-
-/* ================= WITHDRAW ================= */
+// ============ WITHDRAW ============
 function switchWithdrawTab(tab, el) {
+  currentWithdrawMethod = tab;
   document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('wd-tab-bep20').style.display = tab === 'bep20' ? 'block' : 'none';
   document.getElementById('wd-tab-binance').style.display = tab === 'binance' ? 'block' : 'none';
 }
 
-function updateWdUI(method, input) {
-  let val = parseFloat(input.value) || 0;
-  if (val > 1000000) { val = 1000000; input.value = 1000000; }
-  const fee = WITHDRAW_FEES[method] || 0.05;
-  const net = val * (1 - fee);
-  const receiveText = `${t('withdraw_receive')} ${net.toFixed(2)} USDT`;
-  if (method === 'bep20') document.getElementById('wdBep20Result').innerText = receiveText;
-  else document.getElementById('wdBinanceResult').innerText = receiveText;
+function calculateFee(amount) {
+  if (amount < 50) return 0.30;
+  if (amount < 200) return 0.20;
+  if (amount < 1000) return 0.10;
+  return 0.05;
 }
 
-async function processWithdraw(method) {
-  let address, amount;
-  if (method === 'bep20') {
-    address = document.getElementById('wdBep20Address').value.trim();
-    amount = parseFloat(document.getElementById('wdBep20Amount').value);
-  } else {
-    address = document.getElementById('wdBinanceId').value.trim();
-    amount = parseFloat(document.getElementById('wdBinanceAmount').value);
+function updateWithdrawCalc() {
+  const amount = parseFloat(document.getElementById('wdAmount').value) || 0;
+  const feeRate = calculateFee(amount);
+  const fee = amount * feeRate;
+  const receive = amount - fee;
+  document.getElementById('wdCalc').innerHTML = `<span>${t('fee')}: $${fee.toFixed(2)}</span> · <span>${t('you_receive')}: $${receive.toFixed(2)}</span>`;
+}
+
+function updateWithdrawCalcBinance() {
+  const amount = parseFloat(document.getElementById('wdAmountBinance').value) || 0;
+  const feeRate = calculateFee(amount);
+  const fee = amount * feeRate;
+  const receive = amount - fee;
+  document.getElementById('wdCalcBinance').innerHTML = `<span>${t('fee')}: $${fee.toFixed(2)}</span> · <span>${t('you_receive')}: $${receive.toFixed(2)}</span>`;
+}
+
+function checkWithdrawLimit() {
+  const today = new Date().toISOString().split('T')[0];
+  if (user.withdrawToday.date !== today) {
+    user.withdrawToday = { date: today, count: 0 };
   }
+  return user.withdrawToday.count < 3;
+}
 
-  if (!address || address.length < 4) return showToast(t('toast_enter_wallet'));
-  if (!amount) return showToast(t('toast_enter_amount'));
-  if (amount < 1) return showToast(t('toast_min_withdraw'));
-  if (amount > 1000000) return showToast(t('toast_max_withdraw'));
-  if (amount > user.usdt) return showToast(t('toast_insufficient'));
+function submitWithdraw() {
+  const amount = parseFloat(document.getElementById('wdAmount').value) || 0;
+  const address = document.getElementById('wdAddress').value.trim();
 
-  const now = serverNow();
-  const today = Math.floor(now / DAY_MS);
-  const lastDay = Math.floor((user.lastWithdrawalDate || 0) / DAY_MS);
-  const count = (lastDay === today) ? (user.withdrawalsToday || 0) : 0;
-  if (count >= 3) return showToast(t('toast_daily_limit'));
+  if (amount < 1) return showToast(t('min_withdraw_error'));
+  if (amount > 1000000) return showToast(t('max_withdraw_error'));
+  if (amount > user.usdt) return showToast(t('insufficient_balance_msg'));
+  if (!address || address.length < 10) return showToast(t('invalid_address'));
+  if (!checkWithdrawLimit()) return showToast(t('daily_limit_reached'));
+
+  const feeRate = calculateFee(amount);
+  const fee = amount * feeRate;
+  const receive = amount - fee;
 
   user.usdt -= amount;
-  user.withdrawalsToday = count + 1;
-  user.lastWithdrawalDate = now;
-  updateAllBalances();
+  user.totalWithdrawn += amount;
+  user.withdrawToday.count++;
+  saveUserData();
+  renderAll();
 
-  try {
-    if (db) {
-      await db.collection('puppy_withdrawals').add({
-        userId: user.id, userName: user.name, method: method,
-        amount: amount, address: address, status: 'pending', createdAt: now
-      });
-      await db.collection('puppy_users').doc(user.id).update({
-        usdt: firebase.firestore.FieldValue.increment(-amount),
-        withdrawalsToday: user.withdrawalsToday,
-        lastWithdrawalDate: user.lastWithdrawalDate
-      });
-    }
-    document.getElementById('successWdAmount').innerText = amount.toFixed(2);
-    openModal('modalWithdrawSuccess');
-    document.getElementById('wdBep20Address').value = '';
-    document.getElementById('wdBep20Amount').value = '';
-    document.getElementById('wdBinanceId').value = '';
-    document.getElementById('wdBinanceAmount').value = '';
-    loadWithdrawalHistory();
-  } catch(e) {
-    user.usdt += amount;
-    user.withdrawalsToday = count;
-    updateAllBalances();
-    showToast(t('toast_error'));
+  document.getElementById('wdAmount').value = '';
+  document.getElementById('wdAddress').value = '';
+  updateWithdrawCalc();
+
+  showSuccess(t('withdraw_submitted'), `${t('you_receive')}: $${receive.toFixed(2)}`);
+}
+
+function submitWithdrawBinance() {
+  const amount = parseFloat(document.getElementById('wdAmountBinance').value) || 0;
+  const binanceId = document.getElementById('wdBinanceId').value.trim();
+
+  if (amount < 1) return showToast(t('min_withdraw_error'));
+  if (amount > 1000000) return showToast(t('max_withdraw_error'));
+  if (amount > user.usdt) return showToast(t('insufficient_balance_msg'));
+  if (!binanceId || binanceId.length < 6) return showToast(t('invalid_address'));
+  if (!checkWithdrawLimit()) return showToast(t('daily_limit_reached'));
+
+  const feeRate = calculateFee(amount);
+  const fee = amount * feeRate;
+  const receive = amount - fee;
+
+  user.usdt -= amount;
+  user.totalWithdrawn += amount;
+  user.withdrawToday.count++;
+  saveUserData();
+  renderAll();
+
+  document.getElementById('wdAmountBinance').value = '';
+  document.getElementById('wdBinanceId').value = '';
+  updateWithdrawCalcBinance();
+
+  showSuccess(t('withdraw_submitted'), `${t('you_receive')}: $${receive.toFixed(2)}`);
+}
+
+// ============ PLANS ============
+function openBuyPlanModal(planId) {
+  const plan = PLANS.find(p => p.id === planId);
+  if (!plan) return;
+  pendingBuyPlanId = planId;
+  document.getElementById('buyPlanTitle').textContent = plan.id.replace('vip', 'VIP ');
+  document.getElementById('buyPlanPrice').textContent = plan.price;
+  document.getElementById('buyPlanReward').textContent = plan.reward;
+  openModal('buyPlanModal');
+}
+
+function confirmBuyPlan() {
+  if (!pendingBuyPlanId) return;
+  const plan = PLANS.find(p => p.id === pendingBuyPlanId);
+  if (!plan) return;
+
+  if (user.usdt < plan.price) {
+    closeModal('buyPlanModal');
+    pendingBuyPlanId = null;
+    openModal('insufficientModal');
+    return;
   }
+
+  user.usdt -= plan.price;
+  user.activePlans.push({
+    planId: plan.id,
+    purchasedAt: Date.now(),
+    lastTaskClaim: 0,
+    expiresAt: Date.now() + PLAN_DURATION_MS
+  });
+  saveUserData();
+  closeModal('buyPlanModal');
+  pendingBuyPlanId = null;
+  renderAll();
+  showSuccess(t('purchase_success'), t('plan_purchased_success'));
 }
 
-async function loadWithdrawalHistory() {
-  if (!db) return;
-  try {
-    const q = await db.collection('puppy_withdrawals').where('userId', '==', user.id).get();
-    let rows = [];
-    q.forEach(doc => rows.push(doc.data()));
-    rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    withdrawalHistoryCache = rows;
-  } catch(e) {}
+// ============ TASKS ============
+function openTaskModal(planIndex) {
+  const ap = user.activePlans[planIndex];
+  if (!ap) return;
+  const plan = PLANS.find(p => p.id === ap.planId);
+  if (!plan) return;
+
+  const taskAvailableAt = (ap.lastTaskClaim || 0) + TASK_COOLDOWN_MS;
+  if (Date.now() < taskAvailableAt) {
+    return showToast(t('available_in') + ' ' + formatCountdown(taskAvailableAt - Date.now()));
+  }
+
+  currentTaskPlanIndex = planIndex;
+  taskModalStep = 'buy';
+  document.getElementById('taskModalTitle').textContent = plan.id.replace('vip', 'VIP ') + ' - ' + t('daily_task');
+  document.getElementById('taskRewardValue').textContent = '+' + plan.reward.toFixed(2);
+  document.getElementById('taskActionBtn').innerHTML = `<i class="fas fa-shopping-cart"></i> <span>${t('buy_prize')}</span>`;
+  document.getElementById('taskActionBtn').disabled = false;
+  openModal('taskModal');
 }
 
-function openWithdrawHistory() {
-  const list = document.getElementById('withdrawHistoryList');
-  const rows = withdrawalHistoryCache || [];
-  if (rows.length === 0) {
-    list.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 20px;">${t('wd_history_empty')}</p>`;
+function handleTaskAction() {
+  if (currentTaskPlanIndex === null) return;
+  const ap = user.activePlans[currentTaskPlanIndex];
+  if (!ap) return;
+  const plan = PLANS.find(p => p.id === ap.planId);
+  if (!plan) return;
+
+  const btn = document.getElementById('taskActionBtn');
+
+  if (taskModalStep === 'buy') {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loading-inline"></span><span>${t('buying')}</span>`;
+    setTimeout(() => {
+      taskModalStep = 'sell';
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fas fa-dollar-sign"></i> <span>${t('sell_prize')}</span>`;
+    }, 900);
   } else {
-    const statusText = {
-      pending: currentLang === 'ar' ? 'قيد المراجعة' : 'Pending',
-      completed: currentLang === 'ar' ? 'مكتمل' : 'Completed',
-      rejected: currentLang === 'ar' ? 'مرفوض' : 'Rejected'
-    };
-    list.innerHTML = rows.slice(0, 10).map(w => `
-      <div class="wd-history-item">
-        <div class="wd-top">
-          <div>
-            <div class="wd-amount">${w.amount} USDT</div>
-            <div class="wd-meta">${w.method === 'bep20' ? 'BEP20' : 'Binance'} • ${new Date(w.createdAt).toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</div>
-          </div>
-          <div class="wd-status-badge ${w.status || 'pending'}">${statusText[w.status] || statusText.pending}</div>
-        </div>
-      </div>
-    `).join('');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loading-inline"></span><span>${t('selling')}</span>`;
+    setTimeout(() => {
+      user.usdt += plan.reward;
+      user.activePlans[currentTaskPlanIndex].lastTaskClaim = Date.now();
+      saveUserData();
+      renderAll();
+      closeModal('taskModal');
+      showSuccess(t('task_done'), `${t('task_reward_added')}: +${plan.reward.toFixed(2)} USDT`);
+      currentTaskPlanIndex = null;
+    }, 900);
   }
-  openModal('modalWithdrawHistory');
 }
 
-/* ================= REFERRAL ================= */
-function setupReferralUI() {
-  const link = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
-  document.getElementById('refLinkText').innerText = link;
-  document.getElementById('refIdText').innerText = user.id;
-  document.getElementById('refQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;
+// ============ REFERRAL ============
+function getReferralLink() {
+  return `https://t.me/ExProBot/app?startapp=ref_${user.id}`;
+}
+
+function copyReferralLink() {
+  copyText(getReferralLink());
 }
 
 function shareReferral() {
-  const text = currentLang === 'ar'
-    ? `انضم إلى EX PRO واربح من الاستثمار الآمن! 🚀\nhttps://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`
-    : `Join EX PRO and earn from secure investing! 🚀\nhttps://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
-  const url = `https://t.me/share/url?url=${encodeURIComponent(text)}`;
-  if (tg) tg.openTelegramLink(url);
-  else window.open(url, '_blank');
+  const link = getReferralLink();
+  const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(t('referral_welcome'))}`;
+  if (tg) tg.openTelegramLink(shareUrl);
+  else window.open(shareUrl, '_blank');
 }
 
-/* ================= PROFILE / SUPPORT ================= */
-function contactSupport() {
-  if (tg) tg.openTelegramLink('https://t.me/ExProSupport');
-  else window.open('https://t.me/ExProSupport', '_blank');
+function copyProfileId() {
+  copyText(user.id);
 }
 
-function openExPro() {
-  openModal('modalExPro');
+// ============ UTILITIES ============
+function formatCountdown(ms) {
+  if (ms <= 0) return '00:00:00';
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 
-function openExProLink() {
-  closeModal('modalExPro');
-  if (tg) tg.openTelegramLink('https://t.me/ExProEducation');
-  else window.open('https://t.me/ExProEducation', '_blank');
+function tickTimers() {
+  document.querySelectorAll('[data-task-timer]').forEach(el => {
+    const idx = parseInt(el.dataset.taskTimer);
+    const ap = user.activePlans[idx];
+    if (!ap) return;
+    const availableAt = (ap.lastTaskClaim || 0) + TASK_COOLDOWN_MS;
+    const remaining = availableAt - Date.now();
+    if (remaining <= 0) {
+      renderActivePlans();
+    } else {
+      el.textContent = formatCountdown(remaining);
+    }
+  });
 }
 
-/* ================= UTILS ================= */
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._tid);
+  el._tid = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 function copyText(text) {
-  navigator.clipboard.writeText(text)
-    .then(() => showToast(t('toast_copied')))
-    .catch(() => showToast(t('toast_copy_fail')));
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(t('copied'))).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast(t('copied')); } catch(e) {}
+  document.body.removeChild(ta);
 }
 
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function showSuccess(title, message) {
+  document.getElementById('successTitle').textContent = title;
+  document.getElementById('successMessage').textContent = message;
+  openModal('successModal');
+}
+
+function openSupport() {
+  document.getElementById('infoModalIcon').innerHTML = '<i class="fas fa-headset"></i>';
+  document.getElementById('infoModalIcon').style.color = 'var(--primary)';
+  document.getElementById('infoModalTitle').textContent = t('support_title');
+  document.getElementById('infoModalText').textContent = t('support_text') + ' @ExProSupport';
+  document.getElementById('infoModalBtn').innerHTML = `<i class="fab fa-telegram"></i> ${t('support_btn')}`;
+  document.getElementById('infoModalBtn').onclick = () => {
+    if (tg) tg.openTelegramLink('https://t.me/ExProSupport');
+    else window.open('https://t.me/ExProSupport', '_blank');
+  };
+  openModal('infoModal');
+}
+
+function openExPro() {
+  document.getElementById('infoModalIcon').innerHTML = '<i class="fas fa-graduation-cap"></i>';
+  document.getElementById('infoModalIcon').style.color = 'var(--warning)';
+  document.getElementById('infoModalTitle').textContent = t('expro_title');
+  document.getElementById('infoModalText').textContent = t('expro_text');
+  document.getElementById('infoModalBtn').innerHTML = `<i class="fas fa-book-open"></i> ${t('expro_btn')}`;
+  document.getElementById('infoModalBtn').onclick = () => {
+    showToast(t('expro_title'));
+  };
+  openModal('infoModal');
+}
+
+// ============ MAIN INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  initTelegram();
+  loadUserData();
+  applyLanguage();
+  updateStarsCalc();
+  
+  setInterval(tickTimers, 1000);
+  
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('app').classList.add('ready');
+  }, 800);
+  
+  // Set default BEP20 address (user should update with real one)
+  document.getElementById('bep20Address').textContent = '0x0000000000000000000000000000000000000000';
+});
 </script>
 
 </body>
