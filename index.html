@@ -10,6 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!-- مشغل TGS (defer = لا يعطل الرندر) -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <style>
 :root {
   --bg-main: #0f0f11;
@@ -129,7 +133,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   margin-left: -5px; transform: scale(1.1);
 }
 .home-card .card-video-icon {
-  width: 95px; height: 95px; object-fit: contain;
+  width: 95px; height: 95px;
   margin-left: -5px; transform: scale(1.3);
   background: transparent;
 }
@@ -522,7 +526,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 @keyframes crashMoveStars { 0% { background-position: 0 0; } 100% { background-position: -200px 200px; } }
 
 .crash-rocket, .crash-waiting-icon {
-  position: absolute; object-fit: contain;
+  position: absolute;
   transition: opacity 0.3s ease; opacity: 0;
   pointer-events: none; z-index: 2;
   display: block;
@@ -596,6 +600,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cashout { background: var(--success); }
 .crash-main-btn.cancel { background: var(--danger); color: #fff; }
 .crash-main-btn.disabled { background: var(--bg-soft); color: var(--text-secondary); pointer-events: none; }
+
+/* ===== TGS container ===== */
+.tgs-box { display: block; }
+.tgs-box svg { width: 100% !important; height: 100% !important; display: block; }
 </style>
 </head>
 <body>
@@ -635,10 +643,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <h3>Crash</h3>
             <p>لعبة السرعة</p>
           </div>
-          <video autoplay loop muted playsinline preload="auto" class="card-video-icon" id="home-crash-video">
-            <source src="gifts_by_StickerEmojiRobot-010.webm" type="video/webm">
-            <source src="./gifts_by_StickerEmojiRobot-010.webm" type="video/webm">
-          </video>
+          <div class="card-video-icon tgs-box" id="home-crash-tgs"></div>
         </div>
 
         <div class="home-card card-cases" onclick="showToast('قريباً')">
@@ -684,14 +689,8 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view" id="view-crash">
       <div class="crash-game-area" id="crash-game-area">
         <div class="crash-stars-bg" id="crash-stars-bg"></div>
-        <video autoplay loop muted playsinline preload="auto" class="crash-rocket" id="crash-rocket">
-          <source src="Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00.webm" type="video/webm">
-          <source src="./Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00.webm" type="video/webm">
-        </video>
-        <video autoplay loop muted playsinline preload="auto" class="crash-waiting-icon" id="crash-waiting-icon">
-          <source src="OwledDidi_by_StickerEmojiRobot-012.webm" type="video/webm">
-          <source src="./OwledDidi_by_StickerEmojiRobot-012.webm" type="video/webm">
-        </video>
+        <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
+        <div class="crash-waiting-icon tgs-box" id="crash-waiting-tgs"></div>
       </div>
       <div class="crash-bottom-panel">
         <div class="crash-bet-controls">
@@ -1271,66 +1270,106 @@ async function syncUserData(updates) {
   } catch (e) {}
 }
 
-/* ============ VIDEO LOADING (IMPORTANT FIX) ============ */
-function initVideos() {
-  const videoIds = ['home-crash-video', 'crash-rocket', 'crash-waiting-icon'];
-  videoIds.forEach(id => {
-    const v = document.getElementById(id);
-    if (!v) return;
-    
-    // Force muted (required for autoplay on all browsers)
-    v.muted = true;
-    v.defaultMuted = true;
-    v.playsInline = true;
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', '');
-    
-    // Load explicitly
-    try { v.load(); } catch(e) {}
-    
-    // Try to play
-    const playPromise = v.play();
-    if (playPromise && playPromise.catch) {
-      playPromise.catch(err => {
-        console.warn('⚠️ Autoplay blocked for', id, '- will retry on user interaction:', err.name);
-        // Retry on first user interaction
-        const retry = () => {
-          v.play().catch(e => console.warn('Retry play failed:', e.name));
-        };
-        document.addEventListener('touchstart', retry, { once: true, passive: true });
-        document.addEventListener('click', retry, { once: true });
-      });
-    }
-    
-    // Log load events
-    v.addEventListener('loadeddata', () => {
-      console.log('✅ Video loaded:', id, '-', v.videoWidth + 'x' + v.videoHeight);
-    });
-    
-    v.addEventListener('canplay', () => {
-      console.log('✅ Video canplay:', id);
-    });
-    
-    v.addEventListener('error', () => {
-      const src = v.currentSrc || v.src || (v.querySelector('source')?.src);
-      console.error('❌ Video load error:', id, '- src:', src, '- code:', v.error?.code, '- message:', v.error?.message);
-      console.error('👉 Check: 1) File exists? 2) Not in Git LFS? 3) Correct filename/case?');
-    });
-    
-    // Check after 5s if video never loaded
-    setTimeout(() => {
-      if (v.readyState === 0) {
-        console.error('❌ Video failed to load after 5s:', id);
-        console.error('👉 Likely causes:');
-        console.error('   1) File is in Git LFS (check raw URL shows "version https://git-lfs...")');
-        console.error('   2) Filename case mismatch (GitHub Pages is case-sensitive)');
-        console.error('   3) File is missing or in a different folder');
-        console.error('   4) File > 100MB');
-        console.error('   Current src:', v.currentSrc || v.querySelector('source')?.src);
+/* ============ TGS LOADER (fast, cached) ============ */
+const TGS = {
+  _zipCache: {},
+  _loading: {},
+  _anims: {},
+
+  async loadZip(zipName) {
+    if (this._zipCache[zipName]) return this._zipCache[zipName];
+    if (this._loading[zipName]) return this._loading[zipName];
+
+    this._loading[zipName] = (async () => {
+      if (!window.JSZip || !window.pako) throw new Error('libraries not ready');
+      const url = './' + zipName;
+      const resp = await fetch(url, { cache: 'force-cache' });
+      if (!resp.ok) throw new Error('ZIP fetch ' + resp.status + ' at ' + url);
+      const buf = await resp.arrayBuffer();
+      const zip = await JSZip.loadAsync(buf);
+      const files = Object.values(zip.files)
+        .filter(f => !f.dir && f.name.toLowerCase().endsWith('.tgs'))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const list = [];
+      for (const f of files) {
+        try {
+          const compressed = await f.async('uint8array');
+          const jsonText = pako.ungzip(compressed, { to: 'string' });
+          list.push(JSON.parse(jsonText));
+        } catch (e) { console.warn('TGS parse skip:', f.name, e); }
       }
-    }, 5000);
-  });
+      if (!list.length) throw new Error('لا يوجد TGS صالح في ' + zipName);
+      this._zipCache[zipName] = list;
+      return list;
+    })();
+
+    try { return await this._loading[zipName]; }
+    finally { delete this._loading[zipName]; }
+  },
+
+  async playIn(element, zipName, index = 0) {
+    if (!element) throw new Error('element missing');
+    const list = await this.loadZip(zipName);
+    const data = list[index % list.length];
+    if (this._anims[element.id]) {
+      try { this._anims[element.id].destroy(); } catch(e) {}
+    }
+    element.innerHTML = '';
+    const anim = lottie.loadAnimation({
+      container: element,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      animationData: data,
+      rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+    });
+    this._anims[element.id] = anim;
+    return anim;
+  },
+
+  replayAll() {
+    Object.values(this._anims || {}).forEach(a => {
+      try { a.play(); } catch(e) {}
+    });
+  },
+
+  replay(ids) {
+    ids.forEach(id => {
+      const a = this._anims[id];
+      if (a) { try { a.play(); } catch(e) {} }
+    });
+  }
+};
+
+const ZIP_ROCKET = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00-tgs.zip';
+const ZIP_BOOK   = 'sticks_Timeless_Book_by_StickerEmojiRobot-002-tgs.zip';
+
+let _tgsInitStarted = false;
+async function initTgsStickers() {
+  if (_tgsInitStarted) return;
+  _tgsInitStarted = true;
+
+  // انتظر تحميل المكتبات (defer)
+  for (let i = 0; i < 60; i++) {
+    if (window.lottie && window.JSZip && window.pako) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if (!window.lottie) { console.warn('lottie لم يُحمَّل'); return; }
+
+  // صاروخ Crash (نفس الملف في الرئيسية وفي صفحة Crash — كاش واحد)
+  TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
+    .catch(e => console.warn('home crash TGS:', e.message));
+
+  TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET)
+    .catch(e => console.warn('crash rocket TGS:', e.message));
+
+  // أيقونة الانتظار — كتاب
+  TGS.playIn(document.getElementById('crash-waiting-tgs'), ZIP_BOOK)
+    .catch(e => console.warn('crash waiting TGS:', e.message));
 }
+
+/* ملاحظة: تم استبدال الفيديوهات بـ TGS */
+function initVideos() { /* no-op */ }
 
 document.addEventListener('DOMContentLoaded', () => {
   initTelegram();
@@ -1338,6 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
   initVideos();
+  initTgsStickers();
   initFirebase();
   setTimeout(() => {
     document.getElementById('splash').classList.add('hide');
@@ -1349,11 +1389,8 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     if (isCrashViewActive()) saveActiveRoundState();
   } else {
-    // Replay videos when tab becomes visible (some browsers pause them)
-    ['home-crash-video', 'crash-rocket', 'crash-waiting-icon'].forEach(id => {
-      const v = document.getElementById(id);
-      if (v && v.paused) v.play().catch(()=>{});
-    });
+    // استئناف ملصقات TGS عند العودة
+    if (typeof TGS !== 'undefined') TGS.replayAll();
     if (db) {
       calibrateServerTime().then(() => initDailyLogin());
       if (isCrashViewActive()) checkAndResumeCrashRound();
@@ -1393,12 +1430,8 @@ function go(viewName) {
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
     startCrashGame();
-    // Ensure crash videos are playing
     setTimeout(() => {
-      ['crash-rocket', 'crash-waiting-icon'].forEach(id => {
-        const v = document.getElementById(id);
-        if (v && v.paused) v.play().catch(()=>{});
-      });
+      TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs']);
     }, 100);
   } else {
     if (mainScroll.classList.contains('crash-mode')) stopCrashGame();
@@ -2115,17 +2148,17 @@ function isCrashViewActive() {
 }
 
 function crashSetRocketActive(active) {
-  const rocket = document.getElementById('crash-rocket');
+  const rocket = document.getElementById('crash-rocket-tgs');
   if (!rocket) return;
   rocket.classList.toggle('active', active);
-  if (active && rocket.paused) rocket.play().catch(()=>{});
+  if (active) TGS.replay(['crash-rocket-tgs']);
 }
 
 function crashSetWaitingActive(active) {
-  const waiting = document.getElementById('crash-waiting-icon');
+  const waiting = document.getElementById('crash-waiting-tgs');
   if (!waiting) return;
   waiting.classList.toggle('active', active);
-  if (active && waiting.paused) waiting.play().catch(()=>{});
+  if (active) TGS.replay(['crash-waiting-tgs']);
 }
 
 /* ---------- Firebase persistence ---------- */
