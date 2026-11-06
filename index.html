@@ -202,130 +202,43 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: transparent;
 }
 
-/* ============ SPIN / CASES (Carousel) ============ */
+/* ============ SPIN / CASES ============ */
 #view-spin { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-spin.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
-  background: radial-gradient(ellipse 68% 48% at 50% 30%,
-    rgba(150, 180, 255, 0.16) 0%,
-    rgba(100, 140, 220, 0.06) 40%,
+  background: radial-gradient(ellipse 68% 48% at 50% 40%,
+    rgba(150, 180, 255, 0.18) 0%,
+    rgba(100, 140, 220, 0.07) 40%,
     transparent 72%);
   border-radius: 30px; padding: 24px 12px;
 }
-
-.cases-carousel-wrap {
-  position: relative;
-  width: 100%;
-  padding: 32px 0;
-  margin-bottom: 10px;
+.spin-card-container { width: 100%; display: flex; justify-content: center; margin-bottom: 30px; padding: 20px 0; }
+.spin-card {
+  width: 208px; height: 236px;
+  background: linear-gradient(165deg, rgba(52,52,70,0.94), rgba(16,16,24,0.97));
+  border-radius: 32px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 22px 55px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.20), 0 0 60px rgba(245,215,110,0.14);
+  position: relative; overflow: hidden;
 }
-.cases-pointer {
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  background: linear-gradient(180deg,
-    rgba(245,215,110,0.10) 0%,
-    var(--gold) 30%,
-    var(--gold) 70%,
-    rgba(245,215,110,0.10) 100%);
-  z-index: 10;
-  box-shadow: 0 0 20px var(--gold), 0 0 40px rgba(245,215,110,0.5);
+.spin-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(245,215,110,0.16), transparent 60%);
   pointer-events: none;
-  border-radius: 2px;
 }
-.cases-pointer::before,
-.cases-pointer::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0; height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-}
-.cases-pointer::before { top: -2px; border-top: 10px solid var(--gold); }
-.cases-pointer::after { bottom: -2px; border-bottom: 10px solid var(--gold); }
-
-.cases-viewport {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
-}
-.cases-track {
-  display: flex;
-  gap: 12px;
-  will-change: transform;
-  padding: 8px 0;
-}
-.cases-card {
-  flex: 0 0 140px;
-  width: 140px;
-  height: 200px;
-  background: linear-gradient(165deg, rgba(60,60,80,0.92), rgba(20,20,30,0.97));
-  border-radius: 20px;
+.spin-card img { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.55)); position: relative; z-index: 1; }
+.spin-card .val {
+  font-size: 20px; font-weight: 900; margin-top: 15px; color: var(--gold);
+  display: flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  padding: 6px 18px; border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.14);
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 8px;
-  position: relative;
-  overflow: hidden;
+  position: relative; z-index: 1;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 4px 14px rgba(0,0,0,0.35);
 }
-.cases-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(245,215,110,0.10), transparent 60%);
-  pointer-events: none;
-}
-.cases-card .prize-img {
-  width: 96px;
-  height: 96px;
-  object-fit: contain;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.5));
-  position: relative;
-}
-.cases-card .prize-val {
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--gold);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(0,0,0,0.35);
-  padding: 4px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.10);
-  position: relative;
-}
-.cases-card .prize-val img {
-  width: 14px; height: 14px; border-radius: 50%;
-}
-
-.cases-footer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
-}
-.cases-hint {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
+.spin-card .val img { width: 20px; height: 20px; border-radius: 50%; }
 .spin-ctrl-btn {
   flex: 1;
   background: linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
@@ -341,7 +254,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .spin-ctrl-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.14); }
 
-/* Small pill spin buttons (ticket / stars) */
 .spin-choices {
   display: flex; gap: 10px; width: 100%;
   justify-content: center; margin-top: 4px;
@@ -1016,24 +928,30 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* Big multiplier display — above the icon (moved up to top 13%) */
+/* Big multiplier display — above the icon (moved higher) */
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 13%;
+  left: 50%; top: 10%;
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
   color: #ffffff;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
-  letter-spacing: -3px;
+  letter-spacing: -2px;
   text-shadow: 0 6px 30px rgba(91,141,239,0.55), 0 0 60px rgba(91,141,239,0.35);
   z-index: 5;
   pointer-events: none;
   direction: ltr;
-  transition: color 0.2s, text-shadow 0.2s, opacity 0.3s ease;
+  transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
   white-space: nowrap;
   line-height: 1;
-  opacity: 0;
+}
+.crash-multiplier-display:empty { opacity: 0; }
+.crash-multiplier-display.waiting {
+  opacity: 0.55;
+  color: #c5c5d5;
+  text-shadow: 0 4px 20px rgba(255,255,255,0.15);
+  font-size: 52px;
 }
 .crash-multiplier-display.cashed {
   color: var(--success);
@@ -1221,12 +1139,14 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-grid-wrap {
   flex: 1;
   display: flex; align-items: center; justify-content: center;
-  padding: 12px 12px 22px;
+  padding: 10px 14px;
   min-height: 0;
   overflow: hidden;
 }
-/* Grid sized by JS — width & height set dynamically to 88% of available square */
+/* Smaller grid to leave room for Start button */
 .mines-grid {
+  width: 100%; max-width: 340px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -1303,6 +1223,20 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-cell.revealed-bomb .mines-cell-inner i { color: #ff6b6b; }
 .mines-cell.revealed-gem .mines-cell-inner i { color: #5b8def; }
 
+/* Faded background icon on unrevealed cells */
+.mines-cell-bg-icon {
+  position: absolute;
+  inset: 18%;
+  opacity: 0.13;
+  pointer-events: none;
+  filter: grayscale(1) brightness(1.4);
+}
+.mines-cell-bg-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
 .mines-bombs-row {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 8px; padding: 0 14px 10px;
@@ -1367,9 +1301,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-bet-display input::-webkit-outer-spin-button,
 .mines-bet-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+/* Add spacing so Start button sits away from bottom controls */
 .mines-main-btn {
   width: calc(100% - 28px);
-  margin: 0 14px;
+  margin: 6px 14px 0;
   padding: 15px;
   border-radius: 16px;
   font-size: 16px; font-weight: 800;
@@ -1406,13 +1341,12 @@ input:checked + .slider:before { transform: translateX(22px); }
   .page-title { font-size: 23px; }
   .podium-item.rank-1 .podium-avatar { width: 76px; height: 76px; }
   .podium-item.rank-2 .podium-avatar, .podium-item.rank-3 .podium-avatar { width: 64px; height: 64px; }
-  .mines-grid { gap: 7px; }
+  .mines-grid { gap: 7px; max-width: 300px; }
   .mines-cell { border-radius: 14px; }
   .mines-cell::after { border-radius: 10px; inset: 4px; }
   .crash-multiplier-display { font-size: 54px; }
+  .crash-multiplier-display.waiting { font-size: 42px; }
   .crash-countdown-display { font-size: 36px; }
-  .cases-card { flex: 0 0 120px; width: 120px; height: 180px; }
-  .cases-card .prize-img { width: 80px; height: 80px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1481,13 +1415,12 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- CASES — Carousel design -->
     <div class="view" id="view-spin">
-      <div class="cases-carousel-wrap">
-        <div class="cases-pointer"></div>
-        <div class="cases-viewport">
-          <div class="cases-track" id="casesTrack"></div>
-        </div>
+      <div class="spin-card-container">
+          <div class="spin-card" id="spin-card">
+              <img src="https://up6.cc/2026/10/17932600818491.png" id="spin-img" alt="Prize">
+              <div class="val"><img src="https://up6.cc/2026/10/17932600818491.png"> <span id="spin-val">0</span></div>
+          </div>
       </div>
       <div style="display: flex; gap: 12px; width: 100%; margin-bottom: 16px;">
         <button class="spin-ctrl-btn" onclick="openModal('spin-settings-modal')">
@@ -1497,18 +1430,15 @@ input:checked + .slider:before { transform: translateX(22px); }
           <i class="fas fa-gift"></i> Prizes
         </button>
       </div>
-      <div class="cases-footer">
-        <div class="cases-hint">اختر طريقة اللعب</div>
-        <div class="spin-choices">
-          <button class="spin-choice" id="spin-btn-ticket" onclick="startSpin('ticket')">
-            <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Ticket">
-            <span class="choice-cost">10</span>
-          </button>
-          <button class="spin-choice" id="spin-btn-stars" onclick="startSpin('stars')">
-            <img src="https://up6.cc/2026/10/17932600818491.png" alt="Star">
-            <span class="choice-cost">10</span>
-          </button>
-        </div>
+      <div class="spin-choices">
+        <button class="spin-choice" id="spin-btn-ticket" onclick="startSpin('ticket')">
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Ticket">
+          <span class="choice-cost">10</span>
+        </button>
+        <button class="spin-choice" id="spin-btn-stars" onclick="startSpin('stars')">
+          <img src="https://up6.cc/2026/10/17932600818491.png" alt="Star">
+          <span class="choice-cost">10</span>
+        </button>
       </div>
     </div>
 
@@ -1930,8 +1860,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
+<!-- Task sheet — position: relative so close button anchors correctly -->
 <div class="modal-overlay" id="taskSheet" style="align-items: flex-end; padding: 0;">
-  <div class="modal-content" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
+  <div class="modal-content" style="position: relative; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
     <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
     <div class="task-modal-icon" id="tsIcon" style="width: 80px; height: 80px; border-radius: 50%; background: #229ED9; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
     <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #fff; line-height: 1.4; padding: 0 10px;">اسم المهمة</h3>
@@ -2007,11 +1938,6 @@ let tasksCache = [];
 let spinState = { isSpinning: false, soundOn: true, currency: 'ticket' };
 let pendingPrize = null;
 let audioCtx = null;
-
-// Carousel constants
-const CAROUSEL_CARD_WIDTH = 140;
-const CAROUSEL_GAP = 12;
-const CAROUSEL_TOTAL = CAROUSEL_CARD_WIDTH + CAROUSEL_GAP;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -2290,12 +2216,6 @@ window.addEventListener('pagehide', () => {
   if (isCrashViewActive()) saveActiveRoundState();
 });
 
-window.addEventListener('resize', () => {
-  if (document.getElementById('view-mines')?.classList.contains('active')) {
-    sizeMinesGrid();
-  }
-});
-
 function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
@@ -2324,11 +2244,6 @@ function go(viewName) {
   mainScroll.classList.remove('crash-mode', 'mines-mode');
 
   if (viewName === 'crash') {
-    // Clear any pending background resolution timer when entering crash view
-    if (crashBackgroundTimer) {
-      clearTimeout(crashBackgroundTimer);
-      crashBackgroundTimer = null;
-    }
     mainScroll.classList.add('crash-mode');
     startCrashGame();
     setTimeout(() => {
@@ -2366,88 +2281,12 @@ function renderProfile() {
   }
 }
 
-/* ================= SPIN / CASES — Carousel ================= */
+/* ================= SPIN / CASES ================= */
 function initSpinGame() {
-  buildCarousel();
+  document.getElementById('spin-img').src = WINNING_TABLE[0].img;
+  document.getElementById('spin-val').innerText = WINNING_TABLE[0].value;
   WINNING_TABLE.forEach(p => { const img = new Image(); img.src = p.img; });
 }
-
-function buildCarousel() {
-  const track = document.getElementById('casesTrack');
-  if (!track) return;
-  const totalCards = 60;
-  let html = '';
-  for (let i = 0; i < totalCards; i++) {
-    const prize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-    html += `
-      <div class="cases-card" data-idx="${i}">
-        <img class="prize-img" src="${prize.img}" alt="" onerror="this.src='${ASSETS.star}'">
-        <div class="prize-val">
-          <img src="${ASSETS.star}"> ${prize.value}
-        </div>
-      </div>
-    `;
-  }
-  track.innerHTML = html;
-  track.style.transition = 'none';
-  track.style.transform = 'translateX(0)';
-}
-
-function animateCarousel(winner) {
-  const track = document.getElementById('casesTrack');
-  if (!track) return;
-  
-  const cards = track.querySelectorAll('.cases-card');
-  // Determine card width from actual rendered card (in case of responsive rules)
-  const sampleCard = cards[0];
-  const cardW = sampleCard ? sampleCard.offsetWidth : CAROUSEL_CARD_WIDTH;
-  const gap = 12;
-  const total = cardW + gap;
-  
-  // Choose winner index
-  const winnerIndex = 45 + Math.floor(Math.random() * 10); // 45-54
-  
-  // Update winner card content
-  if (cards[winnerIndex]) {
-    cards[winnerIndex].innerHTML = `
-      <img class="prize-img" src="${winner.img}" alt="" onerror="this.src='${ASSETS.star}'">
-      <div class="prize-val">
-        <img src="${ASSETS.star}"> ${winner.value}
-      </div>
-    `;
-  }
-  
-  // Calculate target translate
-  const viewport = document.querySelector('.cases-viewport');
-  const viewportWidth = viewport.offsetWidth;
-  const centerOffset = (viewportWidth / 2) - (cardW / 2);
-  const targetTranslate = -(winnerIndex * total) + centerOffset;
-  const jitter = (Math.random() - 0.5) * (cardW * 0.5);
-  const finalTranslate = targetTranslate + jitter;
-  
-  // Reset first
-  track.style.transition = 'none';
-  track.style.transform = 'translateX(0)';
-  void track.offsetWidth;
-  
-  // Animate
-  track.style.transition = 'transform 4.2s cubic-bezier(0.20, 0.85, 0.15, 1)';
-  track.style.transform = `translateX(${finalTranslate}px)`;
-  
-  // Tick sounds with decelerating frequency
-  const startTime = Date.now();
-  const duration = 4200;
-  function scheduleTick() {
-    const elapsed = Date.now() - startTime;
-    if (elapsed >= duration) return;
-    playTickSound();
-    const progress = elapsed / duration;
-    const nextDelay = 50 + Math.pow(progress, 2.5) * 350;
-    setTimeout(scheduleTick, nextDelay);
-  }
-  scheduleTick();
-}
-
 function pickPrizeByWeight() {
   const totalWeight = WINNING_TABLE.reduce((sum, p) => sum + p.weight, 0);
   let random = Math.random() * totalWeight;
@@ -2457,7 +2296,6 @@ function pickPrizeByWeight() {
   }
   return WINNING_TABLE[0];
 }
-
 function startSpin(currency = 'ticket') {
   if (spinState.isSpinning) return;
   const cost = 10;
@@ -2469,25 +2307,37 @@ function startSpin(currency = 'ticket') {
     if (user.stars < cost) { showToast('تحتاج إلى 10 نجوم للدوران!'); return; }
     user.stars -= cost;
     syncUserData({ stars: firebase.firestore.FieldValue.increment(-cost) });
-  } else return;
-  
+  } else {
+    return;
+  }
   spinState.currency = currency;
   updateBalances();
   spinState.isSpinning = true;
   document.getElementById('spin-btn-ticket').disabled = true;
   document.getElementById('spin-btn-stars').disabled = true;
-  
   const winner = pickPrizeByWeight();
   pendingPrize = winner;
-  
-  animateCarousel(winner);
-  
-  setTimeout(() => {
-    spinState.isSpinning = false;
-    showSpinWinModal(winner);
-  }, 4400);
+  let startTime = Date.now();
+  let duration = 4000;
+  function animate() {
+    const now = Date.now();
+    const progress = (now - startTime) / duration;
+    if (progress >= 1) {
+      document.getElementById('spin-img').src = winner.img;
+      document.getElementById('spin-val').innerText = winner.value;
+      spinState.isSpinning = false;
+      setTimeout(() => showSpinWinModal(winner), 300);
+      return;
+    }
+    const tempPrize = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    document.getElementById('spin-img').src = tempPrize.img;
+    document.getElementById('spin-val').innerText = tempPrize.value;
+    playTickSound();
+    const nextDelay = 50 + Math.pow(progress, 3) * 400;
+    setTimeout(animate, nextDelay);
+  }
+  animate();
 }
-
 function playTickSound() {
   if (!spinState.soundOn) return;
   try {
@@ -2502,7 +2352,6 @@ function playTickSound() {
     osc.start(); osc.stop(audioCtx.currentTime + 0.05);
   } catch (e) {}
 }
-
 function showSpinWinModal(prize) {
   const winIcon = document.getElementById('win-icon');
   const winValue = document.getElementById('win-value');
@@ -2511,7 +2360,6 @@ function showSpinWinModal(prize) {
   winValue.style.color = '#FFD700';
   openModal('spin-win-modal');
 }
-
 function claimSpinReward() {
   if (!pendingPrize) return;
   user.stars += pendingPrize.value;
@@ -2521,15 +2369,11 @@ function claimSpinReward() {
   closeModal('spin-win-modal');
   document.getElementById('spin-btn-ticket').disabled = false;
   document.getElementById('spin-btn-stars').disabled = false;
-  // Rebuild carousel for next spin
-  setTimeout(() => buildCarousel(), 100);
 }
-
 function toggleSpinSound(checkbox) {
   spinState.soundOn = checkbox.checked;
   localStorage.setItem('spinSoundOn', spinState.soundOn);
 }
-
 function renderPrizesGrid() {
   const container = document.getElementById('prizes-grid-container');
   if (!container) return;
@@ -2764,7 +2608,8 @@ function switchDepositTab(tab, el) {
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
-  document.getElementById('dep-tab-' + tab).style.display = 'flex';
+  const target = document.getElementById('dep-tab-' + tab);
+  target.style.display = target.classList.contains('dep-layout') ? 'flex' : 'block';
 }
 function updateDepositUI(input) {
   let val = parseInt(input.value) || 0;
@@ -3173,7 +3018,6 @@ const crashState = {
 };
 
 let crashHistory = [];
-let crashBackgroundTimer = null;
 
 function isCrashViewActive() {
   const v = document.getElementById('view-crash');
@@ -3201,18 +3045,13 @@ function crashSetExplosionActive(active) {
   if (active) TGS.restart('crash-explosion-tgs');
 }
 
-/* text = '' hides the display entirely */
 function crashSetMultiplierDisplay(text, state) {
   const el = document.getElementById('crash-mult-display');
   if (!el) return;
   el.textContent = text;
-  el.classList.remove('cashed', 'crashed');
-  if (!text) {
-    el.style.opacity = '0';
-    return;
-  }
-  el.style.opacity = '1';
-  if (state === 'cashed') el.classList.add('cashed');
+  el.classList.remove('waiting', 'cashed', 'crashed');
+  if (state === 'waiting') el.classList.add('waiting');
+  else if (state === 'cashed') el.classList.add('cashed');
   else if (state === 'crashed') el.classList.add('crashed');
 }
 
@@ -3240,17 +3079,19 @@ async function loadCrashHistory() {
     renderCrashHistoryStrip();
   }
 }
-async function saveCrashRound(multiplier, bet, result) {
+async function saveCrashRound(multiplier, bet, result, roundId = null) {
   if (!db) return;
   try {
-    await db.collection('puppy_users').doc(user.id).collection('crash_rounds').add({
-      userId: user.id,
-      multiplier: Number(multiplier),
-      bet: Number(bet),
-      result: result,
-      winAmount: result === 'won' ? Number(bet) * Number(multiplier) : 0,
-      createdAt: Date.now()
-    });
+    const id = roundId || crashState.roundId || ('r_' + user.id + '_' + Date.now());
+    await db.collection('puppy_users').doc(user.id)
+      .collection('crash_rounds').doc(id).set({
+        userId: user.id,
+        multiplier: Number(multiplier),
+        bet: Number(bet),
+        result: result,
+        winAmount: result === 'won' ? Number(bet) * Number(multiplier) : 0,
+        createdAt: Date.now()
+      }, { merge: true });
   } catch(e) { console.error('saveCrashRound', e); }
 }
 async function saveActiveCrashRound(data) {
@@ -3271,6 +3112,21 @@ async function getActiveCrashRound() {
     const doc = await db.collection('puppy_crash_active').doc(user.id).get();
     if (!doc.exists) return null;
     const data = doc.data();
+
+    // Flying states should never persist in new code — clean up only very stale ones
+    if (data.status === 'flying') {
+      const age = Date.now() - (data.updatedAt || 0);
+      if (age > 5 * 60 * 1000) {
+        await saveCrashRound(
+          data.crashPoint || 1, data.activeBet, 'lost',
+          'stale_' + (data.updatedAt || Date.now())
+        );
+        await clearActiveCrashRound();
+      }
+      return null;
+    }
+
+    // 10-minute timeout for waiting rounds
     if (data.updatedAt && (Date.now() - data.updatedAt > 10 * 60 * 1000)) {
       await clearActiveCrashRound();
       return null;
@@ -3278,17 +3134,38 @@ async function getActiveCrashRound() {
     return data;
   } catch(e) { return null; }
 }
+
+/**
+ * Called when the app is being hidden/unloaded.
+ * - Waiting round: saved for resume on next open (bet not charged twice)
+ * - Flying round: user "walked away" — we compute the loss NOW in the background
+ *   so the round is properly settled even if they never come back.
+ */
 function saveActiveRoundState() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
+
   if (crashState.status === 'waiting') {
-    saveActiveCrashRound({ status: 'waiting', activeBet: crashState.activeBet, hasCashedOut: false });
-  } else if (crashState.status === 'flying') {
-    const elapsed = (performance.now() - crashState.startTime) / 1000;
-    const startTimeServer = Date.now() - (elapsed * 1000);
     saveActiveCrashRound({
-      status: 'flying', startTime: startTimeServer,
-      crashPoint: crashState.crashPoint, activeBet: crashState.activeBet, hasCashedOut: false
+      status: 'waiting',
+      activeBet: crashState.activeBet,
+      hasCashedOut: false
     });
+  } else if (crashState.status === 'flying') {
+    // Compute loss in background and record it
+    const elapsed = (performance.now() - crashState.startTime) / 1000;
+    const currentMult = Math.pow(1.08, elapsed);
+    const finalMult = Math.min(currentMult, crashState.crashPoint);
+    const bet = crashState.activeBet;
+
+    // Fire-and-forget (Firestore persistence queues these if offline)
+    saveCrashRound(finalMult, bet, 'lost');
+    clearActiveCrashRound();
+
+    // Reset local state so we don't accidentally re-process
+    crashState.hasBet = false;
+    crashState.activeBet = 0;
+    crashState.hasCashedOut = false;
+    crashState.cashoutMultiplier = 0;
   }
 }
 
@@ -3324,59 +3201,6 @@ function crashPushHistory(multiplier) {
   if (crashHistory.length > 5) crashHistory.pop();
 }
 
-/* NEW: background loss resolution when leaving during a round */
-function crashScheduleBackgroundResolution() {
-  if (!crashState.hasBet || crashState.hasCashedOut) return;
-  if (crashState.status !== 'flying' && crashState.status !== 'waiting') return;
-
-  if (crashBackgroundTimer) {
-    clearTimeout(crashBackgroundTimer);
-    crashBackgroundTimer = null;
-  }
-
-  let timeToCrashMs = 0;
-
-  if (crashState.status === 'flying') {
-    const elapsed = (performance.now() - crashState.startTime) / 1000;
-    const crashTimeSec = Math.log(Math.max(1.0001, crashState.crashPoint)) / Math.log(1.08);
-    const remaining = Math.max(0.5, crashTimeSec - elapsed);
-    timeToCrashMs = remaining * 1000;
-  } else if (crashState.status === 'waiting') {
-    // Generate crash point now so we can schedule the timeline
-    crashState.crashPoint = crashGenerateCrashPoint();
-    const crashTimeSec = Math.log(Math.max(1.0001, crashState.crashPoint)) / Math.log(1.08);
-    timeToCrashMs = (crashState.countdown * 1000) + (crashTimeSec * 1000);
-    saveActiveCrashRound({
-      status: 'flying',
-      startTime: Date.now() + crashState.countdown * 1000,
-      crashPoint: crashState.crashPoint,
-      activeBet: crashState.activeBet,
-      hasCashedOut: false
-    });
-  }
-
-  const betAmount = crashState.activeBet;
-  const crashPoint = crashState.crashPoint;
-
-  crashBackgroundTimer = setTimeout(async () => {
-    crashBackgroundTimer = null;
-    try {
-      await saveCrashRound(crashPoint, betAmount, 'lost');
-      await clearActiveCrashRound();
-    } catch (e) {}
-    crashHistory.unshift({ multiplier: crashPoint });
-    if (crashHistory.length > 5) crashHistory.pop();
-    if (isCrashViewActive()) {
-      // If user returned in the meantime (unlikely since we clear on go), render
-      renderCrashHistoryStrip();
-    }
-    crashState.hasBet = false;
-    crashState.activeBet = 0;
-    crashState.hasCashedOut = false;
-    crashState.cashoutMultiplier = 0;
-  }, Math.max(0, timeToCrashMs) + 150);
-}
-
 async function startCrashGame() {
   if (crashState.status === 'waiting' || crashState.status === 'flying') return;
   await loadCrashHistory();
@@ -3388,7 +3212,7 @@ async function startCrashGame() {
 async function checkAndResumeCrashRound() {
   const active = await getActiveCrashRound();
   if (!active || !active.activeBet) return false;
-  
+
   if (active.status === 'waiting') {
     crashState.activeBet = active.activeBet;
     crashState.hasBet = true;
@@ -3401,82 +3225,14 @@ async function checkAndResumeCrashRound() {
     showToast(`تم استرداد رهانك السابق (${active.activeBet} نجمة)`);
     return true;
   }
-  
-  if (active.status === 'flying') {
-    const now = Date.now();
-    const elapsed = (now - active.startTime) / 1000;
-    const expectedMult = Math.pow(1.08, elapsed);
-    
-    if (expectedMult >= active.crashPoint || elapsed > 300) {
-      const finalMult = active.crashPoint || expectedMult;
-      await saveCrashRound(finalMult, active.activeBet, 'lost');
-      await clearActiveCrashRound();
-      await loadCrashHistory();
-      showToast(`انتهت جولتك السابقة على x${finalMult.toFixed(2)} أثناء غيابك`);
-      crashStartWaitingPhase();
-      return true;
-    }
-    
-    resumeActiveFlight(active, elapsed);
-    return true;
-  }
+  // Flying rounds are handled/cleared inside getActiveCrashRound
   return false;
-}
-
-function resumeActiveFlight(active, elapsed) {
-  crashState.status = 'flying';
-  crashState.startTime = performance.now() - (elapsed * 1000);
-  crashState.crashPoint = active.crashPoint;
-  crashState.activeBet = active.activeBet;
-  crashState.hasBet = true;
-  crashState.hasCashedOut = false;
-  crashState.multiplier = Math.pow(1.08, elapsed);
-  
-  const starsBg = document.getElementById('crash-stars-bg');
-  const mainBtn = document.getElementById('crash-main-btn');
-  
-  crashSetCountdownDisplay('', false);
-  crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', '');
-  starsBg.style.animationDuration = '0.2s';
-  crashSetWaitingActive(false);
-  crashSetExplosionActive(false);
-  crashSetRocketActive(true);
-  mainBtn.className = 'crash-main-btn cashout';
-  mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
-  
-  function loop(timestamp) {
-    if (crashState.status !== 'flying') return;
-    const el = (timestamp - crashState.startTime) / 1000;
-    crashState.multiplier = Math.pow(1.08, el);
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-      crashState.hasCashedOut ? 'cashed' : '');
-    if (crashState.hasBet && !crashState.hasCashedOut) {
-      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
-      if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
-    }
-    if (crashState.multiplier >= crashState.crashPoint) {
-      crashState.multiplier = crashState.crashPoint;
-      crashHandleCrash();
-      return;
-    }
-    crashState.animationId = requestAnimationFrame(loop);
-  }
-  crashState.animationId = requestAnimationFrame(loop);
-  showToast('تم استرداد جولتك الجارية');
 }
 
 function stopCrashGame() {
   if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
   if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
-
-  // If user has an active bet still in progress, schedule background resolution
-  if (crashState.hasBet && !crashState.hasCashedOut &&
-      (crashState.status === 'flying' || crashState.status === 'waiting')) {
-    crashScheduleBackgroundResolution();
-  } else {
-    saveActiveRoundState();
-  }
-
+  saveActiveRoundState();
   crashState.status = 'idle';
   crashState.hasBet = false;
   crashState.hasCashedOut = false;
@@ -3490,15 +3246,16 @@ function crashStartWaitingPhase() {
   if (!crashState.hasBet) crashState.activeBet = 0;
   crashState.hasCashedOut = false;
   crashState.cashoutMultiplier = 0;
-  crashState.countdown = 6; // CHANGED: 10 → 6
+  crashState.countdown = 6;
+  crashState.roundId = null; // fresh round
 
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
 
-  starsBg.style.animationDuration = '10s';
+  starsBg.style.animationDuration = '6s';
 
-  // Hide the multiplier entirely during waiting phase
-  crashSetMultiplierDisplay('', '');
+  // Do NOT show multiplier during setup — only countdown
+  crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
 
   if (crashState.hasBet) {
@@ -3530,6 +3287,7 @@ function crashStartFlyingPhase() {
   crashState.status = 'flying';
   crashState.startTime = performance.now();
   crashState.crashPoint = crashGenerateCrashPoint();
+  crashState.roundId = 'r_' + user.id + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
 
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
@@ -3619,7 +3377,7 @@ function crashHandleCrash() {
     mainBtn.className = 'crash-main-btn disabled';
   }
 
-  starsBg.style.animationDuration = '10s';
+  starsBg.style.animationDuration = '6s';
   crashSetRocketActive(false);
   crashSetWaitingActive(false);
   crashSetExplosionActive(true);
@@ -3644,6 +3402,10 @@ function crashDoCashOut() {
   saveCrashRound(crashState.multiplier, crashState.activeBet, 'won');
   clearActiveCrashRound();
 
+  // Reset bet so it can't be double-refunded on the next "cancel"
+  crashState.hasBet = false;
+  crashState.activeBet = 0;
+
   const gameArea = document.getElementById('crash-game-area');
   if (gameArea) {
     gameArea.classList.add('cashout-anim');
@@ -3664,6 +3426,7 @@ function crashHandleMainBtn() {
 }
 
 function crashPlaceBet() {
+  crashValidateBet();
   const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
   if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
   user.stars -= bet;
@@ -3714,7 +3477,7 @@ function crashUpdateAutoCashout(input) {
 }
 
 /* ================= MINES GAME ================= */
-const MINES_TOTAL_CELLS = 16; // 4×4
+const MINES_TOTAL_CELLS = 16;
 const MINES_HOUSE_EDGE = 0.86;
 
 const minesState = {
@@ -3727,24 +3490,6 @@ const minesState = {
   multiplier: 1.00,
   autoResetTimeout: null
 };
-
-/* Sizes the mines grid to ~88% of available square so buttons below get breathing room */
-function sizeMinesGrid() {
-  const wrap = document.querySelector('.mines-grid-wrap');
-  const grid = document.getElementById('minesGrid');
-  if (!wrap || !grid) return;
-  const wrapW = wrap.clientWidth;
-  const wrapH = wrap.clientHeight;
-  // wrap padding is 12 + 12 horizontal, 12 + 22 vertical (see CSS)
-  const availableW = wrapW - 24;
-  const availableH = wrapH - 34;
-  if (availableW <= 0 || availableH <= 0) return;
-  const size = Math.floor(Math.min(availableW, availableH) * 0.88);
-  if (size > 80 && size < 1200) {
-    grid.style.width = size + 'px';
-    grid.style.height = size + 'px';
-  }
-}
 
 function minesSelectBombs(count, el) {
   if (minesState.status === 'playing') return;
@@ -3789,11 +3534,6 @@ function initMinesView() {
   renderMinesLadder();
   renderMinesGrid();
   updateMinesUI();
-  // Size after layout settles
-  requestAnimationFrame(() => {
-    sizeMinesGrid();
-    requestAnimationFrame(sizeMinesGrid);
-  });
 }
 
 function minesCalcMultiplier(bombs, opened) {
@@ -3854,7 +3594,7 @@ function renderMinesGrid() {
       inner.innerHTML = '';
       if (minesIconFrames.card) {
         const bg = document.createElement('div');
-        bg.style.cssText = 'position:absolute;inset:18%;opacity:0.13;pointer-events:none;filter:grayscale(1) brightness(1.4);';
+        bg.className = 'mines-cell-bg-icon';
         bg.innerHTML = minesIconFrames.card;
         cell.appendChild(bg);
       }
@@ -3965,7 +3705,7 @@ function minesCellClick(index) {
       cell.classList.add('revealed', 'revealed-gem');
       cell.disabled = true;
       if (inner) inner.innerHTML = minesIconFrames.diamond || '<i class="fas fa-gem"></i>';
-      const bg = cell.querySelector('div[style*="position:absolute"]');
+      const bg = cell.querySelector('.mines-cell-bg-icon');
       if (bg) bg.remove();
     }
     renderMinesLadder();
