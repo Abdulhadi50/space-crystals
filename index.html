@@ -134,7 +134,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   color: var(--text-primary); font-weight: 800; font-size: 16px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
   transition: transform 0.2s var(--spring);
-  will-change: transform;
 }
 .balance-pill:active { transform: scale(0.96); }
 .balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
@@ -183,7 +182,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card:active { transform: scale(0.975); }
 .home-card.card-free   { --card-accent: radial-gradient(circle at 105% -10%, rgba(232,232,245,0.22), transparent 62%); }
 .home-card.card-crash  { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.42), transparent 62%); }
-.home-card.card-cases  { --card-accent: radial-gradient(circle at 105% -10%, rgba(220,7,175,0.40), transparent 62%); }
+.home-card.card-mines  { --card-accent: radial-gradient(circle at 105% -10%, rgba(59,130,246,0.46), transparent 62%); }
 .home-card.referral    { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.42), transparent 62%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
@@ -212,7 +211,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
     rgba(100, 140, 220, 0.07) 40%,
     transparent 72%);
   border-radius: 30px; padding: 24px 12px;
-  position: relative;
 }
 .spin-card-container { width: 100%; display: flex; justify-content: center; margin-bottom: 30px; padding: 20px 0; }
 .spin-card {
@@ -222,10 +220,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   border: 1px solid rgba(255,255,255,0.16);
-  box-shadow:
-    0 22px 55px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.20),
-    0 0 60px rgba(245,215,110,0.14);
+  box-shadow: 0 22px 55px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.20), 0 0 60px rgba(245,215,110,0.14);
   position: relative; overflow: hidden;
 }
 .spin-card::before {
@@ -233,11 +228,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: radial-gradient(circle at 50% 0%, rgba(245,215,110,0.16), transparent 60%);
   pointer-events: none;
 }
-.spin-card img {
-  width: 120px; height: 120px; object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.55));
-  position: relative; z-index: 1;
-}
+.spin-card img { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,0.55)); position: relative; z-index: 1; }
 .spin-card .val {
   font-size: 20px; font-weight: 900; margin-top: 15px; color: var(--gold);
   display: flex; align-items: center; gap: 6px;
@@ -254,9 +245,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 20px; border-radius: 22px;
   font-size: 20px; font-weight: 800;
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: transform 0.15s var(--spring), filter 0.2s;
+  transition: transform 0.15s var(--spring);
   box-shadow: 0 12px 30px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.30);
-  position: relative; overflow: hidden;
 }
 .spin-btn:active { transform: scale(0.97); }
 .spin-btn:disabled { opacity: 0.55; pointer-events: none; }
@@ -601,12 +591,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .btn-copy:active { transform: scale(0.95); }
 
-/* ============ PODIUM (TOP 3) ============ */
+/* ============ PODIUM ============ */
 .podium {
   display: flex; justify-content: center; align-items: flex-end;
   gap: 10px; padding: 8px 0 24px;
-  margin-bottom: 6px;
-  min-height: 210px;
+  margin-bottom: 6px; min-height: 210px;
 }
 .podium-item {
   display: flex; flex-direction: column; align-items: center;
@@ -676,10 +665,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   box-shadow: 0 6px 18px rgba(0,0,0,0.26);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  transition: transform 0.2s var(--spring);
   contain: layout style paint;
 }
-.ranking-row:active { transform: scale(0.99); }
 .ranking-row.me {
   border-color: rgba(255,255,255,0.42);
   box-shadow: 0 6px 22px rgba(255,255,255,0.12), inset 0 1px 0 rgba(255,255,255,0.18);
@@ -730,17 +717,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   position: relative; overflow: hidden;
   contain: layout style paint;
 }
-.stat-card::before {
-  content: ''; position: absolute; top: -40%; left: -30%;
-  width: 90%; height: 180%;
-  background: radial-gradient(circle, rgba(255,255,255,0.07), transparent 65%);
-  pointer-events: none;
-}
 .stat-card img {
   width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); position: relative;
 }
-.stat-card i { position: relative; }
 .stat-info { position: relative; min-width: 0; }
 .stat-info h3 { font-size: 19px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.3px; }
 .stat-info p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
@@ -761,8 +741,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   animation: popInModal 0.32s var(--spring);
   border: 1px solid rgba(255,255,255,0.14);
   box-shadow: 0 26px 70px rgba(0,0,0,0.68), inset 0 1px 0 rgba(255,255,255,0.16);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  backdrop-filter: blur(16px) saturate(150%);
 }
 @keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.4px; }
@@ -829,11 +807,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 input:checked + .slider { background: var(--gradient-success); border-color: rgba(52,211,153,0.5); box-shadow: 0 0 14px rgba(52,211,153,0.4); }
 input:checked + .slider:before { transform: translateX(22px); }
 
-/* ============ TASK MODAL ============ */
 #tsIcon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 #tsIcon i { font-size: 40px; color: #fff; }
 
-/* ============ TOAST ============ */
 .toast {
   position: fixed; top: 20px; left: 50%;
   transform: translateX(-50%) translateY(-120px);
@@ -846,8 +822,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   border: 1px solid rgba(255,255,255,0.16);
   max-width: 90%; text-align: center;
   box-shadow: 0 14px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.14);
-  -webkit-backdrop-filter: blur(14px) saturate(170%);
-  backdrop-filter: blur(14px) saturate(170%);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -877,7 +851,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: var(--nav-indicator-shadow);
   transform: translateX(calc(var(--nav-index) * -100%));
   transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
-  will-change: transform;
   pointer-events: none;
 }
 .nav-item {
@@ -887,9 +860,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: 26px; transition: color 0.25s;
   position: relative; z-index: 1; background: transparent;
 }
-.nav-item i { font-size: 18px; transition: transform 0.25s var(--spring); }
+.nav-item i { font-size: 18px; }
 .nav-item.active { color: var(--text-primary); }
-.nav-item.active i { transform: translateY(-1px) scale(1.06); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
@@ -1052,6 +1024,247 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.42), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(255,255,255,0.07); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); }
 
+/* ============ MINES GAME ============ */
+.main-scroll.mines-mode { padding: 0; overflow: hidden; }
+#view-mines.active {
+  display: flex; flex-direction: column; height: 100%;
+  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 58px);
+  padding-bottom: calc(var(--dock-height) + 20px + var(--safe-bottom));
+  animation: viewIn 0.35s var(--ease-out);
+  background: radial-gradient(ellipse 80% 50% at 50% 35%, rgba(59,130,246,0.12), transparent 70%);
+}
+
+.mines-ladder {
+  display: flex; gap: 6px; padding: 6px 14px 10px;
+  overflow-x: auto; scrollbar-width: none;
+  direction: ltr;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+.mines-ladder::-webkit-scrollbar { display: none; }
+.mines-ladder-pill {
+  padding: 6px 12px; border-radius: 12px;
+  background: rgba(30, 58, 138, 0.35);
+  border: 1px solid rgba(91,141,239,0.20);
+  color: rgba(255,255,255,0.55);
+  font-size: 12px; font-weight: 800;
+  font-family: system-ui, -apple-system, sans-serif;
+  flex-shrink: 0;
+  transition: all 0.25s var(--ease-out);
+}
+.mines-ladder-pill.passed {
+  color: rgba(255,255,255,0.9);
+  background: rgba(59,130,246,0.20);
+  border-color: rgba(91,141,239,0.35);
+}
+.mines-ladder-pill.current {
+  background: var(--gradient-blue); color: #fff;
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 0 16px rgba(59,130,246,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
+  transform: scale(1.06);
+}
+
+.mines-grid-wrap {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px 14px;
+  min-height: 0;
+  overflow: hidden;
+}
+.mines-grid {
+  width: 100%; max-width: 400px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+  aspect-ratio: 1;
+}
+.mines-cell {
+  aspect-ratio: 1;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background:
+    radial-gradient(circle at 40% 30%, rgba(91,141,239,0.12), transparent 65%),
+    linear-gradient(160deg, rgba(30,40,60,0.95), rgba(15,20,32,0.98));
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: transform 0.2s var(--spring), filter 0.2s, background 0.2s;
+  overflow: hidden;
+  contain: layout style paint;
+}
+.mines-cell::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.06), transparent 55%);
+  pointer-events: none;
+}
+.mines-cell::after {
+  content: '';
+  position: absolute; inset: 4px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border: 1px solid rgba(91,141,239,0.16);
+  pointer-events: none;
+}
+.mines-cell:active:not(.revealed):not(.locked) {
+  transform: scale(0.94);
+  filter: brightness(1.15);
+}
+.mines-cell.revealed { cursor: default; }
+.mines-cell.revealed-gem {
+  background:
+    radial-gradient(circle at 40% 30%, rgba(96,165,250,0.35), transparent 60%),
+    linear-gradient(160deg, rgba(30,64,120,0.95), rgba(15,30,60,0.98));
+  animation: minesPop 0.35s var(--spring);
+}
+.mines-cell.revealed-gem::after { border-color: rgba(96,165,250,0.45); }
+.mines-cell.revealed-bomb {
+  background:
+    radial-gradient(circle at 40% 30%, rgba(239,68,68,0.45), transparent 60%),
+    linear-gradient(160deg, rgba(80,20,30,0.98), rgba(40,10,20,0.98));
+  animation: minesBombShake 0.5s var(--ease-out);
+}
+.mines-cell.revealed-bomb::after { border-color: rgba(239,68,68,0.5); }
+.mines-cell.dimmed { opacity: 0.55; }
+@keyframes minesPop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+@keyframes minesBombShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px) rotate(-3deg); }
+  40% { transform: translateX(4px) rotate(3deg); }
+  60% { transform: translateX(-3px) rotate(-2deg); }
+  80% { transform: translateX(3px) rotate(2deg); }
+}
+.mines-cell-inner {
+  width: 72%; height: 72%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.mines-cell-inner svg { width: 100% !important; height: 100% !important; display: block; }
+.mines-cell-inner img { width: 100%; height: 100%; object-fit: contain; }
+.mines-cell-inner .fallback-emoji { font-size: 26px; line-height: 1; }
+
+.mines-actions-row {
+  display: flex; gap: 8px; padding: 8px 14px 10px;
+  align-items: center;
+}
+.mines-icon-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.14);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-primary); font-size: 16px;
+  flex-shrink: 0;
+  transition: transform 0.15s var(--spring), background 0.2s;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.mines-icon-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.14); }
+.mines-topup-btn {
+  flex: 1;
+  background: var(--gradient-blue);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 800; font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow: 0 8px 22px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+  transition: transform 0.15s var(--spring);
+}
+.mines-topup-btn:active { transform: scale(0.97); }
+
+.mines-bombs-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; padding: 0 14px 10px;
+}
+.mines-bomb-count-btn {
+  background: linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-primary);
+  padding: 12px 8px;
+  border-radius: 14px;
+  font-weight: 800; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.2s var(--ease-out);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+}
+.mines-bomb-count-btn.active {
+  background: var(--gradient-blue);
+  border-color: rgba(255,255,255,0.28);
+  box-shadow: 0 6px 18px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.mines-bomb-count-btn:active:not(:disabled) { transform: scale(0.96); }
+.mines-bomb-count-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.mines-bomb-count-btn .bomb-emoji { font-size: 16px; }
+
+.mines-bet-row {
+  display: flex; align-items: center; gap: 8px; padding: 0 14px 10px;
+}
+.mines-bet-adj {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--text-primary); font-size: 22px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.mines-bet-adj:active { transform: scale(0.92); }
+.mines-bet-adj:disabled { opacity: 0.4; pointer-events: none; }
+.mines-bet-display {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 8px 12px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.mines-bet-display img {
+  width: 20px; height: 20px; border-radius: 50%;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+}
+.mines-bet-display input {
+  background: transparent; border: none; outline: none;
+  color: var(--text-primary);
+  font-size: 20px; font-weight: 800;
+  text-align: center;
+  width: 80px;
+  direction: ltr;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.mines-bet-display input::-webkit-outer-spin-button,
+.mines-bet-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.mines-main-btn {
+  width: calc(100% - 28px);
+  margin: 0 14px;
+  padding: 15px;
+  border-radius: 16px;
+  font-size: 16px; font-weight: 800;
+  color: #fff;
+  background: var(--gradient-blue);
+  border: 1px solid rgba(255,255,255,0.20);
+  transition: transform 0.15s var(--spring), background 0.2s;
+  box-shadow: 0 10px 26px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+  direction: ltr;
+}
+.mines-main-btn:active:not(:disabled) { transform: scale(0.97); }
+.mines-main-btn.cashout {
+  background: var(--gradient-success);
+  box-shadow: 0 10px 26px rgba(52,211,153,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.mines-main-btn.disabled {
+  background: rgba(255,255,255,0.07);
+  color: var(--text-secondary);
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.08);
+}
+
 .tgs-box { display: block; }
 .tgs-box svg { width: 100% !important; height: 100% !important; display: block; }
 
@@ -1065,6 +1278,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   .page-title { font-size: 23px; }
   .podium-item.rank-1 .podium-avatar { width: 76px; height: 76px; }
   .podium-item.rank-2 .podium-avatar, .podium-item.rank-3 .podium-avatar { width: 64px; height: 64px; }
+  .mines-grid { gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1099,12 +1313,13 @@ input:checked + .slider:before { transform: translateX(22px); }
     
     <div class="view active" id="view-home">
       <div class="home-cards">
+        <!-- Renamed: Free → Cases -->
         <div class="home-card card-free" onclick="go('spin')">
           <div class="card-text">
-            <h3>Free</h3>
+            <h3>Cases</h3>
             <p>2 cases</p>
           </div>
-          <img src="IMG_20261029_131022_938.png" class="card-icon" alt="Free Gift" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+          <div class="card-video-icon tgs-box" id="home-cases-tgs"></div>
         </div>
 
         <div class="home-card card-crash" onclick="go('crash')">
@@ -1115,12 +1330,13 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon tgs-box" id="home-crash-tgs"></div>
         </div>
 
-        <div class="home-card card-cases" onclick="showToast('قريباً')">
+        <!-- NEW: Mines -->
+        <div class="home-card card-mines" onclick="go('mines')">
           <div class="card-text">
-            <h3>Cases</h3>
-            <p>20 cases</p>
+            <h3>Mines</h3>
+            <p>القنابل والجواهر</p>
           </div>
-          <img src="IMG_20261029_131039_955.png" class="card-icon" alt="Cases" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+          <div class="card-video-icon tgs-box" id="home-mines-tgs"></div>
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
@@ -1197,6 +1413,43 @@ input:checked + .slider:before { transform: translateX(22px); }
           <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
         </div>
       </div>
+    </div>
+
+    <!-- NEW: MINES GAME -->
+    <div class="view" id="view-mines">
+      <div class="mines-ladder" id="minesLadder"></div>
+      <div class="mines-grid-wrap">
+        <div class="mines-grid" id="minesGrid"></div>
+      </div>
+      <div class="mines-actions-row">
+        <button class="mines-icon-btn" onclick="openModal('spin-settings-modal')" aria-label="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button class="mines-icon-btn" onclick="openModal('spin-prizes-modal')" aria-label="Prizes">
+          <i class="fas fa-gift"></i>
+        </button>
+        <button class="mines-topup-btn" onclick="go('deposit')">Top up balance</button>
+      </div>
+      <div class="mines-bombs-row">
+        <button class="mines-bomb-count-btn active" data-bombs="2" onclick="minesSelectBombs(2, this)">
+          <span class="bomb-emoji">💣</span> 2
+        </button>
+        <button class="mines-bomb-count-btn" data-bombs="4" onclick="minesSelectBombs(4, this)">
+          <span class="bomb-emoji">💣</span> 4
+        </button>
+        <button class="mines-bomb-count-btn" data-bombs="6" onclick="minesSelectBombs(6, this)">
+          <span class="bomb-emoji">💣</span> 6
+        </button>
+      </div>
+      <div class="mines-bet-row">
+        <button class="mines-bet-adj" onclick="minesAdjustBet(-1)" aria-label="Decrease">−</button>
+        <div class="mines-bet-display">
+          <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+          <input type="number" id="minesBetInput" value="1" min="1" max="500" onchange="minesValidateBet()">
+        </div>
+        <button class="mines-bet-adj" onclick="minesAdjustBet(1)" aria-label="Increase">+</button>
+      </div>
+      <button class="mines-main-btn" id="minesMainBtn" onclick="minesHandleMainBtn()">Start Game</button>
     </div>
 
     <div class="view" id="view-tasks">
@@ -1741,7 +1994,7 @@ async function syncUserData(updates) {
   } catch (e) {}
 }
 
-/* ============ TGS LOADER (fast, cached) ============ */
+/* ============ TGS LOADER ============ */
 const TGS = {
   _zipCache: {},
   _loading: {},
@@ -1795,7 +2048,6 @@ const TGS = {
       animationData: data,
       rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
     });
-    // Speed up frames — snappier animations
     try { anim.setSpeed(opts.speed || 1.4); } catch(e) {}
     this._anims[element.id] = anim;
     return anim;
@@ -1820,9 +2072,22 @@ const TGS = {
   }
 };
 
+// Crash animations
 const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
 const ZIP_WAITING   = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
 const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
+
+// Home card animations
+const ZIP_HOME_CASES = 'gifts-003-tgs-by-StickerEmojiRobot.zip';
+const ZIP_HOME_MINES = 'RestrictedEmoji_by_StickerEmojiRobot-580-tgs.zip';
+
+// Mines in-game icons
+const MINES_ZIP_CARD    = 'RestrictedEmoji_by_StickerEmojiRobot-580-tgs.zip';
+const MINES_ZIP_BOMB    = 'RestrictedEmoji_by_StickerEmojiRobot-580-tgs.zip';
+const MINES_ZIP_DIAMOND = 'RestrictedEmoji_by_StickerEmojiRobot-574-tgs.zip';
+
+// Cache for mines icons (static first-frame SVGs)
+const minesIconFrames = { card: null, bomb: null, diamond: null };
 
 let _tgsInitStarted = false;
 async function initTgsStickers() {
@@ -1835,9 +2100,17 @@ async function initTgsStickers() {
   }
   if (!window.lottie) { console.warn('lottie لم يُحمَّل'); return; }
 
+  // Home cards
+  TGS.playIn(document.getElementById('home-cases-tgs'), ZIP_HOME_CASES)
+    .catch(e => console.warn('home cases TGS:', e.message));
+
   TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('home crash TGS:', e.message));
 
+  TGS.playIn(document.getElementById('home-mines-tgs'), ZIP_HOME_MINES)
+    .catch(e => console.warn('home mines TGS:', e.message));
+
+  // Crash in-game
   TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('crash rocket TGS:', e.message));
 
@@ -1846,6 +2119,32 @@ async function initTgsStickers() {
 
   TGS.playIn(document.getElementById('crash-explosion-tgs'), ZIP_EXPLOSION, { loop: false })
     .catch(e => console.warn('crash explosion TGS:', e.message));
+
+  // Mines - extract static first frames for grid icons
+  try { minesIconFrames.card    = await extractFirstFrameSvg(MINES_ZIP_CARD);    } catch(e) { console.warn('card frame:', e); }
+  try { minesIconFrames.bomb    = await extractFirstFrameSvg(MINES_ZIP_BOMB);    } catch(e) { console.warn('bomb frame:', e); }
+  try { minesIconFrames.diamond = await extractFirstFrameSvg(MINES_ZIP_DIAMOND); } catch(e) { console.warn('diamond frame:', e); }
+
+  // Pre-render initial mines grid if user is on it
+  if (document.getElementById('view-mines')?.classList.contains('active')) {
+    renderMinesGrid();
+  }
+}
+
+async function extractFirstFrameSvg(zipName) {
+  const list = await TGS.loadZip(zipName);
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:100px;height:100px;pointer-events:none;';
+  document.body.appendChild(container);
+  const anim = lottie.loadAnimation({
+    container, renderer: 'svg', loop: false, autoplay: false, animationData: list[0]
+  });
+  anim.goToAndStop(0, true);
+  await new Promise(r => setTimeout(r, 60));
+  const svg = container.innerHTML;
+  anim.destroy();
+  container.remove();
+  return svg;
 }
 
 function initVideos() { /* no-op */ }
@@ -1905,16 +2204,21 @@ function go(viewName) {
   }
 
   const mainScroll = document.getElementById('mainScroll');
+  mainScroll.classList.remove('crash-mode', 'mines-mode');
+
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
     startCrashGame();
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
     }, 100);
+  } else if (viewName === 'mines') {
+    mainScroll.classList.add('mines-mode');
+    initMinesView();
   } else {
-    if (mainScroll.classList.contains('crash-mode')) stopCrashGame();
-    mainScroll.classList.remove('crash-mode');
+    if (crashState.status !== 'idle') stopCrashGame();
   }
+  
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
   if (viewName === 'withdraw') loadWithdrawalHistory();
 }
@@ -2572,9 +2876,7 @@ async function loadGlobalRanking() {
       return;
     }
 
-    // ---- PODIUM: top 3 ----
     const top3 = allUsers.slice(0, 3);
-    // order: 2, 1, 3
     const order = [];
     if (top3[1]) order.push({ u: top3[1], rank: 2 });
     if (top3[0]) order.push({ u: top3[0], rank: 1 });
@@ -2600,7 +2902,6 @@ async function loadGlobalRanking() {
     });
     podiumContainer.appendChild(podium);
 
-    // ---- LIST: from rank 4 ----
     list.innerHTML = '';
     const rest = allUsers.slice(3);
     rest.forEach((u, i) => {
@@ -2621,7 +2922,6 @@ async function loadGlobalRanking() {
       list.appendChild(div);
     });
     if (rest.length === 0) {
-      // Only 1-3 users - podium is enough; show subtle hint
       const hint = document.createElement('p');
       hint.style.cssText = 'text-align:center; color:var(--text-tertiary); font-size:12px; font-weight:600; padding:16px 0;';
       hint.innerText = 'المزيد من المتنافسين قادمون...';
@@ -2701,7 +3001,7 @@ async function loadCrashHistory() {
   if (!db) { renderCrashHistoryStrip(); return; }
   try {
     const q = await db.collection('puppy_users').doc(user.id)
-      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(15).get();
+      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(4).get();
     crashHistory = [];
     q.forEach(doc => {
       const d = doc.data();
@@ -2873,6 +3173,12 @@ function stopCrashGame() {
   crashState.hasBet = false;
   crashState.hasCashedOut = false;
   crashState.activeBet = 0;
+  // FIX: Disable auto-play when leaving crash view
+  if (crashState.autoPlay) {
+    crashState.autoPlay = false;
+    const toggle = document.getElementById('crash-auto-play-toggle');
+    if (toggle) toggle.checked = false;
+  }
 }
 
 function crashStartWaitingPhase() {
@@ -2930,7 +3236,8 @@ function crashCreateLiveHistory() {
   el.innerText = 'x1.00';
   strip.prepend(el);
   crashLiveHistoryEl = el;
-  while (strip.children.length > 16) strip.lastChild.remove();
+  // FIX: limit to 5 total pills (4 past + 1 live)
+  while (strip.children.length > 5) strip.lastChild.remove();
 }
 
 function crashStartFlyingPhase() {
@@ -2983,10 +3290,15 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
+// FIX: 40% chance crash is between 1.00 and 10.00, 60% above 10
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.50) return 1.00 + (Math.random() * 0.05);
-  return 1.05 + Math.pow(Math.random(), 2) * 10;
+  if (r < 0.40) {
+    // 40% in [1.00, 10.00], biased low
+    return 1.00 + Math.pow(Math.random(), 1.3) * 9.00;
+  }
+  // 60% above 10.00, biased toward lower end
+  return 10.01 + Math.pow(Math.random(), 2.5) * 89.99;
 }
 
 function crashHandleCrash() {
@@ -2995,6 +3307,7 @@ function crashHandleCrash() {
   const mainBtn = document.getElementById('crash-main-btn');
   const starsBg = document.getElementById('crash-stars-bg');
 
+  // Note: if user already cashed out, crashLiveHistoryEl is null (set in crashDoCashOut)
   if (crashLiveHistoryEl) {
     crashLiveHistoryEl.classList.remove('live');
     crashLiveHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
@@ -3011,7 +3324,7 @@ function crashHandleCrash() {
   } else if (!crashState.hasBet) {
     crashHistory.unshift({ multiplier: finalMult, result: 'watching' });
   }
-  if (crashHistory.length > 15) crashHistory.pop();
+  if (crashHistory.length > 4) crashHistory.pop();
   renderCrashHistoryStrip();
 
   if (betWasActive) {
@@ -3028,8 +3341,6 @@ function crashHandleCrash() {
   }
 
   starsBg.style.animationDuration = '10s';
-
-  // Switch visual: hide rocket, show explosion
   crashSetRocketActive(false);
   crashSetWaitingActive(false);
   crashSetExplosionActive(true);
@@ -3044,13 +3355,21 @@ function crashDoCashOut() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
   crashState.hasCashedOut = true;
   const winAmount = crashState.activeBet * crashState.multiplier;
+
+  // FIX: update live history pill to show CASHOUT multiplier (not crash point)
+  if (crashLiveHistoryEl) {
+    crashLiveHistoryEl.classList.remove('live');
+    crashLiveHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
+    crashLiveHistoryEl = null;
+  }
+
   user.stars += winAmount;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
   updateBalances();
   saveCrashRound(crashState.multiplier, crashState.activeBet, 'won');
   clearActiveCrashRound();
   crashHistory.unshift({ multiplier: crashState.multiplier, result: 'won' });
-  if (crashHistory.length > 15) crashHistory.pop();
+  if (crashHistory.length > 4) crashHistory.pop();
   const gameArea = document.getElementById('crash-game-area');
   if (gameArea) {
     gameArea.classList.add('cashout-anim');
@@ -3122,6 +3441,288 @@ function crashUpdateAutoCashout(input) {
   if (val > 100) val = 100;
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
+}
+
+/* ================= MINES GAME ================= */
+const MINES_TOTAL_CELLS = 25;
+const MINES_HOUSE_EDGE = 0.88; // "less profit" than typical games
+
+const minesState = {
+  status: 'idle',      // idle | playing | won | lost
+  bombCount: 2,
+  bet: 1,
+  grid: [],            // 'gem' | 'bomb'
+  revealed: [],        // boolean[25]
+  gemsOpened: 0,
+  multiplier: 1.00,
+  lastCrashIndex: -1,
+  autoResetTimeout: null
+};
+
+function minesSelectBombs(count, el) {
+  if (minesState.status === 'playing') return;
+  minesState.bombCount = count;
+  document.querySelectorAll('.mines-bomb-count-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderMinesLadder();
+}
+
+function minesValidateBet() {
+  const input = document.getElementById('minesBetInput');
+  let val = parseInt(input.value) || 1;
+  if (val < 1) val = 1;
+  if (val > 500) val = 500;
+  input.value = val;
+  minesState.bet = val;
+}
+
+function minesAdjustBet(delta) {
+  if (minesState.status === 'playing') return;
+  const input = document.getElementById('minesBetInput');
+  let current = parseInt(input.value) || 1;
+  current += delta;
+  if (current < 1) current = 1;
+  if (current > 500) current = 500;
+  input.value = current;
+  minesState.bet = current;
+}
+
+function initMinesView() {
+  if (minesState.autoResetTimeout) {
+    clearTimeout(minesState.autoResetTimeout);
+    minesState.autoResetTimeout = null;
+  }
+  if (minesState.status === 'won' || minesState.status === 'lost') {
+    minesReset();
+    return;
+  }
+  if (!minesState.revealed.length) {
+    minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
+  }
+  renderMinesLadder();
+  renderMinesGrid();
+  updateMinesUI();
+}
+
+function minesCalcMultiplier(bombs, opened) {
+  if (opened <= 0) return 1.00;
+  let fair = 1;
+  for (let i = 0; i < opened; i++) {
+    fair *= (MINES_TOTAL_CELLS - i) / (MINES_TOTAL_CELLS - bombs - i);
+  }
+  return fair * MINES_HOUSE_EDGE;
+}
+
+function renderMinesLadder() {
+  const ladder = document.getElementById('minesLadder');
+  if (!ladder) return;
+  ladder.innerHTML = '';
+  const bombs = minesState.bombCount;
+  const maxOpens = MINES_TOTAL_CELLS - bombs;
+  // Show multipliers for each open level, 1..maxOpens
+  for (let i = 1; i <= maxOpens; i++) {
+    const mult = minesCalcMultiplier(bombs, i);
+    const pill = document.createElement('div');
+    pill.className = 'mines-ladder-pill';
+    if (minesState.status === 'playing' && i <= minesState.gemsOpened) pill.classList.add('passed');
+    if (minesState.status === 'playing' && i === minesState.gemsOpened + 1) pill.classList.add('current');
+    pill.innerText = 'x' + mult.toFixed(2);
+    ladder.appendChild(pill);
+  }
+  // Scroll to current position
+  if (minesState.status === 'playing') {
+    setTimeout(() => {
+      const cur = ladder.querySelector('.current') || ladder.querySelector('.passed:last-child');
+      if (cur) cur.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }, 50);
+  }
+}
+
+function renderMinesGrid() {
+  const grid = document.getElementById('minesGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i = 0; i < MINES_TOTAL_CELLS; i++) {
+    const cell = document.createElement('button');
+    cell.className = 'mines-cell';
+    cell.dataset.index = i;
+    cell.setAttribute('type', 'button');
+    cell.innerHTML = '<div class="mines-cell-inner"></div>';
+    const inner = cell.querySelector('.mines-cell-inner');
+
+    if (minesState.revealed[i]) {
+      cell.classList.add('revealed');
+      const isBomb = minesState.grid[i] === 'bomb';
+      if (isBomb) {
+        cell.classList.add('revealed-bomb');
+        inner.innerHTML = minesIconFrames.bomb || '<span class="fallback-emoji">💣</span>';
+      } else {
+        cell.classList.add('revealed-gem');
+        inner.innerHTML = minesIconFrames.diamond || '<span class="fallback-emoji">💎</span>';
+      }
+    } else {
+      // Hidden cell - subtle card TGS frame as background pattern
+      inner.innerHTML = '';
+      if (minesIconFrames.card) {
+        // Use card frame as very faint background pattern inside the cell
+        const bg = document.createElement('div');
+        bg.style.cssText = 'position:absolute;inset:18%;opacity:0.13;pointer-events:none;filter:grayscale(1) brightness(1.4);';
+        bg.innerHTML = minesIconFrames.card;
+        cell.appendChild(bg);
+      }
+      cell.addEventListener('click', () => minesCellClick(i));
+    }
+    grid.appendChild(cell);
+  }
+}
+
+function updateMinesUI() {
+  const btn = document.getElementById('minesMainBtn');
+  const betInput = document.getElementById('minesBetInput');
+  const bombBtns = document.querySelectorAll('.mines-bomb-count-btn');
+  const adjBtns = document.querySelectorAll('.mines-bet-adj');
+  if (!btn) return;
+
+  if (minesState.status === 'idle' || minesState.status === 'won' || minesState.status === 'lost') {
+    btn.className = 'mines-main-btn';
+    btn.innerText = 'Start Game';
+    btn.disabled = false;
+    if (betInput) betInput.disabled = false;
+    bombBtns.forEach(b => b.disabled = false);
+    adjBtns.forEach(b => b.disabled = false);
+  } else if (minesState.status === 'playing') {
+    if (minesState.gemsOpened > 0) {
+      const cash = minesState.bet * minesState.multiplier;
+      btn.className = 'mines-main-btn cashout';
+      btn.innerText = `Cash Out ${cash.toFixed(2)}`;
+    } else {
+      btn.className = 'mines-main-btn disabled';
+      btn.innerText = 'Pick a cell...';
+    }
+    btn.disabled = false;
+    if (betInput) betInput.disabled = true;
+    bombBtns.forEach(b => b.disabled = true);
+    adjBtns.forEach(b => b.disabled = true);
+  }
+}
+
+function minesHandleMainBtn() {
+  if (minesState.status === 'playing') {
+    if (minesState.gemsOpened > 0) minesCashOut();
+  } else {
+    minesStart();
+  }
+}
+
+function minesStart() {
+  if (minesState.status === 'playing') return;
+  minesValidateBet();
+  const bet = parseInt(document.getElementById('minesBetInput').value) || 1;
+  if (bet < 1) return showToast('الحد الأدنى للرهان 1 نجمة');
+  if (bet > 500) return showToast('الحد الأقصى للرهان 500 نجمة');
+  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+
+  user.stars -= bet;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
+  updateBalances();
+
+  // Generate shuffled grid
+  const bombs = minesState.bombCount;
+  const arr = [];
+  for (let i = 0; i < bombs; i++) arr.push('bomb');
+  for (let i = 0; i < MINES_TOTAL_CELLS - bombs; i++) arr.push('gem');
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  minesState.grid = arr;
+  minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
+  minesState.gemsOpened = 0;
+  minesState.multiplier = 1.00;
+  minesState.bet = bet;
+  minesState.status = 'playing';
+  minesState.lastCrashIndex = -1;
+
+  renderMinesGrid();
+  renderMinesLadder();
+  updateMinesUI();
+}
+
+function minesCellClick(index) {
+  if (minesState.status !== 'playing') return;
+  if (minesState.revealed[index]) return;
+
+  minesState.revealed[index] = true;
+  const cell = document.querySelector(`.mines-cell[data-index="${index}"]`);
+  const inner = cell?.querySelector('.mines-cell-inner');
+
+  if (minesState.grid[index] === 'bomb') {
+    // LOST
+    minesState.status = 'lost';
+    minesState.lastCrashIndex = index;
+    // Reveal all
+    for (let i = 0; i < MINES_TOTAL_CELLS; i++) minesState.revealed[i] = true;
+    renderMinesGrid();
+    updateMinesUI();
+    renderMinesLadder();
+    showToast('💥 انفجرت القنبلة! خسرت الرهان');
+    minesState.autoResetTimeout = setTimeout(() => {
+      if (minesState.status === 'lost') minesReset();
+    }, 2600);
+  } else {
+    // GEM
+    minesState.gemsOpened++;
+    minesState.multiplier = minesCalcMultiplier(minesState.bombCount, minesState.gemsOpened);
+    // Update just this cell
+    if (cell) {
+      cell.classList.add('revealed', 'revealed-gem');
+      cell.disabled = true;
+      if (inner) inner.innerHTML = minesIconFrames.diamond || '<span class="fallback-emoji">💎</span>';
+      // remove hidden background pattern
+      const bg = cell.querySelector('div[style*="position:absolute"]');
+      if (bg) bg.remove();
+    }
+    renderMinesLadder();
+    updateMinesUI();
+
+    // Check if all safe cells opened
+    if (minesState.gemsOpened === MINES_TOTAL_CELLS - minesState.bombCount) {
+      minesCashOut();
+    }
+  }
+}
+
+function minesCashOut() {
+  if (minesState.status !== 'playing') return;
+  const winnings = minesState.bet * minesState.multiplier;
+  user.stars += winnings;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(winnings) });
+  updateBalances();
+  minesState.status = 'won';
+  showToast(`🎉 ربحت ${winnings.toFixed(2)} نجمة!`);
+  // Reveal all remaining to show the full board
+  for (let i = 0; i < MINES_TOTAL_CELLS; i++) minesState.revealed[i] = true;
+  renderMinesGrid();
+  updateMinesUI();
+  minesState.autoResetTimeout = setTimeout(() => {
+    if (minesState.status === 'won') minesReset();
+  }, 2600);
+}
+
+function minesReset() {
+  if (minesState.autoResetTimeout) {
+    clearTimeout(minesState.autoResetTimeout);
+    minesState.autoResetTimeout = null;
+  }
+  minesState.status = 'idle';
+  minesState.grid = [];
+  minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
+  minesState.gemsOpened = 0;
+  minesState.multiplier = 1.00;
+  renderMinesGrid();
+  renderMinesLadder();
+  updateMinesUI();
 }
 </script>
 
