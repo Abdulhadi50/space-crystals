@@ -254,31 +254,32 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .spin-ctrl-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.14); }
 
-/* Dual spin buttons (ticket / stars) */
+/* Small pill spin buttons (ticket / stars) */
 .spin-choices {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; width: 100%; margin-top: 4px;
+  display: flex; gap: 10px; width: 100%;
+  justify-content: center; margin-top: 4px;
 }
 .spin-choice {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 7px;
+  padding: 11px 20px;
+  border-radius: 999px;
   background: var(--gradient-blue); color: #fff;
   border: 1px solid rgba(255,255,255,0.22);
-  padding: 18px 12px; border-radius: 22px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px;
-  transition: transform 0.15s var(--spring), filter 0.2s;
-  box-shadow: 0 12px 30px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.30);
+  font-weight: 800; font-size: 13px;
+  box-shadow: 0 8px 20px rgba(59,111,219,0.40), inset 0 1px 0 rgba(255,255,255,0.28);
+  transition: transform 0.15s var(--spring);
   cursor: pointer;
+  flex: 1; max-width: 160px;
 }
-.spin-choice:active:not(:disabled) { transform: scale(0.97); }
+.spin-choice:active:not(:disabled) { transform: scale(0.96); }
 .spin-choice:disabled { opacity: 0.5; pointer-events: none; }
-.choice-icon {
-  width: 34px; height: 34px; border-radius: 50%;
-  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.4));
+.spin-choice img {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
-.choice-label { font-size: 13px; font-weight: 700; opacity: 0.92; letter-spacing: 0.2px; }
-.choice-cost {
-  font-size: 22px; font-weight: 900; line-height: 1;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+.spin-choice .choice-cost {
+  font-size: 15px; font-weight: 900; direction: ltr; line-height: 1;
 }
 
 /* ============ HEADERS ============ */
@@ -928,6 +929,59 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
+/* Big multiplier display — above the icon */
+.crash-multiplier-display {
+  position: absolute;
+  left: 50%; top: 18%;
+  transform: translateX(-50%);
+  font-size: 68px;
+  font-weight: 900;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
+  letter-spacing: -3px;
+  text-shadow: 0 6px 30px rgba(91,141,239,0.55), 0 0 60px rgba(91,141,239,0.35);
+  z-index: 5;
+  pointer-events: none;
+  direction: ltr;
+  transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.crash-multiplier-display.waiting {
+  opacity: 0.55;
+  color: #c5c5d5;
+  text-shadow: 0 4px 20px rgba(255,255,255,0.15);
+  font-size: 52px;
+}
+.crash-multiplier-display.cashed {
+  color: var(--success);
+  text-shadow: 0 6px 30px rgba(52,211,153,0.6), 0 0 60px rgba(52,211,153,0.4);
+}
+.crash-multiplier-display.crashed {
+  color: var(--danger);
+  text-shadow: 0 6px 30px rgba(255,77,109,0.7), 0 0 60px rgba(255,77,109,0.5);
+}
+
+/* Big countdown — below the waiting icon */
+.crash-countdown-display {
+  position: absolute;
+  left: 50%; bottom: 20%;
+  transform: translateX(-50%);
+  font-size: 44px;
+  font-weight: 900;
+  color: #ffffff;
+  font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 26px rgba(255,255,255,0.40), 0 0 40px rgba(255,255,255,0.20);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+  direction: ltr;
+  line-height: 1;
+}
+.crash-countdown-display.active { opacity: 1; }
+
 .crash-rocket, .crash-waiting-icon, .crash-explosion {
   position: absolute;
   transition: opacity 0.25s ease;
@@ -966,31 +1020,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   background: rgba(255,255,255,0.08); color: #ffffff; flex-shrink: 0;
   border: 1px solid rgba(255,255,255,0.10);
   font-family: system-ui, -apple-system, sans-serif;
-  transition: max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease, border-width 0.3s ease, background 0.25s, color 0.25s;
+  transition: max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease, border-width 0.3s ease;
   max-width: 200px; overflow: hidden; white-space: nowrap;
-}
-.crash-history-pill.live {
-  background: var(--gradient-platinum); color: #0a0a0f;
-  border: 1px solid #ffffff;
-  box-shadow: 0 0 14px rgba(255,255,255,0.30);
-}
-.crash-history-pill.live.cashed {
-  background: var(--gradient-success); color: #052014;
-  border-color: rgba(255,255,255,0.5);
-  box-shadow: 0 0 14px rgba(52,211,153,0.5);
-}
-.crash-history-pill.won {
-  background: rgba(52,211,153,0.22); color: var(--success);
-  border-color: rgba(52,211,153,0.45);
-}
-.crash-history-pill.lost {
-  background: rgba(255,77,109,0.20); color: #FF8CA1;
-  border-color: rgba(255,77,109,0.42);
-}
-.crash-history-pill.crashed,
-.crash-history-pill.watching {
-  background: rgba(255,255,255,0.08); color: #ffffff;
-  border-color: rgba(255,255,255,0.10);
 }
 .crash-history-pill.removing {
   opacity: 0;
@@ -998,8 +1029,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   padding: 4px 0;
   border-width: 0;
 }
-.crash-round-timer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); font-family: system-ui, -apple-system, sans-serif; }
-.crash-toggle-row { display: flex; justify-content: space-between; align-items: center; }
+.crash-round-timer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); font-family: system-ui, -apple-system, sans-serif; display: none; }
+.crash-toggle-row { display: flex; justify-content: flex-end; align-items: center; }
 .crash-toggle-left { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
 .crash-toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
 .crash-toggle-switch input { opacity: 0; width: 0; height: 0; }
@@ -1115,15 +1146,15 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-grid {
   width: 100%; max-width: 400px;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 9px;
   aspect-ratio: 1;
 }
-/* Cells — rounded squares (was hexagon) */
+/* Cells — rounded squares */
 .mines-cell {
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 18px;
   background:
     radial-gradient(circle at 40% 30%, rgba(91,141,239,0.12), transparent 65%),
     linear-gradient(160deg, rgba(30,40,60,0.95), rgba(15,20,32,0.98));
@@ -1144,8 +1175,8 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .mines-cell::after {
   content: '';
-  position: absolute; inset: 4px;
-  border-radius: 12px;
+  position: absolute; inset: 5px;
+  border-radius: 14px;
   border: 1px solid rgba(91,141,239,0.16);
   pointer-events: none;
 }
@@ -1181,13 +1212,13 @@ input:checked + .slider:before { transform: translateX(22px); }
   80% { transform: translateX(3px) rotate(2deg); }
 }
 .mines-cell-inner {
-  width: 72%; height: 72%;
+  width: 70%; height: 70%;
   display: flex; align-items: center; justify-content: center;
   position: relative; z-index: 1;
 }
 .mines-cell-inner svg { width: 100% !important; height: 100% !important; display: block; }
 .mines-cell-inner img { width: 100%; height: 100%; object-fit: contain; }
-.mines-cell-inner i { font-size: 28px; }
+.mines-cell-inner i { font-size: 30px; }
 .mines-cell.revealed-bomb .mines-cell-inner i { color: #ff6b6b; }
 .mines-cell.revealed-gem .mines-cell-inner i { color: #5b8def; }
 
@@ -1294,9 +1325,12 @@ input:checked + .slider:before { transform: translateX(22px); }
   .page-title { font-size: 23px; }
   .podium-item.rank-1 .podium-avatar { width: 76px; height: 76px; }
   .podium-item.rank-2 .podium-avatar, .podium-item.rank-3 .podium-avatar { width: 64px; height: 64px; }
-  .mines-grid { gap: 6px; }
-  .mines-cell { border-radius: 12px; }
-  .mines-cell::after { border-radius: 9px; inset: 3px; }
+  .mines-grid { gap: 7px; }
+  .mines-cell { border-radius: 14px; }
+  .mines-cell::after { border-radius: 10px; inset: 4px; }
+  .crash-multiplier-display { font-size: 54px; }
+  .crash-multiplier-display.waiting { font-size: 42px; }
+  .crash-countdown-display { font-size: 36px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1380,16 +1414,14 @@ input:checked + .slider:before { transform: translateX(22px); }
           <i class="fas fa-gift"></i> Prizes
         </button>
       </div>
-      <!-- Dual spin buttons: 10 tickets OR 10 stars -->
+      <!-- Small pill spin buttons -->
       <div class="spin-choices">
         <button class="spin-choice" id="spin-btn-ticket" onclick="startSpin('ticket')">
-          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" class="choice-icon" alt="Ticket">
-          <span class="choice-label">Spin</span>
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Ticket">
           <span class="choice-cost">10</span>
         </button>
         <button class="spin-choice" id="spin-btn-stars" onclick="startSpin('stars')">
-          <img src="https://up6.cc/2026/10/17932600818491.png" class="choice-icon" alt="Star">
-          <span class="choice-label">Spin</span>
+          <img src="https://up6.cc/2026/10/17932600818491.png" alt="Star">
           <span class="choice-cost">10</span>
         </button>
       </div>
@@ -1398,22 +1430,16 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view" id="view-crash">
       <div class="crash-game-area" id="crash-game-area">
         <div class="crash-stars-bg" id="crash-stars-bg"></div>
+        <div class="crash-multiplier-display waiting" id="crash-mult-display">1.00×</div>
         <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
         <div class="crash-waiting-icon tgs-box" id="crash-waiting-tgs"></div>
         <div class="crash-explosion tgs-box" id="crash-explosion-tgs"></div>
+        <div class="crash-countdown-display" id="crash-countdown-display">10s</div>
       </div>
       <div class="crash-bottom-panel">
         <div class="crash-bet-controls">
           <div class="crash-history-strip" id="crash-history-strip"></div>
-          <div class="crash-round-timer" id="crash-round-timer">Starting in 10s...</div>
           <div class="crash-toggle-row">
-            <div class="crash-toggle-left">
-              <label class="crash-toggle-switch">
-                <input type="checkbox" id="crash-auto-play-toggle" onchange="crashToggleAutoPlay(this)">
-                <span class="crash-toggle-slider"></span>
-              </label>
-              <span>Auto Play</span>
-            </div>
             <div class="crash-toggle-left">
               <label class="crash-toggle-switch">
                 <input type="checkbox" id="crash-auto-cashout-toggle" onchange="crashToggleAutoCashout(this)">
@@ -1439,7 +1465,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- MINES GAME (simplified) -->
+    <!-- MINES GAME — 4×4 grid -->
     <div class="view" id="view-mines">
       <div class="mines-ladder" id="minesLadder"></div>
       <div class="mines-grid-wrap">
@@ -2194,7 +2220,7 @@ function go(viewName) {
   } else if (activeProfile) {
     activeProfile.classList.add('active');
   } else {
-    document.querySelector('.dock-nav').style.setProperty('--nav-index', 0);
+    document.querySelector('.dock-nav').setProperty && document.querySelector('.dock-nav').style.setProperty('--nav-index', 0);
     const homeNav = document.querySelector('.nav-item[data-view="home"]');
     if (homeNav) homeNav.classList.add('active');
   }
@@ -2965,7 +2991,7 @@ const crashState = {
   hasBet: false,
   activeBet: 0,
   hasCashedOut: false,
-  autoPlay: false,
+  cashoutMultiplier: 0,
   autoCashout: false,
   autoCashoutValue: 2.00,
   countdown: 10,
@@ -2975,7 +3001,6 @@ const crashState = {
   roundId: null
 };
 
-let crashLiveHistoryEl = null;
 let crashHistory = [];
 
 function isCrashViewActive() {
@@ -3004,12 +3029,29 @@ function crashSetExplosionActive(active) {
   if (active) TGS.restart('crash-explosion-tgs');
 }
 
+function crashSetMultiplierDisplay(text, state) {
+  const el = document.getElementById('crash-mult-display');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('waiting', 'cashed', 'crashed');
+  if (state === 'waiting') el.classList.add('waiting');
+  else if (state === 'cashed') el.classList.add('cashed');
+  else if (state === 'crashed') el.classList.add('crashed');
+}
+
+function crashSetCountdownDisplay(text, visible) {
+  const el = document.getElementById('crash-countdown-display');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.toggle('active', !!visible);
+}
+
 /* ---------- Firebase persistence ---------- */
 async function loadCrashHistory() {
   if (!db) { renderCrashHistoryStrip(); return; }
   try {
     const q = await db.collection('puppy_users').doc(user.id)
-      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(4).get();
+      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(5).get();
     crashHistory = [];
     q.forEach(doc => {
       const d = doc.data();
@@ -3081,10 +3123,30 @@ function renderCrashHistoryStrip() {
     const el = document.createElement('div');
     el.className = 'crash-history-pill';
     el.innerText = 'x' + Number(item.multiplier).toFixed(2);
-    if (item.result === 'won') el.classList.add('won');
-    else if (item.result === 'lost') el.classList.add('lost');
     strip.appendChild(el);
   });
+}
+
+function crashPushHistory(multiplier) {
+  const strip = document.getElementById('crash-history-strip');
+  if (!strip) return;
+
+  // Fade out oldest if already 5 pills
+  const active = Array.from(strip.querySelectorAll('.crash-history-pill:not(.removing)'));
+  if (active.length >= 5) {
+    const oldest = active[active.length - 1];
+    oldest.classList.add('removing');
+    setTimeout(() => { if (oldest.parentNode) oldest.remove(); }, 320);
+  }
+
+  const el = document.createElement('div');
+  el.className = 'crash-history-pill';
+  el.innerText = 'x' + Number(multiplier).toFixed(2);
+  strip.prepend(el);
+
+  // Keep crashHistory array in sync (max 5)
+  crashHistory.unshift({ multiplier });
+  if (crashHistory.length > 5) crashHistory.pop();
 }
 
 async function startCrashGame() {
@@ -3142,24 +3204,24 @@ function resumeActiveFlight(active, elapsed) {
   crashState.hasCashedOut = false;
   crashState.multiplier = Math.pow(1.08, elapsed);
   
-  const roundTimer = document.getElementById('crash-round-timer');
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
   
-  roundTimer.style.display = 'none';
+  crashSetCountdownDisplay('', false);
+  crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + '×', '');
   starsBg.style.animationDuration = '0.2s';
   crashSetWaitingActive(false);
   crashSetExplosionActive(false);
   crashSetRocketActive(true);
   mainBtn.className = 'crash-main-btn cashout';
   mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
-  crashCreateLiveHistory();
   
   function loop(timestamp) {
     if (crashState.status !== 'flying') return;
     const el = (timestamp - crashState.startTime) / 1000;
     crashState.multiplier = Math.pow(1.08, el);
-    if (crashLiveHistoryEl) crashLiveHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + '×',
+      crashState.hasCashedOut ? 'cashed' : '');
     if (crashState.hasBet && !crashState.hasCashedOut) {
       mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
@@ -3182,12 +3244,8 @@ function stopCrashGame() {
   crashState.status = 'idle';
   crashState.hasBet = false;
   crashState.hasCashedOut = false;
+  crashState.cashoutMultiplier = 0;
   crashState.activeBet = 0;
-  if (crashState.autoPlay) {
-    crashState.autoPlay = false;
-    const toggle = document.getElementById('crash-auto-play-toggle');
-    if (toggle) toggle.checked = false;
-  }
 }
 
 function crashStartWaitingPhase() {
@@ -3195,16 +3253,18 @@ function crashStartWaitingPhase() {
   crashState.multiplier = 1.00;
   if (!crashState.hasBet) crashState.activeBet = 0;
   crashState.hasCashedOut = false;
+  crashState.cashoutMultiplier = 0;
   crashState.countdown = 10;
 
   const starsBg = document.getElementById('crash-stars-bg');
-  const roundTimer = document.getElementById('crash-round-timer');
   const mainBtn = document.getElementById('crash-main-btn');
 
   starsBg.style.animationDuration = '10s';
-  roundTimer.style.display = 'block';
-  roundTimer.innerText = `Starting in ${crashState.countdown}s...`;
-  
+
+  // Show 1.00× faded above icon, countdown 10s below
+  crashSetMultiplierDisplay('1.00×', 'waiting');
+  crashSetCountdownDisplay(crashState.countdown + 's', true);
+
   if (crashState.hasBet) {
     mainBtn.className = 'crash-main-btn cancel';
     mainBtn.innerText = 'Cancel bet';
@@ -3216,13 +3276,6 @@ function crashStartWaitingPhase() {
   crashSetRocketActive(false);
   crashSetExplosionActive(false);
   crashSetWaitingActive(true);
-  crashCreateLiveHistory();
-
-  if (crashState.autoPlay && !crashState.hasBet) {
-    setTimeout(() => {
-      if (crashState.status === 'waiting' && !crashState.hasBet && isCrashViewActive()) crashPlaceBet();
-    }, 500);
-  }
 
   if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
   crashState.countdownInterval = setInterval(() => {
@@ -3232,29 +3285,9 @@ function crashStartWaitingPhase() {
       clearInterval(crashState.countdownInterval);
       crashStartFlyingPhase();
     } else {
-      roundTimer.innerText = `Starting in ${crashState.countdown}s...`;
+      crashSetCountdownDisplay(crashState.countdown + 's', true);
     }
   }, 1000);
-}
-
-/* Create live pill. If strip already has 5 pills, oldest (rightmost) is removed smoothly first. */
-function crashCreateLiveHistory() {
-  const strip = document.getElementById('crash-history-strip');
-  if (!strip) return;
-
-  // Count non-removing pills; if >= 5, fade out the oldest (last child)
-  const active = Array.from(strip.querySelectorAll('.crash-history-pill:not(.removing)'));
-  if (active.length >= 5) {
-    const oldest = active[active.length - 1];
-    oldest.classList.add('removing');
-    setTimeout(() => { if (oldest.parentNode) oldest.remove(); }, 320);
-  }
-
-  const el = document.createElement('div');
-  el.className = 'crash-history-pill live';
-  el.innerText = 'x1.00';
-  strip.prepend(el);
-  crashLiveHistoryEl = el;
 }
 
 function crashStartFlyingPhase() {
@@ -3262,11 +3295,11 @@ function crashStartFlyingPhase() {
   crashState.startTime = performance.now();
   crashState.crashPoint = crashGenerateCrashPoint();
 
-  const roundTimer = document.getElementById('crash-round-timer');
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
 
-  roundTimer.style.display = 'none';
+  crashSetCountdownDisplay('', false);
+  crashSetMultiplierDisplay('1.00×', '');
   starsBg.style.animationDuration = '0.2s';
   crashSetWaitingActive(false);
   crashSetExplosionActive(false);
@@ -3292,8 +3325,8 @@ function crashStartFlyingPhase() {
     if (crashState.status !== 'flying') return;
     const elapsed = (timestamp - crashState.startTime) / 1000;
     crashState.multiplier = Math.pow(1.08, elapsed);
-    // Live pill always updates while flying (even after cashout)
-    if (crashLiveHistoryEl) crashLiveHistoryEl.innerText = 'x' + crashState.multiplier.toFixed(2);
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + '×',
+      crashState.hasCashedOut ? 'cashed' : '');
     if (crashState.hasBet && !crashState.hasCashedOut) {
       mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
@@ -3308,13 +3341,13 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
-// 40% of rounds crash between 1.00 and 10.00, 60% above 10.00
+// 60% of rounds crash between 1.00 and 5.00, 40% above 5.00
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.40) {
-    return 1.00 + Math.pow(Math.random(), 1.3) * 9.00;
+  if (r < 0.60) {
+    return 1.00 + Math.pow(Math.random(), 1.3) * 4.00;
   }
-  return 10.01 + Math.pow(Math.random(), 2.5) * 89.99;
+  return 5.01 + Math.pow(Math.random(), 2.5) * 94.99;
 }
 
 function crashHandleCrash() {
@@ -3325,18 +3358,18 @@ function crashHandleCrash() {
 
   const finalMult = crashState.multiplier;
 
-  // Finalize the live pill with crash value, keep it in the strip
-  if (crashLiveHistoryEl) {
-    crashLiveHistoryEl.classList.remove('live', 'cashed');
-    crashLiveHistoryEl.innerText = 'x' + finalMult.toFixed(2);
-    if (crashState.hasCashedOut) crashLiveHistoryEl.classList.add('won');
-    else if (crashState.hasBet) crashLiveHistoryEl.classList.add('lost');
-    else crashLiveHistoryEl.classList.add('watching');
-    crashLiveHistoryEl = null;
-  }
+  // Big display: show final value in red
+  crashSetMultiplierDisplay(finalMult.toFixed(2) + '×', 'crashed');
+  crashSetCountdownDisplay('', false);
 
   const betWasActive = crashState.hasBet && !crashState.hasCashedOut;
-  
+  const recordedMult = crashState.hasCashedOut
+    ? (crashState.cashoutMultiplier || finalMult)
+    : finalMult;
+
+  // Add pill only once per round
+  crashPushHistory(recordedMult);
+
   if (betWasActive) {
     saveCrashRound(finalMult, crashState.activeBet, 'lost');
     clearActiveCrashRound();
@@ -3366,12 +3399,11 @@ function crashHandleCrash() {
 function crashDoCashOut() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
   crashState.hasCashedOut = true;
+  crashState.cashoutMultiplier = crashState.multiplier;
   const winAmount = crashState.activeBet * crashState.multiplier;
 
-  // Mark live pill visually as "cashed" but KEEP updating numbers
-  if (crashLiveHistoryEl) {
-    crashLiveHistoryEl.classList.add('cashed');
-  }
+  // Big display: switch to green and KEEP updating until crash
+  crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + '×', 'cashed');
 
   user.stars += winAmount;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
@@ -3439,10 +3471,6 @@ function crashAddBet(amount) {
   let newVal = Math.min(current + amount, 1000);
   input.value = newVal;
 }
-function crashToggleAutoPlay(checkbox) {
-  crashState.autoPlay = checkbox.checked;
-  if (crashState.autoPlay && crashState.status === 'waiting' && !crashState.hasBet) crashPlaceBet();
-}
 function crashToggleAutoCashout(checkbox) { crashState.autoCashout = checkbox.checked; }
 function crashUpdateAutoCashout(input) {
   let val = parseFloat(input.value) || 2.00;
@@ -3453,8 +3481,8 @@ function crashUpdateAutoCashout(input) {
 }
 
 /* ================= MINES GAME ================= */
-const MINES_TOTAL_CELLS = 25;
-const MINES_HOUSE_EDGE = 0.86; // slightly lower profit than before (was 0.88)
+const MINES_TOTAL_CELLS = 16; // 4×4 grid
+const MINES_HOUSE_EDGE = 0.86;
 
 const minesState = {
   status: 'idle',
