@@ -2132,7 +2132,6 @@ const FIREBASE_CONFIG = {
 
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 
-// تم دمج جميع الملفات الجديدة هنا
 const WINNING_TABLE = [
   { id: 'p1', img: 'IMG_20261029_131022_938.png', value: 0.01, weight: 20 },
   { id: 'p2', img: 'IMG_20261029_131039_955.png', value: 0.1, weight: 20 },
@@ -2266,19 +2265,23 @@ function initFirebase() {
       fetchUserData(),
       loadTasks(),
       loadWithdrawalHistory(),
-      calibrateServerTime()
+      calibrateServerTime(),
+      loadCrashHistory() // تحميل السجل عند بدء التطبيق
     ]).then(() => {
       document.getElementById('splash').classList.add('hide');
       document.getElementById('app').classList.add('ready');
+      startCrashGame(); // بدء اللعبة في الخلفية
     }).catch((err) => {
       console.error("Init error:", err);
       document.getElementById('splash').classList.add('hide');
       document.getElementById('app').classList.add('ready');
+      startCrashGame();
     });
   } catch (e) {
     console.error(e);
     document.getElementById('splash').classList.add('hide');
     document.getElementById('app').classList.add('ready');
+    startCrashGame();
   }
 }
 
@@ -2481,18 +2484,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    if (isCrashViewActive()) saveActiveRoundState();
+    // نترك اللعبة تعمل في الخلفية
   } else {
     if (typeof TGS !== 'undefined') TGS.replayAll();
     if (db) {
       calibrateServerTime().then(() => initDailyLogin());
-      if (isCrashViewActive()) checkAndResumeCrashRound();
     }
   }
 });
 
 window.addEventListener('pagehide', () => {
-  if (isCrashViewActive()) saveActiveRoundState();
+  saveActiveRoundState();
 });
 
 function go(viewName) {
@@ -2524,7 +2526,7 @@ function go(viewName) {
 
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
-    startCrashGame();
+    startCrashGame(); // تعمل بأمان إذا كانت اللعبة مستمرة
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
     }, 100);
@@ -2532,10 +2534,7 @@ function go(viewName) {
     mainScroll.classList.add('mines-mode');
     initMinesView();
   } else if (viewName === 'slots') {
-    if (crashState.status !== 'idle') stopCrashGame();
     slotsUpdateBalance();
-  } else {
-    if (crashState.status !== 'idle') stopCrashGame();
   }
   
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2613,12 +2612,12 @@ function getSlotOutcome() {
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
 
-  if (roll < 95) {
+  // نسبة الفوز أصبحت متوسطة: 75% خسارة، 24% فوز عادي، 1% جاكبوت
+  if (roll < 75) {
     return { type: 'lose' };
-  } else if (roll < 96) { // 1% للجائزة الكبرى p10
+  } else if (roll >= 99) {
     return { type: 'win', id: 'p10', value: config.table['p10'] };
   } else {
-    // 4% لباقي الجوائز
     const keys = Object.keys(config.table).filter(k => k !== 'p10');
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return { type: 'win', id: randomKey, value: config.table[randomKey] };
@@ -2773,7 +2772,6 @@ function slotsShowPrizes() {
   container.innerHTML = '';
   const config = SLOTS_CONFIG[slotsState.currentBet];
 
-  // 0 prize
   const loseDiv = document.createElement('div');
   loseDiv.className = 'prize-grid-item';
   loseDiv.innerHTML = `
@@ -2784,7 +2782,6 @@ function slotsShowPrizes() {
   `;
   container.appendChild(loseDiv);
 
-  // All prizes for current bet sorted by value
   const sortedPrizes = Object.entries(config.table).sort((a,b) => a[1] - b[1]);
 
   sortedPrizes.forEach(([symId, val]) => {
@@ -3529,6 +3526,7 @@ const crashState = {
   countdownInterval: null,
   animationId: null,
   startTime: 0,
+  waitingEndTime: 0,
   roundId: null
 };
 
@@ -3657,7 +3655,7 @@ function saveActiveRoundState() {
       hasCashedOut: false
     });
   } else if (crashState.status === 'flying') {
-    const elapsed = (performance.now() - crashState.startTime) / 1000;
+    const elapsed = (Date.now() - crashState.startTime) / 1000;
     const currentMult = Math.pow(1.08, elapsed);
     const finalMult = Math.min(currentMult, crashState.crashPoint);
     const bet = crashState.activeBet;
@@ -3705,8 +3703,9 @@ function crashPushHistory(multiplier) {
 }
 
 async function startCrashGame() {
-  if (crashState.status === 'waiting' || crashState.status === 'flying') return;
-  await loadCrashHistory();
+  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') {
+    return; // اللعبة تعمل بالفعل في الخلفية
+  }
   const resumed = await checkAndResumeCrashRound();
   if (resumed) return;
   crashStartWaitingPhase();
@@ -3731,17 +3730,6 @@ async function checkAndResumeCrashRound() {
   return false;
 }
 
-function stopCrashGame() {
-  if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
-  if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
-  saveActiveRoundState();
-  crashState.status = 'idle';
-  crashState.hasBet = false;
-  crashState.hasCashedOut = false;
-  crashState.cashoutMultiplier = 0;
-  crashState.activeBet = 0;
-}
-
 function crashStartWaitingPhase() {
   crashState.status = 'waiting';
   crashState.multiplier = 1.00;
@@ -3750,43 +3738,53 @@ function crashStartWaitingPhase() {
   crashState.cashoutMultiplier = 0;
   crashState.countdown = 6;
   crashState.roundId = null;
+  crashState.waitingEndTime = Date.now() + 6000;
 
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
 
-  starsBg.style.animationDuration = '6s';
+  if (starsBg) starsBg.style.animationDuration = '6s';
 
   crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
 
   if (crashState.hasBet) {
-    mainBtn.className = 'crash-main-btn cancel';
-    mainBtn.innerText = 'Cancel bet';
+    if (mainBtn) {
+      mainBtn.className = 'crash-main-btn cancel';
+      mainBtn.innerText = 'Cancel bet';
+    }
   } else {
-    mainBtn.className = 'crash-main-btn';
-    mainBtn.innerText = 'Place bet';
+    if (mainBtn) {
+      mainBtn.className = 'crash-main-btn';
+      mainBtn.innerText = 'Place bet';
+    }
   }
 
   crashSetRocketActive(false);
   crashSetExplosionActive(false);
   crashSetWaitingActive(true);
 
-  if (crashState.countdownInterval) clearInterval(crashState.countdownInterval);
-  crashState.countdownInterval = setInterval(() => {
-    if (!isCrashViewActive()) { clearInterval(crashState.countdownInterval); return; }
-    crashState.countdown--;
-    if (crashState.countdown <= 0) {
-      clearInterval(crashState.countdownInterval);
+  if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
+
+  const tick = () => {
+    if (crashState.status !== 'waiting') return;
+    const remain = Math.ceil((crashState.waitingEndTime - Date.now()) / 1000);
+    if (remain <= 0) {
       crashStartFlyingPhase();
     } else {
-      crashSetCountdownDisplay(crashState.countdown + 's', true);
+      crashState.countdown = remain;
+      if (isCrashViewActive()) {
+        crashSetCountdownDisplay(remain + 's', true);
+      }
+      crashState.countdownInterval = setTimeout(tick, 200);
     }
-  }, 1000);
+  };
+  tick();
 }
 
 function crashStartFlyingPhase() {
   crashState.status = 'flying';
-  crashState.startTime = performance.now();
+  crashState.startTime = Date.now();
   crashState.crashPoint = crashGenerateCrashPoint();
   crashState.roundId = 'r_' + user.id + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
 
@@ -3795,37 +3793,48 @@ function crashStartFlyingPhase() {
 
   crashSetCountdownDisplay('', false);
   crashSetMultiplierDisplay('1.00x', '');
-  starsBg.style.animationDuration = '0.2s';
+  if (starsBg) starsBg.style.animationDuration = '0.2s';
   crashSetWaitingActive(false);
   crashSetExplosionActive(false);
   crashSetRocketActive(true);
 
   if (crashState.hasBet && !crashState.hasCashedOut) {
     saveActiveCrashRound({
-      status: 'flying', startTime: Date.now(),
+      status: 'flying', startTime: crashState.startTime,
       crashPoint: crashState.crashPoint,
       activeBet: crashState.activeBet, hasCashedOut: false
     });
   }
 
   if (crashState.hasBet) {
-    mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
-    mainBtn.className = 'crash-main-btn cashout';
+    if (mainBtn) {
+      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+      mainBtn.className = 'crash-main-btn cashout';
+    }
   } else {
-    mainBtn.innerText = 'Waiting...';
-    mainBtn.className = 'crash-main-btn disabled';
+    if (mainBtn) {
+      mainBtn.innerText = 'Waiting...';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
   }
 
-  function loop(timestamp) {
+  function loop() {
     if (crashState.status !== 'flying') return;
-    const elapsed = (timestamp - crashState.startTime) / 1000;
+    const elapsed = (Date.now() - crashState.startTime) / 1000;
     crashState.multiplier = Math.pow(1.08, elapsed);
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-      crashState.hasCashedOut ? 'cashed' : '');
+
+    if (isCrashViewActive()) {
+      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
+        crashState.hasCashedOut ? 'cashed' : '');
+      if (crashState.hasBet && !crashState.hasCashedOut) {
+        if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+      }
+    }
+
     if (crashState.hasBet && !crashState.hasCashedOut) {
-      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
     }
+
     if (crashState.multiplier >= crashState.crashPoint) {
       crashState.multiplier = crashState.crashPoint;
       crashHandleCrash();
@@ -3836,12 +3845,14 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
+// تم تحديث النسب هنا بناءً على طلبك
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.60) {
-    return 1.00 + Math.pow(Math.random(), 1.3) * 4.00;
-  }
-  return 5.01 + Math.pow(Math.random(), 2.5) * 94.99;
+  if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
+  if (r < 0.80) return 2.00 + Math.random() * 8.00; // 30% -> 2.00 to 10.00
+  if (r < 0.90) return 10.00 + Math.random() * 10.00; // 10% -> 10.00 to 20.00
+  if (r < 0.95) return 20.00 + Math.random() * 30.00; // 5% -> 20.00 to 50.00
+  return 50.00 + Math.random() * 50.00; // 5% -> 50.00 to 100.00
 }
 
 function crashHandleCrash() {
@@ -3852,8 +3863,10 @@ function crashHandleCrash() {
 
   const finalMult = crashState.multiplier;
 
-  crashSetMultiplierDisplay(finalMult.toFixed(2) + 'x', 'crashed');
-  crashSetCountdownDisplay('', false);
+  if (isCrashViewActive()) {
+    crashSetMultiplierDisplay(finalMult.toFixed(2) + 'x', 'crashed');
+    crashSetCountdownDisplay('', false);
+  }
 
   const betWasActive = crashState.hasBet && !crashState.hasCashedOut;
   const recordedMult = crashState.hasCashedOut
@@ -3867,24 +3880,30 @@ function crashHandleCrash() {
     clearActiveCrashRound();
     crashState.hasBet = false;
     crashState.activeBet = 0;
-    mainBtn.innerText = 'Crashed';
-    mainBtn.className = 'crash-main-btn disabled';
+    if (mainBtn) {
+      mainBtn.innerText = 'Crashed';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
   } else if (crashState.hasCashedOut) {
-    mainBtn.innerText = 'You won!';
-    mainBtn.className = 'crash-main-btn disabled';
+    if (mainBtn) {
+      mainBtn.innerText = 'You won!';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
   } else {
-    mainBtn.innerText = 'Crashed';
-    mainBtn.className = 'crash-main-btn disabled';
+    if (mainBtn) {
+      mainBtn.innerText = 'Crashed';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
   }
 
-  starsBg.style.animationDuration = '6s';
+  if (starsBg) starsBg.style.animationDuration = '6s';
   crashSetRocketActive(false);
   crashSetWaitingActive(false);
   crashSetExplosionActive(true);
 
   setTimeout(() => {
     crashSetExplosionActive(false);
-    if (isCrashViewActive()) crashStartWaitingPhase();
+    crashStartWaitingPhase();
   }, 2500);
 }
 
@@ -3894,7 +3913,9 @@ function crashDoCashOut() {
   crashState.cashoutMultiplier = crashState.multiplier;
   const winAmount = crashState.activeBet * crashState.multiplier;
 
-  crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
+  if (isCrashViewActive()) {
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
+  }
 
   user.stars += winAmount;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
@@ -3906,13 +3927,15 @@ function crashDoCashOut() {
   crashState.activeBet = 0;
 
   const gameArea = document.getElementById('crash-game-area');
-  if (gameArea) {
+  if (gameArea && isCrashViewActive()) {
     gameArea.classList.add('cashout-anim');
     setTimeout(() => gameArea.classList.remove('cashout-anim'), 300);
   }
   const mainBtn = document.getElementById('crash-main-btn');
-  mainBtn.innerText = `WON ${winAmount.toFixed(2)}`;
-  mainBtn.className = 'crash-main-btn disabled';
+  if (mainBtn) {
+    mainBtn.innerText = `WON ${winAmount.toFixed(2)}`;
+    mainBtn.className = 'crash-main-btn disabled';
+  }
 }
 
 function crashHandleMainBtn() {
@@ -3936,8 +3959,10 @@ function crashPlaceBet() {
   crashState.hasCashedOut = false;
   saveActiveCrashRound({ status: 'waiting', activeBet: bet, hasCashedOut: false });
   const mainBtn = document.getElementById('crash-main-btn');
-  mainBtn.innerText = 'Cancel bet';
-  mainBtn.className = 'crash-main-btn cancel';
+  if (mainBtn) {
+    mainBtn.innerText = 'Cancel bet';
+    mainBtn.className = 'crash-main-btn cancel';
+  }
 }
 
 function crashCancelBet() {
@@ -3949,8 +3974,10 @@ function crashCancelBet() {
   crashState.hasBet = false;
   clearActiveCrashRound();
   const mainBtn = document.getElementById('crash-main-btn');
-  mainBtn.innerText = 'Place bet';
-  mainBtn.className = 'crash-main-btn';
+  if (mainBtn) {
+    mainBtn.innerText = 'Place bet';
+    mainBtn.className = 'crash-main-btn';
+  }
 }
 
 function crashValidateBet() {
