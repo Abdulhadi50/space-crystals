@@ -13,6 +13,7 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root {
   --bg-main: #07070b;
@@ -182,6 +183,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.card-crash  { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.42), transparent 62%); }
 .home-card.card-mines  { --card-accent: radial-gradient(circle at 105% -10%, rgba(59,130,246,0.46), transparent 62%); }
 .home-card.card-slots  { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.35), transparent 62%); }
+.home-card.card-trading { --card-accent: radial-gradient(circle at 105% -10%, rgba(52,211,153,0.42), transparent 62%); }
 .home-card.referral    { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.42), transparent 62%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
@@ -968,7 +970,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 #tsIcon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 #tsIcon i { font-size: 40px; color: #fff; }
 
-/* Info Modal specific */
 .info-modal { text-align: right; }
 .info-modal h3 { text-align: center; margin-bottom: 16px; }
 .info-modal p { font-size: 13px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
@@ -1476,6 +1477,152 @@ input:checked + .slider:before { transform: translateX(22px); }
 .tgs-box { display: block; }
 .tgs-box svg { width: 100% !important; height: 100% !important; display: block; }
 
+/* ============ TRADING VIEW ============ */
+.main-scroll.trading-mode { padding: 0; overflow: hidden; }
+#view-trading.active {
+  display: flex; flex-direction: column; height: 100%;
+  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 52px);
+  padding-bottom: calc(var(--dock-height) + 12px + var(--safe-bottom));
+  animation: viewIn 0.35s var(--ease-out);
+}
+
+.trading-header {
+  padding: 0 14px 8px; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.trading-symbol-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px; padding: 10px 14px;
+}
+.trading-symbol-info { display: flex; flex-direction: column; gap: 2px; }
+.trading-symbol-name { font-size: 15px; font-weight: 800; color: #fff; }
+.trading-symbol-price { font-size: 22px; font-weight: 900; color: #fff; direction: ltr; text-align: left; transition: color 0.25s; }
+.trading-symbol-change { font-size: 13px; font-weight: 800; direction: ltr; text-align: left; }
+.trading-symbol-change.up { color: var(--success); }
+.trading-symbol-change.down { color: var(--danger); }
+
+.trading-symbol-selector {
+  display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.trading-symbol-selector::-webkit-scrollbar { display: none; }
+.trading-symbol-btn {
+  padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 800;
+  background: rgba(255,255,255,0.06); color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+  transition: all 0.2s;
+  direction: ltr; font-family: system-ui, sans-serif;
+}
+.trading-symbol-btn.active {
+  background: var(--gradient-blue); color: #fff;
+  border-color: rgba(255,255,255,0.25);
+  box-shadow: 0 4px 14px rgba(59,111,219,0.35);
+}
+
+.trading-timeframes {
+  display: flex; gap: 4px; background: rgba(255,255,255,0.04);
+  border-radius: 12px; padding: 3px;
+}
+.trading-timeframe-btn {
+  flex: 1; padding: 6px 4px; border-radius: 9px;
+  font-size: 11px; font-weight: 800; color: var(--text-secondary);
+  transition: all 0.2s; direction: ltr;
+  font-family: system-ui, sans-serif;
+}
+.trading-timeframe-btn.active {
+  background: rgba(255,255,255,0.14); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.trading-chart-wrap {
+  flex: 1; margin: 0 8px; position: relative; min-height: 200px;
+  border-radius: 18px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #0b0b12;
+}
+#tradingChart { width: 100%; height: 100%; min-height: 200px; }
+
+.trading-panel {
+  padding: 8px 14px 0; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.trading-trade-row {
+  display: flex; gap: 8px; align-items: stretch;
+}
+.trading-amount-wrap {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.trading-amount-label { font-size: 10px; color: var(--text-secondary); font-weight: 700; padding-right: 4px; }
+.trading-amount-input {
+  width: 100%; padding: 12px 14px; border-radius: 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff; font-size: 18px; font-weight: 800;
+  outline: none; text-align: center; direction: ltr;
+  font-family: system-ui, sans-serif;
+}
+.trading-amount-input:focus { border-color: rgba(255,255,255,0.3); }
+
+.trading-btn {
+  flex: 1; border-radius: 14px; font-size: 15px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 14px 8px; color: #fff; transition: transform 0.15s var(--spring);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.trading-btn:active:not(:disabled) { transform: scale(0.97); }
+.trading-btn:disabled { opacity: 0.4; pointer-events: none; }
+.trading-btn.buy {
+  background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+  box-shadow: 0 8px 22px rgba(52,211,153,0.35);
+}
+.trading-btn.sell {
+  background: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
+  box-shadow: 0 8px 22px rgba(230,57,80,0.35);
+}
+
+.trading-balance-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-weight: 700; color: var(--text-secondary);
+  padding: 2px 4px;
+}
+.trading-balance-row b { color: #FFD700; font-size: 14px; }
+
+.trading-positions {
+  max-height: 140px; overflow-y: auto; margin: 0 14px;
+  display: flex; flex-direction: column; gap: 6px; padding-bottom: 4px;
+}
+.trading-position {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 8px 12px; gap: 8px;
+}
+.trading-position-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.trading-position-title { font-size: 12px; font-weight: 800; color: #fff; }
+.trading-position-pnl { font-size: 12px; font-weight: 800; direction: ltr; }
+.trading-position-pnl.profit { color: var(--success); }
+.trading-position-pnl.loss { color: var(--danger); }
+.trading-close-btn {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; padding: 6px 14px; border-radius: 10px;
+  font-size: 11px; font-weight: 800; flex-shrink: 0;
+}
+.trading-empty { text-align: center; color: var(--text-tertiary); font-size: 11px; font-weight: 600; padding: 8px; }
+
+.trading-quick-amounts {
+  display: flex; gap: 6px; padding: 0;
+}
+.trading-quick-btn {
+  flex: 1; padding: 8px; border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-secondary); font-size: 11px; font-weight: 800;
+  direction: ltr; font-family: system-ui, sans-serif;
+}
+.trading-quick-btn:active { background: rgba(255,255,255,0.12); }
+
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
   .home-card h3 { font-size: 21px; }
@@ -1499,6 +1646,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
   .slots-spin-btn { font-size: 15px; padding: 14px; }
   .prize-val { font-size: 10px; padding: 2px 4px; }
+  .trading-symbol-price { font-size: 18px; }
+  .trading-btn { font-size: 13px; padding: 12px 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1539,6 +1688,16 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>2 cases</p>
           </div>
           <div class="card-video-icon tgs-box" id="home-cases-tgs"></div>
+        </div>
+
+        <div class="home-card card-trading" onclick="go('trading')">
+          <div class="card-text">
+            <h3>التداول</h3>
+            <p>أسعار حقيقية · شموع</p>
+          </div>
+          <div class="card-video-icon tgs-box" id="home-trading-tgs">
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px;filter:drop-shadow(0 8px 20px rgba(52,211,153,0.4));">📈</div>
+          </div>
         </div>
 
         <div class="home-card card-crash" onclick="go('crash')">
@@ -1639,6 +1798,60 @@ input:checked + .slider:before { transform: translateX(22px); }
           <img src="https://up6.cc/2026/10/17932600818491.png" alt="Star">
           <span class="choice-cost">10</span>
         </button>
+      </div>
+    </div>
+
+    <!-- TRADING VIEW -->
+    <div class="view" id="view-trading">
+      <div class="trading-header">
+        <div class="trading-symbol-row">
+          <div class="trading-symbol-info">
+            <span class="trading-symbol-name" id="tradingSymbolName">BTC/USDT</span>
+            <span class="trading-symbol-change" id="tradingSymbolChange">+0.00%</span>
+          </div>
+          <div class="trading-symbol-price" id="tradingSymbolPrice">0.00</div>
+        </div>
+        <div class="trading-symbol-selector" id="tradingSymbolSelector"></div>
+        <div class="trading-timeframes" id="tradingTimeframes">
+          <button class="trading-timeframe-btn active" data-tf="1m" onclick="switchTimeframe('1m', this)">1m</button>
+          <button class="trading-timeframe-btn" data-tf="5m" onclick="switchTimeframe('5m', this)">5m</button>
+          <button class="trading-timeframe-btn" data-tf="15m" onclick="switchTimeframe('15m', this)">15m</button>
+          <button class="trading-timeframe-btn" data-tf="1h" onclick="switchTimeframe('1h', this)">1h</button>
+          <button class="trading-timeframe-btn" data-tf="4h" onclick="switchTimeframe('4h', this)">4h</button>
+          <button class="trading-timeframe-btn" data-tf="1d" onclick="switchTimeframe('1d', this)">1d</button>
+        </div>
+      </div>
+
+      <div class="trading-chart-wrap">
+        <div id="tradingChart"></div>
+      </div>
+
+      <div class="trading-panel">
+        <div class="trading-quick-amounts">
+          <button class="trading-quick-btn" onclick="setTradeAmount(50)">50</button>
+          <button class="trading-quick-btn" onclick="setTradeAmount(100)">100</button>
+          <button class="trading-quick-btn" onclick="setTradeAmount(500)">500</button>
+          <button class="trading-quick-btn" onclick="setTradeAmount(1000)">1000</button>
+        </div>
+        <div class="trading-trade-row">
+          <div class="trading-amount-wrap">
+            <span class="trading-amount-label">المبلغ (نجوم)</span>
+            <input type="number" class="trading-amount-input" id="tradingAmountInput" value="100" min="1">
+          </div>
+          <button class="trading-btn buy" id="tradingBuyBtn" onclick="openTrade('long')">
+            <i class="fas fa-arrow-up"></i> شراء
+          </button>
+          <button class="trading-btn sell" id="tradingSellBtn" onclick="openTrade('short')">
+            <i class="fas fa-arrow-down"></i> بيع
+          </button>
+        </div>
+        <div class="trading-balance-row">
+          <span>الرصيد: <b id="tradingBalance">0</b> ⭐</span>
+          <span id="tradingOpenCount">0 صفقة مفتوحة</span>
+        </div>
+        <div class="trading-positions" id="tradingPositions">
+          <div class="trading-empty">لا توجد صفقات مفتوحة</div>
+        </div>
       </div>
     </div>
 
@@ -2063,7 +2276,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Legal / Info Modals -->
 <div class="modal-overlay" id="modal-help">
   <div class="modal-content info-modal">
     <h3>المساعدة والدعم</h3>
@@ -2092,7 +2304,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     <p>باستخدامك للتطبيق، فإنك توافق على الشروط التالية:</p>
     <ul>
       <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
-      <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب (Slots, Crash, Mines, Cases) على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
+      <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب (Slots, Crash, Mines, Cases, Trading) على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
       <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
       <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمل خسارته.</li>
     </ul>
@@ -2100,7 +2312,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Task sheet -->
 <div class="modal-overlay" id="taskSheet" style="align-items: flex-end; padding: 0;">
   <div class="modal-content" style="position: relative; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
     <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
@@ -2163,48 +2374,17 @@ const WINNING_TABLE = [
   { id: 'p18', img: 'IMG_20261029_180056_326.png', value: 110, weight: 0.2 }
 ];
 
-/* ================= SLOTS CONFIG ================= */
 const SLOTS_BET_LEVELS = [69, 149, 399, 999];
 const SLOT_SYMBOLS = {};
 WINNING_TABLE.forEach(s => { SLOT_SYMBOLS[s.id] = s; });
 
-// خريطة جوائز مخصصة لكل رهان (بدون كسور)
 const SLOTS_CONFIG = {
-  69: {
-    table: {
-      p10: 700, p18: 500, p13: 350, p4: 250, p5: 150,
-      p9: 100, p8: 75, p7: 50, p6: 40, p3: 30,
-      p14: 25, p2: 20, p15: 15, p1: 10, p11: 8,
-      p16: 6, p17: 4, p12: 2
-    }
-  },
-  149: {
-    table: {
-      p10: 1500, p18: 1000, p13: 700, p4: 500, p5: 300,
-      p9: 200, p8: 150, p7: 100, p6: 80, p3: 60,
-      p14: 50, p2: 40, p15: 30, p1: 20, p11: 15,
-      p16: 10, p17: 8, p12: 5
-    }
-  },
-  399: {
-    table: {
-      p10: 4000, p18: 3000, p13: 2000, p4: 1500, p5: 1000,
-      p9: 800, p8: 500, p7: 300, p6: 200, p3: 150,
-      p14: 100, p2: 80, p15: 60, p1: 50, p11: 40,
-      p16: 30, p17: 20, p12: 10
-    }
-  },
-  999: {
-    table: {
-      p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500,
-      p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400,
-      p14: 300, p2: 200, p15: 150, p1: 100, p11: 80,
-      p16: 60, p17: 40, p12: 20
-    }
-  }
+  69: { table: { p10: 700, p18: 500, p13: 350, p4: 250, p5: 150, p9: 100, p8: 75, p7: 50, p6: 40, p3: 30, p14: 25, p2: 20, p15: 15, p1: 10, p11: 8, p16: 6, p17: 4, p12: 2 } },
+  149: { table: { p10: 1500, p18: 1000, p13: 700, p4: 500, p5: 300, p9: 200, p8: 150, p7: 100, p6: 80, p3: 60, p14: 50, p2: 40, p15: 30, p1: 20, p11: 15, p16: 10, p17: 8, p12: 5 } },
+  399: { table: { p10: 4000, p18: 3000, p13: 2000, p4: 1500, p5: 1000, p9: 800, p8: 500, p7: 300, p6: 200, p3: 150, p14: 100, p2: 80, p15: 60, p1: 50, p11: 40, p16: 30, p17: 20, p12: 10 } },
+  999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
-/* ================= USER DATA ================= */
 let user = {
   id: '123456789', name: 'لاعب', photo: '',
   stars: 25, tickets: 20, referrals: 0, totalWithdrawn: 0,
@@ -2335,7 +2515,6 @@ async function syncUserData(updates) {
   } catch (e) {}
 }
 
-/* ============ TGS LOADER ============ */
 const TGS = {
   _zipCache: {},
   _loading: {},
@@ -2494,7 +2673,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    // نترك اللعبة تعمل في الخلفية
   } else {
     if (typeof TGS !== 'undefined') TGS.replayAll();
     if (db) {
@@ -2517,6 +2695,9 @@ function go(viewName) {
   
   const activeNav = document.querySelector(`.nav-item[data-view="${viewName}"]`);
   const activeProfile = document.querySelector(`.nav-profile[data-view="${viewName}"]`);
+
+  const mainScroll = document.getElementById('mainScroll');
+  mainScroll.classList.remove('crash-mode', 'mines-mode', 'trading-mode');
   
   if (activeNav) {
     activeNav.classList.add('active');
@@ -2531,9 +2712,6 @@ function go(viewName) {
     if (homeNav) homeNav.classList.add('active');
   }
 
-  const mainScroll = document.getElementById('mainScroll');
-  mainScroll.classList.remove('crash-mode', 'mines-mode');
-
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
     startCrashGame(); 
@@ -2545,9 +2723,14 @@ function go(viewName) {
     initMinesView();
   } else if (viewName === 'slots') {
     slotsUpdateBalance();
+  } else if (viewName === 'trading') {
+    mainScroll.classList.add('trading-mode');
+    setTimeout(() => { initTradingView(); }, 50);
   }
   
-  mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
+  if (viewName !== 'crash' && viewName !== 'mines' && viewName !== 'trading') {
+    mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   if (viewName === 'withdraw') loadWithdrawalHistory();
 }
 
@@ -2561,6 +2744,8 @@ function updateBalances() {
   document.getElementById('statTotalWithdrawn').innerText = f(user.totalWithdrawn);
   document.getElementById('refInvited').innerText = user.referrals;
   document.getElementById('refEarned').innerText = user.referrals * 2;
+  const tradeBal = document.getElementById('tradingBalance');
+  if (tradeBal) tradeBal.innerText = f(user.stars % 1 === 0 ? user.stars : user.stars.toFixed(2));
 }
 
 function renderProfile() {
@@ -2573,10 +2758,7 @@ function renderProfile() {
 }
 
 /* ================= SLOTS GAME ================= */
-let slotsState = {
-  currentBet: 69,
-  isSpinning: false
-};
+let slotsState = { currentBet: 69, isSpinning: false };
 
 function initSlots() {
   for (let r = 0; r < 3; r++) {
@@ -2621,8 +2803,6 @@ function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
-
-  // نسبة الفوز 25% (75% خسارة، 24% فوز عادي، 1% جاكبوت)
   if (roll < 75) {
     return { type: 'lose' };
   } else if (roll >= 99) {
@@ -2663,17 +2843,12 @@ async function slotsSpin() {
   document.querySelectorAll('.slots-reel-item').forEach(i => i.classList.remove('win'));
 
   const outcome = getSlotOutcome();
-
   let finalGrid = [[],[],[]];
   if (outcome.type === 'win') {
     for (let r = 0; r < 3; r++) {
       for (let row = 0; row < 3; row++) {
-        if (row === 1) {
-          finalGrid[r][row] = outcome.id;
-        } else {
-          const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
-          finalGrid[r][row] = rnd.id;
-        }
+        if (row === 1) finalGrid[r][row] = outcome.id;
+        else { const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)]; finalGrid[r][row] = rnd.id; }
       }
     }
   } else {
@@ -2687,7 +2862,6 @@ async function slotsSpin() {
       }
       attempts++;
     } while (slotsHasWinningLine(finalGrid) && attempts < 50);
-    
     if (slotsHasWinningLine(finalGrid)) {
       let safeId = WINNING_TABLE[0].id;
       if (finalGrid[1][1] === safeId) safeId = WINNING_TABLE[1].id;
@@ -2697,7 +2871,6 @@ async function slotsSpin() {
 
   const itemEl = document.querySelector('.slots-reel-item');
   const ITEM_HEIGHT = itemEl ? itemEl.getBoundingClientRect().height : 80;
-
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
@@ -2705,16 +2878,13 @@ async function slotsSpin() {
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
     track.innerHTML = '';
-
     let html = '';
     for (let i = 0; i < numRandomItems; i++) {
       const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
       html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
     }
-
     const finalSym = SLOT_SYMBOLS[finalGrid[r][1]];
     html += `<div class="slots-reel-item"><img src="${finalSym.img}" alt=""></div>`;
-
     for (let i = 0; i < numExtraItems; i++) {
       const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
       html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
@@ -2723,11 +2893,9 @@ async function slotsSpin() {
 
     const endY = ITEM_HEIGHT - numRandomItems * ITEM_HEIGHT;
     const startY = endY - 2000;
-
     track.style.transition = 'none';
     track.style.transform = `translateY(${startY}px)`;
     track.offsetHeight;
-
     setTimeout(() => {
       track.style.transition = `transform ${durations[r]}ms cubic-bezier(0.15, 0.85, 0.35, 1)`;
       track.style.transform = `translateY(${endY}px)`;
@@ -2738,44 +2906,32 @@ async function slotsSpin() {
     try {
       let winAmount = 0;
       let winningCells = [];
-
-      const mid0 = finalGrid[0][1];
-      const mid1 = finalGrid[1][1];
-      const mid2 = finalGrid[2][1];
-
+      const mid0 = finalGrid[0][1], mid1 = finalGrid[1][1], mid2 = finalGrid[2][1];
       if (mid0 === mid1 && mid1 === mid2) {
         if (outcome.type === 'win') {
           winAmount = outcome.value;
           winningCells = [[0,1],[1,1],[2,1]];
         }
       }
-
       if (winAmount > 0) {
         winningCells.forEach(([r, row]) => {
           const track = document.getElementById('reelTrack' + r);
           const itemsInReel = track.children;
           if (itemsInReel[numRandomItems]) itemsInReel[numRandomItems].classList.add('win');
         });
-
         user.stars += winAmount;
         updateBalances();
         syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
-
         resultEl.innerText = '';
         resultEl.className = 'slots-result';
-        
         const winningSym = SLOT_SYMBOLS[outcome.id];
-        setTimeout(() => {
-          showSlotsWinModal({ img: winningSym.img, value: winAmount });
-        }, 500);
-        
+        setTimeout(() => { showSlotsWinModal({ img: winningSym.img, value: winAmount }); }, 500);
       } else {
         resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
         resultEl.className = 'slots-result lose';
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
+    } catch (e) { console.error(e); }
+    finally {
       slotsState.isSpinning = false;
       spinBtn.disabled = false;
       document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = false);
@@ -2797,35 +2953,19 @@ function slotsShowPrizes() {
   const container = document.getElementById('slots-prizes-grid');
   container.innerHTML = '';
   const config = SLOTS_CONFIG[slotsState.currentBet];
-
   const loseDiv = document.createElement('div');
   loseDiv.className = 'prize-grid-item';
-  loseDiv.innerHTML = `
-    <img src="https://img.icons8.com/color/96/000000/cancel.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Nothing">
-    <div class="prize-val">
-      <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 0
-    </div>
-  `;
+  loseDiv.innerHTML = `<img src="https://img.icons8.com/color/96/000000/cancel.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Nothing"><div class="prize-val"><img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 0</div>`;
   container.appendChild(loseDiv);
-
   const sortedPrizes = Object.entries(config.table).sort((a,b) => a[1] - b[1]);
-
   sortedPrizes.forEach(([symId, val]) => {
     const sym = SLOT_SYMBOLS[symId];
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
-    if (symId === 'p10') {
-      div.style.background = 'linear-gradient(160deg, rgba(255,215,0,0.3), rgba(200,150,0,0.5))';
-    }
-    div.innerHTML = `
-      <img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${val}">
-      <div class="prize-val" ${symId === 'p10' ? 'style="color: var(--gold);"' : ''}>
-        <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${val}
-      </div>
-    `;
+    if (symId === 'p10') div.style.background = 'linear-gradient(160deg, rgba(255,215,0,0.3), rgba(200,150,0,0.5))';
+    div.innerHTML = `<img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${val}"><div class="prize-val" ${symId === 'p10' ? 'style="color: var(--gold);"' : ''}><img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${val}</div>`;
     container.appendChild(div);
   });
-
   openModal('slots-prizes-modal');
 }
 
@@ -2855,9 +2995,7 @@ function startSpin(currency = 'ticket') {
     if (user.stars < cost) { showToast('تحتاج إلى 10 نجوم للدوران!'); return; }
     user.stars -= cost;
     syncUserData({ stars: firebase.firestore.FieldValue.increment(-cost) });
-  } else {
-    return;
-  }
+  } else return;
   spinState.currency = currency;
   updateBalances();
   spinState.isSpinning = true;
@@ -2930,11 +3068,7 @@ function renderPrizesGrid() {
   sortedPrizes.forEach(prize => {
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
-    div.innerHTML = `
-      <img src="${prize.img}" alt="${prize.value}" onerror="this.src='${ASSETS.star}'">
-      <div class="prize-val">
-        <img src="${ASSETS.star}" style="width:14px; height:14px; border-radius:50%;"> ${prize.value}
-      </div>`;
+    div.innerHTML = `<img src="${prize.img}" alt="${prize.value}" onerror="this.src='${ASSETS.star}'"><div class="prize-val"><img src="${ASSETS.star}" style="width:14px; height:14px; border-radius:50%;"> ${prize.value}</div>`;
     container.appendChild(div);
   });
 }
@@ -3062,28 +3196,15 @@ async function loadTasks() {
       const isTicket = task.rewardType === 'ticket';
       const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
       const isCompleted = user.completedTasks.includes(task.id);
-      let iconHtml = task.imageUrl 
-        ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` 
-        : `<i class="fab fa-telegram"></i>`;
+      let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
       let actionBtn = isCompleted 
         ? `<button class="start-btn" style="background: rgba(255,255,255,0.07); color: var(--text-secondary); box-shadow: none;" disabled>تم</button>`
         : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
-      html += `
-        <div class="task-item">
-          <div class="task-info">
-            <div class="task-icon">${iconHtml}</div>
-            <div class="task-text">
-              <h4>${task.title}</h4>
-              <div class="task-reward"><img src="${rewardIcon}"> ${task.rewardAmount}</div>
-            </div>
-          </div>
-          ${actionBtn}
-        </div>`;
+      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${task.title}</h4><div class="task-reward"><img src="${rewardIcon}"> ${task.rewardAmount}</div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
     container.innerHTML = html;
   } catch(e) {
-    console.error(e);
     container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--danger);">تعذر تحميل المهام</div>';
   }
 }
@@ -3211,15 +3332,10 @@ async function processDeposit(type) {
           syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
           showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
           go('home');
-        } else if (status === 'cancelled') {
-          showToast('تم إلغاء الدفع');
-        } else {
-          showToast('فشل الدفع');
-        }
+        } else if (status === 'cancelled') showToast('تم إلغاء الدفع');
+        else showToast('فشل الدفع');
       });
-    } catch (e) {
-      showToast(e.message || 'تعذر بدء الدفع');
-    }
+    } catch (e) { showToast(e.message || 'تعذر بدء الدفع'); }
   } else if (type === 'crypto') {
     const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
     if (!amount || amount < 1) return showToast('الحد الأدنى $1');
@@ -3247,9 +3363,7 @@ async function processDeposit(type) {
       startCryptoTimer();
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch (e) { window.open(payUrl, '_blank'); }
       showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
-    } catch(e) {
-      showToast(e.message || 'تعذر بدء الدفع');
-    }
+    } catch(e) { showToast(e.message || 'تعذر بدء الدفع'); }
   }
 }
 function startCryptoTimer() {
@@ -3294,12 +3408,8 @@ async function checkCryptoStatus(btn) {
     } else {
       showToast('الفاتورة لا تزال قيد الانتظار');
     }
-  } catch (e) {
-    showToast('تعذر التحقق');
-  } finally {
-    btn.innerHTML = oldTxt;
-    btn.disabled = false;
-  }
+  } catch (e) { showToast('تعذر التحقق'); }
+  finally { btn.innerHTML = oldTxt; btn.disabled = false; }
 }
 function switchWithdrawTab(tab, el) {
   document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
@@ -3325,9 +3435,7 @@ async function loadWithdrawalHistory() {
     user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
     document.getElementById('statTotalWithdrawn').innerText = user.totalWithdrawn.toLocaleString('en-US');
     renderWithdrawHistory();
-  } catch(e) {
-    renderWithdrawHistory();
-  }
+  } catch(e) { renderWithdrawHistory(); }
 }
 function openWithdrawHistory() { wdShowAll = false; renderWithdrawHistory(); openModal('modalWithdrawHistory'); }
 function showAllWithdrawals() { wdShowAll = true; renderWithdrawHistory(); }
@@ -3363,21 +3471,14 @@ function renderWithdrawHistory() {
     }
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `
-      <div class="history-main">
-        <div class="history-amount">${w.amount} نجمة</div>
-        <div class="history-method">${methodName}</div>
-      </div>
-      <div class="status ${st.class}">${st.text}</div>`;
+    div.innerHTML = `<div class="history-main"><div class="history-amount">${w.amount} نجمة</div><div class="history-method">${methodName}</div></div><div class="status ${st.class}">${st.text}</div>`;
     list.appendChild(div);
   });
   if (showAllBtn) {
     if (withdrawalHistory.length > 5 && !wdShowAll) {
       showAllBtn.classList.add('visible');
       showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
-    } else {
-      showAllBtn.classList.remove('visible');
-    }
+    } else showAllBtn.classList.remove('visible');
   }
 }
 async function processWithdraw(method) {
@@ -3393,11 +3494,8 @@ async function processWithdraw(method) {
   }
   if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
   if (!amount) return showToast('أدخل مبلغاً صحيحاً');
-  if (method === 'gram') {
-    if (amount < 10) return showToast('الحد الأدنى للسحب 10 نجوم');
-  } else {
-    if (amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة');
-  }
+  if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى للسحب 10 نجوم'); }
+  else { if (amount < 50) return showToast('الحد الأدنى للسحب 50 نجمة'); }
   if (amount > 5000) return showToast('الحد الأقصى للسحب 5000 نجمة');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
   const btn = event.target;
@@ -3406,16 +3504,11 @@ async function processWithdraw(method) {
   try {
     user.stars -= amount;
     updateBalances();
-    const newWithdraw = {
-      userId: user.id, userName: user.name, method: method,
-      amount: amount, account: id, status: 'pending', createdAt: Date.now()
-    };
+    const newWithdraw = { userId: user.id, userName: user.name, method: method, amount: amount, account: id, status: 'pending', createdAt: Date.now() };
     if (db) {
       await db.collection('puppy_withdrawals').add(newWithdraw);
       await syncUserData({ stars: firebase.firestore.FieldValue.increment(-amount) });
-    } else {
-      withdrawalHistory.unshift(newWithdraw);
-    }
+    } else withdrawalHistory.unshift(newWithdraw);
     document.getElementById('successWdStars').innerText = amount;
     document.getElementById('successWdPayout').innerText = payoutStr;
     openModal('modalWithdrawSuccess');
@@ -3427,8 +3520,7 @@ async function processWithdraw(method) {
     adjustInputWidth(document.getElementById('wdGramAmount'));
     updateWdUI('binance', document.getElementById('wdBinanceAmount'));
     updateWdUI('gram', document.getElementById('wdGramAmount'));
-    if (db) loadWithdrawalHistory();
-    else renderWithdrawHistory();
+    if (db) loadWithdrawalHistory(); else renderWithdrawHistory();
   } catch(e) {
     showToast('حدث خطأ أثناء السحب');
     user.stars += amount;
@@ -3457,56 +3549,37 @@ async function loadGlobalRanking() {
       if ((data.referralCount || 0) === 0) return;
       allUsers.push({ id: doc.id, ...data });
     });
-
     if (allUsers.length === 0) {
       podiumContainer.innerHTML = '';
       list.innerHTML = '<p style="text-align:center; color:var(--text-secondary);">لا توجد تصنيفات بعد</p>';
       return;
     }
-
     const top3 = allUsers.slice(0, 3);
     const order = [];
     if (top3[1]) order.push({ u: top3[1], rank: 2 });
     if (top3[0]) order.push({ u: top3[0], rank: 1 });
     if (top3[2]) order.push({ u: top3[2], rank: 3 });
-
     podiumContainer.innerHTML = '';
     const podium = document.createElement('div');
     podium.className = 'podium';
     order.forEach(({ u, rank }) => {
       const isMe = u.id === user.id;
-      const avatar = u.photoUrl
-        ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">`
-        : '<i class="fas fa-user"></i>';
+      const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const el = document.createElement('div');
       el.className = `podium-item rank-${rank}${isMe ? ' me' : ''}`;
-      el.innerHTML = `
-        <div class="podium-rank">${rank}</div>
-        <div class="podium-avatar">${avatar}</div>
-        <div class="podium-name">${u.name || 'لاعب'}${isMe ? ' (أنت)' : ''}</div>
-        <div class="podium-count">${u.referralCount} إحالة</div>
-      `;
+      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${u.name || 'لاعب'}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${u.referralCount} إحالة</div>`;
       podium.appendChild(el);
     });
     podiumContainer.appendChild(podium);
-
     list.innerHTML = '';
     const rest = allUsers.slice(3);
     rest.forEach((u, i) => {
       const rank = i + 4;
       const isMe = u.id === user.id;
-      const avatar = u.photoUrl
-        ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">`
-        : '<i class="fas fa-user"></i>';
+      const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `
-        <div class="ranking-rank">${rank}</div>
-        <div class="ranking-avatar">${avatar}</div>
-        <div class="ranking-info">
-          <div class="ranking-name">${u.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div>
-          <div class="ranking-count">${u.referralCount} إحالة</div>
-        </div>`;
+      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${u.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${u.referralCount} إحالة</div></div>`;
       list.appendChild(div);
     });
     if (rest.length === 0) {
@@ -3515,7 +3588,6 @@ async function loadGlobalRanking() {
       hint.innerText = 'المزيد من المتنافسين قادمون...';
       list.appendChild(hint);
     }
-
     globalRankingLoaded = true;
   } catch(e) {
     console.error('Ranking error:', e);
@@ -3539,51 +3611,34 @@ function closeModal(id) { document.getElementById(id).classList.remove('show'); 
 
 /* ================= CRASH GAME ================= */
 const crashState = {
-  status: 'idle',
-  multiplier: 1.00,
-  crashPoint: 1.00,
-  hasBet: false,
-  activeBet: 0,
-  hasCashedOut: false,
-  cashoutMultiplier: 0,
-  autoCashout: false,
-  autoCashoutValue: 2.00,
-  countdown: 6,
-  countdownInterval: null,
-  animationId: null,
-  startTime: 0,
-  waitingEndTime: 0,
-  roundId: null
+  status: 'idle', multiplier: 1.00, crashPoint: 1.00, hasBet: false, activeBet: 0,
+  hasCashedOut: false, cashoutMultiplier: 0, autoCashout: false, autoCashoutValue: 2.00,
+  countdown: 6, countdownInterval: null, animationId: null, startTime: 0, waitingEndTime: 0, roundId: null
 };
-
 let crashHistory = [];
 
 function isCrashViewActive() {
   const v = document.getElementById('view-crash');
   return v && v.classList.contains('active');
 }
-
 function crashSetRocketActive(active) {
   const rocket = document.getElementById('crash-rocket-tgs');
   if (!rocket) return;
   rocket.classList.toggle('active', active);
   if (active) TGS.replay(['crash-rocket-tgs']);
 }
-
 function crashSetWaitingActive(active) {
   const waiting = document.getElementById('crash-waiting-tgs');
   if (!waiting) return;
   waiting.classList.toggle('active', active);
   if (active) TGS.replay(['crash-waiting-tgs']);
 }
-
 function crashSetExplosionActive(active) {
   const exp = document.getElementById('crash-explosion-tgs');
   if (!exp) return;
   exp.classList.toggle('active', active);
   if (active) TGS.restart('crash-explosion-tgs');
 }
-
 function crashSetMultiplierDisplay(text, state) {
   const el = document.getElementById('crash-mult-display');
   if (!el) return;
@@ -3593,52 +3648,37 @@ function crashSetMultiplierDisplay(text, state) {
   else if (state === 'cashed') el.classList.add('cashed');
   else if (state === 'crashed') el.classList.add('crashed');
 }
-
 function crashSetCountdownDisplay(text, visible) {
   const el = document.getElementById('crash-countdown-display');
   if (!el) return;
   el.textContent = text;
   el.classList.toggle('active', !!visible);
 }
-
 async function loadCrashHistory() {
   if (!db) { renderCrashHistoryStrip(); return; }
   try {
-    const q = await db.collection('puppy_users').doc(user.id)
-      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(5).get();
+    const q = await db.collection('puppy_users').doc(user.id).collection('crash_rounds').orderBy('createdAt', 'desc').limit(5).get();
     crashHistory = [];
     q.forEach(doc => {
       const d = doc.data();
       if (d.multiplier) crashHistory.push({ multiplier: d.multiplier, result: d.result || 'played' });
     });
     renderCrashHistoryStrip();
-  } catch(e) {
-    console.error('loadCrashHistory', e);
-    renderCrashHistoryStrip();
-  }
+  } catch(e) { renderCrashHistoryStrip(); }
 }
 async function saveCrashRound(multiplier, bet, result, roundId = null) {
   if (!db) return;
   try {
     const id = roundId || crashState.roundId || ('r_' + user.id + '_' + Date.now());
-    await db.collection('puppy_users').doc(user.id)
-      .collection('crash_rounds').doc(id).set({
-        userId: user.id,
-        multiplier: Number(multiplier),
-        bet: Number(bet),
-        result: result,
-        winAmount: result === 'won' ? Number(bet) * Number(multiplier) : 0,
-        createdAt: Date.now()
-      }, { merge: true });
-  } catch(e) { console.error('saveCrashRound', e); }
+    await db.collection('puppy_users').doc(user.id).collection('crash_rounds').doc(id).set({
+      userId: user.id, multiplier: Number(multiplier), bet: Number(bet), result: result,
+      winAmount: result === 'won' ? Number(bet) * Number(multiplier) : 0, createdAt: Date.now()
+    }, { merge: true });
+  } catch(e) {}
 }
 async function saveActiveCrashRound(data) {
   if (!db) return;
-  try {
-    await db.collection('puppy_crash_active').doc(user.id).set({
-      ...data, userId: user.id, updatedAt: Date.now()
-    });
-  } catch(e) { console.error('saveActiveCrashRound', e); }
+  try { await db.collection('puppy_crash_active').doc(user.id).set({ ...data, userId: user.id, updatedAt: Date.now() }); } catch(e) {}
 }
 async function clearActiveCrashRound() {
   if (!db) return;
@@ -3650,19 +3690,14 @@ async function getActiveCrashRound() {
     const doc = await db.collection('puppy_crash_active').doc(user.id).get();
     if (!doc.exists) return null;
     const data = doc.data();
-
     if (data.status === 'flying') {
       const age = Date.now() - (data.updatedAt || 0);
       if (age > 5 * 60 * 1000) {
-        await saveCrashRound(
-          data.crashPoint || 1, data.activeBet, 'lost',
-          'stale_' + (data.updatedAt || Date.now())
-        );
+        await saveCrashRound(data.crashPoint || 1, data.activeBet, 'lost', 'stale_' + (data.updatedAt || Date.now()));
         await clearActiveCrashRound();
       }
       return null;
     }
-
     if (data.updatedAt && (Date.now() - data.updatedAt > 10 * 60 * 1000)) {
       await clearActiveCrashRound();
       return null;
@@ -3670,32 +3705,22 @@ async function getActiveCrashRound() {
     return data;
   } catch(e) { return null; }
 }
-
 function saveActiveRoundState() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
-
   if (crashState.status === 'waiting') {
-    saveActiveCrashRound({
-      status: 'waiting',
-      activeBet: crashState.activeBet,
-      hasCashedOut: false
-    });
+    saveActiveCrashRound({ status: 'waiting', activeBet: crashState.activeBet, hasCashedOut: false });
   } else if (crashState.status === 'flying') {
     const elapsed = (Date.now() - crashState.startTime) / 1000;
     const currentMult = Math.pow(1.08, elapsed);
     const finalMult = Math.min(currentMult, crashState.crashPoint);
-    const bet = crashState.activeBet;
-
-    saveCrashRound(finalMult, bet, 'lost');
+    saveCrashRound(finalMult, crashState.activeBet, 'lost');
     clearActiveCrashRound();
-
     crashState.hasBet = false;
     crashState.activeBet = 0;
     crashState.hasCashedOut = false;
     crashState.cashoutMultiplier = 0;
   }
 }
-
 function renderCrashHistoryStrip() {
   const strip = document.getElementById('crash-history-strip');
   if (!strip) return;
@@ -3707,55 +3732,42 @@ function renderCrashHistoryStrip() {
     strip.appendChild(el);
   });
 }
-
 function crashPushHistory(multiplier) {
   const strip = document.getElementById('crash-history-strip');
   if (!strip) return;
-
   const active = Array.from(strip.querySelectorAll('.crash-history-pill:not(.removing)'));
   if (active.length >= 5) {
     const oldest = active[active.length - 1];
     oldest.classList.add('removing');
     setTimeout(() => { if (oldest.parentNode) oldest.remove(); }, 320);
   }
-
   const el = document.createElement('div');
   el.className = 'crash-history-pill';
   el.innerText = 'x' + Number(multiplier).toFixed(2);
   strip.prepend(el);
-
   crashHistory.unshift({ multiplier });
   if (crashHistory.length > 5) crashHistory.pop();
 }
-
 async function startCrashGame() {
-  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') {
-    return;
-  }
+  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') return;
   const resumed = await checkAndResumeCrashRound();
   if (resumed) return;
   crashStartWaitingPhase();
 }
-
 async function checkAndResumeCrashRound() {
   const active = await getActiveCrashRound();
   if (!active || !active.activeBet) return false;
-
   if (active.status === 'waiting') {
     crashState.activeBet = active.activeBet;
     crashState.hasBet = true;
     crashStartWaitingPhase();
     const mainBtn = document.getElementById('crash-main-btn');
-    if (mainBtn) {
-      mainBtn.innerText = 'Cancel bet';
-      mainBtn.className = 'crash-main-btn cancel';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Cancel bet'; mainBtn.className = 'crash-main-btn cancel'; }
     showToast(`تم استرداد رهانك السابق (${active.activeBet} نجمة)`);
     return true;
   }
   return false;
 }
-
 function crashStartWaitingPhase() {
   crashState.status = 'waiting';
   crashState.multiplier = 1.00;
@@ -3765,102 +3777,66 @@ function crashStartWaitingPhase() {
   crashState.countdown = 6;
   crashState.roundId = null;
   crashState.waitingEndTime = Date.now() + 6000;
-
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
-
   if (starsBg) starsBg.style.animationDuration = '6s';
-
   crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
-
   if (crashState.hasBet) {
-    if (mainBtn) {
-      mainBtn.className = 'crash-main-btn cancel';
-      mainBtn.innerText = 'Cancel bet';
-    }
+    if (mainBtn) { mainBtn.className = 'crash-main-btn cancel'; mainBtn.innerText = 'Cancel bet'; }
   } else {
-    if (mainBtn) {
-      mainBtn.className = 'crash-main-btn';
-      mainBtn.innerText = 'Place bet';
-    }
+    if (mainBtn) { mainBtn.className = 'crash-main-btn'; mainBtn.innerText = 'Place bet'; }
   }
-
   crashSetRocketActive(false);
   crashSetExplosionActive(false);
   crashSetWaitingActive(true);
-
   if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
-
   const tick = () => {
     if (crashState.status !== 'waiting') return;
     const remain = Math.ceil((crashState.waitingEndTime - Date.now()) / 1000);
-    if (remain <= 0) {
-      crashStartFlyingPhase();
-    } else {
+    if (remain <= 0) crashStartFlyingPhase();
+    else {
       crashState.countdown = remain;
-      if (isCrashViewActive()) {
-        crashSetCountdownDisplay(remain + 's', true);
-      }
+      if (isCrashViewActive()) crashSetCountdownDisplay(remain + 's', true);
       crashState.countdownInterval = setTimeout(tick, 200);
     }
   };
   tick();
 }
-
 function crashStartFlyingPhase() {
   crashState.status = 'flying';
   crashState.startTime = Date.now();
   crashState.crashPoint = crashGenerateCrashPoint();
   crashState.roundId = 'r_' + user.id + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
-
   crashSetCountdownDisplay('', false);
   crashSetMultiplierDisplay('1.00x', '');
   if (starsBg) starsBg.style.animationDuration = '0.2s';
   crashSetWaitingActive(false);
   crashSetExplosionActive(false);
   crashSetRocketActive(true);
-
   if (crashState.hasBet && !crashState.hasCashedOut) {
-    saveActiveCrashRound({
-      status: 'flying', startTime: crashState.startTime,
-      crashPoint: crashState.crashPoint,
-      activeBet: crashState.activeBet, hasCashedOut: false
-    });
+    saveActiveCrashRound({ status: 'flying', startTime: crashState.startTime, crashPoint: crashState.crashPoint, activeBet: crashState.activeBet, hasCashedOut: false });
   }
-
   if (crashState.hasBet) {
-    if (mainBtn) {
-      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
-      mainBtn.className = 'crash-main-btn cashout';
-    }
+    if (mainBtn) { mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`; mainBtn.className = 'crash-main-btn cashout'; }
   } else {
-    if (mainBtn) {
-      mainBtn.innerText = 'Waiting...';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Waiting...'; mainBtn.className = 'crash-main-btn disabled'; }
   }
-
   function loop() {
     if (crashState.status !== 'flying') return;
     const elapsed = (Date.now() - crashState.startTime) / 1000;
     crashState.multiplier = Math.pow(1.08, elapsed);
-
     if (isCrashViewActive()) {
-      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-        crashState.hasCashedOut ? 'cashed' : '');
+      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', crashState.hasCashedOut ? 'cashed' : '');
       if (crashState.hasBet && !crashState.hasCashedOut) {
         if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       }
     }
-
     if (crashState.hasBet && !crashState.hasCashedOut) {
       if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
     }
-
     if (crashState.multiplier >= crashState.crashPoint) {
       crashState.multiplier = crashState.crashPoint;
       crashHandleCrash();
@@ -3870,99 +3846,68 @@ function crashStartFlyingPhase() {
   }
   crashState.animationId = requestAnimationFrame(loop);
 }
-
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
-  if (r < 0.80) return 2.00 + Math.random() * 8.00; // 30% -> 2.00 to 10.00
-  if (r < 0.90) return 10.00 + Math.random() * 10.00; // 10% -> 10.00 to 20.00
-  if (r < 0.95) return 20.00 + Math.random() * 30.00; // 5% -> 20.00 to 50.00
-  return 50.00 + Math.random() * 50.00; // 5% -> 50.00 to 100.00
+  if (r < 0.50) return 1.00 + Math.random() * 1.00;
+  if (r < 0.80) return 2.00 + Math.random() * 8.00;
+  if (r < 0.90) return 10.00 + Math.random() * 10.00;
+  if (r < 0.95) return 20.00 + Math.random() * 30.00;
+  return 50.00 + Math.random() * 50.00;
 }
-
 function crashHandleCrash() {
   crashState.status = 'crashed';
   if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
   const mainBtn = document.getElementById('crash-main-btn');
   const starsBg = document.getElementById('crash-stars-bg');
-
   const finalMult = crashState.multiplier;
-
   if (isCrashViewActive()) {
     crashSetMultiplierDisplay(finalMult.toFixed(2) + 'x', 'crashed');
     crashSetCountdownDisplay('', false);
   }
-
   const betWasActive = crashState.hasBet && !crashState.hasCashedOut;
-  const recordedMult = crashState.hasCashedOut
-    ? (crashState.cashoutMultiplier || finalMult)
-    : finalMult;
-
+  const recordedMult = crashState.hasCashedOut ? (crashState.cashoutMultiplier || finalMult) : finalMult;
   crashPushHistory(recordedMult);
-
   if (betWasActive) {
     saveCrashRound(finalMult, crashState.activeBet, 'lost');
     clearActiveCrashRound();
     crashState.hasBet = false;
     crashState.activeBet = 0;
-    if (mainBtn) {
-      mainBtn.innerText = 'Crashed';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Crashed'; mainBtn.className = 'crash-main-btn disabled'; }
   } else if (crashState.hasCashedOut) {
-    if (mainBtn) {
-      mainBtn.innerText = 'You won!';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'You won!'; mainBtn.className = 'crash-main-btn disabled'; }
   } else {
-    if (mainBtn) {
-      mainBtn.innerText = 'Crashed';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Crashed'; mainBtn.className = 'crash-main-btn disabled'; }
   }
-
   if (starsBg) starsBg.style.animationDuration = '6s';
   crashSetRocketActive(false);
   crashSetWaitingActive(false);
   crashSetExplosionActive(true);
-
   setTimeout(() => {
     crashSetExplosionActive(false);
     crashStartWaitingPhase();
   }, 2500);
 }
-
 function crashDoCashOut() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
   crashState.hasCashedOut = true;
   crashState.cashoutMultiplier = crashState.multiplier;
   const winAmount = crashState.activeBet * crashState.multiplier;
-
-  if (isCrashViewActive()) {
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
-  }
-
+  if (isCrashViewActive()) crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
   user.stars += winAmount;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
   updateBalances();
   saveCrashRound(crashState.multiplier, crashState.activeBet, 'won');
   clearActiveCrashRound();
-
   crashState.hasBet = false;
   crashState.activeBet = 0;
-
   const gameArea = document.getElementById('crash-game-area');
   if (gameArea && isCrashViewActive()) {
     gameArea.classList.add('cashout-anim');
     setTimeout(() => gameArea.classList.remove('cashout-anim'), 300);
   }
   const mainBtn = document.getElementById('crash-main-btn');
-  if (mainBtn) {
-    mainBtn.innerText = `WON ${winAmount.toFixed(2)}`;
-    mainBtn.className = 'crash-main-btn disabled';
-  }
+  if (mainBtn) { mainBtn.innerText = `WON ${winAmount.toFixed(2)}`; mainBtn.className = 'crash-main-btn disabled'; }
 }
-
 function crashHandleMainBtn() {
   if (crashState.status === 'waiting') {
     if (!crashState.hasBet) crashPlaceBet();
@@ -3971,7 +3916,6 @@ function crashHandleMainBtn() {
     if (crashState.hasBet && !crashState.hasCashedOut) crashDoCashOut();
   }
 }
-
 function crashPlaceBet() {
   crashValidateBet();
   const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
@@ -3984,12 +3928,8 @@ function crashPlaceBet() {
   crashState.hasCashedOut = false;
   saveActiveCrashRound({ status: 'waiting', activeBet: bet, hasCashedOut: false });
   const mainBtn = document.getElementById('crash-main-btn');
-  if (mainBtn) {
-    mainBtn.innerText = 'Cancel bet';
-    mainBtn.className = 'crash-main-btn cancel';
-  }
+  if (mainBtn) { mainBtn.innerText = 'Cancel bet'; mainBtn.className = 'crash-main-btn cancel'; }
 }
-
 function crashCancelBet() {
   if (!crashState.hasBet) return;
   user.stars += crashState.activeBet;
@@ -3999,12 +3939,8 @@ function crashCancelBet() {
   crashState.hasBet = false;
   clearActiveCrashRound();
   const mainBtn = document.getElementById('crash-main-btn');
-  if (mainBtn) {
-    mainBtn.innerText = 'Place bet';
-    mainBtn.className = 'crash-main-btn';
-  }
+  if (mainBtn) { mainBtn.innerText = 'Place bet'; mainBtn.className = 'crash-main-btn'; }
 }
-
 function crashValidateBet() {
   const input = document.getElementById('crash-bet-input');
   let val = parseInt(input.value) || 1;
@@ -4030,16 +3966,8 @@ function crashUpdateAutoCashout(input) {
 /* ================= MINES GAME ================= */
 const MINES_TOTAL_CELLS = 16;
 const MINES_HOUSE_EDGE = 0.86;
-
 const minesState = {
-  status: 'idle',
-  bombCount: 2,
-  bet: 1,
-  grid: [],
-  revealed: [],
-  gemsOpened: 0,
-  multiplier: 1.00,
-  autoResetTimeout: null
+  status: 'idle', bombCount: 2, bet: 1, grid: [], revealed: [], gemsOpened: 0, multiplier: 1.00, autoResetTimeout: null
 };
 
 function minesSelectBombs(count, el) {
@@ -4049,7 +3977,6 @@ function minesSelectBombs(count, el) {
   if (el) el.classList.add('active');
   renderMinesLadder();
 }
-
 function minesValidateBet() {
   const input = document.getElementById('minesBetInput');
   let val = parseInt(input.value) || 1;
@@ -4058,7 +3985,6 @@ function minesValidateBet() {
   input.value = val;
   minesState.bet = val;
 }
-
 function minesAdjustBet(delta) {
   if (minesState.status === 'playing') return;
   const input = document.getElementById('minesBetInput');
@@ -4069,33 +3995,23 @@ function minesAdjustBet(delta) {
   input.value = current;
   minesState.bet = current;
 }
-
 function initMinesView() {
   if (minesState.autoResetTimeout) {
     clearTimeout(minesState.autoResetTimeout);
     minesState.autoResetTimeout = null;
   }
-  if (minesState.status === 'won' || minesState.status === 'lost') {
-    minesReset();
-    return;
-  }
-  if (!minesState.revealed.length) {
-    minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
-  }
+  if (minesState.status === 'won' || minesState.status === 'lost') { minesReset(); return; }
+  if (!minesState.revealed.length) minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
   renderMinesLadder();
   renderMinesGrid();
   updateMinesUI();
 }
-
 function minesCalcMultiplier(bombs, opened) {
   if (opened <= 0) return 1.00;
   let fair = 1;
-  for (let i = 0; i < opened; i++) {
-    fair *= (MINES_TOTAL_CELLS - i) / (MINES_TOTAL_CELLS - bombs - i);
-  }
+  for (let i = 0; i < opened; i++) fair *= (MINES_TOTAL_CELLS - i) / (MINES_TOTAL_CELLS - bombs - i);
   return fair * MINES_HOUSE_EDGE;
 }
-
 function renderMinesLadder() {
   const ladder = document.getElementById('minesLadder');
   if (!ladder) return;
@@ -4118,7 +4034,6 @@ function renderMinesLadder() {
     }, 50);
   }
 }
-
 function renderMinesGrid() {
   const grid = document.getElementById('minesGrid');
   if (!grid) return;
@@ -4130,17 +4045,11 @@ function renderMinesGrid() {
     cell.setAttribute('type', 'button');
     cell.innerHTML = '<div class="mines-cell-inner"></div>';
     const inner = cell.querySelector('.mines-cell-inner');
-
     if (minesState.revealed[i]) {
       cell.classList.add('revealed');
       const isBomb = minesState.grid[i] === 'bomb';
-      if (isBomb) {
-        cell.classList.add('revealed-bomb');
-        inner.innerHTML = minesIconFrames.bomb || '<i class="fas fa-bomb"></i>';
-      } else {
-        cell.classList.add('revealed-gem');
-        inner.innerHTML = minesIconFrames.diamond || '<i class="fas fa-gem"></i>';
-      }
+      if (isBomb) { cell.classList.add('revealed-bomb'); inner.innerHTML = minesIconFrames.bomb || '<i class="fas fa-bomb"></i>'; }
+      else { cell.classList.add('revealed-gem'); inner.innerHTML = minesIconFrames.diamond || '<i class="fas fa-gem"></i>'; }
     } else {
       inner.innerHTML = '';
       if (minesIconFrames.card) {
@@ -4154,14 +4063,12 @@ function renderMinesGrid() {
     grid.appendChild(cell);
   }
 }
-
 function updateMinesUI() {
   const btn = document.getElementById('minesMainBtn');
   const betInput = document.getElementById('minesBetInput');
   const bombBtns = document.querySelectorAll('.mines-bomb-count-btn');
   const adjBtns = document.querySelectorAll('.mines-bet-adj');
   if (!btn) return;
-
   if (minesState.status === 'idle' || minesState.status === 'won' || minesState.status === 'lost') {
     btn.className = 'mines-main-btn';
     btn.innerText = 'Start Game';
@@ -4185,15 +4092,11 @@ function updateMinesUI() {
     adjBtns.forEach(b => b.disabled = true);
   }
 }
-
 function minesHandleMainBtn() {
   if (minesState.status === 'playing') {
     if (minesState.gemsOpened > 0) minesCashOut();
-  } else {
-    minesStart();
-  }
+  } else minesStart();
 }
-
 function minesStart() {
   if (minesState.autoResetTimeout) {
     clearTimeout(minesState.autoResetTimeout);
@@ -4205,11 +4108,9 @@ function minesStart() {
   if (bet < 1) return showToast('الحد الأدنى للرهان 1 نجمة');
   if (bet > 500) return showToast('الحد الأقصى للرهان 500 نجمة');
   if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
-
   user.stars -= bet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
   updateBalances();
-
   const bombs = minesState.bombCount;
   const arr = [];
   for (let i = 0; i < bombs; i++) arr.push('bomb');
@@ -4218,27 +4119,22 @@ function minesStart() {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-
   minesState.grid = arr;
   minesState.revealed = Array(MINES_TOTAL_CELLS).fill(false);
   minesState.gemsOpened = 0;
   minesState.multiplier = 1.00;
   minesState.bet = bet;
   minesState.status = 'playing';
-
   renderMinesGrid();
   renderMinesLadder();
   updateMinesUI();
 }
-
 function minesCellClick(index) {
   if (minesState.status !== 'playing') return;
   if (minesState.revealed[index]) return;
-
   minesState.revealed[index] = true;
   const cell = document.querySelector(`.mines-cell[data-index="${index}"]`);
   const inner = cell?.querySelector('.mines-cell-inner');
-
   if (minesState.grid[index] === 'bomb') {
     minesState.status = 'lost';
     for (let i = 0; i < MINES_TOTAL_CELLS; i++) minesState.revealed[i] = true;
@@ -4261,13 +4157,9 @@ function minesCellClick(index) {
     }
     renderMinesLadder();
     updateMinesUI();
-
-    if (minesState.gemsOpened === MINES_TOTAL_CELLS - minesState.bombCount) {
-      minesCashOut();
-    }
+    if (minesState.gemsOpened === MINES_TOTAL_CELLS - minesState.bombCount) minesCashOut();
   }
 }
-
 function minesCashOut() {
   if (minesState.status !== 'playing') return;
   const winnings = minesState.bet * minesState.multiplier;
@@ -4283,7 +4175,6 @@ function minesCashOut() {
     if (minesState.status === 'won') minesReset();
   }, 2600);
 }
-
 function minesReset() {
   if (minesState.autoResetTimeout) {
     clearTimeout(minesState.autoResetTimeout);
@@ -4297,6 +4188,269 @@ function minesReset() {
   renderMinesGrid();
   renderMinesLadder();
   updateMinesUI();
+}
+
+/* ================= TRADING GAME ================= */
+const TRADING_SYMBOLS = ['BTCUSDT','ETHUSDT','BNBUSDT','SOLUSDT','XRPUSDT','ADAUSDT','DOGEUSDT','AVAXUSDT','LINKUSDT','DOTUSDT'];
+const TRADING_NAMES = { BTCUSDT:'BTC/USDT', ETHUSDT:'ETH/USDT', BNBUSDT:'BNB/USDT', SOLUSDT:'SOL/USDT', XRPUSDT:'XRP/USDT', ADAUSDT:'ADA/USDT', DOGEUSDT:'DOGE/USDT', AVAXUSDT:'AVAX/USDT', LINKUSDT:'LINK/USDT', DOTUSDT:'DOT/USDT' };
+
+const tradingState = {
+  symbol: 'BTCUSDT',
+  timeframe: '1m',
+  chart: null,
+  candleSeries: null,
+  ws: null,
+  lastPrice: 0,
+  lastChange: 0,
+  openTrades: [],
+  closedTrades: [],
+  initialized: false,
+  wsReconnectTimer: null
+};
+
+function initTradingView() {
+  if (tradingState.initialized) return;
+  tradingState.initialized = true;
+
+  // Symbol selector
+  const sel = document.getElementById('tradingSymbolSelector');
+  sel.innerHTML = '';
+  TRADING_SYMBOLS.forEach(sym => {
+    const btn = document.createElement('button');
+    btn.className = 'trading-symbol-btn' + (sym === tradingState.symbol ? ' active' : '');
+    btn.innerText = TRADING_NAMES[sym].replace('/USDT','');
+    btn.onclick = () => switchSymbol(sym, btn);
+    sel.appendChild(btn);
+  });
+
+  // Chart
+  const chartEl = document.getElementById('tradingChart');
+  if (!chartEl || !window.LightweightCharts) return;
+  tradingState.chart = LightweightCharts.createChart(chartEl, {
+    layout: {
+      background: { color: '#0b0b12' },
+      textColor: '#9A9AAE',
+      fontFamily: 'IBM Plex Sans Arabic, system-ui, sans-serif',
+      fontSize: 11
+    },
+    grid: {
+      vertLines: { color: 'rgba(255,255,255,0.04)' },
+      horzLines: { color: 'rgba(255,255,255,0.04)' }
+    },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: 'rgba(255,255,255,0.08)' },
+    timeScale: { borderColor: 'rgba(255,255,255,0.08)', timeVisible: true, secondsVisible: false },
+    handleScroll: { vertTouchDrag: false }
+  });
+
+  tradingState.candleSeries = tradingState.chart.addCandlestickSeries({
+    upColor: '#34D399',
+    downColor: '#FF4D6D',
+    borderUpColor: '#34D399',
+    borderDownColor: '#FF4D6D',
+    wickUpColor: '#34D399',
+    wickDownColor: '#FF4D6D'
+  });
+
+  const ro = new ResizeObserver(() => {
+    if (tradingState.chart && chartEl) {
+      tradingState.chart.applyOptions({
+        width: chartEl.clientWidth,
+        height: chartEl.clientHeight
+      });
+    }
+  });
+  ro.observe(chartEl);
+
+  loadTradingData();
+}
+
+function switchSymbol(symbol, btn) {
+  document.querySelectorAll('.trading-symbol-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  tradingState.symbol = symbol;
+  document.getElementById('tradingSymbolName').innerText = TRADING_NAMES[symbol];
+  loadTradingData();
+}
+
+function switchTimeframe(tf, btn) {
+  document.querySelectorAll('.trading-timeframe-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  tradingState.timeframe = tf;
+  loadTradingData();
+}
+
+async function loadTradingData() {
+  const { symbol, timeframe } = tradingState;
+  try {
+    const res = await fetch(`https://data-api.binance.vision/api/v3/klines?symbol=${symbol}&interval=${timeframe}&limit=300`);
+    const raw = await res.json();
+    const candles = raw.map(k => ({
+      time: Math.floor(k[0] / 1000),
+      open: parseFloat(k[1]),
+      high: parseFloat(k[2]),
+      low: parseFloat(k[3]),
+      close: parseFloat(k[4])
+    }));
+    if (tradingState.candleSeries) {
+      tradingState.candleSeries.setData(candles);
+      tradingState.chart.timeScale().fitContent();
+    }
+    if (candles.length) {
+      const last = candles[candles.length - 1];
+      tradingState.lastPrice = last.close;
+      updatePriceDisplay(last.close, null);
+    }
+    const statRes = await fetch(`https://data-api.binance.vision/api/v3/ticker/24hr?symbol=${symbol}`);
+    const stat = await statRes.json();
+    tradingState.lastChange = parseFloat(stat.priceChangePercent);
+    updatePriceDisplay(parseFloat(stat.lastPrice), tradingState.lastChange);
+    connectTradingWS();
+  } catch (e) {
+    console.error('Trading data error', e);
+  }
+}
+
+function updatePriceDisplay(price, change) {
+  const priceEl = document.getElementById('tradingSymbolPrice');
+  const changeEl = document.getElementById('tradingSymbolChange');
+  if (!priceEl || !changeEl) return;
+  priceEl.innerText = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+  if (change !== null && change !== undefined) {
+    changeEl.innerText = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+    changeEl.className = 'trading-symbol-change ' + (change >= 0 ? 'up' : 'down');
+    priceEl.style.color = change >= 0 ? '#34D399' : '#FF4D6D';
+  }
+}
+
+function connectTradingWS() {
+  if (tradingState.ws) {
+    try { tradingState.ws.close(); } catch(e) {}
+    tradingState.ws = null;
+  }
+  if (tradingState.wsReconnectTimer) {
+    clearTimeout(tradingState.wsReconnectTimer);
+    tradingState.wsReconnectTimer = null;
+  }
+  const { symbol, timeframe } = tradingState;
+  const stream = `${symbol.toLowerCase()}@kline_${timeframe}`;
+  const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${stream}`);
+  tradingState.ws = ws;
+
+  ws.onmessage = (ev) => {
+    const msg = JSON.parse(ev.data);
+    if (!msg.k || !tradingState.candleSeries) return;
+    const k = msg.k;
+    const candle = {
+      time: Math.floor(k.t / 1000),
+      open: parseFloat(k.o),
+      high: parseFloat(k.h),
+      low: parseFloat(k.l),
+      close: parseFloat(k.c)
+    };
+    tradingState.candleSeries.update(candle);
+    tradingState.lastPrice = candle.close;
+    updatePriceDisplay(candle.close, tradingState.lastChange);
+    updateOpenTradesPnL(candle.close);
+  };
+
+  ws.onclose = () => {
+    if (!tradingState.initialized) return;
+    tradingState.wsReconnectTimer = setTimeout(() => connectTradingWS(), 3000);
+  };
+  ws.onerror = () => { try { ws.close(); } catch(e) {} };
+}
+
+function setTradeAmount(v) {
+  document.getElementById('tradingAmountInput').value = v;
+}
+
+function openTrade(direction) {
+  const amount = parseInt(document.getElementById('tradingAmountInput').value) || 0;
+  if (amount < 1) return showToast('أدخل مبلغاً صحيحاً');
+  if (amount > user.stars) return showToast('رصيدك غير كافٍ!');
+  if (!tradingState.lastPrice) return showToast('انتظر تحميل السعر...');
+
+  user.stars -= amount;
+  updateBalances();
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(-amount) });
+
+  const trade = {
+    id: 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    symbol: tradingState.symbol,
+    direction: direction,
+    amount: amount,
+    entryPrice: tradingState.lastPrice,
+    openTime: Date.now()
+  };
+  tradingState.openTrades.push(trade);
+  renderTradingPositions();
+  showToast(direction === 'long' ? '✅ فتحت صفقة شراء' : '✅ فتحت صفقة بيع');
+}
+
+function closeTrade(tradeId) {
+  const idx = tradingState.openTrades.findIndex(t => t.id === tradeId);
+  if (idx === -1) return;
+  const trade = tradingState.openTrades[idx];
+  const currentPrice = tradingState.lastPrice;
+  if (!currentPrice) return showToast('انتظر تحديث السعر...');
+
+  let pnl;
+  if (trade.direction === 'long') {
+    pnl = ((currentPrice - trade.entryPrice) / trade.entryPrice) * trade.amount;
+  } else {
+    pnl = ((trade.entryPrice - currentPrice) / trade.entryPrice) * trade.amount;
+  }
+  const payout = Math.max(0, trade.amount + pnl);
+  user.stars += payout;
+  updateBalances();
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(payout) });
+
+  trade.closePrice = currentPrice;
+  trade.pnl = pnl;
+  trade.closeTime = Date.now();
+  tradingState.closedTrades.unshift(trade);
+  if (tradingState.closedTrades.length > 20) tradingState.closedTrades.pop();
+  tradingState.openTrades.splice(idx, 1);
+  renderTradingPositions();
+  showToast(pnl >= 0 ? `💰 ربحت ${pnl.toFixed(2)} نجمة` : `📉 خسرت ${Math.abs(pnl).toFixed(2)} نجمة`);
+}
+
+function updateOpenTradesPnL(currentPrice) {
+  tradingState.openTrades.forEach(trade => {
+    const el = document.getElementById('pnl_' + trade.id);
+    if (!el) return;
+    let pnl;
+    if (trade.direction === 'long') {
+      pnl = ((currentPrice - trade.entryPrice) / trade.entryPrice) * trade.amount;
+    } else {
+      pnl = ((trade.entryPrice - currentPrice) / trade.entryPrice) * trade.amount;
+    }
+    el.innerText = (pnl >= 0 ? '+' : '') + pnl.toFixed(2) + ' ⭐';
+    el.className = 'trading-position-pnl ' + (pnl >= 0 ? 'profit' : 'loss');
+  });
+}
+
+function renderTradingPositions() {
+  const container = document.getElementById('tradingPositions');
+  const countEl = document.getElementById('tradingOpenCount');
+  if (!container || !countEl) return;
+  countEl.innerText = tradingState.openTrades.length + ' صفقة مفتوحة';
+  if (!tradingState.openTrades.length) {
+    container.innerHTML = '<div class="trading-empty">لا توجد صفقات مفتوحة</div>';
+    return;
+  }
+  container.innerHTML = tradingState.openTrades.map(t => {
+    const dirLabel = t.direction === 'long' ? '🟢 شراء' : '🔴 بيع';
+    return `<div class="trading-position">
+      <div class="trading-position-info">
+        <span class="trading-position-title">${dirLabel} ${TRADING_NAMES[t.symbol]} · ${t.amount} ⭐</span>
+        <span class="trading-position-pnl" id="pnl_${t.id}">0.00 ⭐</span>
+      </div>
+      <button class="trading-close-btn" onclick="closeTrade('${t.id}')">إغلاق</button>
+    </div>`;
+  }).join('');
+  updateOpenTradesPnL(tradingState.lastPrice);
 }
 </script>
 
