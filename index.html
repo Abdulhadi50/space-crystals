@@ -226,46 +226,57 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid rgba(255,255,255,0.16);
   box-shadow: 0 22px 55px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.20), 0 0 60px rgba(245,215,110,0.10);
   width: 100%;
+  height: 240px;
+  overflow: hidden;
 }
 .slots-reel {
   flex: 1;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 6px;
   background: rgba(0,0,0,0.35);
   border-radius: 18px;
-  padding: 10px 6px;
   border: 1px solid rgba(255,255,255,0.08);
-  min-height: 260px;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+/* Smooth gradient masks for reel cylinder effect */
+.slots-reel::before, .slots-reel::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 60px;
+  z-index: 2; pointer-events: none;
+}
+.slots-reel::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(16,16,24,0.95), transparent);
+}
+.slots-reel::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(16,16,24,0.95), transparent);
+}
+.slots-reel-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  will-change: transform;
 }
 .slots-reel-item {
   width: 100%;
-  aspect-ratio: 1;
+  height: 80px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.04);
-  transition: transform 0.2s var(--spring);
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
 }
 .slots-reel-item img {
-  width: 80%; height: 80%; object-fit: contain;
+  width: 60px; height: 60px; object-fit: contain;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
   pointer-events: none;
 }
 .slots-reel-item.win {
-  background: rgba(52,211,153,0.20);
-  box-shadow: 0 0 16px rgba(52,211,153,0.5);
+  background: rgba(52,211,153,0.25);
+  box-shadow: inset 0 0 16px rgba(52,211,153,0.5);
   transform: scale(1.05);
 }
-.slots-reel.spinning .slots-reel-item {
-  animation: reelSpin 0.15s linear infinite;
-}
-@keyframes reelSpin {
-  0% { transform: translateY(-10px); opacity: 0.4; }
-  50% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(10px); opacity: 0.4; }
-}
+
 .slots-result {
   font-size: 20px; font-weight: 800; text-align: center;
   min-height: 28px;
@@ -274,36 +285,39 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .slots-result.win { color: var(--success); text-shadow: 0 0 20px rgba(52,211,153,0.5); }
 .slots-result.lose { color: var(--text-secondary); }
+
 .slots-bet-levels {
-  display: flex; gap: 10px; width: 100%;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: flex;
+  background: linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.015));
+  border-radius: 18px; padding: 5px;
+  border: 1px solid rgba(255,255,255,0.11);
+  width: 100%;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 6px 18px rgba(0,0,0,0.28);
 }
 .slots-bet-btn {
-  flex: 1; min-width: 70px;
-  padding: 12px 8px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.13);
-  color: var(--text-primary);
-  font-weight: 800; font-size: 14px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px;
-  transition: all 0.2s var(--ease-out);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  flex: 1; text-align: center; padding: 12px 4px; white-space: nowrap;
+  border-radius: 14px; color: var(--text-secondary);
+  font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  transition: all 0.25s var(--ease-out);
+  border: 1px solid transparent;
 }
-.slots-bet-btn span { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.slots-bet-btn img {
+  width: 14px; height: 14px;
+}
 .slots-bet-btn.active {
-  background: var(--gradient-blue);
-  border-color: rgba(255,255,255,0.28);
-  box-shadow: 0 6px 18px rgba(59,111,219,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
-  transform: scale(1.02);
+  background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06));
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 4px 12px rgba(0,0,0,0.35);
 }
-.slots-bet-btn.active span { color: rgba(255,255,255,0.8); }
-.slots-bet-btn:active:not(:disabled) { transform: scale(0.96); }
+.slots-bet-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
 .slots-bet-btn:disabled { opacity: 0.5; pointer-events: none; }
+
 .slots-spin-btn {
-  width: 100%; max-width: 280px;
+  width: 100%;
   padding: 16px;
   border-radius: 18px;
   background: var(--gradient-blue);
@@ -318,12 +332,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .slots-spin-btn:active:not(:disabled) { transform: scale(0.97); }
 .slots-spin-btn:disabled { opacity: 0.5; pointer-events: none; }
 .slots-spin-btn img { width: 24px; height: 24px; }
-.slots-info {
-  font-size: 12px; color: var(--text-secondary); font-weight: 600;
-  text-align: center;
-  max-width: 280px;
-  line-height: 1.6;
-}
 
 /* ============ SPIN / CASES ============ */
 #view-spin { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
@@ -1470,8 +1478,12 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crash-multiplier-display { font-size: 54px; }
   .crash-multiplier-display.waiting { font-size: 42px; }
   .crash-countdown-display { font-size: 36px; }
-  .slots-reels { gap: 6px; padding: 12px 8px; }
-  .slots-reel { min-height: 220px; }
+  .slots-reels { height: 210px; }
+  .slots-reel-item { height: 70px; }
+  .slots-reel-item img { width: 50px; height: 50px; }
+  .slots-reel::before, .slots-reel::after { height: 50px; }
+  .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
+  .slots-spin-btn { font-size: 15px; padding: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1553,32 +1565,38 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="slots-container">
         <div class="slots-reels" id="slotsReels">
           <div class="slots-reel" id="reel0">
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
+            <div class="slots-reel-track" id="reelTrack0"></div>
           </div>
           <div class="slots-reel" id="reel1">
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
+            <div class="slots-reel-track" id="reelTrack1"></div>
           </div>
           <div class="slots-reel" id="reel2">
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
-            <div class="slots-reel-item"><img src="" alt=""></div>
+            <div class="slots-reel-track" id="reelTrack2"></div>
           </div>
         </div>
         <div class="slots-result" id="slotsResult">اختر رهانك</div>
         <div class="slots-bet-levels" id="slotsBetLevels">
-          <button class="slots-bet-btn" data-bet="69" onclick="slotsChangeBet(69)">69 <span>نجمة</span></button>
-          <button class="slots-bet-btn" data-bet="149" onclick="slotsChangeBet(149)">149 <span>نجمة</span></button>
-          <button class="slots-bet-btn" data-bet="399" onclick="slotsChangeBet(399)">399 <span>نجمة</span></button>
-          <button class="slots-bet-btn" data-bet="999" onclick="slotsChangeBet(999)">999 <span>نجمة</span></button>
+          <button class="slots-bet-btn" data-bet="69" onclick="slotsChangeBet(69)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 69
+          </button>
+          <button class="slots-bet-btn" data-bet="149" onclick="slotsChangeBet(149)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 149
+          </button>
+          <button class="slots-bet-btn" data-bet="399" onclick="slotsChangeBet(399)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 399
+          </button>
+          <button class="slots-bet-btn" data-bet="999" onclick="slotsChangeBet(999)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 999
+          </button>
         </div>
-        <button class="slots-spin-btn" id="slotsSpinBtn" onclick="slotsSpin()">
-          Spin for <img src="https://up6.cc/2026/10/17932600818491.png" alt="star"> <span id="slotsSpinCost">69</span>
-        </button>
-        <div class="slots-info">90% فرصة لجائزة "لا شيء" و10% للجوائز الأخرى</div>
+        <div style="display: flex; gap: 10px; width: 100%; max-width: 360px;">
+          <button class="slots-prizes-btn" onclick="slotsShowPrizes()" style="flex: 1; padding: 16px; border-radius: 18px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.15); color: white; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fas fa-gift"></i> الجوائز
+          </button>
+          <button class="slots-spin-btn" id="slotsSpinBtn" onclick="slotsSpin()" style="flex: 2; margin: 0;">
+            Spin for <img src="https://up6.cc/2026/10/17932600818491.png" alt="star"> <span id="slotsSpinCost">69</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1991,6 +2009,14 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
+<div class="modal-overlay" id="slots-prizes-modal">
+  <div class="modal-content" style="max-width: 400px; padding: 20px;">
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <div class="prizes-grid" id="slots-prizes-grid"></div>
+    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')">إغلاق</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="spin-settings-modal">
   <div class="modal-content">
     <h3 style="margin-bottom: 20px;">الإعدادات</h3>
@@ -2087,7 +2113,6 @@ const WINNING_TABLE = [
 /* ================= SLOTS CONFIG ================= */
 const SLOTS_BET_LEVELS = [69, 149, 399, 999];
 
-// Each level: { noWin: 90, wins: [ { weight, symbols: [id1,id2,id3], value } ] } — weights sum to 10
 const SLOTS_CONFIG = {
   69: {
     noWin: 90,
@@ -2139,7 +2164,6 @@ const SLOTS_CONFIG = {
   }
 };
 
-/* Build lookup for symbols by id */
 const SLOT_SYMBOLS = {};
 WINNING_TABLE.forEach(s => { SLOT_SYMBOLS[s.id] = s; });
 
@@ -2481,7 +2505,6 @@ function go(viewName) {
     mainScroll.classList.add('mines-mode');
     initMinesView();
   } else if (viewName === 'slots') {
-    // stop any crash game when leaving crash view
     if (crashState.status !== 'idle') stopCrashGame();
     slotsUpdateBalance();
   } else {
@@ -2520,14 +2543,18 @@ let slotsState = {
 };
 
 function initSlots() {
-  // Set initial reel images from first symbols of the table
   for (let r = 0; r < 3; r++) {
-    const reel = document.getElementById('reel' + r);
-    const items = reel.querySelectorAll('.slots-reel-item img');
-    items.forEach((img, idx) => {
-      const sym = WINNING_TABLE[(r * 3 + idx) % WINNING_TABLE.length];
-      img.src = sym.img;
-    });
+    const track = document.getElementById('reelTrack' + r);
+    track.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      const item = document.createElement('div');
+      item.className = 'slots-reel-item';
+      item.innerHTML = `<img src="${sym.img}" alt="">`;
+      track.appendChild(item);
+    }
+    track.style.transform = 'translateY(0)';
+    track.style.transition = 'none';
   }
   slotsUpdateBalance();
   slotsUpdateBetUI();
@@ -2554,18 +2581,13 @@ function slotsUpdateBalance() {
   }
 }
 
-/**
- * Pick outcome based on 90% no-win, 10% weighted win.
- * Returns { type:'lose' } or { type:'win', symbols:[id1,id2,id3], value }
- */
 function slotsPickOutcome(bet) {
   const config = SLOTS_CONFIG[bet];
   if (!config) return { type: 'lose' };
 
-  const roll = Math.random() * 100; // 0..100
+  const roll = Math.random() * 100;
   if (roll < config.noWin) return { type: 'lose' };
 
-  // Weighted pick among wins
   const totalWinWeight = config.wins.reduce((s, w) => s + w.weight, 0);
   let r = Math.random() * totalWinWeight;
   for (const w of config.wins) {
@@ -2585,7 +2607,6 @@ async function slotsSpin() {
   spinBtn.disabled = true;
   document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = true);
 
-  // Deduct bet
   user.stars -= bet;
   updateBalances();
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
@@ -2594,37 +2615,23 @@ async function slotsSpin() {
   resultEl.innerText = '...';
   resultEl.className = 'slots-result';
 
-  // Clear win classes
   document.querySelectorAll('.slots-reel-item').forEach(i => i.classList.remove('win'));
 
-  // Add spinning class
-  for (let r = 0; r < 3; r++) {
-    document.getElementById('reel' + r).classList.add('spinning');
-  }
-
-  // Pick outcome upfront
   const outcome = slotsPickOutcome(bet);
 
-  // Build final symbol grid (3x3) from outcome or random
-  let finalGrid;
+  let finalGrid = [[],[],[]];
   if (outcome.type === 'win') {
-    // All three reels show the same winning symbol (one per reel) — middle row wins
-    // Build 3x3 with winning symbol in middle row, random others
-    finalGrid = [[],[],[]];
     for (let r = 0; r < 3; r++) {
       for (let row = 0; row < 3; row++) {
         if (row === 1) {
           finalGrid[r][row] = outcome.symbols[r];
         } else {
-          // random symbol
           const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
           finalGrid[r][row] = rnd.id;
         }
       }
     }
   } else {
-    // Lose: random grid ensuring no full line match
-    finalGrid = [[],[],[]];
     let attempts = 0;
     do {
       for (let r = 0; r < 3; r++) {
@@ -2635,39 +2642,58 @@ async function slotsSpin() {
       }
       attempts++;
     } while (slotsHasWinningLine(finalGrid) && attempts < 50);
-    // If still has winning line after attempts, force a break
     if (slotsHasWinningLine(finalGrid)) {
       finalGrid[0][1] = finalGrid[1][1] === finalGrid[2][1] ? WINNING_TABLE[0].id : finalGrid[0][1];
     }
   }
 
-  // Animate reels
-  const spinDuration = 1200;
-  const reelDelays = [0, 200, 400];
+  const itemHeight = 80;
+  const numRandomItems = 40;
+  const numExtraItems = 10;
+  const durations = [1800, 2200, 2600];
 
   for (let r = 0; r < 3; r++) {
+    const track = document.getElementById('reelTrack' + r);
+    track.innerHTML = '';
+
+    let html = '';
+    for (let i = 0; i < numRandomItems; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
+    }
+
+    const finalSym = SLOT_SYMBOLS[finalGrid[r][1]];
+    html += `<div class="slots-reel-item"><img src="${finalSym.img}" alt=""></div>`;
+
+    for (let i = 0; i < numExtraItems; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
+    }
+    track.innerHTML = html;
+
+    const N = numRandomItems;
+    const endY = 80 - N * 80;
+    const startY = endY - 2000;
+
+    track.style.transition = 'none';
+    track.style.transform = `translateY(${startY}px)`;
+    track.offsetHeight;
+
     setTimeout(() => {
-      const reel = document.getElementById('reel' + r);
-      const items = reel.querySelectorAll('.slots-reel-item img');
-      items.forEach((img, row) => {
-        img.src = SLOT_SYMBOLS[finalGrid[r][row]].img;
-      });
-      reel.classList.remove('spinning');
-    }, spinDuration + reelDelays[r]);
+      track.style.transition = `transform ${durations[r]}ms cubic-bezier(0.15, 0.85, 0.35, 1)`;
+      track.style.transform = `translateY(${endY}px)`;
+    }, r * 100);
   }
 
-  // Wait for all reels to stop
   setTimeout(async () => {
-    // Evaluate win
     let winAmount = 0;
     let winningCells = [];
 
-    // Check middle row (the only active payline)
     const mid0 = finalGrid[0][1];
     const mid1 = finalGrid[1][1];
     const mid2 = finalGrid[2][1];
+
     if (mid0 === mid1 && mid1 === mid2) {
-      const sym = SLOT_SYMBOLS[mid0];
       const betConfig = SLOTS_CONFIG[bet];
       const match = betConfig.wins.find(w => w.symbols.every(s => s === mid0));
       if (match) {
@@ -2676,15 +2702,11 @@ async function slotsSpin() {
       }
     }
 
-    // Also check top and bottom rows? For simplicity, only middle row is active payline.
-    // (We can extend to 3 lines later.)
-
     if (winAmount > 0) {
-      // Highlight winning cells
       winningCells.forEach(([r, row]) => {
-        const reel = document.getElementById('reel' + r);
-        const items = reel.querySelectorAll('.slots-reel-item');
-        if (items[row]) items[row].classList.add('win');
+        const track = document.getElementById('reelTrack' + r);
+        const itemsInReel = track.children;
+        if (itemsInReel[N]) itemsInReel[N].classList.add('win');
       });
 
       user.stars += winAmount;
@@ -2699,24 +2721,54 @@ async function slotsSpin() {
       resultEl.className = 'slots-result lose';
     }
 
-    // Re-enable
     slotsState.isSpinning = false;
     spinBtn.disabled = false;
     document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = false);
-  }, spinDuration + 700);
+  }, durations[2] + 300);
 }
 
 function slotsHasWinningLine(grid) {
-  // Check middle row
   const mid0 = grid[0][1], mid1 = grid[1][1], mid2 = grid[2][1];
   if (mid0 === mid1 && mid1 === mid2) return true;
-  // Check top row
   const top0 = grid[0][0], top1 = grid[1][0], top2 = grid[2][0];
   if (top0 === top1 && top1 === top2) return true;
-  // Check bottom row
   const bot0 = grid[0][2], bot1 = grid[1][2], bot2 = grid[2][2];
   if (bot0 === bot1 && bot1 === bot2) return true;
   return false;
+}
+
+function slotsShowPrizes() {
+  const bet = slotsState.currentBet;
+  const config = SLOTS_CONFIG[bet];
+  const container = document.getElementById('slots-prizes-grid');
+  container.innerHTML = '';
+
+  const loseDiv = document.createElement('div');
+  loseDiv.className = 'prize-grid-item';
+  loseDiv.innerHTML = `
+    <img src="https://img.icons8.com/color/96/000000/cancel.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Nothing">
+    <div class="prize-val">
+      <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 0
+    </div>
+  `;
+  container.appendChild(loseDiv);
+
+  const sortedWins = [...config.wins].sort((a,b) => a.value - b.value);
+  sortedWins.forEach(w => {
+    const symId = w.symbols[0];
+    const sym = SLOT_SYMBOLS[symId];
+    const div = document.createElement('div');
+    div.className = 'prize-grid-item';
+    div.innerHTML = `
+      <img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${w.value}">
+      <div class="prize-val">
+        <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${w.value}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  openModal('slots-prizes-modal');
 }
 
 /* ================= SPIN / CASES ================= */
@@ -3551,7 +3603,6 @@ async function getActiveCrashRound() {
     if (!doc.exists) return null;
     const data = doc.data();
 
-    // Flying states should never persist in new code — clean up only very stale ones
     if (data.status === 'flying') {
       const age = Date.now() - (data.updatedAt || 0);
       if (age > 5 * 60 * 1000) {
@@ -3564,7 +3615,6 @@ async function getActiveCrashRound() {
       return null;
     }
 
-    // 10-minute timeout for waiting rounds
     if (data.updatedAt && (Date.now() - data.updatedAt > 10 * 60 * 1000)) {
       await clearActiveCrashRound();
       return null;
@@ -3573,12 +3623,6 @@ async function getActiveCrashRound() {
   } catch(e) { return null; }
 }
 
-/**
- * Called when the app is being hidden/unloaded.
- * - Waiting round: saved for resume on next open (bet not charged twice)
- * - Flying round: user "walked away" — we compute the loss NOW in the background
- *   so the round is properly settled even if they never come back.
- */
 function saveActiveRoundState() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
 
@@ -3589,17 +3633,14 @@ function saveActiveRoundState() {
       hasCashedOut: false
     });
   } else if (crashState.status === 'flying') {
-    // Compute loss in background and record it
     const elapsed = (performance.now() - crashState.startTime) / 1000;
     const currentMult = Math.pow(1.08, elapsed);
     const finalMult = Math.min(currentMult, crashState.crashPoint);
     const bet = crashState.activeBet;
 
-    // Fire-and-forget (Firestore persistence queues these if offline)
     saveCrashRound(finalMult, bet, 'lost');
     clearActiveCrashRound();
 
-    // Reset local state so we don't accidentally re-process
     crashState.hasBet = false;
     crashState.activeBet = 0;
     crashState.hasCashedOut = false;
@@ -3663,7 +3704,6 @@ async function checkAndResumeCrashRound() {
     showToast(`تم استرداد رهانك السابق (${active.activeBet} نجمة)`);
     return true;
   }
-  // Flying rounds are handled/cleared inside getActiveCrashRound
   return false;
 }
 
@@ -3685,14 +3725,13 @@ function crashStartWaitingPhase() {
   crashState.hasCashedOut = false;
   crashState.cashoutMultiplier = 0;
   crashState.countdown = 6;
-  crashState.roundId = null; // fresh round
+  crashState.roundId = null;
 
   const starsBg = document.getElementById('crash-stars-bg');
   const mainBtn = document.getElementById('crash-main-btn');
 
   starsBg.style.animationDuration = '6s';
 
-  // Do NOT show multiplier during setup — only countdown
   crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
 
@@ -3773,7 +3812,6 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
-// 60% of rounds crash between 1.00 and 5.00, 40% above 5.00
 function crashGenerateCrashPoint() {
   const r = Math.random();
   if (r < 0.60) {
@@ -3840,7 +3878,6 @@ function crashDoCashOut() {
   saveCrashRound(crashState.multiplier, crashState.activeBet, 'won');
   clearActiveCrashRound();
 
-  // Reset bet so it can't be double-refunded on the next "cancel"
   crashState.hasBet = false;
   crashState.activeBet = 0;
 
