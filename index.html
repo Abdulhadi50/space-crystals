@@ -34,7 +34,7 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(16, 16, 24, 0.72);
+  --nav-bg: rgba(16, 16, 24, 0.85);
   --nav-border: rgba(255, 255, 255, 0.12);
   --nav-indicator-bg: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.06));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 6px 16px rgba(0,0,0,0.45);
@@ -104,9 +104,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
-  background: linear-gradient(180deg, rgba(18,18,26,0.88), rgba(12,12,18,0.55));
-  -webkit-backdrop-filter: blur(14px) saturate(170%);
-  backdrop-filter: blur(14px) saturate(170%);
+  background: rgba(18,18,26,0.95);
   border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
   border-bottom: 1px solid rgba(255,255,255,0.07);
   box-shadow: 0 10px 26px rgba(0,0,0,0.35);
@@ -126,8 +124,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .balance-pill {
   display: flex; align-items: center;
   background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
-  -webkit-backdrop-filter: blur(14px) saturate(170%);
-  backdrop-filter: blur(14px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   padding: 4px 8px 4px 12px; gap: 8px;
@@ -165,11 +161,9 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer;
   transition: transform 0.25s var(--spring);
   position: relative; overflow: hidden; min-height: 108px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.085), rgba(255,255,255,0.015));
+  background: linear-gradient(135deg, rgba(30,30,42,0.95), rgba(20,20,28,0.95));
   border: 1px solid rgba(255,255,255,0.13);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  backdrop-filter: blur(12px) saturate(150%);
   contain: layout style paint;
   will-change: transform;
 }
@@ -238,7 +232,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   overflow: hidden;
   height: 100%;
 }
-/* Smooth gradient masks for reel cylinder effect */
 .slots-reel::before, .slots-reel::after {
   content: '';
   position: absolute; left: 0; right: 0; height: 60px;
@@ -317,7 +310,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .slots-bet-btn:disabled { opacity: 0.5; pointer-events: none; }
 
 .slots-spin-btn {
-  width: 100%;
+  flex: 2;
   padding: 16px;
   border-radius: 18px;
   background: var(--gradient-blue);
@@ -380,8 +373,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: transform 0.15s var(--spring), background 0.2s;
   box-shadow: var(--shadow-glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 .spin-ctrl-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.14); }
 
@@ -423,16 +414,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid rgba(255,255,255,0.13);
   border-radius: 26px; padding: 20px; margin-bottom: 20px;
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  backdrop-filter: blur(12px) saturate(150%);
   position: relative; overflow: hidden;
   contain: layout style paint;
-}
-.daily-claim-card::before {
-  content: ''; position: absolute; top: -50%; right: -20%;
-  width: 60%; height: 200%;
-  background: radial-gradient(circle, rgba(245,215,110,0.13), transparent 65%);
-  pointer-events: none;
 }
 .daily-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; position: relative; }
 .daily-title-area h3 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
@@ -487,8 +470,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-radius: 24px; margin-bottom: 16px; overflow: hidden;
   border: 1px solid rgba(255,255,255,0.11);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  backdrop-filter: blur(10px) saturate(150%);
   contain: layout style paint;
 }
 .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.07); gap: 10px; }
@@ -530,8 +511,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid rgba(255,255,255,0.11);
   overflow-x: auto;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 6px 18px rgba(0,0,0,0.28);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
 }
 .tab {
   flex: 1; text-align: center; padding: 12px 8px; white-space: nowrap;
@@ -603,8 +582,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 20px; border-radius: 22px; margin-bottom: 16px;
   border: 1px solid rgba(255,255,255,0.11);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
 }
 .manual-instructions p { font-size: 14px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 600; line-height: 1.65; }
 .warning-box { color: var(--text-primary); font-size: 12px; font-weight: 600; margin-top: 16px; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
@@ -699,8 +676,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   padding: 20px; border-radius: 22px; text-align: center;
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   position: relative; overflow: hidden;
   contain: layout style paint;
 }
@@ -717,8 +692,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border-radius: 20px; padding: 6px; display: flex;
   align-items: center; margin-bottom: 12px;
   box-shadow: var(--shadow-glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 .link-box-text {
   flex: 1; font-size: 12px; color: var(--text-secondary); padding: 8px 12px;
@@ -808,8 +781,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 20px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.26);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
   contain: layout style paint;
 }
 .ranking-row.me {
@@ -836,29 +807,54 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 
 /* ============ PROFILE ============ */
-.profile-header { text-align: center; margin-bottom: 30px; }
+.profile-header-container {
+  position: relative;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.profile-banner {
+  height: 110px;
+  background: linear-gradient(135deg, rgba(91,141,239,0.6), rgba(140,90,220,0.6));
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -50px;
+}
+.profile-banner::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  opacity: 0.3;
+}
 .profile-avatar {
   width: 96px; height: 96px; border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03));
-  margin: 0 auto 16px;
+  background: linear-gradient(135deg, rgba(30,30,42,1), rgba(16,16,24,1));
+  margin: 0 auto 12px;
   display: flex; align-items: center; justify-content: center;
   font-size: 36px; overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.20);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.25), 0 0 40px rgba(91,141,239,0.20);
+  border: 4px solid #1a1a24;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
   position: relative;
 }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.4px; }
-.profile-header p { color: var(--text-secondary); font-size: 13px; font-weight: 600; direction: ltr; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.profile-header-container h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.4px; }
+.profile-id-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  color: var(--text-secondary); font-size: 13px; font-weight: 600; direction: ltr;
+}
+.profile-id-copy {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  padding: 4px 8px; border-radius: 8px; font-size: 11px; cursor: pointer;
+  color: var(--text-primary); display: flex; align-items: center; gap: 4px;
+}
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
 .stat-card {
   background: linear-gradient(135deg, rgba(255,255,255,0.085), rgba(255,255,255,0.02));
   padding: 18px; border-radius: 22px;
   display: flex; align-items: center; gap: 14px;
   border: 1px solid rgba(255,255,255,0.11);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   position: relative; overflow: hidden;
   contain: layout style paint;
 }
@@ -870,22 +866,33 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .stat-info h3 { font-size: 19px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.3px; }
 .stat-info p { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
 
+.profile-actions { display: flex; flex-direction: column; gap: 10px; }
+.profile-action-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 16px 20px; border-radius: 18px;
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+  transition: transform 0.15s var(--spring);
+}
+.profile-action-btn:active { transform: scale(0.98); }
+.profile-action-btn i { color: var(--text-secondary); }
+
 /* ============ MODALS ============ */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.72);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.8);
   z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
-  background: linear-gradient(160deg, rgba(36,36,48,0.96), rgba(16,16,24,0.98));
+  background: linear-gradient(160deg, rgba(36,36,48,0.98), rgba(16,16,24,0.99));
   border-radius: 28px; padding: 30px;
   width: 100%; max-width: 340px; text-align: center;
   animation: popInModal 0.32s var(--spring);
   border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 26px 70px rgba(0,0,0,0.68), inset 0 1px 0 rgba(255,255,255,0.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.16);
 }
 @keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.4px; }
@@ -921,12 +928,14 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   border: 1px solid rgba(255,255,255,0.13);
   box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.13);
+  min-width: 0;
 }
 .prize-grid-item img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5)); }
 .prize-val {
   background: rgba(0,0,0,0.45); padding: 4px 10px; border-radius: 20px;
   font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: #fff;
   border: 1px solid rgba(255,255,255,0.10);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 .switch-row {
@@ -954,6 +963,12 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 #tsIcon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 #tsIcon i { font-size: 40px; color: #fff; }
+
+/* Info Modal specific */
+.info-modal { text-align: right; }
+.info-modal h3 { text-align: center; margin-bottom: 16px; }
+.info-modal p { font-size: 13px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+.info-modal ul { padding-right: 20px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
 
 .toast {
   position: fixed; top: 20px; left: 50%;
@@ -984,8 +999,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: 32px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px;
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
   box-shadow: 0 12px 34px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
 }
 .dock-nav::before {
@@ -1059,7 +1072,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* Big multiplier display — above the icon (moved higher) */
 .crash-multiplier-display {
   position: absolute;
   left: 50%; top: 10%;
@@ -1093,7 +1105,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   text-shadow: 0 6px 30px rgba(255,77,109,0.7), 0 0 60px rgba(255,77,109,0.5);
 }
 
-/* Big countdown — below the waiting icon */
 .crash-countdown-display {
   position: absolute;
   left: 50%; bottom: 20%;
@@ -1136,8 +1147,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   gap: 8px;
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: var(--shadow-card);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  backdrop-filter: blur(12px) saturate(160%);
   contain: layout style paint;
 }
 .crash-history-strip {
@@ -1274,7 +1283,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   min-height: 0;
   overflow: hidden;
 }
-/* Smaller grid to leave room for Start button */
 .mines-grid {
   width: 100%; max-width: 340px;
   margin: 0 auto;
@@ -1354,7 +1362,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-cell.revealed-bomb .mines-cell-inner i { color: #ff6b6b; }
 .mines-cell.revealed-gem .mines-cell-inner i { color: #5b8def; }
 
-/* Faded background icon on unrevealed cells */
 .mines-cell-bg-icon {
   position: absolute;
   inset: 18%;
@@ -1432,7 +1439,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 .mines-bet-display input::-webkit-outer-spin-button,
 .mines-bet-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* Add spacing so Start button sits away from bottom controls */
 .mines-main-btn {
   width: calc(100% - 28px);
   margin: 6px 14px 0;
@@ -1484,6 +1490,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   .slots-reel::before, .slots-reel::after { height: 50px; }
   .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
   .slots-spin-btn { font-size: 15px; padding: 14px; }
+  .prize-val { font-size: 10px; padding: 2px 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1729,9 +1736,6 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="tab" onclick="switchDepositTab('binance', this)">
           <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
         </div>
-        <div class="tab" onclick="switchDepositTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> شام
-        </div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
@@ -1797,24 +1801,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
         </div>
       </div>
-      <div id="dep-tab-sham" class="dep-tab-content" style="display:none;">
-        <div class="manual-instructions">
-          <p>1. قم بتحويل المبلغ إلى معرّف شام كاش التالي:</p>
-          <div class="copy-box">
-            <span style="font-size:12px;">334a08ea2d1bbed05f214a7f08e37ae4</span>
-            <button class="copy-btn" onclick="copyText('334a08ea2d1bbed05f214a7f08e37ae4')">نسخ</button>
-          </div>
-          <p>2. انسخ معرّف حسابك والصقه في خانة "الملاحظة" عند التحويل:</p>
-          <div class="copy-box">
-            <span id="shamUserId">123456789</span>
-            <button class="copy-btn" onclick="copyText(document.getElementById('shamUserId').innerText)">نسخ</button>
-          </div>
-          <div class="warning-box">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>تنبيه: الحد الأدنى للإيداع هو 100 ليرة سورية.</div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="view" id="view-withdraw">
@@ -1824,9 +1810,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="tabs">
         <div class="tab active" onclick="switchWithdrawTab('binance', this)">
           <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
-        </div>
-        <div class="tab" onclick="switchWithdrawTab('sham', this)">
-          <img src="https://up6.cc/2026/09/178975725154411.png"> شام كاش
         </div>
         <div class="tab" onclick="switchWithdrawTab('gram', this)">
           <img src="https://up6.cc/2026/10/179327300871781.png"> Gram
@@ -1844,19 +1827,6 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
         <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
         <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
-      </div>
-      <div id="wd-tab-sham" class="wd-tab-content" style="display:none;">
-        <div class="amount-display">
-          <input type="number" id="wdShamAmount" placeholder="0" oninput="updateWdUI('sham', this)">
-          <img src="https://up6.cc/2026/10/17932600818491.png">
-        </div>
-        <div class="calc-subtext" id="wdShamResult">0 ل.س</div>
-        <div class="wd-input-group">
-          <label>معرّف شام كاش</label>
-          <input type="text" class="wd-input" placeholder="Sham Cash ID" id="wdShamId">
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 10 ل.س | الحد الأدنى 50 نجمة</p>
-        <button class="topup-btn" onclick="processWithdraw('sham')">تقديم الطلب</button>
       </div>
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
@@ -1917,13 +1887,20 @@ input:checked + .slider:before { transform: translateX(22px); }
     </div>
 
     <div class="view" id="view-profile">
-      <div class="profile-header">
+      <div class="profile-header-container">
+        <div class="profile-banner"></div>
         <div class="profile-avatar" id="profileAvatar">
           <i class="fas fa-user"></i>
         </div>
         <h2 id="profileName">اسم المستخدم</h2>
-        <p id="profileId">المعرف: 123456789</p>
+        <div class="profile-id-row">
+          <span id="profileId">123456789</span>
+          <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)">
+            <i class="fas fa-copy"></i> نسخ
+          </button>
+        </div>
       </div>
+      
       <div class="stats-grid">
         <div class="stat-card">
           <img src="https://up6.cc/2026/10/17932600818491.png">
@@ -1953,6 +1930,21 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>إجمالي السحوبات</p>
           </div>
         </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="profile-action-btn" onclick="openModal('modal-help')">
+          <span><i class="fas fa-question-circle" style="margin-left: 8px;"></i> المساعدة</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="profile-action-btn" onclick="openModal('modal-privacy')">
+          <span><i class="fas fa-shield-alt" style="margin-left: 8px;"></i> سياسة الخصوصية</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="profile-action-btn" onclick="openModal('modal-terms')">
+          <span><i class="fas fa-file-contract" style="margin-left: 8px;"></i> شروط اللعب والنزاهة</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
       </div>
     </div>
 
@@ -2053,7 +2045,44 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Task sheet — position: relative so close button anchors correctly -->
+<!-- Legal / Info Modals -->
+<div class="modal-overlay" id="modal-help">
+  <div class="modal-content info-modal">
+    <h3>المساعدة والدعم</h3>
+    <p>إذا واجهت أي مشكلة في التطبيق أو كانت لديك استفسارات، يمكنك التواصل مع فريق الدعم عبر البوت الرسمي.</p>
+    <p>يرجى تقديم معرف المستخدم الخاص بك (الموجود في الملف الشخصي) لتسهيل عملية الدعم.</p>
+    <button class="modal-btn" onclick="closeModal('modal-help')">إغلاق</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-privacy">
+  <div class="modal-content info-modal">
+    <h3>سياسة الخصوصية</h3>
+    <p>نحن نأخذ خصوصيتك على محمل الجد. إليك كيف نتعامل مع بياناتك:</p>
+    <ul>
+      <li>نقوم بجمع معرف تيليجرام (Telegram ID) واسم المستخدم لتخصيص تجربتك وحفظ تقدمك.</li>
+      <li>لا نقوم بمشاركة بياناتك مع أي أطراف ثالثة لأغراض تسويقية.</li>
+      <li>يتم تأمين جميع المعاملات المالية من خلال بوابات دفع موثوقة.</li>
+    </ul>
+    <button class="modal-btn" onclick="closeModal('modal-privacy')">إغلاق</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-terms">
+  <div class="modal-content info-modal">
+    <h3>شروط اللعب والنزاهة</h3>
+    <p>باستخدامك للتطبيق، فإنك توافق على الشروط التالية:</p>
+    <ul>
+      <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
+      <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب (Slots, Crash, Mines, Cases) على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
+      <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
+      <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمل خسارته.</li>
+    </ul>
+    <button class="modal-btn" onclick="closeModal('modal-terms')">موافق</button>
+  </div>
+</div>
+
+<!-- Task sheet -->
 <div class="modal-overlay" id="taskSheet" style="align-items: flex-end; padding: 0;">
   <div class="modal-content" style="position: relative; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
     <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
@@ -2080,7 +2109,6 @@ document.addEventListener('dragstart', e => {
 const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
-  sham: 'https://up6.cc/2026/09/178975725154411.png',
   gram: 'https://up6.cc/2026/10/179327300871781.png',
   ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png'
 };
@@ -2096,74 +2124,30 @@ const FIREBASE_CONFIG = {
 
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 
+// تم دمج جميع الملفات الجديدة هنا
 const WINNING_TABLE = [
-  { id: 'p1', img: 'IMG_20261029_171631_362.png', value: 0.01, weight: 20 },
-  { id: 'p2', img: 'IMG_20261029_172015_445.png', value: 0.1, weight: 20 },
-  { id: 'p3', img: 'IMG_20261029_171638_229.png', value: 0.5, weight: 20 },
-  { id: 'p4', img: 'IMG_20261029_171802_634.png', value: 1, weight: 20 },
-  { id: 'p5', img: 'IMG_20261029_171754_159.png', value: 5, weight: 17 },
-  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 10, weight: 0.8 },
-  { id: 'p7', img: 'IMG_20261029_180047_113.png', value: 20, weight: 0.8 },
-  { id: 'p8', img: 'IMG_20261029_180048_586.png', value: 50, weight: 0.6 },
-  { id: 'p9', img: 'IMG_20261029_180050_512.png', value: 75, weight: 0.4 },
-  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 90, weight: 0.2 },
-  { id: 'p11', img: 'IMG_20261029_180056_326.png', value: 100, weight: 0.2 }
+  { id: 'p1', img: 'IMG_20261029_131022_938.png', value: 0.01, weight: 20 },
+  { id: 'p2', img: 'IMG_20261029_131039_955.png', value: 0.1, weight: 20 },
+  { id: 'p3', img: 'IMG_20261029_131620_989.png', value: 0.5, weight: 20 },
+  { id: 'p4', img: 'IMG_20261029_171453_689.png', value: 1, weight: 20 },
+  { id: 'p5', img: 'IMG_20261029_171514_869.png', value: 2, weight: 17 },
+  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 5, weight: 10 },
+  { id: 'p7', img: 'IMG_20261029_171631_362.png', value: 10, weight: 8 },
+  { id: 'p8', img: 'IMG_20261029_171638_229.png', value: 20, weight: 6 },
+  { id: 'p9', img: 'IMG_20261029_171754_159.png', value: 30, weight: 5 },
+  { id: 'p10', img: 'IMG_20261029_171802_634.png', value: 50, weight: 3 },
+  { id: 'p11', img: 'IMG_20261029_172015_445.png', value: 75, weight: 2 },
+  { id: 'p12', img: 'IMG_20261029_172042_619.png', value: 90, weight: 1.5 },
+  { id: 'p13', img: 'IMG_20261029_172134_616.png', value: 100, weight: 1 },
+  { id: 'p14', img: 'IMG_20261029_180047_113.png', value: 120, weight: 0.8 },
+  { id: 'p15', img: 'IMG_20261029_180048_586.png', value: 140, weight: 0.6 },
+  { id: 'p16', img: 'IMG_20261029_180050_512.png', value: 150, weight: 0.5 },
+  { id: 'p17', img: 'IMG_20261029_180053_502.png', value: 130, weight: 0.4 },
+  { id: 'p18', img: 'IMG_20261029_180056_326.png', value: 110, weight: 0.2 }
 ];
 
 /* ================= SLOTS CONFIG ================= */
 const SLOTS_BET_LEVELS = [69, 149, 399, 999];
-
-const SLOTS_CONFIG = {
-  69: {
-    noWin: 90,
-    wins: [
-      { weight: 3, symbols: ['p1','p1','p1'], value: 50 },
-      { weight: 2, symbols: ['p2','p2','p2'], value: 100 },
-      { weight: 2, symbols: ['p3','p3','p3'], value: 150 },
-      { weight: 1, symbols: ['p4','p4','p4'], value: 250 },
-      { weight: 1, symbols: ['p5','p5','p5'], value: 500 },
-      { weight: 0.5, symbols: ['p6','p6','p6'], value: 1000 },
-      { weight: 0.5, symbols: ['p7','p7','p7'], value: 2000 }
-    ]
-  },
-  149: {
-    noWin: 90,
-    wins: [
-      { weight: 3, symbols: ['p1','p1','p1'], value: 100 },
-      { weight: 2, symbols: ['p2','p2','p2'], value: 200 },
-      { weight: 2, symbols: ['p3','p3','p3'], value: 350 },
-      { weight: 1, symbols: ['p4','p4','p4'], value: 600 },
-      { weight: 1, symbols: ['p5','p5','p5'], value: 1200 },
-      { weight: 0.5, symbols: ['p6','p6','p6'], value: 2500 },
-      { weight: 0.5, symbols: ['p7','p7','p7'], value: 5000 }
-    ]
-  },
-  399: {
-    noWin: 90,
-    wins: [
-      { weight: 3, symbols: ['p1','p1','p1'], value: 250 },
-      { weight: 2, symbols: ['p2','p2','p2'], value: 500 },
-      { weight: 2, symbols: ['p3','p3','p3'], value: 900 },
-      { weight: 1, symbols: ['p4','p4','p4'], value: 1600 },
-      { weight: 1, symbols: ['p5','p5','p5'], value: 3200 },
-      { weight: 0.5, symbols: ['p6','p6','p6'], value: 6500 },
-      { weight: 0.5, symbols: ['p7','p7','p7'], value: 13000 }
-    ]
-  },
-  999: {
-    noWin: 90,
-    wins: [
-      { weight: 3, symbols: ['p1','p1','p1'], value: 600 },
-      { weight: 2, symbols: ['p2','p2','p2'], value: 1200 },
-      { weight: 2, symbols: ['p3','p3','p3'], value: 2200 },
-      { weight: 1, symbols: ['p4','p4','p4'], value: 4000 },
-      { weight: 1, symbols: ['p5','p5','p5'], value: 8000 },
-      { weight: 0.5, symbols: ['p6','p6','p6'], value: 16000 },
-      { weight: 0.5, symbols: ['p7','p7','p7'], value: 32000 }
-    ]
-  }
-};
-
 const SLOT_SYMBOLS = {};
 WINNING_TABLE.forEach(s => { SLOT_SYMBOLS[s.id] = s; });
 
@@ -2280,7 +2264,6 @@ async function fetchUserData() {
     initDailyLogin();
     renderProfile();
     document.getElementById('binanceUserId').innerText = user.id;
-    document.getElementById('shamUserId').innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
   } catch (e) {
@@ -2529,7 +2512,7 @@ function updateBalances() {
 
 function renderProfile() {
   document.getElementById('profileName').innerText = user.name;
-  document.getElementById('profileId').innerText = 'المعرف: ' + user.id;
+  document.getElementById('profileId').innerText = user.id;
   const avatar = document.getElementById('profileAvatar');
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
@@ -2581,20 +2564,17 @@ function slotsUpdateBalance() {
   }
 }
 
-function slotsPickOutcome(bet) {
-  const config = SLOTS_CONFIG[bet];
-  if (!config) return { type: 'lose' };
-
+function getSlotOutcome() {
   const roll = Math.random() * 100;
-  if (roll < config.noWin) return { type: 'lose' };
-
-  const totalWinWeight = config.wins.reduce((s, w) => s + w.weight, 0);
-  let r = Math.random() * totalWinWeight;
-  for (const w of config.wins) {
-    if (r < w.weight) return { type: 'win', symbols: w.symbols, value: w.value };
-    r -= w.weight;
+  if (roll < 95) {
+    return { type: 'lose' };
+  } else if (roll >= 99) {
+    return { type: 'jackpot', value: 10000 };
+  } else {
+    // Pick random symbol from WINNING_TABLE
+    const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+    return { type: 'win', id: sym.id, value: sym.value };
   }
-  return { type: 'lose' };
 }
 
 async function slotsSpin() {
@@ -2614,17 +2594,27 @@ async function slotsSpin() {
   const resultEl = document.getElementById('slotsResult');
   resultEl.innerText = '...';
   resultEl.className = 'slots-result';
-
   document.querySelectorAll('.slots-reel-item').forEach(i => i.classList.remove('win'));
 
-  const outcome = slotsPickOutcome(bet);
+  const outcome = getSlotOutcome();
 
   let finalGrid = [[],[],[]];
   if (outcome.type === 'win') {
     for (let r = 0; r < 3; r++) {
       for (let row = 0; row < 3; row++) {
         if (row === 1) {
-          finalGrid[r][row] = outcome.symbols[r];
+          finalGrid[r][row] = outcome.id;
+        } else {
+          const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+          finalGrid[r][row] = rnd.id;
+        }
+      }
+    }
+  } else if (outcome.type === 'jackpot') {
+    for (let r = 0; r < 3; r++) {
+      for (let row = 0; row < 3; row++) {
+        if (row === 1) {
+          finalGrid[r][row] = WINNING_TABLE[15].id; // highest value symbol
         } else {
           const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
           finalGrid[r][row] = rnd.id;
@@ -2647,7 +2637,9 @@ async function slotsSpin() {
     }
   }
 
-  const itemHeight = 80;
+  const itemEl = document.querySelector('.slots-reel-item');
+  const ITEM_HEIGHT = itemEl ? itemEl.getBoundingClientRect().height : 80;
+
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
@@ -2672,7 +2664,7 @@ async function slotsSpin() {
     track.innerHTML = html;
 
     const N = numRandomItems;
-    const endY = 80 - N * 80;
+    const endY = ITEM_HEIGHT - N * ITEM_HEIGHT;
     const startY = endY - 2000;
 
     track.style.transition = 'none';
@@ -2686,44 +2678,52 @@ async function slotsSpin() {
   }
 
   setTimeout(async () => {
-    let winAmount = 0;
-    let winningCells = [];
+    try {
+      let winAmount = 0;
+      let winningCells = [];
 
-    const mid0 = finalGrid[0][1];
-    const mid1 = finalGrid[1][1];
-    const mid2 = finalGrid[2][1];
+      const mid0 = finalGrid[0][1];
+      const mid1 = finalGrid[1][1];
+      const mid2 = finalGrid[2][1];
 
-    if (mid0 === mid1 && mid1 === mid2) {
-      const betConfig = SLOTS_CONFIG[bet];
-      const match = betConfig.wins.find(w => w.symbols.every(s => s === mid0));
-      if (match) {
-        winAmount = match.value;
-        winningCells = [[0,1],[1,1],[2,1]];
+      if (mid0 === mid1 && mid1 === mid2) {
+        if (outcome.type === 'jackpot') {
+          winAmount = 10000;
+          winningCells = [[0,1],[1,1],[2,1]];
+        } else {
+          const match = WINNING_TABLE.find(w => w.id === mid0);
+          if (match) {
+            winAmount = match.value;
+            winningCells = [[0,1],[1,1],[2,1]];
+          }
+        }
       }
+
+      if (winAmount > 0) {
+        winningCells.forEach(([r, row]) => {
+          const track = document.getElementById('reelTrack' + r);
+          const itemsInReel = track.children;
+          if (itemsInReel[N]) itemsInReel[N].classList.add('win');
+        });
+
+        user.stars += winAmount;
+        updateBalances();
+        syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
+
+        resultEl.innerText = `فزت بـ ${winAmount} نجمة!`;
+        resultEl.className = 'slots-result win';
+        showToast(`🎉 فزت بـ ${winAmount} نجمة!`);
+      } else {
+        resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
+        resultEl.className = 'slots-result lose';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      slotsState.isSpinning = false;
+      spinBtn.disabled = false;
+      document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = false);
     }
-
-    if (winAmount > 0) {
-      winningCells.forEach(([r, row]) => {
-        const track = document.getElementById('reelTrack' + r);
-        const itemsInReel = track.children;
-        if (itemsInReel[N]) itemsInReel[N].classList.add('win');
-      });
-
-      user.stars += winAmount;
-      updateBalances();
-      syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
-
-      resultEl.innerText = `فزت بـ ${winAmount} نجمة!`;
-      resultEl.className = 'slots-result win';
-      showToast(`🎉 فزت بـ ${winAmount} نجمة!`);
-    } else {
-      resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
-      resultEl.className = 'slots-result lose';
-    }
-
-    slotsState.isSpinning = false;
-    spinBtn.disabled = false;
-    document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = false);
   }, durations[2] + 300);
 }
 
@@ -2738,11 +2738,10 @@ function slotsHasWinningLine(grid) {
 }
 
 function slotsShowPrizes() {
-  const bet = slotsState.currentBet;
-  const config = SLOTS_CONFIG[bet];
   const container = document.getElementById('slots-prizes-grid');
   container.innerHTML = '';
 
+  // 0 prize
   const loseDiv = document.createElement('div');
   loseDiv.className = 'prize-grid-item';
   loseDiv.innerHTML = `
@@ -2753,20 +2752,31 @@ function slotsShowPrizes() {
   `;
   container.appendChild(loseDiv);
 
-  const sortedWins = [...config.wins].sort((a,b) => a.value - b.value);
+  // All prizes sorted by value
+  const sortedWins = [...WINNING_TABLE].sort((a,b) => a.value - b.value);
   sortedWins.forEach(w => {
-    const symId = w.symbols[0];
-    const sym = SLOT_SYMBOLS[symId];
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
     div.innerHTML = `
-      <img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${w.value}">
+      <img src="${w.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${w.value}">
       <div class="prize-val">
         <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${w.value}
       </div>
     `;
     container.appendChild(div);
   });
+
+  // Jackpot prize
+  const jackpotDiv = document.createElement('div');
+  jackpotDiv.className = 'prize-grid-item';
+  jackpotDiv.style.background = 'linear-gradient(160deg, rgba(255,215,0,0.3), rgba(200,150,0,0.5))';
+  jackpotDiv.innerHTML = `
+    <img src="https://img.icons8.com/color/96/000000/treasure-chest.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Jackpot">
+    <div class="prize-val" style="color: var(--gold);">
+      <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 10,000
+    </div>
+  `;
+  container.appendChild(jackpotDiv);
 
   openModal('slots-prizes-modal');
 }
@@ -3254,7 +3264,6 @@ function updateWdUI(method, input) {
   let val = parseInt(input.value) || 0;
   if (val > 5000) { val = 5000; input.value = 5000; }
   if (method === 'binance') document.getElementById('wdBinanceResult').innerText = `$${(val * 0.01).toFixed(2)}`;
-  else if (method === 'sham') document.getElementById('wdShamResult').innerText = `${(val * 1).toFixed(0)} ل.س`;
   else if (method === 'gram') document.getElementById('wdGramResult').innerText = `${(val * 0.01).toFixed(2)} TON`;
 }
 async function loadWithdrawalHistory() {
@@ -3295,9 +3304,8 @@ function renderWithdrawHistory() {
   itemsToShow.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
     const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
-    let methodName = 'شام كاش';
-    if (w.method === 'binance') methodName = 'Binance';
-    else if (w.method === 'gram') methodName = 'Gram (TON)';
+    let methodName = 'Binance';
+    if (w.method === 'gram') methodName = 'Gram (TON)';
     if (dateStr !== lastDate) {
       const dateHeader = document.createElement('div');
       dateHeader.className = 'history-date-header';
@@ -3330,10 +3338,6 @@ async function processWithdraw(method) {
     id = document.getElementById('wdBinanceId').value;
     amount = parseInt(document.getElementById('wdBinanceAmount').value);
     payoutStr = '$' + (amount * 0.01).toFixed(2);
-  } else if (method === 'sham') {
-    id = document.getElementById('wdShamId').value;
-    amount = parseInt(document.getElementById('wdShamAmount').value);
-    payoutStr = (amount * 1).toFixed(0) + ' ل.س';
   } else if (method === 'gram') {
     id = document.getElementById('wdGramId').value;
     amount = parseInt(document.getElementById('wdGramAmount').value);
@@ -3369,15 +3373,11 @@ async function processWithdraw(method) {
     openModal('modalWithdrawSuccess');
     document.getElementById('wdBinanceId').value = '';
     document.getElementById('wdBinanceAmount').value = '';
-    document.getElementById('wdShamId').value = '';
-    document.getElementById('wdShamAmount').value = '';
     document.getElementById('wdGramId').value = '';
     document.getElementById('wdGramAmount').value = '';
     adjustInputWidth(document.getElementById('wdBinanceAmount'));
-    adjustInputWidth(document.getElementById('wdShamAmount'));
     adjustInputWidth(document.getElementById('wdGramAmount'));
     updateWdUI('binance', document.getElementById('wdBinanceAmount'));
-    updateWdUI('sham', document.getElementById('wdShamAmount'));
     updateWdUI('gram', document.getElementById('wdGramAmount'));
     if (db) loadWithdrawalHistory();
     else renderWithdrawHistory();
@@ -3552,7 +3552,6 @@ function crashSetCountdownDisplay(text, visible) {
   el.classList.toggle('active', !!visible);
 }
 
-/* ---------- Firebase persistence ---------- */
 async function loadCrashHistory() {
   if (!db) { renderCrashHistoryStrip(); return; }
   try {
