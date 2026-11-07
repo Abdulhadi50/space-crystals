@@ -2266,11 +2266,11 @@ function initFirebase() {
       loadTasks(),
       loadWithdrawalHistory(),
       calibrateServerTime(),
-      loadCrashHistory() // تحميل السجل عند بدء التطبيق
+      loadCrashHistory()
     ]).then(() => {
       document.getElementById('splash').classList.add('hide');
       document.getElementById('app').classList.add('ready');
-      startCrashGame(); // بدء اللعبة في الخلفية
+      startCrashGame();
     }).catch((err) => {
       console.error("Init error:", err);
       document.getElementById('splash').classList.add('hide');
@@ -2526,7 +2526,7 @@ function go(viewName) {
 
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
-    startCrashGame(); // تعمل بأمان إذا كانت اللعبة مستمرة
+    startCrashGame(); 
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
     }, 100);
@@ -2612,7 +2612,7 @@ function getSlotOutcome() {
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
 
-  // نسبة الفوز أصبحت متوسطة: 75% خسارة، 24% فوز عادي، 1% جاكبوت
+  // نسبة الفوز 25% (75% خسارة، 24% فوز عادي، 1% جاكبوت)
   if (roll < 75) {
     return { type: 'lose' };
   } else if (roll >= 99) {
@@ -2622,6 +2622,54 @@ function getSlotOutcome() {
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return { type: 'win', id: randomKey, value: config.table[randomKey] };
   }
+}
+
+// أصوات جديدة للبكرات
+function playReelSpinSound() {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+    
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(100, now);
+    osc.frequency.linearRampToValueAtTime(200, now + 0.5);
+    osc.frequency.linearRampToValueAtTime(150, now + 2.6);
+    
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.1, now + 0.1);
+    gain.gain.linearRampToValueAtTime(0, now + 2.6);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 2.6);
+  } catch (e) {}
+}
+
+function playReelStopSound() {
+  if (!spinState.soundOn) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+    
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.1);
+  } catch (e) {}
 }
 
 async function slotsSpin() {
@@ -2668,8 +2716,12 @@ async function slotsSpin() {
       }
       attempts++;
     } while (slotsHasWinningLine(finalGrid) && attempts < 50);
+    
+    // إصلاح: التأكد من كسر أي خط فوز عشوائي بطريقة صحيحة
     if (slotsHasWinningLine(finalGrid)) {
-      finalGrid[0][1] = finalGrid[1][1] === finalGrid[2][1] ? WINNING_TABLE[0].id : finalGrid[0][1];
+      let safeId = WINNING_TABLE[0].id;
+      if (finalGrid[1][1] === safeId) safeId = WINNING_TABLE[1].id;
+      finalGrid[0][1] = safeId;
     }
   }
 
@@ -2679,6 +2731,8 @@ async function slotsSpin() {
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
+
+  playReelSpinSound();
 
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
@@ -2699,8 +2753,7 @@ async function slotsSpin() {
     }
     track.innerHTML = html;
 
-    const N = numRandomItems;
-    const endY = ITEM_HEIGHT - N * ITEM_HEIGHT;
+    const endY = ITEM_HEIGHT - numRandomItems * ITEM_HEIGHT;
     const startY = endY - 2000;
 
     track.style.transition = 'none';
@@ -2710,6 +2763,9 @@ async function slotsSpin() {
     setTimeout(() => {
       track.style.transition = `transform ${durations[r]}ms cubic-bezier(0.15, 0.85, 0.35, 1)`;
       track.style.transform = `translateY(${endY}px)`;
+      
+      // تشغيل صوت التوقف عند انتهاء كل بكرة
+      setTimeout(() => playReelStopSound(), durations[r]);
     }, r * 100);
   }
 
@@ -2733,7 +2789,8 @@ async function slotsSpin() {
         winningCells.forEach(([r, row]) => {
           const track = document.getElementById('reelTrack' + r);
           const itemsInReel = track.children;
-          if (itemsInReel[N]) itemsInReel[N].classList.add('win');
+          // إصلاح: استخدام numRandomItems بدلاً من N
+          if (itemsInReel[numRandomItems]) itemsInReel[numRandomItems].classList.add('win');
         });
 
         user.stars += winAmount;
@@ -3704,7 +3761,7 @@ function crashPushHistory(multiplier) {
 
 async function startCrashGame() {
   if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') {
-    return; // اللعبة تعمل بالفعل في الخلفية
+    return;
   }
   const resumed = await checkAndResumeCrashRound();
   if (resumed) return;
@@ -3845,7 +3902,6 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
-// تم تحديث النسب هنا بناءً على طلبك
 function crashGenerateCrashPoint() {
   const r = Math.random();
   if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
