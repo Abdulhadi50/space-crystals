@@ -2001,6 +2001,16 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
+<div class="modal-overlay" id="slots-win-modal">
+  <div class="modal-content spin-win-modal">
+    <div class="modal-icon" id="slots-win-icon"></div>
+    <h3>مبروك! لقد ربحت</h3>
+    <p style="margin-bottom: 10px;">لقد حصلت على</p>
+    <div class="win-value" id="slots-win-value"></div>
+    <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="spin-prizes-modal">
   <div class="modal-content" style="max-width: 400px; padding: 20px;">
     <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
@@ -2624,52 +2634,13 @@ function getSlotOutcome() {
   }
 }
 
-// أصوات جديدة للبكرات
-function playReelSpinSound() {
-  if (!spinState.soundOn) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    const now = audioCtx.currentTime;
-    
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(100, now);
-    osc.frequency.linearRampToValueAtTime(200, now + 0.5);
-    osc.frequency.linearRampToValueAtTime(150, now + 2.6);
-    
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.1, now + 0.1);
-    gain.gain.linearRampToValueAtTime(0, now + 2.6);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start(now);
-    osc.stop(now + 2.6);
-  } catch (e) {}
-}
-
-function playReelStopSound() {
-  if (!spinState.soundOn) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const now = audioCtx.currentTime;
-    
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(600, now);
-    osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-    
-    gain.gain.setValueAtTime(0.15, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start(now);
-    osc.stop(now + 0.1);
-  } catch (e) {}
+function showSlotsWinModal(prize) {
+  const winIcon = document.getElementById('slots-win-icon');
+  const winValue = document.getElementById('slots-win-value');
+  winIcon.innerHTML = `<img src="${prize.img}" alt="Win">`;
+  winValue.innerHTML = `<img src="${ASSETS.star}"> ${prize.value}`;
+  winValue.style.color = '#FFD700';
+  openModal('slots-win-modal');
 }
 
 async function slotsSpin() {
@@ -2717,7 +2688,6 @@ async function slotsSpin() {
       attempts++;
     } while (slotsHasWinningLine(finalGrid) && attempts < 50);
     
-    // إصلاح: التأكد من كسر أي خط فوز عشوائي بطريقة صحيحة
     if (slotsHasWinningLine(finalGrid)) {
       let safeId = WINNING_TABLE[0].id;
       if (finalGrid[1][1] === safeId) safeId = WINNING_TABLE[1].id;
@@ -2731,8 +2701,6 @@ async function slotsSpin() {
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
-
-  playReelSpinSound();
 
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
@@ -2763,9 +2731,6 @@ async function slotsSpin() {
     setTimeout(() => {
       track.style.transition = `transform ${durations[r]}ms cubic-bezier(0.15, 0.85, 0.35, 1)`;
       track.style.transform = `translateY(${endY}px)`;
-      
-      // تشغيل صوت التوقف عند انتهاء كل بكرة
-      setTimeout(() => playReelStopSound(), durations[r]);
     }, r * 100);
   }
 
@@ -2789,7 +2754,6 @@ async function slotsSpin() {
         winningCells.forEach(([r, row]) => {
           const track = document.getElementById('reelTrack' + r);
           const itemsInReel = track.children;
-          // إصلاح: استخدام numRandomItems بدلاً من N
           if (itemsInReel[numRandomItems]) itemsInReel[numRandomItems].classList.add('win');
         });
 
@@ -2797,9 +2761,14 @@ async function slotsSpin() {
         updateBalances();
         syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
 
-        resultEl.innerText = `فزت بـ ${winAmount} نجمة!`;
-        resultEl.className = 'slots-result win';
-        showToast(`🎉 فزت بـ ${winAmount} نجمة!`);
+        resultEl.innerText = '';
+        resultEl.className = 'slots-result';
+        
+        const winningSym = SLOT_SYMBOLS[outcome.id];
+        setTimeout(() => {
+          showSlotsWinModal({ img: winningSym.img, value: winAmount });
+        }, 500);
+        
       } else {
         resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
         resultEl.className = 'slots-result lose';
