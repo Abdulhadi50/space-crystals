@@ -34,9 +34,9 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(255, 255, 255, 0.88);
-  --nav-border: rgba(0, 0, 0, 0.08);
-  --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.12), rgba(22, 24, 42, 0.04));
+  --nav-bg: rgba(255, 255, 255, 0.4); /* زجاجي أكثر شفافية */
+  --nav-border: rgba(0, 0, 0, 0.06);
+  --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.10), rgba(22, 24, 42, 0.03));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-platinum: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
@@ -210,35 +210,34 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: block;
 }
 
-/* ============ البطاقات الجديدة (بجانب بعض) ============ */
+/* ============ البطاقات الجديدة (بجانب بعض - أفقي) ============ */
 .home-cards-row {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
 }
 .home-cards-row .home-card {
   flex: 1;
-  flex-direction: column;
+  flex-direction: row; /* أفقي */
   align-items: center;
-  justify-content: center;
-  padding: 16px 8px;
-  min-height: 120px;
+  justify-content: flex-start;
+  padding: 12px 14px;
+  min-height: 70px; /* طول أقل */
+  gap: 12px;
 }
 .home-cards-row .home-card .card-text {
-  align-items: center;
-  text-align: center;
-  margin-bottom: 8px;
+  align-items: flex-start;
+  text-align: right;
+  margin-bottom: 0;
 }
 .home-cards-row .home-card h3 {
-  font-size: 16px;
-  margin-bottom: 2px;
-}
-.home-cards-row .home-card p {
-  font-size: 11px;
+  font-size: 15px;
+  margin-bottom: 0;
+  white-space: nowrap;
 }
 .home-cards-row .home-card .card-video-icon {
-  width: 65px;
-  height: 65px;
+  width: 48px;
+  height: 48px;
   margin: 0;
 }
 
@@ -817,17 +816,17 @@ input:checked + .slider:before { transform: translateX(22px); }
   width: 56px; height: 56px; border-radius: 50%;
   background: var(--nav-bg);
   border: 1px solid var(--nav-border);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  backdrop-filter: blur(4px) saturate(160%);
   display: flex; align-items: center; justify-content: center;
   color: var(--text-secondary); font-size: 20px; flex-shrink: 0;
   transition: all 0.25s var(--spring);
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .dock-home-btn.active {
   color: var(--text-primary);
   border-color: rgba(59,111,219,0.55);
-  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .dock-home-btn:active { transform: scale(0.92); }
 .dock-nav {
@@ -838,9 +837,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: 32px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px;
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  backdrop-filter: blur(8px) saturate(160%);
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  backdrop-filter: blur(4px) saturate(160%);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .dock-nav::before {
   content: ''; position: absolute; z-index: 0;
@@ -864,20 +863,20 @@ input:checked + .slider:before { transform: translateX(22px); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: var(--nav-bg);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  backdrop-filter: blur(4px) saturate(160%);
   border: 1px solid var(--nav-border);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.25s var(--spring);
   color: var(--text-secondary); font-size: 20px; overflow: hidden; flex-shrink: 0;
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .nav-profile.active {
   border-color: rgba(59,111,219,0.55); color: var(--text-primary);
-  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.06);
 }
 
 /* ============ SLOTS GAME ============ */
@@ -1310,8 +1309,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   .home-card { min-height: 100px; padding: 16px 18px; }
   .home-card h3 { font-size: 17px; }
   .home-card .card-icon, .home-card .card-video-icon { width: 80px; height: 80px; }
-  .home-cards-row .home-card { min-height: 110px; padding: 14px 8px; }
-  .home-cards-row .home-card .card-video-icon { width: 55px; height: 55px; }
+  .home-cards-row .home-card { min-height: 60px; padding: 10px; }
+  .home-cards-row .home-card .card-video-icon { width: 40px; height: 40px; }
+  .home-cards-row .home-card h3 { font-size: 13px; }
   .amount-display input, .amount-display .dollar-sign { font-size: 2.5rem; }
   .stat-card { padding: 15px; gap: 10px; }
   .stat-info h3 { font-size: 17px; }
@@ -1380,19 +1380,19 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon" id="home-uae-tgs"></div>
         </div>
 
-        <!-- البطاقتان الجديدتان (بجانب بعضهما) -->
+        <!-- البطاقتان الجديدتان (بجانب بعضهما - أفقي) -->
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
+            <div class="card-video-icon" id="home-properties-tgs"></div>
             <div class="card-text">
               <h3>الممتلكات</h3>
             </div>
-            <div class="card-video-icon" id="home-properties-tgs"></div>
           </div>
           <div class="home-card card-space-clock" onclick="go('spaceClock')">
+            <div class="card-video-icon" id="home-space-clock-tgs"></div>
             <div class="card-text">
               <h3>ساعة الفضاء</h3>
             </div>
-            <div class="card-video-icon" id="home-space-clock-tgs"></div>
           </div>
         </div>
 
@@ -2089,7 +2089,7 @@ const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
 
 const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
-const ZIP_PROPERTIES = 'MoodPack-015-tgs-by-StickerEmojiRobot.zip';
+const ZIP_PROPERTIES = 'MoodPack-017-tgs-by-StickerEmojiRobot.zip'; // تم التحديث هنا
 const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
 
 async function initCountryTgs() {
