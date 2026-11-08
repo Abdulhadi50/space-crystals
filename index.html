@@ -46,7 +46,7 @@
   --gradient-danger: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
   --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
   --shadow-glass: 0 6px 22px rgba(30, 40, 80, 0.06), inset 0 1px 0 rgba(255,255,255,0.85);
-  --appbar-banner: url('https://up6.cc/2026/11/17941304669751.jpg');
+  --appbar-banner: url('https://up6.cc/2026/11/179415848200671.jpg');
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
@@ -183,6 +183,10 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
+/* البطاقات الجديدة */
+.home-card.card-properties { --card-accent: radial-gradient(circle at 105% -10%, rgba(255, 215, 0, 0.35), transparent 65%); }
+.home-card.card-space-clock { --card-accent: radial-gradient(circle at 105% -10%, rgba(150, 60, 255, 0.35), transparent 65%); }
+
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
   font-size: 20px; font-weight: 800; margin-bottom: 4px;
@@ -205,6 +209,45 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   width: 100% !important;
   height: 100% !important;
   display: block;
+}
+
+/* ============ البطاقات الجديدة (مستطيل مقسوم نصفين) ============ */
+.home-card.card-split {
+  padding: 0;
+  min-height: 90px;
+  flex-direction: row;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+.home-card.card-split .split-half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+.home-card.card-split .split-half.split-text {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-right: 20px;
+}
+.home-card.card-split .split-half.split-text h3 {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+.home-card.card-split .split-half.split-text p {
+  font-size: 12px;
+}
+.home-card.card-split .split-half.split-icon {
+  border-left: 1px solid rgba(0,0,0,0.06);
+  padding: 8px;
+}
+.home-card.card-split .split-half.split-icon .card-video-icon {
+  width: 65px;
+  height: 65px;
+  margin: 0;
 }
 
 /* ============ HEADERS ============ */
@@ -845,7 +888,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
-/* ============ SLOTS GAME (Light Theme) ============ */
+/* ============ SLOTS GAME ============ */
 #view-slots { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-slots.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
@@ -1032,7 +1075,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* ==================== تعديل الأمواج - أبطأ وأكثر انتشاراً ==================== */
+/* Air Waves Effect */
 .crash-air-waves {
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
   opacity: 0; transition: opacity 0.4s ease;
@@ -1070,7 +1113,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
   letter-spacing: -2px;
-  text-shadow: none; /* إزالة التوهج */
+  text-shadow: none;
   z-index: 5;
   pointer-events: none;
   direction: ltr;
@@ -1082,7 +1125,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-multiplier-display.waiting {
   opacity: 0.6;
   color: #5b5d6e;
-  text-shadow: none; /* إزالة التوهج */
+  text-shadow: none;
   font-size: 52px;
 }
 .crash-multiplier-display.cashed {
@@ -1275,6 +1318,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .home-card { min-height: 100px; padding: 16px 18px; }
   .home-card h3 { font-size: 17px; }
   .home-card .card-icon, .home-card .card-video-icon { width: 80px; height: 80px; }
+  .home-card.card-split { min-height: 80px; }
+  .home-card.card-split .split-half.split-icon .card-video-icon { width: 55px; height: 55px; }
   .amount-display input, .amount-display .dollar-sign { font-size: 2.5rem; }
   .stat-card { padding: 15px; gap: 10px; }
   .stat-info h3 { font-size: 17px; }
@@ -1341,6 +1386,26 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>اكتشف واربح</p>
           </div>
           <div class="card-video-icon" id="home-uae-tgs"></div>
+        </div>
+
+        <!-- البطاقة الجديدة: الممتلكات -->
+        <div class="home-card card-split card-properties" onclick="go('properties')">
+          <div class="split-half split-text">
+            <h3>الممتلكات</h3>
+          </div>
+          <div class="split-half split-icon">
+            <div class="card-video-icon" id="home-properties-tgs"></div>
+          </div>
+        </div>
+
+        <!-- البطاقة الجديدة: ساعة الفضاء -->
+        <div class="home-card card-split card-space-clock" onclick="go('spaceClock')">
+          <div class="split-half split-text">
+            <h3>ساعة الفضاء</h3>
+          </div>
+          <div class="split-half split-icon">
+            <div class="card-video-icon" id="home-space-clock-tgs"></div>
+          </div>
         </div>
 
         <!-- Slots Card -->
@@ -2036,6 +2101,8 @@ const ZIP_EXPLOSION = 'JessicaRabbit_by_StickerEmojiRobot-021-tgs.zip';
 
 const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
+const ZIP_PROPERTIES = 'MoodPack-015-tgs-by-StickerEmojiRobot.zip';
+const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
 
 async function initCountryTgs() {
   for (let i = 0; i < 60; i++) {
@@ -2048,6 +2115,11 @@ async function initCountryTgs() {
     .catch(e => console.warn('syria TGS:', e.message));
   TGS.playIn(document.getElementById('home-uae-tgs'), ZIP_UAE)
     .catch(e => console.warn('uae TGS:', e.message));
+
+  TGS.playIn(document.getElementById('home-properties-tgs'), ZIP_PROPERTIES)
+    .catch(e => console.warn('properties TGS:', e.message));
+  TGS.playIn(document.getElementById('home-space-clock-tgs'), ZIP_SPACE_CLOCK)
+    .catch(e => console.warn('space clock TGS:', e.message));
     
   TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('home crash TGS:', e.message));
@@ -2239,6 +2311,12 @@ function go(viewName) {
     slotsUpdateBalance();
   } else if (viewName === 'withdraw') {
     loadWithdrawalHistory();
+  } else if (viewName === 'properties') {
+    showToast('الممتلكات - قريباً');
+    go('home');
+  } else if (viewName === 'spaceClock') {
+    showToast('ساعة الفضاء - قريباً');
+    go('home');
   }
   
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2310,7 +2388,6 @@ function getSlotOutcome() {
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
 
-  // نسبة الفوز 25% (75% خسارة، 24% فوز عادي، 1% جاكبوت)
   if (roll < 75) {
     return { type: 'lose' };
   } else if (roll >= 99) {
@@ -3448,21 +3525,16 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
-/* ==================== توزيع احتمالية الانفجار الجديد ==================== */
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  // 70% من الحالات: 1.00 إلى 5.00 (معظمها بين 1.05 و 2.00)
   if (r < 0.70) {
     const sub = Math.random();
     if (sub < 0.80) {
-      // 80% من الـ70% = 56% من المجموع -> 1.05 إلى 2.00
       return 1.05 + Math.random() * 0.95;
     } else {
-      // 20% من الـ70% = 14% من المجموع -> 2.00 إلى 5.00
       return 2.00 + Math.random() * 3.00;
     }
   } else {
-    // 30%: 5.00 إلى 50.00
     return 5.00 + Math.random() * 45.00;
   }
 }
@@ -3527,8 +3599,7 @@ function crashDoCashOut() {
   const winAmount = crashState.activeBet * crashState.multiplier;
 
   if (isCrashViewActive()) {
-    // الحفاظ على نفس اللون، لم يعد يتحول للأخضر
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', '');
   }
 
   user.stars += winAmount;
