@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#f0f2f8">
+<meta name="theme-color" content="#ffffff">
 <title>Cute Bee Stars</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,13 +15,13 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <style>
 :root {
-  --bg-main: #eef1f8;
-  --bg-card: rgba(255, 255, 255, 0.78);
-  --bg-soft: rgba(0, 0, 0, 0.04);
+  --bg-main: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-soft: rgba(0, 0, 0, 0.03);
   --text-primary: #151622;
   --text-secondary: #5b5d6e;
   --text-tertiary: #9395a5;
-  --border: rgba(0, 0, 0, 0.07);
+  --border: rgba(0, 0, 0, 0.08);
   --glass-border: rgba(255, 255, 255, 0.65);
   --success: #0fa96e;
   --danger: #e03858;
@@ -34,8 +34,8 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(255, 255, 255, 0.28);
-  --nav-border: rgba(255, 255, 255, 0.42);
+  --nav-bg: rgba(255, 255, 255, 0.88);
+  --nav-border: rgba(0, 0, 0, 0.08);
   --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.12), rgba(22, 24, 42, 0.04));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
@@ -44,8 +44,8 @@
   --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
   --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
   --gradient-danger: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
-  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
-  --shadow-glass: 0 6px 22px rgba(30, 40, 80, 0.06), inset 0 1px 0 rgba(255,255,255,0.85);
+  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-glass: 0 6px 22px rgba(30, 40, 80, 0.05), inset 0 1px 0 rgba(255,255,255,0.85);
   --appbar-banner: url('https://up6.cc/2026/11/179415848200671.jpg');
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -61,9 +61,9 @@ body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(91, 141, 239, 0.10), transparent 55%),
-    radial-gradient(ellipse 55% 40% at 98% 12%, rgba(201, 162, 39, 0.06), transparent 55%),
-    radial-gradient(ellipse 75% 55% at 50% 108%, rgba(140, 90, 220, 0.07), transparent 60%);
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(91, 141, 239, 0.05), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 98% 12%, rgba(201, 162, 39, 0.03), transparent 55%),
+    radial-gradient(ellipse 75% 55% at 50% 108%, rgba(140, 90, 220, 0.04), transparent 60%);
   pointer-events: none; z-index: 0;
 }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -138,11 +138,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
   -webkit-backdrop-filter: blur(14px) saturate(170%);
   backdrop-filter: blur(14px) saturate(170%);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 999px;
   padding: 3px 10px 3px 10px; gap: 6px;
   color: var(--text-primary); font-weight: 800; font-size: 15px;
-  box-shadow: 0 6px 18px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 6px 18px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
   transition: transform 0.2s var(--spring);
 }
 .balance-pill:active { transform: scale(0.96); }
@@ -165,8 +165,8 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   cursor: pointer;
   transition: transform 0.25s var(--spring);
   position: relative; overflow: hidden; min-height: 108px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(238,241,248,0.95));
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(248,250,255,1));
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
   contain: layout style paint;
   will-change: transform;
@@ -183,7 +183,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
-/* البطاقات الجديدة */
 .home-card.card-properties { --card-accent: radial-gradient(circle at 105% -10%, rgba(255, 215, 0, 0.35), transparent 65%); }
 .home-card.card-space-clock { --card-accent: radial-gradient(circle at 105% -10%, rgba(150, 60, 255, 0.35), transparent 65%); }
 
@@ -211,40 +210,33 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: block;
 }
 
-/* ============ البطاقات الجديدة (مستطيل مقسوم نصفين) ============ */
-.home-card.card-split {
-  padding: 0;
-  min-height: 90px;
-  flex-direction: row;
-  overflow: hidden;
+/* ============ البطاقات الجديدة (بجانب بعض) ============ */
+.home-cards-row {
   display: flex;
-  align-items: stretch;
+  gap: 12px;
+  width: 100%;
 }
-.home-card.card-split .split-half {
+.home-cards-row .home-card {
   flex: 1;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 16px 8px;
+  min-height: 120px;
 }
-.home-card.card-split .split-half.split-text {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding-right: 20px;
+.home-cards-row .home-card .card-text {
+  align-items: center;
+  text-align: center;
+  margin-bottom: 8px;
 }
-.home-card.card-split .split-half.split-text h3 {
-  font-size: 18px;
+.home-cards-row .home-card h3 {
+  font-size: 16px;
   margin-bottom: 2px;
 }
-.home-card.card-split .split-half.split-text p {
-  font-size: 12px;
+.home-cards-row .home-card p {
+  font-size: 11px;
 }
-.home-card.card-split .split-half.split-icon {
-  border-left: 1px solid rgba(0,0,0,0.06);
-  padding: 8px;
-}
-.home-card.card-split .split-half.split-icon .card-video-icon {
+.home-cards-row .home-card .card-video-icon {
   width: 65px;
   height: 65px;
   margin: 0;
@@ -830,12 +822,12 @@ input:checked + .slider:before { transform: translateX(22px); }
   display: flex; align-items: center; justify-content: center;
   color: var(--text-secondary); font-size: 20px; flex-shrink: 0;
   transition: all 0.25s var(--spring);
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .dock-home-btn.active {
   color: var(--text-primary);
   border-color: rgba(59,111,219,0.55);
-  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .dock-home-btn:active { transform: scale(0.92); }
 .dock-nav {
@@ -848,7 +840,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   padding: 6px;
   -webkit-backdrop-filter: blur(8px) saturate(160%);
   backdrop-filter: blur(8px) saturate(160%);
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .dock-nav::before {
   content: ''; position: absolute; z-index: 0;
@@ -879,7 +871,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   display: flex; align-items: center; justify-content: center;
   transition: all 0.25s var(--spring);
   color: var(--text-secondary); font-size: 20px; overflow: hidden; flex-shrink: 0;
-  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
@@ -1303,9 +1295,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   font-weight: 700;
   color: var(--text-primary);
   background: var(--nav-indicator-bg);
-  border: 1px solid rgba(255,255,255,0.16);
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 26px;
-  box-shadow: var(--nav-indicator-shadow);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   transition: transform 0.15s var(--spring);
   position: relative;
   z-index: 1;
@@ -1318,8 +1310,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .home-card { min-height: 100px; padding: 16px 18px; }
   .home-card h3 { font-size: 17px; }
   .home-card .card-icon, .home-card .card-video-icon { width: 80px; height: 80px; }
-  .home-card.card-split { min-height: 80px; }
-  .home-card.card-split .split-half.split-icon .card-video-icon { width: 55px; height: 55px; }
+  .home-cards-row .home-card { min-height: 110px; padding: 14px 8px; }
+  .home-cards-row .home-card .card-video-icon { width: 55px; height: 55px; }
   .amount-display input, .amount-display .dollar-sign { font-size: 2.5rem; }
   .stat-card { padding: 15px; gap: 10px; }
   .stat-info h3 { font-size: 17px; }
@@ -1388,22 +1380,18 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon" id="home-uae-tgs"></div>
         </div>
 
-        <!-- البطاقة الجديدة: الممتلكات -->
-        <div class="home-card card-split card-properties" onclick="go('properties')">
-          <div class="split-half split-text">
-            <h3>الممتلكات</h3>
-          </div>
-          <div class="split-half split-icon">
+        <!-- البطاقتان الجديدتان (بجانب بعضهما) -->
+        <div class="home-cards-row">
+          <div class="home-card card-properties" onclick="go('properties')">
+            <div class="card-text">
+              <h3>الممتلكات</h3>
+            </div>
             <div class="card-video-icon" id="home-properties-tgs"></div>
           </div>
-        </div>
-
-        <!-- البطاقة الجديدة: ساعة الفضاء -->
-        <div class="home-card card-split card-space-clock" onclick="go('spaceClock')">
-          <div class="split-half split-text">
-            <h3>ساعة الفضاء</h3>
-          </div>
-          <div class="split-half split-icon">
+          <div class="home-card card-space-clock" onclick="go('spaceClock')">
+            <div class="card-text">
+              <h3>ساعة الفضاء</h3>
+            </div>
             <div class="card-video-icon" id="home-space-clock-tgs"></div>
           </div>
         </div>
@@ -2095,9 +2083,9 @@ const TGS = {
   }
 };
 
-const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00-tgs.zip';
-const ZIP_WAITING   = 'JessicaRabbit-013-tgs-by-StickerEmojiRobot.zip';
-const ZIP_EXPLOSION = 'JessicaRabbit_by_StickerEmojiRobot-021-tgs.zip';
+const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
+const ZIP_WAITING   = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
+const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
 
 const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
@@ -2158,8 +2146,8 @@ function getNextMidnight() {
 function initTelegram() {
   if (tg) {
     tg.ready(); tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#f0f2f8');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#eef1f8');
+    if (tg.setHeaderColor) tg.setHeaderColor('#ffffff');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
       user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
