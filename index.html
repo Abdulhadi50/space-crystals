@@ -1032,7 +1032,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* Air Waves Effect (من أعلى اليمين إلى أسفل اليسار) */
+/* ==================== تعديل الأمواج - أبطأ وأكثر انتشاراً ==================== */
 .crash-air-waves {
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
   opacity: 0; transition: opacity 0.4s ease;
@@ -1042,36 +1042,39 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-air-waves span {
   position: absolute;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
   border-radius: 2px;
-  animation: airWave 0.8s linear infinite;
-  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  animation: airWave 2.5s linear infinite;
+  box-shadow: 0 0 6px rgba(255,255,255,0.6);
 }
-.crash-air-waves span:nth-child(1) { top: 20%; width: 100px; animation-delay: 0s; }
-.crash-air-waves span:nth-child(2) { top: 40%; width: 180px; animation-delay: 0.15s; }
-.crash-air-waves span:nth-child(3) { top: 60%; width: 140px; animation-delay: 0.3s; }
-.crash-air-waves span:nth-child(4) { top: 80%; width: 220px; animation-delay: 0.45s; }
+.crash-air-waves span:nth-child(1) { top: 15%; left: 5%; width: 120px; animation-delay: 0s; }
+.crash-air-waves span:nth-child(2) { top: 25%; left: 55%; width: 160px; animation-delay: 0.4s; }
+.crash-air-waves span:nth-child(3) { top: 40%; left: 20%; width: 180px; animation-delay: 0.8s; }
+.crash-air-waves span:nth-child(4) { top: 55%; left: 65%; width: 200px; animation-delay: 1.2s; }
+.crash-air-waves span:nth-child(5) { top: 70%; left: 15%; width: 150px; animation-delay: 1.6s; }
+.crash-air-waves span:nth-child(6) { top: 82%; left: 45%; width: 170px; animation-delay: 2.0s; }
+
 @keyframes airWave {
-  0% { transform: translate(100vw, -100vh) rotate(-45deg) scaleX(0.5); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(-100vw, 100vh) rotate(-45deg) scaleX(1.5); opacity: 0; }
+  0% { transform: translate(50vw, -50vh) rotate(-45deg) scaleX(0.4); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(-50vw, 50vh) rotate(-45deg) scaleX(1.4); opacity: 0; }
 }
 
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 5%; /* رفع الرقم للأعلى */
+  left: 50%; top: 5%;
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
   color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
   letter-spacing: -2px;
-  text-shadow: 0 6px 30px rgba(24,44,68,0.15), 0 0 60px rgba(255,255,255,0.6);
+  text-shadow: none; /* إزالة التوهج */
   z-index: 5;
   pointer-events: none;
   direction: ltr;
-  transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
+  transition: color 0.2s, opacity 0.2s;
   white-space: nowrap;
   line-height: 1;
 }
@@ -1079,11 +1082,13 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-multiplier-display.waiting {
   opacity: 0.6;
   color: #5b5d6e;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  text-shadow: none; /* إزالة التوهج */
   font-size: 52px;
 }
-/* إزالة تغيير اللون عند السحب */
-/* .crash-multiplier-display.cashed { color: var(--success); } */
+.crash-multiplier-display.cashed {
+  color: var(--success);
+  text-shadow: none;
+}
 .crash-multiplier-display.crashed {
   color: var(--danger);
   text-shadow: 0 6px 30px rgba(224,56,88,0.4), 0 0 60px rgba(224,56,88,0.2);
@@ -1666,7 +1671,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="crash-sky-bg"></div>
       <div class="crash-game-area" id="crash-game-area">
         <div class="crash-air-waves">
-          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
         <div class="crash-multiplier-display" id="crash-mult-display"></div>
         <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
@@ -2025,7 +2030,6 @@ const TGS = {
   }
 };
 
-// الملفات الجديدة
 const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00-tgs.zip';
 const ZIP_WAITING   = 'JessicaRabbit-013-tgs-by-StickerEmojiRobot.zip';
 const ZIP_EXPLOSION = 'JessicaRabbit_by_StickerEmojiRobot-021-tgs.zip';
@@ -3157,12 +3161,11 @@ function crashSetExplosionActive(active) {
   }
 }
 
-// دالة معدلة لإزالة تغيير اللون عند السحب
 function crashSetMultiplierDisplay(text, state) {
   const el = document.getElementById('crash-mult-display');
   if (!el) return;
   el.textContent = text;
-  el.classList.remove('waiting', 'crashed'); // أزلنا 'cashed'
+  el.classList.remove('waiting', 'cashed', 'crashed');
   if (state === 'waiting') el.classList.add('waiting');
   else if (state === 'crashed') el.classList.add('crashed');
 }
@@ -3425,7 +3428,7 @@ function crashStartFlyingPhase() {
 
     if (isCrashViewActive()) {
       crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-        crashState.hasCashedOut ? '' : '');
+        crashState.hasCashedOut ? 'cashed' : '');
       if (crashState.hasBet && !crashState.hasCashedOut) {
         if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       }
@@ -3445,13 +3448,23 @@ function crashStartFlyingPhase() {
   crashState.animationId = requestAnimationFrame(loop);
 }
 
+/* ==================== توزيع احتمالية الانفجار الجديد ==================== */
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
-  if (r < 0.80) return 2.00 + Math.random() * 8.00; // 30% -> 2.00 to 10.00
-  if (r < 0.90) return 10.00 + Math.random() * 10.00; // 10% -> 10.00 to 20.00
-  if (r < 0.95) return 20.00 + Math.random() * 30.00; // 5% -> 20.00 to 50.00
-  return 50.00 + Math.random() * 50.00; // 5% -> 50.00 to 100.00
+  // 70% من الحالات: 1.00 إلى 5.00 (معظمها بين 1.05 و 2.00)
+  if (r < 0.70) {
+    const sub = Math.random();
+    if (sub < 0.80) {
+      // 80% من الـ70% = 56% من المجموع -> 1.05 إلى 2.00
+      return 1.05 + Math.random() * 0.95;
+    } else {
+      // 20% من الـ70% = 14% من المجموع -> 2.00 إلى 5.00
+      return 2.00 + Math.random() * 3.00;
+    }
+  } else {
+    // 30%: 5.00 إلى 50.00
+    return 5.00 + Math.random() * 45.00;
+  }
 }
 
 function crashHandleCrash() {
@@ -3514,7 +3527,8 @@ function crashDoCashOut() {
   const winAmount = crashState.activeBet * crashState.multiplier;
 
   if (isCrashViewActive()) {
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', ''); // لم يعد يتحول للأخضر
+    // الحفاظ على نفس اللون، لم يعد يتحول للأخضر
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
   }
 
   user.stars += winAmount;
