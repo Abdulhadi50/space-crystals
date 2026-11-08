@@ -34,7 +34,7 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(255, 255, 255, 0.4); /* زجاجي أكثر شفافية */
+  --nav-bg: rgba(255, 255, 255, 0.4);
   --nav-border: rgba(0, 0, 0, 0.06);
   --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.10), rgba(22, 24, 42, 0.03));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
@@ -70,6 +70,13 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 input, textarea { font: inherit; color: inherit; user-select: text; -webkit-user-select: text; }
 img, video { pointer-events: none; -webkit-touch-callout: none; }
 ::-webkit-scrollbar { display: none; }
+
+/* Number inputs: force English display */
+input[type="number"], .num-input {
+  font-variant-numeric: tabular-nums lining-nums;
+  direction: ltr !important;
+  font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+}
 
 /* ============ SPLASH ============ */
 .splash {
@@ -147,6 +154,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .balance-pill:active { transform: scale(0.96); }
 .balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
+.balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
 
 .main-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
@@ -179,7 +187,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card > * { position: relative; z-index: 1; }
 .home-card:active { transform: scale(0.975); }
 .home-card.referral { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.18), transparent 62%); }
-.home-card.country-syria { --card-accent: radial-gradient(circle at 105% -10%, rgba(34,197,94,0.30), transparent 65%); }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
@@ -210,7 +217,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   display: block;
 }
 
-/* ============ البطاقات الجديدة (بجانب بعض - أفقي) ============ */
+/* بطاقتان بجانب بعض (أفقي) */
 .home-cards-row {
   display: flex;
   gap: 10px;
@@ -218,11 +225,11 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .home-cards-row .home-card {
   flex: 1;
-  flex-direction: row; /* أفقي */
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   padding: 12px 14px;
-  min-height: 70px; /* طول أقل */
+  min-height: 70px;
   gap: 12px;
 }
 .home-cards-row .home-card .card-text {
@@ -268,6 +275,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   box-shadow: 0 4px 14px rgba(22,24,42,0.18), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .daily-streak-badge i { color: #FF6B35; }
+.daily-streak-badge span { direction: ltr; }
 .daily-week-days { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px; min-height: 40px; position: relative; }
 .daily-day-circle {
   flex: 1; aspect-ratio: 1; border-radius: 50%;
@@ -331,6 +339,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .task-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
 .task-reward { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); font-weight: 700; }
 .task-reward img { width: 16px; height: 16px; object-fit: contain; }
+.task-reward span { direction: ltr; }
 .start-btn {
   background: var(--gradient-primary); color: #fff;
   padding: 10px 20px; border-radius: 14px;
@@ -374,18 +383,20 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 /* ============ DEPOSIT / WITHDRAW ============ */
 .dep-layout { display: flex; flex-direction: column; padding-top: 15px; }
 .dep-top-section { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; margin-bottom: 10px; }
-.amount-display { text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.amount-display { text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; direction: ltr; }
 .amount-display input {
   font-size: 3rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 220px; outline: none;
   field-sizing: content; transition: width 0.1s;
+  direction: ltr; font-variant-numeric: tabular-nums lining-nums;
+  font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
 .amount-display input::-webkit-outer-spin-button,
 .amount-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.amount-display .dollar-sign { font-size: 3rem; font-weight: 800; color: var(--text-primary); }
+.amount-display .dollar-sign { font-size: 3rem; font-weight: 800; color: var(--text-primary); direction: ltr; }
 .amount-display img { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; filter: drop-shadow(0 6px 14px rgba(30,40,80,0.20)); }
-.calc-subtext { text-align: center; font-size: 15px; font-weight: 700; color: var(--text-primary); margin-top: 8px; min-height: 22px; }
+.calc-subtext { text-align: center; font-size: 15px; font-weight: 700; color: var(--text-primary); margin-top: 8px; min-height: 22px; direction: ltr; }
 .dep-bottom-section { display: flex; flex-direction: column; gap: 40px; margin-top: 20px; }
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
@@ -395,6 +406,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   color: var(--text-primary); font-weight: 700; font-size: 14px;
   transition: transform 0.15s var(--spring), background 0.2s;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 14px rgba(30,40,80,0.05);
+  direction: ltr;
 }
 .chip:active { transform: scale(0.94); background: rgba(0,0,0,0.05); }
 .topup-btn {
@@ -491,7 +503,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   margin-bottom: 8px;
 }
 .history-main { display: flex; flex-direction: column; gap: 2px; }
-.history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); }
+.history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); direction: ltr; text-align: right; }
 .history-method { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
 .status { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; white-space: nowrap; }
 .st-pending    { background: rgba(201,121,26,0.12); color: #a86810; border: 1px solid rgba(201,121,26,0.22); }
@@ -529,7 +541,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: radial-gradient(circle, rgba(150,60,255,0.12), transparent 65%);
   pointer-events: none;
 }
-.ref-stat-box h3 { font-size: 28px; font-weight: 800; margin-bottom: 4px; position: relative; }
+.ref-stat-box h3 { font-size: 28px; font-weight: 800; margin-bottom: 4px; position: relative; direction: ltr; }
 .ref-stat-box p { font-size: 12px; color: var(--text-secondary); font-weight: 600; position: relative; }
 .link-box {
   background: var(--bg-card);
@@ -615,6 +627,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   background: rgba(0,0,0,0.04);
   padding: 2px 8px; border-radius: 10px;
   border: 1px solid var(--border);
+  direction: ltr;
 }
 .podium-item.rank-1 .podium-count { color: var(--gold); background: rgba(245,215,110,0.14); border-color: rgba(245,215,110,0.30); }
 
@@ -648,50 +661,80 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ranking-info { flex: 1; min-width: 0; }
 .ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
-.ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; direction: ltr; text-align: right; }
 
-/* ============ PROFILE ============ */
+/* ============ PROFILE (NEW) ============ */
 .profile-header-container {
-  position: relative;
-  margin-bottom: 30px;
-  text-align: center;
-}
-.profile-banner {
-  height: 110px;
-  background: linear-gradient(135deg, rgba(91,141,239,0.45), rgba(140,90,220,0.45));
-  border-radius: 24px;
-  border: 1px solid rgba(0,0,0,0.06);
-  position: relative;
-  overflow: hidden;
-  margin-bottom: -50px;
-}
-.profile-banner::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png');
-  opacity: 0.3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+  margin-bottom: 24px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
 }
 .profile-avatar {
-  width: 96px; height: 96px; border-radius: 50%;
+  width: 80px; height: 80px; border-radius: 50%;
   background: linear-gradient(135deg, #f5f6fa, #e0e4f0);
-  margin: 0 auto 12px;
+  margin: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 36px; overflow: hidden;
-  border: 4px solid #ffffff;
+  font-size: 32px; overflow: hidden;
+  border: 3px solid #ffffff;
   box-shadow: 0 12px 30px rgba(30,40,80,0.15);
   position: relative;
+  flex-shrink: 0;
 }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-header-container h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.4px; }
+.profile-header-container .profile-info {
+  flex: 1;
+  min-width: 0;
+}
+.profile-header-container h2 {
+  font-size: 20px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.4px;
+}
 .profile-id-row {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  display: flex; align-items: center; justify-content: flex-start; gap: 8px;
   color: var(--text-secondary); font-size: 13px; font-weight: 600; direction: ltr;
 }
+.profile-id-row > span { font-variant-numeric: tabular-nums; }
 .profile-id-copy {
   background: rgba(0,0,0,0.05); border: 1px solid var(--border);
   padding: 4px 8px; border-radius: 8px; font-size: 11px; cursor: pointer;
   color: var(--text-primary); display: flex; align-items: center; gap: 4px;
+  direction: rtl;
 }
+
+/* إحصائيات: 3 بطاقات في صف واحد */
+.stats-grid.three {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.stats-grid.three .stat-card {
+  flex-direction: column;
+  text-align: center;
+  padding: 14px 6px;
+  gap: 6px;
+  align-items: center;
+}
+.stats-grid.three .stat-card img {
+  width: 28px; height: 28px;
+}
+.stats-grid.three .stat-card > i {
+  font-size: 22px !important;
+}
+.stats-grid.three .stat-info {
+  width: 100%;
+}
+.stats-grid.three .stat-info h3 {
+  font-size: 16px;
+  margin-bottom: 0;
+  direction: ltr;
+}
+.stats-grid.three .stat-info p {
+  font-size: 10px;
+}
+
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
 .stat-card {
   background: var(--bg-card);
@@ -973,6 +1016,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   display: flex; align-items: center; justify-content: center; gap: 4px;
   transition: all 0.25s var(--ease-out);
   border: 1px solid transparent;
+  direction: ltr;
 }
 .slots-bet-btn img { width: 14px; height: 14px; }
 .slots-bet-btn.active {
@@ -1017,6 +1061,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: var(--text-primary);
   border: 1px solid var(--border);
   max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  direction: ltr;
 }
 
 /* ============ CRASH GAME ============ */
@@ -1040,7 +1085,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .crash-game-area.cashout-anim { transform: scale(1.03); }
 
-/* Sky Background - Full Screen Fixed */
 .crash-sky-bg {
   position: fixed;
   top: 0;
@@ -1066,7 +1110,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* Air Waves Effect */
 .crash-air-waves {
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
   opacity: 0; transition: opacity 0.4s ease;
@@ -1328,6 +1371,13 @@ input:checked + .slider:before { transform: translateX(22px); }
   .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
   .slots-spin-btn { font-size: 15px; padding: 14px; }
   .prize-val { font-size: 10px; padding: 2px 4px; }
+  .stats-grid.three { gap: 6px; }
+  .stats-grid.three .stat-card { padding: 10px 4px; }
+  .stats-grid.three .stat-card img { width: 24px; height: 24px; }
+  .stats-grid.three .stat-info h3 { font-size: 14px; }
+  .stats-grid.three .stat-info p { font-size: 9px; }
+  .profile-header-container .profile-avatar { width: 68px; height: 68px; font-size: 26px; }
+  .profile-header-container h2 { font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1364,14 +1414,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view active" id="view-home">
       <div class="home-cards">
 
-        <div class="home-card country-syria" onclick="go('referral')">
-          <div class="card-text">
-            <h3>الجمهورية العربية السورية</h3>
-            <p>اكتشف واربح</p>
-          </div>
-          <div class="card-video-icon" id="home-syria-tgs"></div>
-        </div>
-
         <div class="home-card country-uae" onclick="go('referral')">
           <div class="card-text">
             <h3>الإمارات العربية المتحدة</h3>
@@ -1380,7 +1422,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon" id="home-uae-tgs"></div>
         </div>
 
-        <!-- البطاقتان الجديدتان (بجانب بعضهما - أفقي) -->
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
             <div class="card-video-icon" id="home-properties-tgs"></div>
@@ -1396,7 +1437,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
         </div>
 
-        <!-- Slots Card -->
         <div class="home-card card-slots" onclick="go('slots')">
           <div class="card-text">
             <h3>Slots</h3>
@@ -1405,7 +1445,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           <img src="IMG_20261107_094800_698.png" class="card-icon" alt="Slots" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
-        <!-- Crash Card -->
         <div class="home-card card-crash" onclick="go('crash')">
           <div class="card-text">
             <h3>Crash</h3>
@@ -1504,14 +1543,11 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="tab" onclick="switchDepositTab('crypto', this)">
           <img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو
         </div>
-        <div class="tab" onclick="switchDepositTab('binance', this)">
-          <img src="https://up6.cc/2026/09/178982889076391.png"> Binance
-        </div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
           <div class="amount-display">
-            <input type="number" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
+            <input type="text" inputmode="numeric" class="num-input" id="depositAmountInput" value="200" oninput="updateDepositUI(this)">
             <img src="https://up6.cc/2026/10/17932600818491.png">
           </div>
         </div>
@@ -1538,7 +1574,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="amount-display">
             <span class="dollar-sign">$</span>
-            <input type="text" inputmode="decimal" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
+            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
           </div>
           <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
             100 <img src="https://up6.cc/2026/10/17932600818491.png" style="width:16px; height:16px; border-radius:50%;">
@@ -1552,24 +1588,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
           <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
-        </div>
-      </div>
-      <div id="dep-tab-binance" class="dep-tab-content" style="display:none;">
-        <div class="manual-instructions">
-          <p>1. قم بتحويل المبلغ إلى معرّف Binance Pay التالي:</p>
-          <div class="copy-box">
-            <span>1121748571</span>
-            <button class="copy-btn" onclick="copyText('1121748571')">نسخ</button>
-          </div>
-          <p>2. انسخ معرّف حسابك والصقه في خانة "Note" عند التحويل:</p>
-          <div class="copy-box">
-            <span id="binanceUserId">123456789</span>
-            <button class="copy-btn" onclick="copyText(document.getElementById('binanceUserId').innerText)">نسخ</button>
-          </div>
-          <div class="warning-box">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>تنبيه: الحد الأدنى للإيداع هو 1 دولار.</div>
-          </div>
         </div>
       </div>
     </div>
@@ -1588,7 +1606,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
       <div id="wd-tab-binance" class="wd-tab-content">
         <div class="amount-display">
-          <input type="number" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance', this)">
+          <input type="text" inputmode="numeric" class="num-input" id="wdBinanceAmount" placeholder="0" oninput="updateWdUI('binance', this)">
           <img src="https://up6.cc/2026/10/17932600818491.png">
         </div>
         <div class="calc-subtext" id="wdBinanceResult">$0.00</div>
@@ -1601,7 +1619,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
-          <input type="number" id="wdGramAmount" placeholder="0" oninput="updateWdUI('gram', this)">
+          <input type="text" inputmode="numeric" class="num-input" id="wdGramAmount" placeholder="0" oninput="updateWdUI('gram', this)">
           <img src="https://up6.cc/2026/10/17932600818491.png">
         </div>
         <div class="calc-subtext" id="wdGramResult">0 TON</div>
@@ -1659,20 +1677,21 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <div class="view" id="view-profile">
       <div class="profile-header-container">
-        <div class="profile-banner"></div>
         <div class="profile-avatar" id="profileAvatar">
           <i class="fas fa-user"></i>
         </div>
-        <h2 id="profileName">اسم المستخدم</h2>
-        <div class="profile-id-row">
-          <span id="profileId">123456789</span>
-          <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)">
-            <i class="fas fa-copy"></i> نسخ
-          </button>
+        <div class="profile-info">
+          <h2 id="profileName">اسم المستخدم</h2>
+          <div class="profile-id-row">
+            <span id="profileId">123456789</span>
+            <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)">
+              <i class="fas fa-copy"></i> نسخ
+            </button>
+          </div>
         </div>
       </div>
       
-      <div class="stats-grid">
+      <div class="stats-grid three">
         <div class="stat-card">
           <img src="https://up6.cc/2026/10/17932600818491.png">
           <div class="stat-info">
@@ -1681,24 +1700,17 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
         </div>
         <div class="stat-card">
-          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 32px; height: 32px;">
+          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png">
           <div class="stat-info">
             <h3 id="statTickets">0</h3>
             <p>التذاكر</p>
           </div>
         </div>
         <div class="stat-card">
-          <i class="fas fa-users" style="font-size:28px; color:#5B8DEF;"></i>
+          <i class="fas fa-users" style="color:#5B8DEF;"></i>
           <div class="stat-info">
             <h3 id="statRefs">0</h3>
             <p>الإحالات</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-star" style="font-size:28px; color:var(--warning);"></i>
-          <div class="stat-info">
-            <h3 id="statTotalWithdrawn">0</h3>
-            <p>إجمالي السحوبات</p>
           </div>
         </div>
       </div>
@@ -1743,13 +1755,13 @@ input:checked + .slider:before { transform: translateX(22px); }
               </label>
               <div class="crash-auto-input-wrap">
                 <span>x</span>
-                <input type="text" id="crash-auto-cashout-val" value="2.00" onchange="crashUpdateAutoCashout(this)">
+                <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="crash-auto-cashout-val" value="2.00" onchange="crashUpdateAutoCashout(this)">
               </div>
             </div>
           </div>
           <div class="crash-bet-input-row">
             <img src="https://up6.cc/2026/10/17932600818491.png">
-            <input type="number" id="crash-bet-input" value="1" min="1" max="1000" onchange="crashValidateBet()" placeholder="1">
+            <input type="text" inputmode="numeric" class="num-input" id="crash-bet-input" value="1" onchange="crashValidateBet()" placeholder="1">
           </div>
           <div class="crash-quick-chips">
             <button onclick="crashAddBet(10)">+ 10</button>
@@ -1794,7 +1806,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
     <h3>رصيدك غير كافٍ!</h3>
-    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800;">999</span> نجمة إضافية. يرجى شحن رصيدك.</p>
+    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> نجمة إضافية. يرجى شحن رصيدك.</p>
     <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">شحن الرصيد</button>
   </div>
 </div>
@@ -1803,8 +1815,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
     <h3>تم تقديم الطلب بنجاح</h3>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800;">0</span> نجمة</p>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">وستحصل على <span id="successWdPayout" style="color:#0a8a5a; font-weight:800;">$0.00</span></p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> نجمة</p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">وستحصل على <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
     <div style="background: rgba(201,121,26,0.10); color: #a86810; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; margin-bottom: 24px; border: 1px solid rgba(201,121,26,0.22);">
       <i class="fas fa-clock"></i> سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.
     </div>
@@ -1867,18 +1879,16 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
-<!-- Slots Win Modal -->
 <div class="modal-overlay" id="slots-win-modal">
   <div class="modal-content spin-win-modal" style="border: 1px solid rgba(245,215,110,0.28);">
     <div class="modal-icon" id="slots-win-icon" style="width: 100px; height: 100px; margin: 0 auto 20px;"></div>
     <h3>مبروك! لقد ربحت</h3>
     <p style="margin-bottom: 10px;">لقد حصلت على</p>
-    <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45);"></div>
+    <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45); direction: ltr;"></div>
     <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
   </div>
 </div>
 
-<!-- Slots Prizes Modal -->
 <div class="modal-overlay" id="slots-prizes-modal">
   <div class="modal-content" style="max-width: 400px; padding: 20px;">
     <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
@@ -1899,6 +1909,45 @@ document.addEventListener('contextmenu', e => {
 document.addEventListener('dragstart', e => {
   if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
 });
+
+/* ============ رقم إنجليزي ============ */
+function formatNum(n) {
+  if (n === null || n === undefined) return '0';
+  const num = Number(n);
+  if (!isFinite(num)) return '0';
+  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
+  const [intPart, decPart] = str.split('.');
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart ? formattedInt + '.' + decPart : formattedInt;
+}
+
+/* ============ تنظيف الأرقام العربية في الإدخال ============ */
+function sanitizeDigits(el) {
+  if (!el) return;
+  const allowDecimal = el.dataset && el.dataset.decimal === '1';
+  let v = el.value || '';
+  // تحويل الأرقام العربية إلى إنجليزية
+  v = v.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
+  v = v.replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+  if (allowDecimal) {
+    v = v.replace(/[^0-9.]/g, '');
+    const parts = v.split('.');
+    if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+  } else {
+    v = v.replace(/[^0-9]/g, '');
+  }
+  if (v !== el.value) {
+    const pos = el.selectionStart;
+    el.value = v;
+    try { el.setSelectionRange(pos, pos); } catch(e) {}
+  }
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target && e.target.classList && e.target.classList.contains('num-input')) {
+    sanitizeDigits(e.target);
+  }
+}, true);
 
 const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
@@ -1939,43 +1988,14 @@ const WINNING_TABLE = [
   { id: 'p18', img: 'IMG_20261029_180056_326.png', value: 110, weight: 0.2 }
 ];
 
-/* ================= SLOTS CONFIG ================= */
 const SLOT_SYMBOLS = {};
 WINNING_TABLE.forEach(s => { SLOT_SYMBOLS[s.id] = s; });
 
 const SLOTS_CONFIG = {
-  69: {
-    table: {
-      p10: 700, p18: 500, p13: 350, p4: 250, p5: 150,
-      p9: 100, p8: 75, p7: 50, p6: 40, p3: 30,
-      p14: 25, p2: 20, p15: 15, p1: 10, p11: 8,
-      p16: 6, p17: 4, p12: 2
-    }
-  },
-  149: {
-    table: {
-      p10: 1500, p18: 1000, p13: 700, p4: 500, p5: 300,
-      p9: 200, p8: 150, p7: 100, p6: 80, p3: 60,
-      p14: 50, p2: 40, p15: 30, p1: 20, p11: 15,
-      p16: 10, p17: 8, p12: 5
-    }
-  },
-  399: {
-    table: {
-      p10: 4000, p18: 3000, p13: 2000, p4: 1500, p5: 1000,
-      p9: 800, p8: 500, p7: 300, p6: 200, p3: 150,
-      p14: 100, p2: 80, p15: 60, p1: 50, p11: 40,
-      p16: 30, p17: 20, p12: 10
-    }
-  },
-  999: {
-    table: {
-      p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500,
-      p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400,
-      p14: 300, p2: 200, p15: 150, p1: 100, p11: 80,
-      p16: 60, p17: 40, p12: 20
-    }
-  }
+  69: { table: { p10: 700, p18: 500, p13: 350, p4: 250, p5: 150, p9: 100, p8: 75, p7: 50, p6: 40, p3: 30, p14: 25, p2: 20, p15: 15, p1: 10, p11: 8, p16: 6, p17: 4, p12: 2 } },
+  149: { table: { p10: 1500, p18: 1000, p13: 700, p4: 500, p5: 300, p9: 200, p8: 150, p7: 100, p6: 80, p3: 60, p14: 50, p2: 40, p15: 30, p1: 20, p11: 15, p16: 10, p17: 8, p12: 5 } },
+  399: { table: { p10: 4000, p18: 3000, p13: 2000, p4: 1500, p5: 1000, p9: 800, p8: 500, p7: 300, p6: 200, p3: 150, p14: 100, p2: 80, p15: 60, p1: 50, p11: 40, p16: 30, p17: 20, p12: 10 } },
+  999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
 let user = {
@@ -1997,19 +2017,14 @@ let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 
-let slotsState = {
-  currentBet: 69,
-  isSpinning: false
-};
+let slotsState = { currentBet: 69, isSpinning: false };
 
 const tg = window.Telegram?.WebApp;
 let db = null;
 
 /* ============ TGS LOADER ============ */
 const TGS = {
-  _zipCache: {},
-  _loading: {},
-  _anims: {},
+  _zipCache: {}, _loading: {}, _anims: {},
 
   async loadZip(zipName) {
     if (this._zipCache[zipName]) return this._zipCache[zipName];
@@ -2069,14 +2084,12 @@ const TGS = {
       try { a.play(); } catch(e) {}
     });
   },
-
   replay(ids) {
     ids.forEach(id => {
       const a = this._anims[id];
       if (a) { try { a.play(); } catch(e) {} }
     });
   },
-
   restart(id) {
     const a = this._anims[id];
     if (a) { try { a.goToAndPlay(0, true); } catch(e) {} }
@@ -2086,10 +2099,8 @@ const TGS = {
 const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
 const ZIP_WAITING   = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
 const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
-
-const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
-const ZIP_PROPERTIES = 'MoodPack-017-tgs-by-StickerEmojiRobot.zip'; // تم التحديث هنا
+const ZIP_PROPERTIES = 'MoodPack-017-tgs-by-StickerEmojiRobot.zip';
 const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
 
 async function initCountryTgs() {
@@ -2099,25 +2110,18 @@ async function initCountryTgs() {
   }
   if (!window.lottie) { console.warn('lottie لم يُحمَّل'); return; }
 
-  TGS.playIn(document.getElementById('home-syria-tgs'), ZIP_SYRIA)
-    .catch(e => console.warn('syria TGS:', e.message));
   TGS.playIn(document.getElementById('home-uae-tgs'), ZIP_UAE)
     .catch(e => console.warn('uae TGS:', e.message));
-
   TGS.playIn(document.getElementById('home-properties-tgs'), ZIP_PROPERTIES)
     .catch(e => console.warn('properties TGS:', e.message));
   TGS.playIn(document.getElementById('home-space-clock-tgs'), ZIP_SPACE_CLOCK)
     .catch(e => console.warn('space clock TGS:', e.message));
-    
   TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('home crash TGS:', e.message));
-
   TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('crash rocket TGS:', e.message));
-
   TGS.playIn(document.getElementById('crash-waiting-tgs'), ZIP_WAITING)
     .catch(e => console.warn('crash waiting TGS:', e.message));
-
   TGS.playIn(document.getElementById('crash-explosion-tgs'), ZIP_EXPLOSION, { loop: false })
     .catch(e => console.warn('crash explosion TGS:', e.message));
 }
@@ -2209,7 +2213,8 @@ async function fetchUserData() {
     updateBalances();
     initDailyLogin();
     renderProfile();
-    document.getElementById('binanceUserId').innerText = user.id;
+    const binanceEl = document.getElementById('binanceUserId');
+    if (binanceEl) binanceEl.innerText = user.id;
     document.getElementById('refLinkText').innerText = `https://t.me/CuteBeeStarsBot/app?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
   } catch (e) {
@@ -2253,7 +2258,6 @@ function exitGame() {
 }
 
 function go(viewName) {
-  // ====== إدارة وضع اللعب الكامل ======
   const GAME_VIEWS = ['crash'];
   const appContainer = document.getElementById('app');
   if (GAME_VIEWS.includes(viewName)) {
@@ -2261,7 +2265,6 @@ function go(viewName) {
   } else {
     appContainer.classList.remove('in-game');
   }
-  // ====== نهاية الإضافة ======
 
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
@@ -2311,15 +2314,15 @@ function go(viewName) {
 }
 
 function updateBalances() {
-  const f = n => Number(n).toLocaleString('en-US');
-  document.getElementById('topStars').innerText = f(user.stars % 1 === 0 ? user.stars : user.stars.toFixed(2));
-  document.getElementById('topTickets').innerText = f(user.tickets);
-  document.getElementById('statStars').innerText = f(user.stars % 1 === 0 ? user.stars : user.stars.toFixed(2));
-  document.getElementById('statTickets').innerText = f(user.tickets);
-  document.getElementById('statRefs').innerText = user.referrals;
-  document.getElementById('statTotalWithdrawn').innerText = f(user.totalWithdrawn);
-  document.getElementById('refInvited').innerText = user.referrals;
-  document.getElementById('refEarned').innerText = user.referrals * 2;
+  document.getElementById('topStars').innerText = formatNum(user.stars);
+  document.getElementById('topTickets').innerText = formatNum(user.tickets);
+  document.getElementById('statStars').innerText = formatNum(user.stars);
+  document.getElementById('statTickets').innerText = formatNum(user.tickets);
+  document.getElementById('statRefs').innerText = formatNum(user.referrals);
+  const totalEl = document.getElementById('statTotalWithdrawn');
+  if (totalEl) totalEl.innerText = formatNum(user.totalWithdrawn);
+  document.getElementById('refInvited').innerText = formatNum(user.referrals);
+  document.getElementById('refEarned').innerText = formatNum(user.referrals * 2);
 }
 
 function renderProfile() {
@@ -2331,7 +2334,7 @@ function renderProfile() {
   }
 }
 
-/* ================= SLOTS GAME LOGIC ================= */
+/* ================= SLOTS ================= */
 function initSlots() {
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
@@ -2375,23 +2378,18 @@ function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
-
-  if (roll < 75) {
-    return { type: 'lose' };
-  } else if (roll >= 99) {
-    return { type: 'win', id: 'p10', value: config.table['p10'] };
-  } else {
-    const keys = Object.keys(config.table).filter(k => k !== 'p10');
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    return { type: 'win', id: randomKey, value: config.table[randomKey] };
-  }
+  if (roll < 75) return { type: 'lose' };
+  if (roll >= 99) return { type: 'win', id: 'p10', value: config.table['p10'] };
+  const keys = Object.keys(config.table).filter(k => k !== 'p10');
+  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  return { type: 'win', id: randomKey, value: config.table[randomKey] };
 }
 
 function showSlotsWinModal(prize) {
   const winIcon = document.getElementById('slots-win-icon');
   const winValue = document.getElementById('slots-win-value');
   winIcon.innerHTML = `<img src="${prize.img}" alt="Win" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(245,215,110,0.45));">`;
-  winValue.innerHTML = `<img src="${ASSETS.star}" style="width:32px;height:32px;"> ${prize.value}`;
+  winValue.innerHTML = `<img src="${ASSETS.star}" style="width:32px;height:32px;"> ${formatNum(prize.value)}`;
   winValue.style.color = '#FFD700';
   openModal('slots-win-modal');
 }
@@ -2421,9 +2419,8 @@ async function slotsSpin() {
   if (outcome.type === 'win') {
     for (let r = 0; r < 3; r++) {
       for (let row = 0; row < 3; row++) {
-        if (row === 1) {
-          finalGrid[r][row] = outcome.id;
-        } else {
+        if (row === 1) finalGrid[r][row] = outcome.id;
+        else {
           const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
           finalGrid[r][row] = rnd.id;
         }
@@ -2450,7 +2447,6 @@ async function slotsSpin() {
 
   const itemEl = document.querySelector('.slots-reel-item');
   const ITEM_HEIGHT = itemEl ? itemEl.getBoundingClientRect().height : 80;
-
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
@@ -2458,16 +2454,13 @@ async function slotsSpin() {
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
     track.innerHTML = '';
-
     let html = '';
     for (let i = 0; i < numRandomItems; i++) {
       const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
       html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
     }
-
     const finalSym = SLOT_SYMBOLS[finalGrid[r][1]];
     html += `<div class="slots-reel-item"><img src="${finalSym.img}" alt=""></div>`;
-
     for (let i = 0; i < numExtraItems; i++) {
       const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
       html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
@@ -2491,7 +2484,6 @@ async function slotsSpin() {
     try {
       let winAmount = 0;
       let winningCells = [];
-
       const mid0 = finalGrid[0][1];
       const mid1 = finalGrid[1][1];
       const mid2 = finalGrid[2][1];
@@ -2509,19 +2501,15 @@ async function slotsSpin() {
           const itemsInReel = track.children;
           if (itemsInReel[numRandomItems]) itemsInReel[numRandomItems].classList.add('win');
         });
-
         user.stars += winAmount;
         updateBalances();
         syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
-
         resultEl.innerText = '';
         resultEl.className = 'slots-result';
-        
         const winningSym = SLOT_SYMBOLS[outcome.id];
         setTimeout(() => {
           showSlotsWinModal({ img: winningSym.img, value: winAmount });
         }, 500);
-        
       } else {
         resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
         resultEl.className = 'slots-result lose';
@@ -2562,7 +2550,6 @@ function slotsShowPrizes() {
   container.appendChild(loseDiv);
 
   const sortedPrizes = Object.entries(config.table).sort((a,b) => a[1] - b[1]);
-
   sortedPrizes.forEach(([symId, val]) => {
     const sym = SLOT_SYMBOLS[symId];
     const div = document.createElement('div');
@@ -2574,7 +2561,7 @@ function slotsShowPrizes() {
     div.innerHTML = `
       <img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${val}">
       <div class="prize-val" ${symId === 'p10' ? 'style="color: var(--gold);"' : ''}>
-        <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${val}
+        <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${formatNum(val)}
       </div>
     `;
     container.appendChild(div);
@@ -2583,7 +2570,7 @@ function slotsShowPrizes() {
   openModal('slots-prizes-modal');
 }
 
-/* ================= TASKS & DAILY LOGIN ================= */
+/* ================= DAILY & TASKS ================= */
 function formatRemain(ms) {
   if (ms <= 0) return '00:00:00';
   const h = Math.floor(ms / 3600000);
@@ -2603,7 +2590,7 @@ async function initDailyLogin() {
   const streak = user.dailyStreak || 0;
   const claimsThisWeek = (streak % 7 === 0 && streak > 0) ? 7 : (streak % 7);
   const activeDay = (claimsThisWeek % 7) + 1;
-  streakCount.innerText = streak;
+  streakCount.innerText = formatNum(streak);
   container.innerHTML = '';
   for (let i = 1; i <= 7; i++) {
     const circle = document.createElement('div');
@@ -2714,7 +2701,7 @@ async function loadTasks() {
             <div class="task-icon">${iconHtml}</div>
             <div class="task-text">
               <h4>${task.title}</h4>
-              <div class="task-reward"><img src="${rewardIcon}"> ${task.rewardAmount}</div>
+              <div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div>
             </div>
           </div>
           ${actionBtn}
@@ -2774,7 +2761,7 @@ async function checkTaskAction() {
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
-    showToast(`تم إكمال المهمة بنجاح! +${amount} ${isTicket ? 'تيكت' : 'نجمة'}`);
+    showToast(`تم إكمال المهمة بنجاح! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'نجمة'}`);
     closeTaskSheet();
     loadTasks();
   } catch (e) {
@@ -2800,35 +2787,34 @@ function switchDepositTab(tab, el) {
   target.style.display = target.classList.contains('dep-layout') ? 'flex' : 'block';
 }
 function updateDepositUI(input) {
+  sanitizeDigits(input);
   let val = parseInt(input.value) || 0;
   if (val < 0) val = 0;
-  input.value = val;
+  input.value = String(val);
   depositAmount = val;
   adjustInputWidth(input);
 }
 function addChip(amount) {
   const input = document.getElementById('depositAmountInput');
   let current = parseInt(input.value) || 0;
-  input.value = current + amount;
+  input.value = String(current + amount);
   updateDepositUI(input);
 }
 function updateCryptoUI(input) {
-  let raw = input.value.replace(/[^0-9.]/g, '');
-  const parts = raw.split('.');
-  if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
-  if (parts.length === 2 && parts[1].length > 1) raw = parts[0] + '.' + parts[1].substring(0, 1);
+  sanitizeDigits(input);
+  let raw = input.value;
   let val = parseFloat(raw) || 0;
   if (val > 1000) { raw = '1000'; val = 1000; }
   input.value = raw;
   adjustInputWidth(input);
   const stars = Math.floor(val * 100);
-  document.getElementById('cryptoCalcSubtext').innerHTML = `${stars.toLocaleString()} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
+  document.getElementById('cryptoCalcSubtext').innerHTML = `${formatNum(stars)} <img src="${ASSETS.star}" style="width:16px; height:16px; border-radius:50%; vertical-align:middle;">`;
 }
 function addCryptoChip(amount) {
   const input = document.getElementById('cryptoAmountInput');
   let current = parseFloat(input.value) || 0;
   let newVal = Math.min(current + amount, 1000);
-  input.value = Math.round(newVal * 10) / 10;
+  input.value = String(Math.round(newVal * 10) / 10);
   updateCryptoUI(input);
 }
 async function processDeposit(type) {
@@ -2849,7 +2835,7 @@ async function processDeposit(type) {
           user.stars += depositAmount;
           updateBalances();
           syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
-          showToast(`تمت إضافة ${depositAmount} نجمة بنجاح!`);
+          showToast(`تمت إضافة ${formatNum(depositAmount)} نجمة بنجاح!`);
           go('home');
         } else if (status === 'cancelled') {
           showToast('تم إلغاء الدفع');
@@ -2948,9 +2934,11 @@ function switchWithdrawTab(tab, el) {
   document.getElementById('wd-tab-' + tab).style.display = 'block';
 }
 function updateWdUI(method, input) {
-  adjustInputWidth(input);
+  sanitizeDigits(input);
   let val = parseInt(input.value) || 0;
-  if (val > 5000) { val = 5000; input.value = 5000; }
+  if (val > 5000) { val = 5000; }
+  input.value = val > 0 ? String(val) : '';
+  adjustInputWidth(input);
   if (method === 'binance') document.getElementById('wdBinanceResult').innerText = `$${(val * 0.01).toFixed(2)}`;
   else if (method === 'gram') document.getElementById('wdGramResult').innerText = `${(val * 0.01).toFixed(2)} TON`;
 }
@@ -2963,7 +2951,8 @@ async function loadWithdrawalHistory() {
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
     user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
-    document.getElementById('statTotalWithdrawn').innerText = user.totalWithdrawn.toLocaleString('en-US');
+    const totalEl = document.getElementById('statTotalWithdrawn');
+    if (totalEl) totalEl.innerText = formatNum(user.totalWithdrawn);
     renderWithdrawHistory();
   } catch(e) {
     renderWithdrawHistory();
@@ -3005,7 +2994,7 @@ function renderWithdrawHistory() {
     div.className = 'history-item';
     div.innerHTML = `
       <div class="history-main">
-        <div class="history-amount">${w.amount} نجمة</div>
+        <div class="history-amount">${formatNum(w.amount)} نجمة</div>
         <div class="history-method">${methodName}</div>
       </div>
       <div class="status ${st.class}">${st.text}</div>`;
@@ -3056,7 +3045,7 @@ async function processWithdraw(method) {
     } else {
       withdrawalHistory.unshift(newWithdraw);
     }
-    document.getElementById('successWdStars').innerText = amount;
+    document.getElementById('successWdStars').innerText = formatNum(amount);
     document.getElementById('successWdPayout').innerText = payoutStr;
     openModal('modalWithdrawSuccess');
     document.getElementById('wdBinanceId').value = '';
@@ -3124,7 +3113,7 @@ async function loadGlobalRanking() {
         <div class="podium-rank">${rank}</div>
         <div class="podium-avatar">${avatar}</div>
         <div class="podium-name">${u.name || 'لاعب'}${isMe ? ' (أنت)' : ''}</div>
-        <div class="podium-count">${u.referralCount} إحالة</div>
+        <div class="podium-count">${formatNum(u.referralCount)} إحالة</div>
       `;
       podium.appendChild(el);
     });
@@ -3145,7 +3134,7 @@ async function loadGlobalRanking() {
         <div class="ranking-avatar">${avatar}</div>
         <div class="ranking-info">
           <div class="ranking-name">${u.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div>
-          <div class="ranking-count">${u.referralCount} إحالة</div>
+          <div class="ranking-count">${formatNum(u.referralCount)} إحالة</div>
         </div>`;
       list.appendChild(div);
     });
@@ -3179,21 +3168,11 @@ function closeModal(id) { document.getElementById(id).classList.remove('show'); 
 
 /* ================= CRASH GAME ================= */
 const crashState = {
-  status: 'idle',
-  multiplier: 1.00,
-  crashPoint: 1.00,
-  hasBet: false,
-  activeBet: 0,
-  hasCashedOut: false,
-  cashoutMultiplier: 0,
-  autoCashout: false,
-  autoCashoutValue: 2.00,
-  countdown: 6,
-  countdownInterval: null,
-  animationId: null,
-  startTime: 0,
-  waitingEndTime: 0,
-  roundId: null
+  status: 'idle', multiplier: 1.00, crashPoint: 1.00,
+  hasBet: false, activeBet: 0, hasCashedOut: false, cashoutMultiplier: 0,
+  autoCashout: false, autoCashoutValue: 2.00,
+  countdown: 6, countdownInterval: null, animationId: null,
+  startTime: 0, waitingEndTime: 0, roundId: null
 };
 
 let crashHistory = [];
@@ -3221,9 +3200,7 @@ function crashSetExplosionActive(active) {
   const exp = document.getElementById('crash-explosion-tgs');
   if (!exp) return;
   exp.classList.toggle('active', active);
-  if (active) {
-    TGS.restart('crash-explosion-tgs');
-  }
+  if (active) TGS.restart('crash-explosion-tgs');
 }
 
 function crashSetMultiplierDisplay(text, state) {
@@ -3295,10 +3272,7 @@ async function getActiveCrashRound() {
     if (data.status === 'flying') {
       const age = Date.now() - (data.updatedAt || 0);
       if (age > 5 * 60 * 1000) {
-        await saveCrashRound(
-          data.crashPoint || 1, data.activeBet, 'lost',
-          'stale_' + (data.updatedAt || Date.now())
-        );
+        await saveCrashRound(data.crashPoint || 1, data.activeBet, 'lost', 'stale_' + (data.updatedAt || Date.now()));
         await clearActiveCrashRound();
       }
       return null;
@@ -3316,20 +3290,14 @@ function saveActiveRoundState() {
   if (!crashState.hasBet || crashState.hasCashedOut) return;
 
   if (crashState.status === 'waiting') {
-    saveActiveCrashRound({
-      status: 'waiting',
-      activeBet: crashState.activeBet,
-      hasCashedOut: false
-    });
+    saveActiveCrashRound({ status: 'waiting', activeBet: crashState.activeBet, hasCashedOut: false });
   } else if (crashState.status === 'flying') {
     const elapsed = (Date.now() - crashState.startTime) / 1000;
     const currentMult = Math.pow(1.08, elapsed);
     const finalMult = Math.min(currentMult, crashState.crashPoint);
     const bet = crashState.activeBet;
-
     saveCrashRound(finalMult, bet, 'lost');
     clearActiveCrashRound();
-
     crashState.hasBet = false;
     crashState.activeBet = 0;
     crashState.hasCashedOut = false;
@@ -3352,27 +3320,22 @@ function renderCrashHistoryStrip() {
 function crashPushHistory(multiplier) {
   const strip = document.getElementById('crash-history-strip');
   if (!strip) return;
-
   const active = Array.from(strip.querySelectorAll('.crash-history-pill:not(.removing)'));
   if (active.length >= 5) {
     const oldest = active[active.length - 1];
     oldest.classList.add('removing');
     setTimeout(() => { if (oldest.parentNode) oldest.remove(); }, 320);
   }
-
   const el = document.createElement('div');
   el.className = 'crash-history-pill';
   el.innerText = 'x' + Number(multiplier).toFixed(2);
   strip.prepend(el);
-
   crashHistory.unshift({ multiplier });
   if (crashHistory.length > 5) crashHistory.pop();
 }
 
 async function startCrashGame() {
-  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') {
-    return;
-  }
+  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') return;
   const resumed = await checkAndResumeCrashRound();
   if (resumed) return;
   crashStartWaitingPhase();
@@ -3381,7 +3344,6 @@ async function startCrashGame() {
 async function checkAndResumeCrashRound() {
   const active = await getActiveCrashRound();
   if (!active || !active.activeBet) return false;
-
   if (active.status === 'waiting') {
     crashState.activeBet = active.activeBet;
     crashState.hasBet = true;
@@ -3391,7 +3353,7 @@ async function checkAndResumeCrashRound() {
       mainBtn.innerText = 'Cancel bet';
       mainBtn.className = 'crash-main-btn cancel';
     }
-    showToast(`تم استرداد رهانك السابق (${active.activeBet} نجمة)`);
+    showToast(`تم استرداد رهانك السابق (${formatNum(active.activeBet)} نجمة)`);
     return true;
   }
   return false;
@@ -3409,22 +3371,15 @@ function crashStartWaitingPhase() {
 
   const gameArea = document.getElementById('crash-game-area');
   const mainBtn = document.getElementById('crash-main-btn');
-
   if (gameArea) gameArea.classList.remove('flying');
 
   crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
 
   if (crashState.hasBet) {
-    if (mainBtn) {
-      mainBtn.className = 'crash-main-btn cancel';
-      mainBtn.innerText = 'Cancel bet';
-    }
+    if (mainBtn) { mainBtn.className = 'crash-main-btn cancel'; mainBtn.innerText = 'Cancel bet'; }
   } else {
-    if (mainBtn) {
-      mainBtn.className = 'crash-main-btn';
-      mainBtn.innerText = 'Place bet';
-    }
+    if (mainBtn) { mainBtn.className = 'crash-main-btn'; mainBtn.innerText = 'Place bet'; }
   }
 
   crashSetRocketActive(false);
@@ -3432,17 +3387,13 @@ function crashStartWaitingPhase() {
   crashSetWaitingActive(true);
 
   if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
-
   const tick = () => {
     if (crashState.status !== 'waiting') return;
     const remain = Math.ceil((crashState.waitingEndTime - Date.now()) / 1000);
-    if (remain <= 0) {
-      crashStartFlyingPhase();
-    } else {
+    if (remain <= 0) crashStartFlyingPhase();
+    else {
       crashState.countdown = remain;
-      if (isCrashViewActive()) {
-        crashSetCountdownDisplay(remain + 's', true);
-      }
+      if (isCrashViewActive()) crashSetCountdownDisplay(remain + 's', true);
       crashState.countdownInterval = setTimeout(tick, 200);
     }
   };
@@ -3457,7 +3408,6 @@ function crashStartFlyingPhase() {
 
   const gameArea = document.getElementById('crash-game-area');
   const mainBtn = document.getElementById('crash-main-btn');
-
   if (gameArea) gameArea.classList.add('flying');
 
   crashSetCountdownDisplay('', false);
@@ -3492,8 +3442,7 @@ function crashStartFlyingPhase() {
     crashState.multiplier = Math.pow(1.08, elapsed);
 
     if (isCrashViewActive()) {
-      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-        crashState.hasCashedOut ? 'cashed' : '');
+      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', crashState.hasCashedOut ? 'cashed' : '');
       if (crashState.hasBet && !crashState.hasCashedOut) {
         if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       }
@@ -3517,11 +3466,8 @@ function crashGenerateCrashPoint() {
   const r = Math.random();
   if (r < 0.70) {
     const sub = Math.random();
-    if (sub < 0.80) {
-      return 1.05 + Math.random() * 0.95;
-    } else {
-      return 2.00 + Math.random() * 3.00;
-    }
+    if (sub < 0.80) return 1.05 + Math.random() * 0.95;
+    else return 2.00 + Math.random() * 3.00;
   } else {
     return 5.00 + Math.random() * 45.00;
   }
@@ -3532,9 +3478,7 @@ function crashHandleCrash() {
   if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
   const mainBtn = document.getElementById('crash-main-btn');
   const gameArea = document.getElementById('crash-game-area');
-
   const finalMult = crashState.multiplier;
-
   if (gameArea) gameArea.classList.remove('flying');
 
   if (isCrashViewActive()) {
@@ -3543,10 +3487,7 @@ function crashHandleCrash() {
   }
 
   const betWasActive = crashState.hasBet && !crashState.hasCashedOut;
-  const recordedMult = crashState.hasCashedOut
-    ? (crashState.cashoutMultiplier || finalMult)
-    : finalMult;
-
+  const recordedMult = crashState.hasCashedOut ? (crashState.cashoutMultiplier || finalMult) : finalMult;
   crashPushHistory(recordedMult);
 
   if (betWasActive) {
@@ -3554,20 +3495,11 @@ function crashHandleCrash() {
     clearActiveCrashRound();
     crashState.hasBet = false;
     crashState.activeBet = 0;
-    if (mainBtn) {
-      mainBtn.innerText = 'Crashed';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Crashed'; mainBtn.className = 'crash-main-btn disabled'; }
   } else if (crashState.hasCashedOut) {
-    if (mainBtn) {
-      mainBtn.innerText = 'You won!';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'You won!'; mainBtn.className = 'crash-main-btn disabled'; }
   } else {
-    if (mainBtn) {
-      mainBtn.innerText = 'Crashed';
-      mainBtn.className = 'crash-main-btn disabled';
-    }
+    if (mainBtn) { mainBtn.innerText = 'Crashed'; mainBtn.className = 'crash-main-btn disabled'; }
   }
 
   crashSetRocketActive(false);
@@ -3586,9 +3518,7 @@ function crashDoCashOut() {
   crashState.cashoutMultiplier = crashState.multiplier;
   const winAmount = crashState.activeBet * crashState.multiplier;
 
-  if (isCrashViewActive()) {
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', '');
-  }
+  if (isCrashViewActive()) crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', '');
 
   user.stars += winAmount;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
@@ -3655,19 +3585,21 @@ function crashCancelBet() {
 
 function crashValidateBet() {
   const input = document.getElementById('crash-bet-input');
+  sanitizeDigits(input);
   let val = parseInt(input.value) || 1;
   if (val < 1) val = 1;
   if (val > 1000) val = 1000;
-  input.value = val;
+  input.value = String(val);
 }
 function crashAddBet(amount) {
   const input = document.getElementById('crash-bet-input');
   let current = parseInt(input.value) || 0;
   let newVal = Math.min(current + amount, 1000);
-  input.value = newVal;
+  input.value = String(newVal);
 }
 function crashToggleAutoCashout(checkbox) { crashState.autoCashout = checkbox.checked; }
 function crashUpdateAutoCashout(input) {
+  sanitizeDigits(input);
   let val = parseFloat(input.value) || 2.00;
   if (val < 1.01) val = 1.01;
   if (val > 100) val = 100;
