@@ -133,6 +133,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
   left: 16px; right: 16px;
   display: flex; justify-content: space-between; z-index: 51;
+  transition: top 0.3s var(--ease-out);
 }
 .balance-pill {
   display: flex; align-items: center;
@@ -773,7 +774,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ DOCK (أكثر شفافية + ضبابية أقل) ============ */
+/* ============ DOCK ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -846,26 +847,43 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
-/* ============ CRASH GAME (Full Screen + Light Theme) ============ */
+/* ============ CRASH GAME (Light Theme) ============ */
+.main-scroll.crash-mode { padding: 0; overflow: hidden; }
 #view-crash.active {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  z-index: 500;
-  background: linear-gradient(to bottom, #7bc6ff 0%, #d6edff 50%, #e8f5ff 85%, #f2f9ff 100%);
+  display: flex; flex-direction: column; height: 100%;
+  position: relative;
+  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 60px);
+  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
   animation: viewIn 0.35s var(--ease-out);
 }
+.crash-game-area { position: relative; z-index: 1; }
+.crash-bottom-panel { position: relative; z-index: 1; }
+
 .crash-game-area {
-  flex: 0 0 75%; /* 75% من الشاشة */
-  position: relative;
-  display: flex;
+  flex: 1; position: relative; display: flex;
   align-items: center; justify-content: center;
-  overflow: hidden;
+  overflow: hidden; min-height: 0;
+  contain: layout style paint;
+  transition: transform 0.35s var(--ease-out);
+}
+.crash-game-area.cashout-anim { transform: scale(1.03); }
+
+/* Sky Background - Full Screen */
+.crash-sky-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background: linear-gradient(to bottom,
+    #4a9eff 0%,
+    #6fb5ff 25%,
+    #a8d8ff 50%,
+    #cceaff 70%,
+    #e0f0ff 78%,
+    #f0f8ff 88%,
+    #ffffff 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 .crash-game-area::after {
   content: ''; position: absolute; inset: 0;
@@ -901,7 +919,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 15%;
+  left: 50%; top: 12%;
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
@@ -966,24 +984,19 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
 .crash-explosion.active { opacity: 1; }
 
-.crash-bottom-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 8px 16px 0;
-  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* مساحة لزر الخروج */
-}
-
-/* بطاقة الرهان مدموجة مع الخلفية */
+.crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
 .crash-bet-controls {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 248, 255, 0.95) 100%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  backdrop-filter: blur(16px) saturate(160%);
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.40) 0%,
+    rgba(200, 225, 255, 0.55) 35%,
+    rgba(255, 255, 255, 0.80) 100%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
   border-radius: 22px;
   padding: 12px; display: flex; flex-direction: column;
   gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 30px rgba(30,40,80,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 -10px 35px rgba(80, 140, 220, 0.12), inset 0 1px 0 rgba(255,255,255,0.9);
   contain: layout style paint;
 }
 .crash-history-strip {
@@ -1073,37 +1086,53 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
 
-/* ============ EXIT GAME BTN ============ */
-.exit-game-btn {
-  position: absolute;
-  bottom: calc(14px + env(safe-area-inset-bottom));
-  left: 14px; right: 14px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 10px 30px rgba(30,40,80,0.15);
-  color: var(--text-primary);
-  font-size: 16px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  z-index: 600;
-  transition: transform 0.15s var(--spring);
-}
-.exit-game-btn:active { transform: scale(0.97); }
-.exit-game-btn i { font-size: 20px; color: var(--currency-blue); }
-
-/* Hide normal UI when in game */
-body.in-game .top-app-bar,
-body.in-game .floating-balances,
-body.in-game .dock {
+/* ============ IN-GAME MODE (Fullscreen Game) ============ */
+.app-container.in-game .top-app-bar {
   display: none !important;
 }
+.app-container.in-game .floating-balances {
+  top: calc(var(--safe-top) + 10px) !important;
+}
+.app-container.in-game .main-scroll {
+  padding: 0 !important;
+}
+.app-container.in-game #view-crash.active {
+  padding-top: 0 !important;
+  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
+}
+.app-container.in-game .dock-home-btn,
+.app-container.in-game .nav-profile,
+.app-container.in-game .dock-nav .nav-item[data-view] {
+  display: none !important;
+}
+.app-container.in-game .dock-nav::before {
+  display: none !important;
+}
+.app-container.in-game .dock-nav {
+  justify-content: center;
+}
+
+/* Exit Game Button */
+.nav-exit {
+  display: none;
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
+  border-radius: 26px;
+  box-shadow: 0 8px 24px rgba(230, 57, 80, 0.32), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: transform 0.15s var(--spring);
+  padding: 0 20px;
+}
+.nav-exit:active { transform: scale(0.97); }
+.nav-exit i { font-size: 16px; }
+.app-container.in-game .nav-exit { display: flex; }
 
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
@@ -1454,6 +1483,7 @@ body.in-game .dock {
 
     <!-- CRASH GAME VIEW -->
     <div class="view" id="view-crash">
+      <div class="crash-sky-bg"></div>
       <div class="crash-game-area" id="crash-game-area">
         <div class="crash-air-waves">
           <span></span><span></span><span></span><span></span>
@@ -1491,9 +1521,6 @@ body.in-game .dock {
           <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
         </div>
       </div>
-      <button class="exit-game-btn" onclick="exitGame()">
-        <i class="fas fa-arrow-right"></i> خروج من اللعبة
-      </button>
     </div>
 
   </main>
@@ -1515,6 +1542,10 @@ body.in-game .dock {
         <i class="fas fa-money-bill-transfer"></i>
         <span class="nav-text">سحب</span>
       </div>
+      <button class="nav-item nav-exit" onclick="exitGame()">
+        <i class="fas fa-door-open"></i>
+        <span>الخروج من اللعبة</span>
+      </button>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
       <i class="fas fa-user"></i>
@@ -1889,16 +1920,20 @@ window.addEventListener('pagehide', () => {
   saveActiveRoundState();
 });
 
-function exitGame() {
-  go('home');
-}
-
 function go(viewName) {
+  // ====== إدارة وضع اللعب الكامل ======
+  const GAME_VIEWS = ['crash'];
+  const appContainer = document.getElementById('app');
+  if (GAME_VIEWS.includes(viewName)) {
+    appContainer.classList.add('in-game');
+  } else {
+    appContainer.classList.remove('in-game');
+  }
+  // ====== نهاية الإضافة ======
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
   if (target) target.classList.add('active');
-
-  document.body.classList.toggle('in-game', viewName === 'crash');
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
@@ -1912,7 +1947,7 @@ function go(viewName) {
 
   if (activeNav) {
     activeNav.classList.add('active');
-    const items = Array.from(document.querySelectorAll('.nav-item'));
+    const items = Array.from(document.querySelectorAll('.nav-item[data-view]'));
     const index = items.indexOf(activeNav);
     document.querySelector('.dock-nav').style.setProperty('--nav-index', index);
   } else if (activeProfile) {
@@ -1920,8 +1955,10 @@ function go(viewName) {
   }
 
   const mainScroll = document.getElementById('mainScroll');
-  
+  mainScroll.classList.remove('crash-mode');
+
   if (viewName === 'crash') {
+    mainScroll.classList.add('crash-mode');
     startCrashGame();
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
@@ -1931,6 +1968,10 @@ function go(viewName) {
   }
   
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function exitGame() {
+  go('home');
 }
 
 function updateBalances() {
