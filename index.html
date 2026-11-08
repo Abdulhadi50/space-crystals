@@ -102,7 +102,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .app-container.ready { display: flex; }
 
-/* App bar زجاجي فاتح + TGS مكبّر */
+/* App bar زجاجي فاتح + TGS كما كان يعمل */
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
@@ -117,17 +117,15 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .top-app-bar-bg {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.92;
+  opacity: 0.72;
 }
 .top-app-bar-bg svg {
   width: 100% !important;
   height: 100% !important;
   display: block;
-  transform: translateY(-10px) scale(1.42);
-  transform-origin: center center;
 }
 
 .floating-balances {
@@ -1497,7 +1495,7 @@ async function initAppBarTgs() {
     await TGS.playIn(el, ZIP_APPBAR, {
       loop: true,
       speed: 1.1,
-      preserveAspectRatio: 'xMidYMin slice'
+      preserveAspectRatio: 'xMidYMid slice'
     });
   } catch (e) {
     console.warn('appbar TGS:', e.message);
