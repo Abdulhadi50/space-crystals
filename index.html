@@ -103,7 +103,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .app-container.ready { display: flex; }
 
-/* App bar زجاجي فاتح + بانر صورة يملأ العرض */
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
@@ -184,6 +183,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.country-saudi { --card-accent: radial-gradient(circle at 105% -10%, rgba(16,120,60,0.34), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
+.home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
   font-size: 20px; font-weight: 800; margin-bottom: 4px;
@@ -846,7 +846,147 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
-/* ============ CRASH GAME (Light Theme) ============ */
+/* ============ SLOTS GAME (Light Theme) ============ */
+#view-slots { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
+#view-slots.active {
+  display: flex; animation: viewIn 0.35s var(--ease-out);
+  background: radial-gradient(ellipse 68% 48% at 50% 40%, rgba(255, 165, 0, 0.08) 0%, transparent 72%);
+  border-radius: 30px; padding: 24px 12px;
+}
+.slots-container {
+  width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 20px;
+}
+.slots-reels {
+  display: flex; gap: 10px;
+  background: linear-gradient(165deg, #ffffff, #f5f7fc);
+  border-radius: 28px;
+  padding: 16px 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+}
+.slots-reel {
+  flex: 1;
+  background: rgba(0,0,0,0.03);
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+.slots-reel::before, .slots-reel::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 60px;
+  z-index: 2; pointer-events: none;
+}
+.slots-reel::before {
+  top: 0;
+  background: linear-gradient(to bottom, #ffffff, transparent);
+}
+.slots-reel::after {
+  bottom: 0;
+  background: linear-gradient(to top, #ffffff, transparent);
+}
+.slots-reel-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  will-change: transform;
+}
+.slots-reel-item {
+  width: 100%;
+  height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.slots-reel-item img {
+  width: 60px; height: 60px; object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(30,40,80,0.15));
+  pointer-events: none;
+}
+.slots-reel-item.win {
+  background: rgba(15,169,110,0.15);
+  box-shadow: inset 0 0 16px rgba(15,169,110,0.3);
+  transform: scale(1.05);
+}
+
+.slots-result {
+  font-size: 20px; font-weight: 800; text-align: center;
+  min-height: 28px;
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+.slots-result.win { color: var(--success); text-shadow: 0 0 20px rgba(15,169,110,0.3); }
+.slots-result.lose { color: var(--text-secondary); }
+
+.slots-bet-levels {
+  display: flex;
+  background: var(--bg-card);
+  border-radius: 18px; padding: 5px;
+  border: 1px solid var(--border);
+  width: 100%;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 18px rgba(30,40,80,0.05);
+}
+.slots-bet-btn {
+  flex: 1; text-align: center; padding: 12px 4px; white-space: nowrap;
+  border-radius: 14px; color: var(--text-secondary);
+  font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  transition: all 0.25s var(--ease-out);
+  border: 1px solid transparent;
+}
+.slots-bet-btn img { width: 14px; height: 14px; }
+.slots-bet-btn.active {
+  background: var(--nav-indicator-bg);
+  color: var(--text-primary);
+  border-color: rgba(0,0,0,0.06);
+  box-shadow: var(--nav-indicator-shadow);
+}
+.slots-bet-btn:active:not(:disabled) { transform: scale(0.95); }
+.slots-bet-btn:disabled { opacity: 0.5; pointer-events: none; }
+
+.slots-spin-btn {
+  flex: 2;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-blue);
+  color: #fff;
+  font-size: 18px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 10px 28px rgba(59,111,219,0.3), inset 0 1px 0 rgba(255,255,255,0.28);
+  transition: transform 0.15s var(--spring);
+  direction: ltr;
+}
+.slots-spin-btn:active:not(:disabled) { transform: scale(0.97); }
+.slots-spin-btn:disabled { opacity: 0.5; pointer-events: none; }
+.slots-spin-btn img { width: 24px; height: 24px; }
+
+/* Prizes modal for Slots */
+.prizes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; max-height: 50vh; overflow-y: auto; padding: 4px; }
+.prize-grid-item {
+  background: var(--bg-card);
+  border-radius: 18px; padding: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
+.prize-grid-item img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(30,40,80,0.15)); }
+.prize-val {
+  background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: var(--text-primary);
+  border: 1px solid var(--border);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ============ CRASH GAME ============ */
 .main-scroll.crash-mode { padding: 0; overflow: hidden; }
 #view-crash.active {
   display: flex; flex-direction: column; height: 100%;
@@ -921,7 +1061,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 12%;
+  left: 50%; top: 18%; /* زيادة التباعد */
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
@@ -1085,13 +1225,9 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
 
-/* ============ IN-GAME MODE (Fullscreen Game) ============ */
-.app-container.in-game .top-app-bar {
-  display: none !important;
-}
-.app-container.in-game .main-scroll {
-  padding: 0 !important;
-}
+/* ============ IN-GAME MODE ============ */
+.app-container.in-game .top-app-bar { display: none !important; }
+.app-container.in-game .main-scroll { padding: 0 !important; }
 .app-container.in-game #view-crash.active {
   padding-top: calc(var(--top-bar-height) + var(--safe-top) + 80px) !important;
   padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
@@ -1108,21 +1244,23 @@ input:checked + .slider:before { transform: translateX(22px); }
   justify-content: center;
 }
 
-/* Exit Game Button - Same style as nav-item (small) */
+/* Exit Game Button */
 .nav-exit {
   display: none;
   height: 100%;
-  padding: 0 24px;
+  flex: 1;
+  padding: 0 8px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
   font-size: 10px;
   font-weight: 700;
-  color: #fff;
-  background: var(--gradient-danger);
+  color: var(--text-primary);
+  background: var(--nav-indicator-bg);
+  border: 1px solid rgba(255,255,255,0.16);
   border-radius: 26px;
-  box-shadow: 0 6px 18px rgba(230,57,80,0.32), inset 0 1px 0 rgba(255,255,255,0.25);
+  box-shadow: var(--nav-indicator-shadow);
   transition: transform 0.15s var(--spring);
   position: relative;
   z-index: 1;
@@ -1144,6 +1282,13 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crash-multiplier-display { font-size: 54px; }
   .crash-multiplier-display.waiting { font-size: 42px; }
   .crash-countdown-display { font-size: 36px; }
+  .slots-reels { height: 210px; }
+  .slots-reel-item { height: 70px; }
+  .slots-reel-item img { width: 50px; height: 50px; }
+  .slots-reel::before, .slots-reel::after { height: 50px; }
+  .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
+  .slots-spin-btn { font-size: 15px; padding: 14px; }
+  .prize-val { font-size: 10px; padding: 2px 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1204,6 +1349,15 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon" id="home-saudi-tgs"></div>
         </div>
 
+        <!-- Slots Card -->
+        <div class="home-card card-slots" onclick="go('slots')">
+          <div class="card-text">
+            <h3>Slots</h3>
+            <p>ماكينة الحظ</p>
+          </div>
+          <img src="IMG_20261107_094800_698.png" class="card-icon" alt="Slots" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+        </div>
+
         <!-- Crash Card -->
         <div class="home-card card-crash" onclick="go('crash')">
           <div class="card-text">
@@ -1219,6 +1373,46 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>اربح 2 تيكت عن كل صديق</p>
           </div>
           <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOTS GAME VIEW -->
+    <div class="view" id="view-slots">
+      <div class="slots-container">
+        <div class="slots-reels" id="slotsReels">
+          <div class="slots-reel" id="reel0">
+            <div class="slots-reel-track" id="reelTrack0"></div>
+          </div>
+          <div class="slots-reel" id="reel1">
+            <div class="slots-reel-track" id="reelTrack1"></div>
+          </div>
+          <div class="slots-reel" id="reel2">
+            <div class="slots-reel-track" id="reelTrack2"></div>
+          </div>
+        </div>
+        <div class="slots-result" id="slotsResult">اختر رهانك</div>
+        <div class="slots-bet-levels" id="slotsBetLevels">
+          <button class="slots-bet-btn" data-bet="69" onclick="slotsChangeBet(69)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 69
+          </button>
+          <button class="slots-bet-btn" data-bet="149" onclick="slotsChangeBet(149)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 149
+          </button>
+          <button class="slots-bet-btn" data-bet="399" onclick="slotsChangeBet(399)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 399
+          </button>
+          <button class="slots-bet-btn" data-bet="999" onclick="slotsChangeBet(999)">
+            <img src="https://up6.cc/2026/10/17932600818491.png"> 999
+          </button>
+        </div>
+        <div style="display: flex; gap: 10px; width: 100%; max-width: 360px;">
+          <button class="slots-prizes-btn" onclick="slotsShowPrizes()" style="flex: 1; padding: 16px; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fas fa-gift"></i> الجوائز
+          </button>
+          <button class="slots-spin-btn" id="slotsSpinBtn" onclick="slotsSpin()" style="flex: 2; margin: 0;">
+            Spin for <img src="https://up6.cc/2026/10/17932600818491.png" alt="star"> <span id="slotsSpinCost">69</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1626,6 +1820,26 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
+<!-- Slots Win Modal -->
+<div class="modal-overlay" id="slots-win-modal">
+  <div class="modal-content spin-win-modal" style="border: 1px solid rgba(245,215,110,0.28);">
+    <div class="modal-icon" id="slots-win-icon" style="width: 100px; height: 100px; margin: 0 auto 20px;"></div>
+    <h3>مبروك! لقد ربحت</h3>
+    <p style="margin-bottom: 10px;">لقد حصلت على</p>
+    <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45);"></div>
+    <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
+  </div>
+</div>
+
+<!-- Slots Prizes Modal -->
+<div class="modal-overlay" id="slots-prizes-modal">
+  <div class="modal-content" style="max-width: 400px; padding: 20px;">
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <div class="prizes-grid" id="slots-prizes-grid"></div>
+    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')">إغلاق</button>
+  </div>
+</div>
+
 <div class="toast" id="toast">رسالة</div>
 
 <script>
@@ -1657,6 +1871,66 @@ const FIREBASE_CONFIG = {
 
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 
+const WINNING_TABLE = [
+  { id: 'p1', img: 'IMG_20261029_131022_938.png', value: 0.01, weight: 20 },
+  { id: 'p2', img: 'IMG_20261029_131039_955.png', value: 0.1, weight: 20 },
+  { id: 'p3', img: 'IMG_20261029_131620_989.png', value: 0.5, weight: 20 },
+  { id: 'p4', img: 'IMG_20261029_171453_689.png', value: 1, weight: 20 },
+  { id: 'p5', img: 'IMG_20261029_171514_869.png', value: 2, weight: 17 },
+  { id: 'p6', img: 'IMG_20261029_171539_567.png', value: 5, weight: 10 },
+  { id: 'p7', img: 'IMG_20261029_171631_362.png', value: 10, weight: 8 },
+  { id: 'p8', img: 'IMG_20261029_171638_229.png', value: 20, weight: 6 },
+  { id: 'p9', img: 'IMG_20261029_171754_159.png', value: 30, weight: 5 },
+  { id: 'p10', img: 'IMG_20261029_180053_502.png', value: 50, weight: 3 },
+  { id: 'p11', img: 'IMG_20261029_171802_634.png', value: 75, weight: 2 },
+  { id: 'p12', img: 'IMG_20261029_172015_445.png', value: 90, weight: 1.5 },
+  { id: 'p13', img: 'IMG_20261029_172042_619.png', value: 100, weight: 1 },
+  { id: 'p14', img: 'IMG_20261029_172134_616.png', value: 120, weight: 0.8 },
+  { id: 'p15', img: 'IMG_20261029_180047_113.png', value: 140, weight: 0.6 },
+  { id: 'p16', img: 'IMG_20261029_180048_586.png', value: 150, weight: 0.5 },
+  { id: 'p17', img: 'IMG_20261029_180050_512.png', value: 130, weight: 0.4 },
+  { id: 'p18', img: 'IMG_20261029_180056_326.png', value: 110, weight: 0.2 }
+];
+
+/* ================= SLOTS CONFIG ================= */
+const SLOT_SYMBOLS = {};
+WINNING_TABLE.forEach(s => { SLOT_SYMBOLS[s.id] = s; });
+
+const SLOTS_CONFIG = {
+  69: {
+    table: {
+      p10: 700, p18: 500, p13: 350, p4: 250, p5: 150,
+      p9: 100, p8: 75, p7: 50, p6: 40, p3: 30,
+      p14: 25, p2: 20, p15: 15, p1: 10, p11: 8,
+      p16: 6, p17: 4, p12: 2
+    }
+  },
+  149: {
+    table: {
+      p10: 1500, p18: 1000, p13: 700, p4: 500, p5: 300,
+      p9: 200, p8: 150, p7: 100, p6: 80, p3: 60,
+      p14: 50, p2: 40, p15: 30, p1: 20, p11: 15,
+      p16: 10, p17: 8, p12: 5
+    }
+  },
+  399: {
+    table: {
+      p10: 4000, p18: 3000, p13: 2000, p4: 1500, p5: 1000,
+      p9: 800, p8: 500, p7: 300, p6: 200, p3: 150,
+      p14: 100, p2: 80, p15: 60, p1: 50, p11: 40,
+      p16: 30, p17: 20, p12: 10
+    }
+  },
+  999: {
+    table: {
+      p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500,
+      p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400,
+      p14: 300, p2: 200, p15: 150, p1: 100, p11: 80,
+      p16: 60, p17: 40, p12: 20
+    }
+  }
+};
+
 let user = {
   id: '123456789', name: 'لاعب', photo: '',
   stars: 25, tickets: 20, referrals: 0, totalWithdrawn: 0,
@@ -1675,6 +1949,11 @@ let cryptoTimerInterval = null;
 let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
+
+let slotsState = {
+  currentBet: 69,
+  isSpinning: false
+};
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -1897,6 +2176,7 @@ async function syncUserData(updates) {
 document.addEventListener('DOMContentLoaded', () => {
   initTelegram();
   initCountryTgs();
+  initSlots();
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
   initFirebase();
@@ -1916,6 +2196,10 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('pagehide', () => {
   saveActiveRoundState();
 });
+
+function exitGame() {
+  go('home');
+}
 
 function go(viewName) {
   // ====== إدارة وضع اللعب الكامل ======
@@ -1960,15 +2244,13 @@ function go(viewName) {
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
     }, 100);
+  } else if (viewName === 'slots') {
+    slotsUpdateBalance();
   } else if (viewName === 'withdraw') {
     loadWithdrawalHistory();
   }
   
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function exitGame() {
-  go('home');
 }
 
 function updateBalances() {
@@ -1990,6 +2272,259 @@ function renderProfile() {
   if (user.photo) {
     avatar.innerHTML = `<img src="${user.photo}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
   }
+}
+
+/* ================= SLOTS GAME LOGIC ================= */
+function initSlots() {
+  for (let r = 0; r < 3; r++) {
+    const track = document.getElementById('reelTrack' + r);
+    track.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      const item = document.createElement('div');
+      item.className = 'slots-reel-item';
+      item.innerHTML = `<img src="${sym.img}" alt="">`;
+      track.appendChild(item);
+    }
+    track.style.transform = 'translateY(0)';
+    track.style.transition = 'none';
+  }
+  slotsUpdateBalance();
+  slotsUpdateBetUI();
+}
+
+function slotsUpdateBetUI() {
+  document.querySelectorAll('.slots-bet-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.bet) === slotsState.currentBet);
+  });
+  document.getElementById('slotsSpinCost').innerText = slotsState.currentBet;
+}
+
+function slotsChangeBet(bet) {
+  if (slotsState.isSpinning) return;
+  slotsState.currentBet = bet;
+  slotsUpdateBetUI();
+}
+
+function slotsUpdateBalance() {
+  const el = document.getElementById('slotsResult');
+  if (el && !slotsState.isSpinning) {
+    el.innerText = 'اختر رهانك';
+    el.className = 'slots-result';
+  }
+}
+
+function getSlotOutcome() {
+  const bet = slotsState.currentBet;
+  const config = SLOTS_CONFIG[bet];
+  const roll = Math.random() * 100;
+
+  // نسبة الفوز 25% (75% خسارة، 24% فوز عادي، 1% جاكبوت)
+  if (roll < 75) {
+    return { type: 'lose' };
+  } else if (roll >= 99) {
+    return { type: 'win', id: 'p10', value: config.table['p10'] };
+  } else {
+    const keys = Object.keys(config.table).filter(k => k !== 'p10');
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    return { type: 'win', id: randomKey, value: config.table[randomKey] };
+  }
+}
+
+function showSlotsWinModal(prize) {
+  const winIcon = document.getElementById('slots-win-icon');
+  const winValue = document.getElementById('slots-win-value');
+  winIcon.innerHTML = `<img src="${prize.img}" alt="Win" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(245,215,110,0.45));">`;
+  winValue.innerHTML = `<img src="${ASSETS.star}" style="width:32px;height:32px;"> ${prize.value}`;
+  winValue.style.color = '#FFD700';
+  openModal('slots-win-modal');
+}
+
+async function slotsSpin() {
+  if (slotsState.isSpinning) return;
+  const bet = slotsState.currentBet;
+  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+
+  slotsState.isSpinning = true;
+  const spinBtn = document.getElementById('slotsSpinBtn');
+  spinBtn.disabled = true;
+  document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = true);
+
+  user.stars -= bet;
+  updateBalances();
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
+
+  const resultEl = document.getElementById('slotsResult');
+  resultEl.innerText = '...';
+  resultEl.className = 'slots-result';
+  document.querySelectorAll('.slots-reel-item').forEach(i => i.classList.remove('win'));
+
+  const outcome = getSlotOutcome();
+
+  let finalGrid = [[],[],[]];
+  if (outcome.type === 'win') {
+    for (let r = 0; r < 3; r++) {
+      for (let row = 0; row < 3; row++) {
+        if (row === 1) {
+          finalGrid[r][row] = outcome.id;
+        } else {
+          const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+          finalGrid[r][row] = rnd.id;
+        }
+      }
+    }
+  } else {
+    let attempts = 0;
+    do {
+      for (let r = 0; r < 3; r++) {
+        for (let row = 0; row < 3; row++) {
+          const rnd = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+          finalGrid[r][row] = rnd.id;
+        }
+      }
+      attempts++;
+    } while (slotsHasWinningLine(finalGrid) && attempts < 50);
+    
+    if (slotsHasWinningLine(finalGrid)) {
+      let safeId = WINNING_TABLE[0].id;
+      if (finalGrid[1][1] === safeId) safeId = WINNING_TABLE[1].id;
+      finalGrid[0][1] = safeId;
+    }
+  }
+
+  const itemEl = document.querySelector('.slots-reel-item');
+  const ITEM_HEIGHT = itemEl ? itemEl.getBoundingClientRect().height : 80;
+
+  const numRandomItems = 40;
+  const numExtraItems = 10;
+  const durations = [1800, 2200, 2600];
+
+  for (let r = 0; r < 3; r++) {
+    const track = document.getElementById('reelTrack' + r);
+    track.innerHTML = '';
+
+    let html = '';
+    for (let i = 0; i < numRandomItems; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
+    }
+
+    const finalSym = SLOT_SYMBOLS[finalGrid[r][1]];
+    html += `<div class="slots-reel-item"><img src="${finalSym.img}" alt=""></div>`;
+
+    for (let i = 0; i < numExtraItems; i++) {
+      const sym = WINNING_TABLE[Math.floor(Math.random() * WINNING_TABLE.length)];
+      html += `<div class="slots-reel-item"><img src="${sym.img}" alt=""></div>`;
+    }
+    track.innerHTML = html;
+
+    const endY = ITEM_HEIGHT - numRandomItems * ITEM_HEIGHT;
+    const startY = endY - 2000;
+
+    track.style.transition = 'none';
+    track.style.transform = `translateY(${startY}px)`;
+    track.offsetHeight;
+
+    setTimeout(() => {
+      track.style.transition = `transform ${durations[r]}ms cubic-bezier(0.15, 0.85, 0.35, 1)`;
+      track.style.transform = `translateY(${endY}px)`;
+    }, r * 100);
+  }
+
+  setTimeout(async () => {
+    try {
+      let winAmount = 0;
+      let winningCells = [];
+
+      const mid0 = finalGrid[0][1];
+      const mid1 = finalGrid[1][1];
+      const mid2 = finalGrid[2][1];
+
+      if (mid0 === mid1 && mid1 === mid2) {
+        if (outcome.type === 'win') {
+          winAmount = outcome.value;
+          winningCells = [[0,1],[1,1],[2,1]];
+        }
+      }
+
+      if (winAmount > 0) {
+        winningCells.forEach(([r, row]) => {
+          const track = document.getElementById('reelTrack' + r);
+          const itemsInReel = track.children;
+          if (itemsInReel[numRandomItems]) itemsInReel[numRandomItems].classList.add('win');
+        });
+
+        user.stars += winAmount;
+        updateBalances();
+        syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
+
+        resultEl.innerText = '';
+        resultEl.className = 'slots-result';
+        
+        const winningSym = SLOT_SYMBOLS[outcome.id];
+        setTimeout(() => {
+          showSlotsWinModal({ img: winningSym.img, value: winAmount });
+        }, 500);
+        
+      } else {
+        resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
+        resultEl.className = 'slots-result lose';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      slotsState.isSpinning = false;
+      spinBtn.disabled = false;
+      document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = false);
+    }
+  }, durations[2] + 300);
+}
+
+function slotsHasWinningLine(grid) {
+  const mid0 = grid[0][1], mid1 = grid[1][1], mid2 = grid[2][1];
+  if (mid0 === mid1 && mid1 === mid2) return true;
+  const top0 = grid[0][0], top1 = grid[1][0], top2 = grid[2][0];
+  if (top0 === top1 && top1 === top2) return true;
+  const bot0 = grid[0][2], bot1 = grid[1][2], bot2 = grid[2][2];
+  if (bot0 === bot1 && bot1 === bot2) return true;
+  return false;
+}
+
+function slotsShowPrizes() {
+  const container = document.getElementById('slots-prizes-grid');
+  container.innerHTML = '';
+  const config = SLOTS_CONFIG[slotsState.currentBet];
+
+  const loseDiv = document.createElement('div');
+  loseDiv.className = 'prize-grid-item';
+  loseDiv.innerHTML = `
+    <img src="https://img.icons8.com/color/96/000000/cancel.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Nothing">
+    <div class="prize-val">
+      <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 0
+    </div>
+  `;
+  container.appendChild(loseDiv);
+
+  const sortedPrizes = Object.entries(config.table).sort((a,b) => a[1] - b[1]);
+
+  sortedPrizes.forEach(([symId, val]) => {
+    const sym = SLOT_SYMBOLS[symId];
+    const div = document.createElement('div');
+    div.className = 'prize-grid-item';
+    if (symId === 'p10') {
+      div.style.background = 'linear-gradient(160deg, rgba(255,215,0,0.15), rgba(200,150,0,0.25))';
+      div.style.borderColor = 'rgba(255,215,0,0.4)';
+    }
+    div.innerHTML = `
+      <img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${val}">
+      <div class="prize-val" ${symId === 'p10' ? 'style="color: var(--gold);"' : ''}>
+        <img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${val}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  openModal('slots-prizes-modal');
 }
 
 /* ================= TASKS & DAILY LOGIN ================= */
