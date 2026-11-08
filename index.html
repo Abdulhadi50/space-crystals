@@ -103,7 +103,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .app-container.ready { display: flex; }
 
-/* App bar زجاجي فاتح + بانر صورة يملأ العرض */
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
@@ -133,7 +132,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
   left: 16px; right: 16px;
   display: flex; justify-content: space-between; z-index: 51;
-  transition: top 0.3s var(--ease-out);
 }
 .balance-pill {
   display: flex; align-items: center;
@@ -847,51 +845,49 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
-/* ============ CRASH GAME (Light Theme) ============ */
-.main-scroll.crash-mode { padding: 0; overflow: hidden; }
-#view-crash.active {
-  display: flex; flex-direction: column; height: 100%;
-  position: relative;
-  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 60px);
-  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
-  animation: viewIn 0.35s var(--ease-out);
+/* ============ CRASH GAME (Full Screen) ============ */
+#view-crash {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  /* تدرج من أزرق (75%) إلى أبيض خفيف */
+  background: linear-gradient(to bottom,
+    #5fb8ff 0%,
+    #7bc6ff 15%,
+    #9ed3ff 35%,
+    #bde0ff 55%,
+    #d5ecff 68%,
+    #e8f5ff 75%,
+    #f4faff 88%,
+    #ffffff 100%);
+  padding-top: env(safe-area-inset-top, 0);
+  overflow: hidden;
 }
-.crash-game-area { position: relative; z-index: 1; }
-.crash-bottom-panel { position: relative; z-index: 1; }
+#view-crash.active {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-out;
+}
 
 .crash-game-area {
-  flex: 1; position: relative; display: flex;
-  align-items: center; justify-content: center;
-  overflow: hidden; min-height: 0;
-  contain: layout style paint;
+  flex: 0 0 70%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 0;
   transition: transform 0.35s var(--ease-out);
 }
 .crash-game-area.cashout-anim { transform: scale(1.03); }
-
-/* Sky Background - Full Screen */
-.crash-sky-bg {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  background: linear-gradient(to bottom,
-    #4a9eff 0%,
-    #6fb5ff 25%,
-    #a8d8ff 50%,
-    #cceaff 70%,
-    #e0f0ff 78%,
-    #f0f8ff 88%,
-    #ffffff 100%);
-  z-index: 0;
-  pointer-events: none;
-}
 .crash-game-area::after {
   content: ''; position: absolute; inset: 0;
   background: radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255,255,255,0.25), transparent 70%);
   pointer-events: none; z-index: 1;
 }
 
-/* Air Waves Effect */
+/* Air Waves */
 .crash-air-waves {
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
   opacity: 0; transition: opacity 0.4s ease;
@@ -899,11 +895,9 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .crash-game-area.flying .crash-air-waves { opacity: 1; }
 .crash-air-waves span {
-  position: absolute;
-  height: 2px;
+  position: absolute; height: 2px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
-  border-radius: 2px;
-  animation: airWave 0.8s linear infinite;
+  border-radius: 2px; animation: airWave 0.8s linear infinite;
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 .crash-air-waves span:nth-child(1) { top: 25%; width: 100px; animation-delay: 0s; }
@@ -918,64 +912,34 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 .crash-multiplier-display {
-  position: absolute;
-  left: 50%; top: 12%;
-  transform: translateX(-50%);
-  font-size: 68px;
-  font-weight: 900;
-  color: #182C44;
+  position: absolute; left: 50%; top: 18%; transform: translateX(-50%);
+  font-size: 68px; font-weight: 900; color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
   letter-spacing: -2px;
   text-shadow: 0 6px 30px rgba(24,44,68,0.15), 0 0 60px rgba(255,255,255,0.6);
-  z-index: 5;
-  pointer-events: none;
-  direction: ltr;
+  z-index: 5; pointer-events: none; direction: ltr;
+  white-space: nowrap; line-height: 1;
   transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
-  white-space: nowrap;
-  line-height: 1;
 }
 .crash-multiplier-display:empty { opacity: 0; }
-.crash-multiplier-display.waiting {
-  opacity: 0.6;
-  color: #5b5d6e;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  font-size: 52px;
-}
-.crash-multiplier-display.cashed {
-  color: var(--success);
-  text-shadow: 0 6px 30px rgba(15,169,110,0.4), 0 0 60px rgba(15,169,110,0.2);
-}
-.crash-multiplier-display.crashed {
-  color: var(--danger);
-  text-shadow: 0 6px 30px rgba(224,56,88,0.4), 0 0 60px rgba(224,56,88,0.2);
-}
+.crash-multiplier-display.waiting { opacity: 0.6; color: #5b5d6e; font-size: 52px; text-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+.crash-multiplier-display.cashed { color: var(--success); text-shadow: 0 6px 30px rgba(15,169,110,0.4); }
+.crash-multiplier-display.crashed { color: var(--danger); text-shadow: 0 6px 30px rgba(224,56,88,0.4); }
 
 .crash-countdown-display {
-  position: absolute;
-  left: 50%; bottom: 20%;
-  transform: translateX(-50%);
-  font-size: 44px;
-  font-weight: 900;
-  color: #182C44;
+  position: absolute; left: 50%; bottom: 15%; transform: translateX(-50%);
+  font-size: 44px; font-weight: 900; color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
   letter-spacing: -1px;
   text-shadow: 0 4px 26px rgba(24,44,68,0.15), 0 0 40px rgba(255,255,255,0.5);
-  z-index: 5;
-  pointer-events: none;
-  opacity: 0;
+  z-index: 5; pointer-events: none; opacity: 0; direction: ltr; line-height: 1;
   transition: opacity 0.25s;
-  direction: ltr;
-  line-height: 1;
 }
 .crash-countdown-display.active { opacity: 1; }
 
 .crash-rocket, .crash-waiting-icon, .crash-explosion {
-  position: absolute;
-  transition: opacity 0.25s ease;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2;
-  display: block;
+  position: absolute; transition: opacity 0.25s ease; opacity: 0;
+  pointer-events: none; z-index: 2; display: block;
 }
 .crash-rocket { width: 180px; height: 180px; filter: drop-shadow(0 12px 28px rgba(30,40,80,0.3)) drop-shadow(0 0 26px rgba(91,141,239,0.15)); }
 .crash-rocket.active { opacity: 1; }
@@ -984,21 +948,32 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
 .crash-explosion.active { opacity: 1; }
 
-.crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
+.crash-bottom-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8px 16px;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* مساحة لزر الخروج */
+  z-index: 10;
+  min-height: 0;
+}
+
+/* بطاقة الرهان مدموجة مع الخلفية */
 .crash-bet-controls {
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0.40) 0%,
-    rgba(200, 225, 255, 0.55) 35%,
-    rgba(255, 255, 255, 0.80) 100%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  backdrop-filter: blur(28px) saturate(180%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.62) 100%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
   border-radius: 22px;
-  padding: 12px; display: flex; flex-direction: column;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 -10px 35px rgba(80, 140, 220, 0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(30, 40, 80, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
   contain: layout style paint;
 }
+
 .crash-history-strip {
   display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;
   scrollbar-width: none; direction: ltr;
@@ -1013,20 +988,13 @@ input:checked + .slider:before { transform: translateX(22px); }
   transition: max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease, border-width 0.3s ease;
   max-width: 200px; overflow: hidden; white-space: nowrap;
 }
-.crash-history-pill.removing {
-  opacity: 0;
-  max-width: 0;
-  padding: 4px 0;
-  border-width: 0;
-}
-.crash-round-timer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); font-family: system-ui, -apple-system, sans-serif; display: none; }
+.crash-history-pill.removing { opacity: 0; max-width: 0; padding: 4px 0; border-width: 0; }
 .crash-toggle-row { display: flex; justify-content: flex-end; align-items: center; }
 .crash-toggle-left { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
 .crash-toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
 .crash-toggle-switch input { opacity: 0; width: 0; height: 0; }
 .crash-toggle-slider {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0,0,0,0.12);
+  position: absolute; inset: 0; background-color: rgba(0,0,0,0.12);
   transition: .35s var(--ease-out); border-radius: 20px;
   border: 1px solid rgba(0,0,0,0.05);
 }
@@ -1064,8 +1032,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-bet-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .crash-quick-chips { display: flex; gap: 6px; }
 .crash-quick-chips button {
-  flex: 1;
-  background: rgba(0,0,0,0.04);
+  flex: 1; background: rgba(0,0,0,0.04);
   border: 1px solid rgba(0,0,0,0.06); color: var(--text-primary);
   padding: 8px; border-radius: 10px; font-weight: 700; font-size: 12px;
   direction: ltr; font-family: system-ui, -apple-system, sans-serif;
@@ -1086,53 +1053,44 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
 
-/* ============ IN-GAME MODE (Fullscreen Game) ============ */
-.app-container.in-game .top-app-bar {
-  display: none !important;
-}
-.app-container.in-game .floating-balances {
-  top: calc(var(--safe-top) + 10px) !important;
-}
-.app-container.in-game .main-scroll {
-  padding: 0 !important;
-}
-.app-container.in-game #view-crash.active {
-  padding-top: 0 !important;
-  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
-}
-.app-container.in-game .dock-home-btn,
-.app-container.in-game .nav-profile,
-.app-container.in-game .dock-nav .nav-item[data-view] {
-  display: none !important;
-}
-.app-container.in-game .dock-nav::before {
-  display: none !important;
-}
-.app-container.in-game .dock-nav {
-  justify-content: center;
-}
-
-/* Exit Game Button */
-.nav-exit {
+/* ============ EXIT GAME BUTTON (بحجم الأزرار الثلاثة) ============ */
+.exit-game-btn {
   display: none;
-  flex: 1;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
+  position: absolute;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  left: 14px;
+  right: 14px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 8px 24px rgba(30, 40, 80, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #182C44;
   font-size: 15px;
   font-weight: 800;
-  color: #fff;
-  background: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
-  border-radius: 26px;
-  box-shadow: 0 8px 24px rgba(230, 57, 80, 0.32), inset 0 1px 0 rgba(255,255,255,0.2);
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 600;
   transition: transform 0.15s var(--spring);
-  padding: 0 20px;
 }
-.nav-exit:active { transform: scale(0.97); }
-.nav-exit i { font-size: 16px; }
-.app-container.in-game .nav-exit { display: flex; }
+.exit-game-btn:active { transform: scale(0.97); }
+.exit-game-btn i { font-size: 18px; color: #209FD2; }
+
+/* ============ إخفاء الواجهة الرئيسية أثناء اللعب ============ */
+body.in-game .top-app-bar,
+body.in-game .floating-balances,
+body.in-game .dock {
+  display: none !important;
+}
+body.in-game .exit-game-btn {
+  display: flex;
+}
+body.in-game .main-scroll {
+  overflow: hidden;
+}
 
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
@@ -1207,7 +1165,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="card-video-icon" id="home-saudi-tgs"></div>
         </div>
 
-        <!-- Crash Card -->
         <div class="home-card card-crash" onclick="go('crash')">
           <div class="card-text">
             <h3>Crash</h3>
@@ -1481,49 +1438,48 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- CRASH GAME VIEW -->
-    <div class="view" id="view-crash">
-      <div class="crash-sky-bg"></div>
-      <div class="crash-game-area" id="crash-game-area">
-        <div class="crash-air-waves">
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="crash-multiplier-display" id="crash-mult-display"></div>
-        <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
-        <div class="crash-waiting-icon tgs-box" id="crash-waiting-tgs"></div>
-        <div class="crash-explosion tgs-box" id="crash-explosion-tgs"></div>
-        <div class="crash-countdown-display" id="crash-countdown-display">6s</div>
+  </main>
+
+  <!-- CRASH GAME VIEW (خارج main-scroll ليملأ الشاشة) -->
+  <div id="view-crash">
+    <div class="crash-game-area" id="crash-game-area">
+      <div class="crash-air-waves">
+        <span></span><span></span><span></span><span></span>
       </div>
-      <div class="crash-bottom-panel">
-        <div class="crash-bet-controls">
-          <div class="crash-history-strip" id="crash-history-strip"></div>
-          <div class="crash-toggle-row">
-            <div class="crash-toggle-left">
-              <label class="crash-toggle-switch">
-                <input type="checkbox" id="crash-auto-cashout-toggle" onchange="crashToggleAutoCashout(this)">
-                <span class="crash-toggle-slider"></span>
-              </label>
-              <div class="crash-auto-input-wrap">
-                <span>x</span>
-                <input type="text" id="crash-auto-cashout-val" value="2.00" onchange="crashUpdateAutoCashout(this)">
-              </div>
+      <div class="crash-multiplier-display" id="crash-mult-display"></div>
+      <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
+      <div class="crash-waiting-icon tgs-box" id="crash-waiting-tgs"></div>
+      <div class="crash-explosion tgs-box" id="crash-explosion-tgs"></div>
+      <div class="crash-countdown-display" id="crash-countdown-display">6s</div>
+    </div>
+    <div class="crash-bottom-panel">
+      <div class="crash-bet-controls">
+        <div class="crash-history-strip" id="crash-history-strip"></div>
+        <div class="crash-toggle-row">
+          <div class="crash-toggle-left">
+            <label class="crash-toggle-switch">
+              <input type="checkbox" id="crash-auto-cashout-toggle" onchange="crashToggleAutoCashout(this)">
+              <span class="crash-toggle-slider"></span>
+            </label>
+            <div class="crash-auto-input-wrap">
+              <span>x</span>
+              <input type="text" id="crash-auto-cashout-val" value="2.00" onchange="crashUpdateAutoCashout(this)">
             </div>
           </div>
-          <div class="crash-bet-input-row">
-            <img src="https://up6.cc/2026/10/17932600818491.png">
-            <input type="number" id="crash-bet-input" value="1" min="1" max="1000" onchange="crashValidateBet()" placeholder="1">
-          </div>
-          <div class="crash-quick-chips">
-            <button onclick="crashAddBet(10)">+ 10</button>
-            <button onclick="crashAddBet(50)">+ 50</button>
-            <button onclick="crashAddBet(100)">+ 100</button>
-          </div>
-          <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
         </div>
+        <div class="crash-bet-input-row">
+          <img src="https://up6.cc/2026/10/17932600818491.png">
+          <input type="number" id="crash-bet-input" value="1" min="1" max="1000" onchange="crashValidateBet()" placeholder="1">
+        </div>
+        <div class="crash-quick-chips">
+          <button onclick="crashAddBet(10)">+ 10</button>
+          <button onclick="crashAddBet(50)">+ 50</button>
+          <button onclick="crashAddBet(100)">+ 100</button>
+        </div>
+        <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
       </div>
     </div>
-
-  </main>
+  </div>
 
   <div class="dock">
     <div class="dock-home-btn active" data-view="home" onclick="go('home')">
@@ -1542,15 +1498,16 @@ input:checked + .slider:before { transform: translateX(22px); }
         <i class="fas fa-money-bill-transfer"></i>
         <span class="nav-text">سحب</span>
       </div>
-      <button class="nav-item nav-exit" onclick="exitGame()">
-        <i class="fas fa-door-open"></i>
-        <span>الخروج من اللعبة</span>
-      </button>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
       <i class="fas fa-user"></i>
     </div>
   </div>
+
+  <!-- زر الخروج من اللعبة -->
+  <button class="exit-game-btn" onclick="exitGame()">
+    <i class="fas fa-arrow-right"></i> خروج من اللعبة
+  </button>
 </div>
 
 <div class="modal-overlay" id="modalInsufficient">
@@ -1781,7 +1738,7 @@ async function initCountryTgs() {
     .catch(e => console.warn('uae TGS:', e.message));
   TGS.playIn(document.getElementById('home-saudi-tgs'), ZIP_SAUDI)
     .catch(e => console.warn('saudi TGS:', e.message));
-    
+
   TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('home crash TGS:', e.message));
 
@@ -1920,20 +1877,18 @@ window.addEventListener('pagehide', () => {
   saveActiveRoundState();
 });
 
-function go(viewName) {
-  // ====== إدارة وضع اللعب الكامل ======
-  const GAME_VIEWS = ['crash'];
-  const appContainer = document.getElementById('app');
-  if (GAME_VIEWS.includes(viewName)) {
-    appContainer.classList.add('in-game');
-  } else {
-    appContainer.classList.remove('in-game');
-  }
-  // ====== نهاية الإضافة ======
+function exitGame() {
+  go('home');
+}
 
+function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
   if (target) target.classList.add('active');
+
+  // تفعيل وضع اللعبة (إخفاء الواجهة)
+  const isGame = (viewName === 'crash');
+  document.body.classList.toggle('in-game', isGame);
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
@@ -1947,7 +1902,7 @@ function go(viewName) {
 
   if (activeNav) {
     activeNav.classList.add('active');
-    const items = Array.from(document.querySelectorAll('.nav-item[data-view]'));
+    const items = Array.from(document.querySelectorAll('.nav-item'));
     const index = items.indexOf(activeNav);
     document.querySelector('.dock-nav').style.setProperty('--nav-index', index);
   } else if (activeProfile) {
@@ -1955,10 +1910,8 @@ function go(viewName) {
   }
 
   const mainScroll = document.getElementById('mainScroll');
-  mainScroll.classList.remove('crash-mode');
 
   if (viewName === 'crash') {
-    mainScroll.classList.add('crash-mode');
     startCrashGame();
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
@@ -1966,12 +1919,8 @@ function go(viewName) {
   } else if (viewName === 'withdraw') {
     loadWithdrawalHistory();
   }
-  
-  mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
-function exitGame() {
-  go('home');
+  mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateBalances() {
@@ -2114,10 +2063,10 @@ async function loadTasks() {
       const isTicket = task.rewardType === 'ticket';
       const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
       const isCompleted = user.completedTasks.includes(task.id);
-      let iconHtml = task.imageUrl 
-        ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` 
+      let iconHtml = task.imageUrl
+        ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">`
         : `<i class="fab fa-telegram"></i>`;
-      let actionBtn = isCompleted 
+      let actionBtn = isCompleted
         ? `<button class="start-btn" style="background: rgba(0,0,0,0.06); color: var(--text-secondary); box-shadow: none;" disabled>تم</button>`
         : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
       html += `
@@ -2928,11 +2877,11 @@ function crashStartFlyingPhase() {
 
 function crashGenerateCrashPoint() {
   const r = Math.random();
-  if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
-  if (r < 0.80) return 2.00 + Math.random() * 8.00; // 30% -> 2.00 to 10.00
-  if (r < 0.90) return 10.00 + Math.random() * 10.00; // 10% -> 10.00 to 20.00
-  if (r < 0.95) return 20.00 + Math.random() * 30.00; // 5% -> 20.00 to 50.00
-  return 50.00 + Math.random() * 50.00; // 5% -> 50.00 to 100.00
+  if (r < 0.50) return 1.00 + Math.random() * 1.00;
+  if (r < 0.80) return 2.00 + Math.random() * 8.00;
+  if (r < 0.90) return 10.00 + Math.random() * 10.00;
+  if (r < 0.95) return 20.00 + Math.random() * 30.00;
+  return 50.00 + Math.random() * 50.00;
 }
 
 function crashHandleCrash() {
