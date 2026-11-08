@@ -34,10 +34,10 @@
   --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(255, 255, 255, 0.75);
-  --nav-border: rgba(0, 0, 0, 0.06);
-  --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.10), rgba(22, 24, 42, 0.03));
-  --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 16px rgba(30,40,80,0.08);
+  --nav-bg: rgba(255, 255, 255, 0.28);
+  --nav-border: rgba(255, 255, 255, 0.42);
+  --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.12), rgba(22, 24, 42, 0.04));
+  --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-platinum: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-blue: linear-gradient(135deg, #5B8DEF 0%, #3B6FDB 100%);
@@ -141,23 +141,13 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   backdrop-filter: blur(14px) saturate(170%);
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 999px;
-  padding: 4px 8px 4px 12px; gap: 8px;
+  padding: 6px 14px; gap: 8px;
   color: var(--text-primary); font-weight: 800; font-size: 16px;
   box-shadow: 0 6px 18px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
   transition: transform 0.2s var(--spring);
 }
 .balance-pill:active { transform: scale(0.96); }
 .balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
-.deposit-mini-btn {
-  background: var(--gradient-primary); color: #fff;
-  width: 24px; height: 24px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 800; line-height: 1;
-  margin-right: 2px; padding-bottom: 2px;
-  box-shadow: 0 3px 10px rgba(22,24,42,0.18), inset 0 1px 0 rgba(255,255,255,0.15);
-  transition: transform 0.15s var(--spring);
-}
-.deposit-mini-btn:active { transform: scale(0.88); }
 
 .main-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
@@ -185,21 +175,36 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card::before {
   content: ''; position: absolute; inset: 0;
   background: var(--card-accent, transparent);
-  pointer-events: none; border-radius: inherit; opacity: 0.85;
+  pointer-events: none; border-radius: inherit; opacity: 0.9;
 }
 .home-card > * { position: relative; z-index: 1; }
 .home-card:active { transform: scale(0.975); }
 .home-card.referral { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.18), transparent 62%); }
+.home-card.country-syria { --card-accent: radial-gradient(circle at 105% -10%, rgba(34,197,94,0.30), transparent 65%); }
+.home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
+.home-card.country-saudi { --card-accent: radial-gradient(circle at 105% -10%, rgba(16,120,60,0.34), transparent 65%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
-  font-size: 24px; font-weight: 800; margin-bottom: 4px;
+  font-size: 20px; font-weight: 800; margin-bottom: 4px;
   color: var(--text-primary); letter-spacing: -0.6px;
 }
-.home-card p { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
+.home-card p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 .home-card .card-icon {
   width: 95px; height: 95px; object-fit: contain;
   margin-left: -5px; transform: scale(1.06);
   filter: drop-shadow(0 8px 20px rgba(30,40,80,0.18));
+}
+.home-card .card-video-icon {
+  width: 95px; height: 95px;
+  margin-left: -5px;
+  background: transparent;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.home-card .card-video-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 /* ============ HEADERS ============ */
@@ -767,7 +772,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ DOCK ============ */
+/* ============ DOCK (أكثر شفافية + ضبابية أقل) ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -777,17 +782,17 @@ input:checked + .slider:before { transform: translateX(22px); }
   width: 56px; height: 56px; border-radius: 50%;
   background: var(--nav-bg);
   border: 1px solid var(--nav-border);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: blur(8px) saturate(160%);
   display: flex; align-items: center; justify-content: center;
   color: var(--text-secondary); font-size: 20px; flex-shrink: 0;
   transition: all 0.25s var(--spring);
-  box-shadow: 0 12px 34px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .dock-home-btn.active {
   color: var(--text-primary);
   border-color: rgba(59,111,219,0.55);
-  box-shadow: 0 0 0 3px rgba(91,141,239,0.16), 0 12px 34px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .dock-home-btn:active { transform: scale(0.92); }
 .dock-nav {
@@ -798,9 +803,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: 32px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px;
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
-  box-shadow: 0 12px 34px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: blur(8px) saturate(160%);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .dock-nav::before {
   content: ''; position: absolute; z-index: 0;
@@ -824,26 +829,26 @@ input:checked + .slider:before { transform: translateX(22px); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
   background: var(--nav-bg);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: blur(8px) saturate(160%);
   border: 1px solid var(--nav-border);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.25s var(--spring);
   color: var(--text-secondary); font-size: 20px; overflow: hidden; flex-shrink: 0;
-  box-shadow: 0 10px 24px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 8px 24px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .nav-profile.active {
   border-color: rgba(59,111,219,0.55); color: var(--text-primary);
-  box-shadow: 0 0 0 3px rgba(91,141,239,0.16), 0 10px 24px rgba(30,40,80,0.10);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
-  .home-card h3 { font-size: 21px; }
-  .home-card .card-icon { width: 80px; height: 80px; }
+  .home-card h3 { font-size: 17px; }
+  .home-card .card-icon, .home-card .card-video-icon { width: 80px; height: 80px; }
   .amount-display input, .amount-display .dollar-sign { font-size: 2.5rem; }
   .stat-card { padding: 15px; gap: 10px; }
   .stat-info h3 { font-size: 17px; }
@@ -878,7 +883,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="balance-pill">
       <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
       <span id="topStars">0</span>
-      <button class="deposit-mini-btn" onclick="go('deposit')">+</button>
     </div>
   </div>
 
@@ -886,6 +890,31 @@ input:checked + .slider:before { transform: translateX(22px); }
     
     <div class="view active" id="view-home">
       <div class="home-cards">
+
+        <div class="home-card country-syria" onclick="go('referral')">
+          <div class="card-text">
+            <h3>الجمهورية العربية السورية</h3>
+            <p>اكتشف واربح</p>
+          </div>
+          <div class="card-video-icon" id="home-syria-tgs"></div>
+        </div>
+
+        <div class="home-card country-uae" onclick="go('referral')">
+          <div class="card-text">
+            <h3>الإمارات العربية المتحدة</h3>
+            <p>اكتشف واربح</p>
+          </div>
+          <div class="card-video-icon" id="home-uae-tgs"></div>
+        </div>
+
+        <div class="home-card country-saudi" onclick="go('referral')">
+          <div class="card-text">
+            <h3>المملكة العربية السعودية</h3>
+            <p>اكتشف واربح</p>
+          </div>
+          <div class="card-video-icon" id="home-saudi-tgs"></div>
+        </div>
+
         <div class="home-card referral" onclick="go('referral')">
           <div class="card-text">
             <h3>دعوة الأصدقاء</h3>
@@ -1237,7 +1266,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
       <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
       <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
-      <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمل خسارته.</li>
+      <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمله من خسارة.</li>
     </ul>
     <button class="modal-btn" onclick="closeModal('modal-terms')">موافق</button>
   </div>
@@ -1284,7 +1313,6 @@ const FIREBASE_CONFIG = {
 
 const API_BASE = 'https://puppy-merge-api.starlimitedcom.workers.dev';
 
-/* ================= USER DATA ================= */
 let user = {
   id: '123456789', name: 'لاعب', photo: '',
   stars: 25, tickets: 20, referrals: 0, totalWithdrawn: 0,
@@ -1306,6 +1334,91 @@ let tasksCache = [];
 
 const tg = window.Telegram?.WebApp;
 let db = null;
+
+/* ============ TGS LOADER ============ */
+const TGS = {
+  _zipCache: {},
+  _loading: {},
+  _anims: {},
+
+  async loadZip(zipName) {
+    if (this._zipCache[zipName]) return this._zipCache[zipName];
+    if (this._loading[zipName]) return this._loading[zipName];
+
+    this._loading[zipName] = (async () => {
+      if (!window.JSZip || !window.pako) throw new Error('libraries not ready');
+      const url = './' + zipName;
+      const resp = await fetch(url, { cache: 'force-cache' });
+      if (!resp.ok) throw new Error('ZIP fetch ' + resp.status + ' at ' + url);
+      const buf = await resp.arrayBuffer();
+      const zip = await JSZip.loadAsync(buf);
+      const files = Object.values(zip.files)
+        .filter(f => !f.dir && f.name.toLowerCase().endsWith('.tgs'))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const list = [];
+      for (const f of files) {
+        try {
+          const compressed = await f.async('uint8array');
+          const jsonText = pako.ungzip(compressed, { to: 'string' });
+          list.push(JSON.parse(jsonText));
+        } catch (e) { console.warn('TGS parse skip:', f.name, e); }
+      }
+      if (!list.length) throw new Error('لا يوجد TGS صالح في ' + zipName);
+      this._zipCache[zipName] = list;
+      return list;
+    })();
+
+    try { return await this._loading[zipName]; }
+    finally { delete this._loading[zipName]; }
+  },
+
+  async playIn(element, zipName, opts = {}) {
+    if (!element) throw new Error('element missing');
+    const list = await this.loadZip(zipName);
+    const index = opts.index || 0;
+    const data = list[index % list.length];
+    if (this._anims[element.id]) {
+      try { this._anims[element.id].destroy(); } catch(e) {}
+    }
+    element.innerHTML = '';
+    const anim = lottie.loadAnimation({
+      container: element,
+      renderer: 'svg',
+      loop: opts.loop !== false,
+      autoplay: true,
+      animationData: data,
+      rendererSettings: { preserveAspectRatio: opts.preserveAspectRatio || 'xMidYMid meet' }
+    });
+    try { anim.setSpeed(opts.speed || 1.2); } catch(e) {}
+    this._anims[element.id] = anim;
+    return anim;
+  },
+
+  replayAll() {
+    Object.values(this._anims || {}).forEach(a => {
+      try { a.play(); } catch(e) {}
+    });
+  }
+};
+
+const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
+const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
+const ZIP_SAUDI = 'RestrictedEmoji-920-tgs-by-StickerEmojiRobot.zip';
+
+async function initCountryTgs() {
+  for (let i = 0; i < 60; i++) {
+    if (window.lottie && window.JSZip && window.pako) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if (!window.lottie) { console.warn('lottie لم يُحمَّل'); return; }
+
+  TGS.playIn(document.getElementById('home-syria-tgs'), ZIP_SYRIA)
+    .catch(e => console.warn('syria TGS:', e.message));
+  TGS.playIn(document.getElementById('home-uae-tgs'), ZIP_UAE)
+    .catch(e => console.warn('uae TGS:', e.message));
+  TGS.playIn(document.getElementById('home-saudi-tgs'), ZIP_SAUDI)
+    .catch(e => console.warn('saudi TGS:', e.message));
+}
 
 async function calibrateServerTime() {
   if (!db) return;
@@ -1410,6 +1523,7 @@ async function syncUserData(updates) {
 
 document.addEventListener('DOMContentLoaded', () => {
   initTelegram();
+  initCountryTgs();
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
   initFirebase();
@@ -1421,6 +1535,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && db) {
+    TGS.replayAll();
     calibrateServerTime().then(() => initDailyLogin());
   }
 });
