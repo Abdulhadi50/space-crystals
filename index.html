@@ -46,6 +46,7 @@
   --gradient-danger: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
   --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
   --shadow-glass: 0 6px 22px rgba(30, 40, 80, 0.06), inset 0 1px 0 rgba(255,255,255,0.85);
+  --appbar-banner: url('https://up6.cc/2026/11/17941304669751.jpg');
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
@@ -102,30 +103,29 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 }
 .app-container.ready { display: flex; }
 
-/* App bar زجاجي فاتح + TGS كما كان يعمل */
+/* App bar زجاجي فاتح + بانر صورة يملأ العرض */
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
-  background: rgba(255, 255, 255, 0.5);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
-  backdrop-filter: blur(22px) saturate(180%);
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   border: none; border-radius: 0; box-shadow: none;
   z-index: 50; padding-top: var(--safe-top);
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,0.55) 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,0.55) 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0,0,0,0.6) 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0,0,0,0.6) 80%, transparent 100%);
 }
 .top-app-bar-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.72;
-}
-.top-app-bar-bg svg {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
+  opacity: 1;
+  background-image: var(--appbar-banner);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
 
 .floating-balances {
@@ -868,7 +868,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 <div class="app-container" id="app">
   <header class="top-app-bar">
-    <div class="top-app-bar-bg" id="appbar-tgs"></div>
+    <div class="top-app-bar-bg"></div>
   </header>
   <div class="floating-balances">
     <div class="balance-pill">
@@ -1408,103 +1408,8 @@ async function syncUserData(updates) {
   } catch (e) {}
 }
 
-/* ============ TGS LOADER ============ */
-const TGS = {
-  _zipCache: {},
-  _loading: {},
-  _anims: {},
-
-  async loadZip(zipName) {
-    if (this._zipCache[zipName]) return this._zipCache[zipName];
-    if (this._loading[zipName]) return this._loading[zipName];
-
-    this._loading[zipName] = (async () => {
-      if (!window.JSZip || !window.pako) throw new Error('libraries not ready');
-      const url = './' + zipName;
-      const resp = await fetch(url, { cache: 'force-cache' });
-      if (!resp.ok) throw new Error('ZIP fetch ' + resp.status + ' at ' + url);
-      const buf = await resp.arrayBuffer();
-      const zip = await JSZip.loadAsync(buf);
-      const files = Object.values(zip.files)
-        .filter(f => !f.dir && f.name.toLowerCase().endsWith('.tgs'))
-        .sort((a, b) => a.name.localeCompare(b.name));
-      const list = [];
-      for (const f of files) {
-        try {
-          const compressed = await f.async('uint8array');
-          const jsonText = pako.ungzip(compressed, { to: 'string' });
-          list.push(JSON.parse(jsonText));
-        } catch (e) { console.warn('TGS parse skip:', f.name, e); }
-      }
-      if (!list.length) throw new Error('لا يوجد TGS صالح في ' + zipName);
-      this._zipCache[zipName] = list;
-      return list;
-    })();
-
-    try { return await this._loading[zipName]; }
-    finally { delete this._loading[zipName]; }
-  },
-
-  async playIn(element, zipName, opts = {}) {
-    if (!element) throw new Error('element missing');
-    const list = await this.loadZip(zipName);
-    const index = opts.index || 0;
-    const data = list[index % list.length];
-    if (this._anims[element.id]) {
-      try { this._anims[element.id].destroy(); } catch(e) {}
-    }
-    element.innerHTML = '';
-    const anim = lottie.loadAnimation({
-      container: element,
-      renderer: 'svg',
-      loop: opts.loop !== false,
-      autoplay: true,
-      animationData: data,
-      rendererSettings: { preserveAspectRatio: opts.preserveAspectRatio || 'xMidYMid meet' }
-    });
-    try { anim.setSpeed(opts.speed || 1.4); } catch(e) {}
-    this._anims[element.id] = anim;
-    return anim;
-  },
-
-  replayAll() {
-    Object.values(this._anims || {}).forEach(a => {
-      try { a.play(); } catch(e) {}
-    });
-  },
-
-  replay(ids) {
-    ids.forEach(id => {
-      const a = this._anims[id];
-      if (a) { try { a.play(); } catch(e) {} }
-    });
-  }
-};
-
-const ZIP_APPBAR = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
-
-async function initAppBarTgs() {
-  for (let i = 0; i < 60; i++) {
-    if (window.lottie && window.JSZip && window.pako) break;
-    await new Promise(r => setTimeout(r, 100));
-  }
-  if (!window.lottie) { console.warn('lottie لم يُحمَّل'); return; }
-  const el = document.getElementById('appbar-tgs');
-  if (!el) return;
-  try {
-    await TGS.playIn(el, ZIP_APPBAR, {
-      loop: true,
-      speed: 1.1,
-      preserveAspectRatio: 'xMidYMid slice'
-    });
-  } catch (e) {
-    console.warn('appbar TGS:', e.message);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   initTelegram();
-  initAppBarTgs();
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
   initFirebase();
@@ -1515,13 +1420,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // نترك الأنيميشن يعمل
-  } else {
-    if (typeof TGS !== 'undefined') TGS.replayAll();
-    if (db) {
-      calibrateServerTime().then(() => initDailyLogin());
-    }
+  if (!document.hidden && db) {
+    calibrateServerTime().then(() => initDailyLogin());
   }
 });
 
