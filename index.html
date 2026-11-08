@@ -181,7 +181,6 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.referral { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.18), transparent 62%); }
 .home-card.country-syria { --card-accent: radial-gradient(circle at 105% -10%, rgba(34,197,94,0.30), transparent 65%); }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
-.home-card.country-saudi { --card-accent: radial-gradient(circle at 105% -10%, rgba(16,120,60,0.34), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
@@ -1033,7 +1032,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   pointer-events: none; z-index: 1;
 }
 
-/* Air Waves Effect */
+/* Air Waves Effect (من أعلى اليمين إلى أسفل اليسار) */
 .crash-air-waves {
   position: absolute; inset: 0; pointer-events: none; z-index: 1;
   opacity: 0; transition: opacity 0.4s ease;
@@ -1048,20 +1047,20 @@ input:checked + .slider:before { transform: translateX(22px); }
   animation: airWave 0.8s linear infinite;
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
-.crash-air-waves span:nth-child(1) { top: 25%; width: 100px; animation-delay: 0s; }
-.crash-air-waves span:nth-child(2) { top: 45%; width: 180px; animation-delay: 0.15s; }
-.crash-air-waves span:nth-child(3) { top: 65%; width: 140px; animation-delay: 0.3s; }
+.crash-air-waves span:nth-child(1) { top: 20%; width: 100px; animation-delay: 0s; }
+.crash-air-waves span:nth-child(2) { top: 40%; width: 180px; animation-delay: 0.15s; }
+.crash-air-waves span:nth-child(3) { top: 60%; width: 140px; animation-delay: 0.3s; }
 .crash-air-waves span:nth-child(4) { top: 80%; width: 220px; animation-delay: 0.45s; }
 @keyframes airWave {
-  0% { transform: translateX(100vw) scaleX(0.5); opacity: 0; }
+  0% { transform: translate(100vw, -100vh) rotate(-45deg) scaleX(0.5); opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% { transform: translateX(-100vw) scaleX(1.5); opacity: 0; }
+  100% { transform: translate(-100vw, 100vh) rotate(-45deg) scaleX(1.5); opacity: 0; }
 }
 
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 18%; /* زيادة التباعد */
+  left: 50%; top: 5%; /* رفع الرقم للأعلى */
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
@@ -1083,10 +1082,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   text-shadow: 0 4px 20px rgba(0,0,0,0.05);
   font-size: 52px;
 }
-.crash-multiplier-display.cashed {
-  color: var(--success);
-  text-shadow: 0 6px 30px rgba(15,169,110,0.4), 0 0 60px rgba(15,169,110,0.2);
-}
+/* إزالة تغيير اللون عند السحب */
+/* .crash-multiplier-display.cashed { color: var(--success); } */
 .crash-multiplier-display.crashed {
   color: var(--danger);
   text-shadow: 0 6px 30px rgba(224,56,88,0.4), 0 0 60px rgba(224,56,88,0.2);
@@ -1339,14 +1336,6 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>اكتشف واربح</p>
           </div>
           <div class="card-video-icon" id="home-uae-tgs"></div>
-        </div>
-
-        <div class="home-card country-saudi" onclick="go('referral')">
-          <div class="card-text">
-            <h3>المملكة العربية السعودية</h3>
-            <p>اكتشف واربح</p>
-          </div>
-          <div class="card-video-icon" id="home-saudi-tgs"></div>
         </div>
 
         <!-- Slots Card -->
@@ -2036,13 +2025,13 @@ const TGS = {
   }
 };
 
-const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
-const ZIP_WAITING   = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
-const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
+// الملفات الجديدة
+const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-00-tgs.zip';
+const ZIP_WAITING   = 'JessicaRabbit-013-tgs-by-StickerEmojiRobot.zip';
+const ZIP_EXPLOSION = 'JessicaRabbit_by_StickerEmojiRobot-021-tgs.zip';
 
 const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
-const ZIP_SAUDI = 'RestrictedEmoji-920-tgs-by-StickerEmojiRobot.zip';
 
 async function initCountryTgs() {
   for (let i = 0; i < 60; i++) {
@@ -2055,8 +2044,6 @@ async function initCountryTgs() {
     .catch(e => console.warn('syria TGS:', e.message));
   TGS.playIn(document.getElementById('home-uae-tgs'), ZIP_UAE)
     .catch(e => console.warn('uae TGS:', e.message));
-  TGS.playIn(document.getElementById('home-saudi-tgs'), ZIP_SAUDI)
-    .catch(e => console.warn('saudi TGS:', e.message));
     
   TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
     .catch(e => console.warn('home crash TGS:', e.message));
@@ -3170,13 +3157,13 @@ function crashSetExplosionActive(active) {
   }
 }
 
+// دالة معدلة لإزالة تغيير اللون عند السحب
 function crashSetMultiplierDisplay(text, state) {
   const el = document.getElementById('crash-mult-display');
   if (!el) return;
   el.textContent = text;
-  el.classList.remove('waiting', 'cashed', 'crashed');
+  el.classList.remove('waiting', 'crashed'); // أزلنا 'cashed'
   if (state === 'waiting') el.classList.add('waiting');
-  else if (state === 'cashed') el.classList.add('cashed');
   else if (state === 'crashed') el.classList.add('crashed');
 }
 
@@ -3438,7 +3425,7 @@ function crashStartFlyingPhase() {
 
     if (isCrashViewActive()) {
       crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
-        crashState.hasCashedOut ? 'cashed' : '');
+        crashState.hasCashedOut ? '' : '');
       if (crashState.hasBet && !crashState.hasCashedOut) {
         if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
       }
@@ -3527,7 +3514,7 @@ function crashDoCashOut() {
   const winAmount = crashState.activeBet * crashState.multiplier;
 
   if (isCrashViewActive()) {
-    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', ''); // لم يعد يتحول للأخضر
   }
 
   user.stars += winAmount;
