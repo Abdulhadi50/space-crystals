@@ -141,17 +141,17 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
   backdrop-filter: blur(14px) saturate(170%);
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 999px;
-  padding: 6px 14px; gap: 8px;
-  color: var(--text-primary); font-weight: 800; font-size: 16px;
+  padding: 3px 10px 3px 10px; gap: 6px;
+  color: var(--text-primary); font-weight: 800; font-size: 15px;
   box-shadow: 0 6px 18px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
   transition: transform 0.2s var(--spring);
 }
 .balance-pill:active { transform: scale(0.96); }
-.balance-pill img { width: 24px; height: 24px; border-radius: 50%; }
+.balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
 
 .main-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: calc(var(--top-bar-height) + var(--safe-top) + 70px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
+  padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
   -webkit-overflow-scrolling: touch;
 }
 .view { display: none; }
@@ -183,6 +183,7 @@ img, video { pointer-events: none; -webkit-touch-callout: none; }
 .home-card.country-syria { --card-accent: radial-gradient(circle at 105% -10%, rgba(34,197,94,0.30), transparent 65%); }
 .home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.country-saudi { --card-accent: radial-gradient(circle at 105% -10%, rgba(16,120,60,0.34), transparent 65%); }
+.home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
 .home-card h3 {
   font-size: 20px; font-weight: 800; margin-bottom: 4px;
@@ -772,7 +773,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ DOCK (أكثر شفافية + ضبابية أقل) ============ */
+/* ============ DOCK ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -845,6 +846,227 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
+/* ============ CRASH GAME (Light Theme) ============ */
+.main-scroll.crash-mode { padding: 0; overflow: hidden; }
+#view-crash.active {
+  display: flex; flex-direction: column; height: 100%;
+  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 60px);
+  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
+  animation: viewIn 0.35s var(--ease-out);
+}
+.crash-game-area {
+  flex: 1; position: relative; display: flex;
+  align-items: center; justify-content: center;
+  overflow: hidden; min-height: 0;
+  contain: layout style paint;
+  transition: transform 0.35s var(--ease-out);
+}
+.crash-game-area.cashout-anim { transform: scale(1.03); }
+
+/* Sky Background */
+.crash-sky-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, #7bc6ff 0%, #cceaff 45%, #f0f8ff 80%, #ffffff 100%);
+  z-index: 0;
+}
+.crash-game-area::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255,255,255,0.25), transparent 70%);
+  pointer-events: none; z-index: 1;
+}
+
+/* Air Waves Effect */
+.crash-air-waves {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity 0.4s ease;
+  overflow: hidden;
+}
+.crash-game-area.flying .crash-air-waves { opacity: 1; }
+.crash-air-waves span {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  border-radius: 2px;
+  animation: airWave 0.8s linear infinite;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+}
+.crash-air-waves span:nth-child(1) { top: 25%; width: 100px; animation-delay: 0s; }
+.crash-air-waves span:nth-child(2) { top: 45%; width: 180px; animation-delay: 0.15s; }
+.crash-air-waves span:nth-child(3) { top: 65%; width: 140px; animation-delay: 0.3s; }
+.crash-air-waves span:nth-child(4) { top: 80%; width: 220px; animation-delay: 0.45s; }
+@keyframes airWave {
+  0% { transform: translateX(100vw) scaleX(0.5); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(-100vw) scaleX(1.5); opacity: 0; }
+}
+
+.crash-multiplier-display {
+  position: absolute;
+  left: 50%; top: 12%;
+  transform: translateX(-50%);
+  font-size: 68px;
+  font-weight: 900;
+  color: #182C44;
+  font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
+  letter-spacing: -2px;
+  text-shadow: 0 6px 30px rgba(24,44,68,0.15), 0 0 60px rgba(255,255,255,0.6);
+  z-index: 5;
+  pointer-events: none;
+  direction: ltr;
+  transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.crash-multiplier-display:empty { opacity: 0; }
+.crash-multiplier-display.waiting {
+  opacity: 0.6;
+  color: #5b5d6e;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  font-size: 52px;
+}
+.crash-multiplier-display.cashed {
+  color: var(--success);
+  text-shadow: 0 6px 30px rgba(15,169,110,0.4), 0 0 60px rgba(15,169,110,0.2);
+}
+.crash-multiplier-display.crashed {
+  color: var(--danger);
+  text-shadow: 0 6px 30px rgba(224,56,88,0.4), 0 0 60px rgba(224,56,88,0.2);
+}
+
+.crash-countdown-display {
+  position: absolute;
+  left: 50%; bottom: 20%;
+  transform: translateX(-50%);
+  font-size: 44px;
+  font-weight: 900;
+  color: #182C44;
+  font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 26px rgba(24,44,68,0.15), 0 0 40px rgba(255,255,255,0.5);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+  direction: ltr;
+  line-height: 1;
+}
+.crash-countdown-display.active { opacity: 1; }
+
+.crash-rocket, .crash-waiting-icon, .crash-explosion {
+  position: absolute;
+  transition: opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  display: block;
+}
+.crash-rocket { width: 180px; height: 180px; filter: drop-shadow(0 12px 28px rgba(30,40,80,0.3)) drop-shadow(0 0 26px rgba(91,141,239,0.15)); }
+.crash-rocket.active { opacity: 1; }
+.crash-waiting-icon { width: 130px; height: 130px; filter: drop-shadow(0 10px 22px rgba(30,40,80,0.2)); }
+.crash-waiting-icon.active { opacity: 1; }
+.crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
+.crash-explosion.active { opacity: 1; }
+
+.crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
+.crash-bet-controls {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-radius: 22px;
+  padding: 12px; display: flex; flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 28px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  contain: layout style paint;
+}
+.crash-history-strip {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;
+  scrollbar-width: none; direction: ltr;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.crash-history-strip::-webkit-scrollbar { display: none; }
+.crash-history-pill {
+  padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 800;
+  background: rgba(0,0,0,0.05); color: var(--text-primary); flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.05);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease, border-width 0.3s ease;
+  max-width: 200px; overflow: hidden; white-space: nowrap;
+}
+.crash-history-pill.removing {
+  opacity: 0;
+  max-width: 0;
+  padding: 4px 0;
+  border-width: 0;
+}
+.crash-round-timer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); font-family: system-ui, -apple-system, sans-serif; display: none; }
+.crash-toggle-row { display: flex; justify-content: flex-end; align-items: center; }
+.crash-toggle-left { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+.crash-toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+.crash-toggle-switch input { opacity: 0; width: 0; height: 0; }
+.crash-toggle-slider {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.12);
+  transition: .35s var(--ease-out); border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.crash-toggle-slider:before {
+  position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
+  background: linear-gradient(135deg, #FFFFFF, #E8E8F5);
+  transition: .35s var(--spring); border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(30,40,80,0.2);
+}
+.crash-toggle-switch input:checked + .crash-toggle-slider { background: var(--gradient-success); border-color: rgba(52,211,153,0.5); box-shadow: 0 0 12px rgba(52,211,153,0.4); }
+.crash-toggle-switch input:checked + .crash-toggle-slider:before { transform: translateX(16px); }
+.crash-auto-input-wrap { display: flex; align-items: center; gap: 4px; color: var(--text-primary); }
+.crash-auto-input-wrap input {
+  width: 46px; background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px; color: var(--text-primary);
+  font-weight: 700; font-size: 12px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+  padding: 2px 0;
+}
+.crash-bet-input-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(0,0,0,0.03);
+  padding: 4px; border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.crash-bet-input-row img { width: 20px; height: 20px; }
+.crash-bet-input-row input {
+  background: transparent; border: none; color: var(--text-primary);
+  font-size: 24px; font-weight: 800; width: 100px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+}
+.crash-bet-input-row input::-webkit-outer-spin-button,
+.crash-bet-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.crash-quick-chips { display: flex; gap: 6px; }
+.crash-quick-chips button {
+  flex: 1;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06); color: var(--text-primary);
+  padding: 8px; border-radius: 10px; font-weight: 700; font-size: 12px;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+  transition: transform 0.15s var(--spring), background 0.2s;
+}
+.crash-quick-chips button:active { transform: scale(0.95); background: rgba(0,0,0,0.08); }
+.crash-main-btn {
+  width: 100%; padding: 14px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 16px; font-weight: 800; color: #fff;
+  background: var(--gradient-blue);
+  direction: ltr;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 10px 26px rgba(59,111,219,0.3), inset 0 1px 0 rgba(255,255,255,0.28);
+}
+.crash-main-btn:active { transform: scale(0.97); }
+.crash-main-btn.cashout { background: var(--gradient-success); box-shadow: 0 10px 26px rgba(52,211,153,0.3), inset 0 1px 0 rgba(255,255,255,0.28); }
+.crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
+.crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
+
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
   .home-card h3 { font-size: 17px; }
@@ -855,6 +1077,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   .page-title { font-size: 23px; }
   .podium-item.rank-1 .podium-avatar { width: 76px; height: 76px; }
   .podium-item.rank-2 .podium-avatar, .podium-item.rank-3 .podium-avatar { width: 64px; height: 64px; }
+  .crash-multiplier-display { font-size: 54px; }
+  .crash-multiplier-display.waiting { font-size: 42px; }
+  .crash-countdown-display { font-size: 36px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -913,6 +1138,15 @@ input:checked + .slider:before { transform: translateX(22px); }
             <p>اكتشف واربح</p>
           </div>
           <div class="card-video-icon" id="home-saudi-tgs"></div>
+        </div>
+
+        <!-- Crash Card -->
+        <div class="home-card card-crash" onclick="go('crash')">
+          <div class="card-text">
+            <h3>Crash</h3>
+            <p>لعبة السرعة</p>
+          </div>
+          <div class="card-video-icon" id="home-crash-tgs"></div>
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
@@ -1180,6 +1414,48 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
+    <!-- CRASH GAME VIEW -->
+    <div class="view" id="view-crash">
+      <div class="crash-game-area" id="crash-game-area">
+        <div class="crash-sky-bg"></div>
+        <div class="crash-air-waves">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="crash-multiplier-display" id="crash-mult-display"></div>
+        <div class="crash-rocket tgs-box" id="crash-rocket-tgs"></div>
+        <div class="crash-waiting-icon tgs-box" id="crash-waiting-tgs"></div>
+        <div class="crash-explosion tgs-box" id="crash-explosion-tgs"></div>
+        <div class="crash-countdown-display" id="crash-countdown-display">6s</div>
+      </div>
+      <div class="crash-bottom-panel">
+        <div class="crash-bet-controls">
+          <div class="crash-history-strip" id="crash-history-strip"></div>
+          <div class="crash-toggle-row">
+            <div class="crash-toggle-left">
+              <label class="crash-toggle-switch">
+                <input type="checkbox" id="crash-auto-cashout-toggle" onchange="crashToggleAutoCashout(this)">
+                <span class="crash-toggle-slider"></span>
+              </label>
+              <div class="crash-auto-input-wrap">
+                <span>x</span>
+                <input type="text" id="crash-auto-cashout-val" value="2.00" onchange="crashUpdateAutoCashout(this)">
+              </div>
+            </div>
+          </div>
+          <div class="crash-bet-input-row">
+            <img src="https://up6.cc/2026/10/17932600818491.png">
+            <input type="number" id="crash-bet-input" value="1" min="1" max="1000" onchange="crashValidateBet()" placeholder="1">
+          </div>
+          <div class="crash-quick-chips">
+            <button onclick="crashAddBet(10)">+ 10</button>
+            <button onclick="crashAddBet(50)">+ 50</button>
+            <button onclick="crashAddBet(100)">+ 100</button>
+          </div>
+          <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <div class="dock">
@@ -1398,8 +1674,24 @@ const TGS = {
     Object.values(this._anims || {}).forEach(a => {
       try { a.play(); } catch(e) {}
     });
+  },
+
+  replay(ids) {
+    ids.forEach(id => {
+      const a = this._anims[id];
+      if (a) { try { a.play(); } catch(e) {} }
+    });
+  },
+
+  restart(id) {
+    const a = this._anims[id];
+    if (a) { try { a.goToAndPlay(0, true); } catch(e) {} }
   }
 };
+
+const ZIP_ROCKET    = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
+const ZIP_WAITING   = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
+const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
 
 const ZIP_SYRIA = 'RestrictedEmoji_by_StickerEmojiRobot-933-tgs.zip';
 const ZIP_UAE   = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
@@ -1418,6 +1710,18 @@ async function initCountryTgs() {
     .catch(e => console.warn('uae TGS:', e.message));
   TGS.playIn(document.getElementById('home-saudi-tgs'), ZIP_SAUDI)
     .catch(e => console.warn('saudi TGS:', e.message));
+    
+  TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET)
+    .catch(e => console.warn('home crash TGS:', e.message));
+
+  TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET)
+    .catch(e => console.warn('crash rocket TGS:', e.message));
+
+  TGS.playIn(document.getElementById('crash-waiting-tgs'), ZIP_WAITING)
+    .catch(e => console.warn('crash waiting TGS:', e.message));
+
+  TGS.playIn(document.getElementById('crash-explosion-tgs'), ZIP_EXPLOSION, { loop: false })
+    .catch(e => console.warn('crash explosion TGS:', e.message));
 }
 
 async function calibrateServerTime() {
@@ -1465,7 +1769,8 @@ function initFirebase() {
       fetchUserData(),
       loadTasks(),
       loadWithdrawalHistory(),
-      calibrateServerTime()
+      calibrateServerTime(),
+      loadCrashHistory()
     ]).then(() => {
       document.getElementById('splash').classList.add('hide');
       document.getElementById('app').classList.add('ready');
@@ -1540,6 +1845,10 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+window.addEventListener('pagehide', () => {
+  saveActiveRoundState();
+});
+
 function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
@@ -1565,8 +1874,19 @@ function go(viewName) {
   }
 
   const mainScroll = document.getElementById('mainScroll');
+  mainScroll.classList.remove('crash-mode');
+
+  if (viewName === 'crash') {
+    mainScroll.classList.add('crash-mode');
+    startCrashGame();
+    setTimeout(() => {
+      TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
+    }, 100);
+  } else if (viewName === 'withdraw') {
+    loadWithdrawalHistory();
+  }
+  
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
-  if (viewName === 'withdraw') loadWithdrawalHistory();
 }
 
 function updateBalances() {
@@ -1627,9 +1947,11 @@ async function initDailyLogin() {
     btn.disabled = false;
     btnText.innerText = 'استلام المكافأة';
     btn.style.background = 'var(--gradient-primary)';
+    btn.style.color = '#FFFFFF';
   } else {
     btn.disabled = true;
     btn.style.background = 'rgba(0,0,0,0.06)';
+    btn.style.color = 'var(--text-secondary)';
     const updateTimer = () => {
       const remain = user.nextDailyClaim - serverNow();
       if (remain <= 0) {
@@ -1637,6 +1959,7 @@ async function initDailyLogin() {
         btn.disabled = false;
         btnText.innerText = 'استلام المكافأة';
         btn.style.background = 'var(--gradient-primary)';
+        btn.style.color = '#FFFFFF';
         return;
       }
       btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
@@ -1659,6 +1982,7 @@ async function claimDailyReward() {
   btn.disabled = true;
   btnText.innerText = 'جاري التحقق...';
   btn.style.background = 'rgba(0,0,0,0.06)';
+  btn.style.color = 'var(--text-secondary)';
   try {
     const userRef = db.collection('puppy_users').doc(user.id);
     await db.runTransaction(async (transaction) => {
@@ -2179,6 +2503,500 @@ function showToast(msg) {
 function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('تم النسخ بنجاح!')); }
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+/* ================= CRASH GAME ================= */
+const crashState = {
+  status: 'idle',
+  multiplier: 1.00,
+  crashPoint: 1.00,
+  hasBet: false,
+  activeBet: 0,
+  hasCashedOut: false,
+  cashoutMultiplier: 0,
+  autoCashout: false,
+  autoCashoutValue: 2.00,
+  countdown: 6,
+  countdownInterval: null,
+  animationId: null,
+  startTime: 0,
+  waitingEndTime: 0,
+  roundId: null
+};
+
+let crashHistory = [];
+
+function isCrashViewActive() {
+  const v = document.getElementById('view-crash');
+  return v && v.classList.contains('active');
+}
+
+function crashSetRocketActive(active) {
+  const rocket = document.getElementById('crash-rocket-tgs');
+  if (!rocket) return;
+  rocket.classList.toggle('active', active);
+  if (active) TGS.replay(['crash-rocket-tgs']);
+}
+
+function crashSetWaitingActive(active) {
+  const waiting = document.getElementById('crash-waiting-tgs');
+  if (!waiting) return;
+  waiting.classList.toggle('active', active);
+  if (active) TGS.replay(['crash-waiting-tgs']);
+}
+
+function crashSetExplosionActive(active) {
+  const exp = document.getElementById('crash-explosion-tgs');
+  if (!exp) return;
+  exp.classList.toggle('active', active);
+  if (active) {
+    TGS.restart('crash-explosion-tgs');
+  }
+}
+
+function crashSetMultiplierDisplay(text, state) {
+  const el = document.getElementById('crash-mult-display');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('waiting', 'cashed', 'crashed');
+  if (state === 'waiting') el.classList.add('waiting');
+  else if (state === 'cashed') el.classList.add('cashed');
+  else if (state === 'crashed') el.classList.add('crashed');
+}
+
+function crashSetCountdownDisplay(text, visible) {
+  const el = document.getElementById('crash-countdown-display');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.toggle('active', !!visible);
+}
+
+async function loadCrashHistory() {
+  if (!db) { renderCrashHistoryStrip(); return; }
+  try {
+    const q = await db.collection('puppy_users').doc(user.id)
+      .collection('crash_rounds').orderBy('createdAt', 'desc').limit(5).get();
+    crashHistory = [];
+    q.forEach(doc => {
+      const d = doc.data();
+      if (d.multiplier) crashHistory.push({ multiplier: d.multiplier, result: d.result || 'played' });
+    });
+    renderCrashHistoryStrip();
+  } catch(e) {
+    console.error('loadCrashHistory', e);
+    renderCrashHistoryStrip();
+  }
+}
+async function saveCrashRound(multiplier, bet, result, roundId = null) {
+  if (!db) return;
+  try {
+    const id = roundId || crashState.roundId || ('r_' + user.id + '_' + Date.now());
+    await db.collection('puppy_users').doc(user.id)
+      .collection('crash_rounds').doc(id).set({
+        userId: user.id,
+        multiplier: Number(multiplier),
+        bet: Number(bet),
+        result: result,
+        winAmount: result === 'won' ? Number(bet) * Number(multiplier) : 0,
+        createdAt: Date.now()
+      }, { merge: true });
+  } catch(e) { console.error('saveCrashRound', e); }
+}
+async function saveActiveCrashRound(data) {
+  if (!db) return;
+  try {
+    await db.collection('puppy_crash_active').doc(user.id).set({
+      ...data, userId: user.id, updatedAt: Date.now()
+    });
+  } catch(e) { console.error('saveActiveCrashRound', e); }
+}
+async function clearActiveCrashRound() {
+  if (!db) return;
+  try { await db.collection('puppy_crash_active').doc(user.id).delete(); } catch(e) {}
+}
+async function getActiveCrashRound() {
+  if (!db) return null;
+  try {
+    const doc = await db.collection('puppy_crash_active').doc(user.id).get();
+    if (!doc.exists) return null;
+    const data = doc.data();
+
+    if (data.status === 'flying') {
+      const age = Date.now() - (data.updatedAt || 0);
+      if (age > 5 * 60 * 1000) {
+        await saveCrashRound(
+          data.crashPoint || 1, data.activeBet, 'lost',
+          'stale_' + (data.updatedAt || Date.now())
+        );
+        await clearActiveCrashRound();
+      }
+      return null;
+    }
+
+    if (data.updatedAt && (Date.now() - data.updatedAt > 10 * 60 * 1000)) {
+      await clearActiveCrashRound();
+      return null;
+    }
+    return data;
+  } catch(e) { return null; }
+}
+
+function saveActiveRoundState() {
+  if (!crashState.hasBet || crashState.hasCashedOut) return;
+
+  if (crashState.status === 'waiting') {
+    saveActiveCrashRound({
+      status: 'waiting',
+      activeBet: crashState.activeBet,
+      hasCashedOut: false
+    });
+  } else if (crashState.status === 'flying') {
+    const elapsed = (Date.now() - crashState.startTime) / 1000;
+    const currentMult = Math.pow(1.08, elapsed);
+    const finalMult = Math.min(currentMult, crashState.crashPoint);
+    const bet = crashState.activeBet;
+
+    saveCrashRound(finalMult, bet, 'lost');
+    clearActiveCrashRound();
+
+    crashState.hasBet = false;
+    crashState.activeBet = 0;
+    crashState.hasCashedOut = false;
+    crashState.cashoutMultiplier = 0;
+  }
+}
+
+function renderCrashHistoryStrip() {
+  const strip = document.getElementById('crash-history-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+  crashHistory.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'crash-history-pill';
+    el.innerText = 'x' + Number(item.multiplier).toFixed(2);
+    strip.appendChild(el);
+  });
+}
+
+function crashPushHistory(multiplier) {
+  const strip = document.getElementById('crash-history-strip');
+  if (!strip) return;
+
+  const active = Array.from(strip.querySelectorAll('.crash-history-pill:not(.removing)'));
+  if (active.length >= 5) {
+    const oldest = active[active.length - 1];
+    oldest.classList.add('removing');
+    setTimeout(() => { if (oldest.parentNode) oldest.remove(); }, 320);
+  }
+
+  const el = document.createElement('div');
+  el.className = 'crash-history-pill';
+  el.innerText = 'x' + Number(multiplier).toFixed(2);
+  strip.prepend(el);
+
+  crashHistory.unshift({ multiplier });
+  if (crashHistory.length > 5) crashHistory.pop();
+}
+
+async function startCrashGame() {
+  if (crashState.status === 'waiting' || crashState.status === 'flying' || crashState.status === 'crashed') {
+    return;
+  }
+  const resumed = await checkAndResumeCrashRound();
+  if (resumed) return;
+  crashStartWaitingPhase();
+}
+
+async function checkAndResumeCrashRound() {
+  const active = await getActiveCrashRound();
+  if (!active || !active.activeBet) return false;
+
+  if (active.status === 'waiting') {
+    crashState.activeBet = active.activeBet;
+    crashState.hasBet = true;
+    crashStartWaitingPhase();
+    const mainBtn = document.getElementById('crash-main-btn');
+    if (mainBtn) {
+      mainBtn.innerText = 'Cancel bet';
+      mainBtn.className = 'crash-main-btn cancel';
+    }
+    showToast(`تم استرداد رهانك السابق (${active.activeBet} نجمة)`);
+    return true;
+  }
+  return false;
+}
+
+function crashStartWaitingPhase() {
+  crashState.status = 'waiting';
+  crashState.multiplier = 1.00;
+  if (!crashState.hasBet) crashState.activeBet = 0;
+  crashState.hasCashedOut = false;
+  crashState.cashoutMultiplier = 0;
+  crashState.countdown = 6;
+  crashState.roundId = null;
+  crashState.waitingEndTime = Date.now() + 6000;
+
+  const gameArea = document.getElementById('crash-game-area');
+  const mainBtn = document.getElementById('crash-main-btn');
+
+  if (gameArea) gameArea.classList.remove('flying');
+
+  crashSetMultiplierDisplay('', 'waiting');
+  crashSetCountdownDisplay(crashState.countdown + 's', true);
+
+  if (crashState.hasBet) {
+    if (mainBtn) {
+      mainBtn.className = 'crash-main-btn cancel';
+      mainBtn.innerText = 'Cancel bet';
+    }
+  } else {
+    if (mainBtn) {
+      mainBtn.className = 'crash-main-btn';
+      mainBtn.innerText = 'Place bet';
+    }
+  }
+
+  crashSetRocketActive(false);
+  crashSetExplosionActive(false);
+  crashSetWaitingActive(true);
+
+  if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
+
+  const tick = () => {
+    if (crashState.status !== 'waiting') return;
+    const remain = Math.ceil((crashState.waitingEndTime - Date.now()) / 1000);
+    if (remain <= 0) {
+      crashStartFlyingPhase();
+    } else {
+      crashState.countdown = remain;
+      if (isCrashViewActive()) {
+        crashSetCountdownDisplay(remain + 's', true);
+      }
+      crashState.countdownInterval = setTimeout(tick, 200);
+    }
+  };
+  tick();
+}
+
+function crashStartFlyingPhase() {
+  crashState.status = 'flying';
+  crashState.startTime = Date.now();
+  crashState.crashPoint = crashGenerateCrashPoint();
+  crashState.roundId = 'r_' + user.id + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+
+  const gameArea = document.getElementById('crash-game-area');
+  const mainBtn = document.getElementById('crash-main-btn');
+
+  if (gameArea) gameArea.classList.add('flying');
+
+  crashSetCountdownDisplay('', false);
+  crashSetMultiplierDisplay('1.00x', '');
+  crashSetWaitingActive(false);
+  crashSetExplosionActive(false);
+  crashSetRocketActive(true);
+
+  if (crashState.hasBet && !crashState.hasCashedOut) {
+    saveActiveCrashRound({
+      status: 'flying', startTime: crashState.startTime,
+      crashPoint: crashState.crashPoint,
+      activeBet: crashState.activeBet, hasCashedOut: false
+    });
+  }
+
+  if (crashState.hasBet) {
+    if (mainBtn) {
+      mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+      mainBtn.className = 'crash-main-btn cashout';
+    }
+  } else {
+    if (mainBtn) {
+      mainBtn.innerText = 'Waiting...';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
+  }
+
+  function loop() {
+    if (crashState.status !== 'flying') return;
+    const elapsed = (Date.now() - crashState.startTime) / 1000;
+    crashState.multiplier = Math.pow(1.08, elapsed);
+
+    if (isCrashViewActive()) {
+      crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x',
+        crashState.hasCashedOut ? 'cashed' : '');
+      if (crashState.hasBet && !crashState.hasCashedOut) {
+        if (mainBtn) mainBtn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
+      }
+    }
+
+    if (crashState.hasBet && !crashState.hasCashedOut) {
+      if (crashState.autoCashout && crashState.multiplier >= crashState.autoCashoutValue) crashDoCashOut();
+    }
+
+    if (crashState.multiplier >= crashState.crashPoint) {
+      crashState.multiplier = crashState.crashPoint;
+      crashHandleCrash();
+      return;
+    }
+    crashState.animationId = requestAnimationFrame(loop);
+  }
+  crashState.animationId = requestAnimationFrame(loop);
+}
+
+function crashGenerateCrashPoint() {
+  const r = Math.random();
+  if (r < 0.50) return 1.00 + Math.random() * 1.00; // 50% -> 1.00 to 2.00
+  if (r < 0.80) return 2.00 + Math.random() * 8.00; // 30% -> 2.00 to 10.00
+  if (r < 0.90) return 10.00 + Math.random() * 10.00; // 10% -> 10.00 to 20.00
+  if (r < 0.95) return 20.00 + Math.random() * 30.00; // 5% -> 20.00 to 50.00
+  return 50.00 + Math.random() * 50.00; // 5% -> 50.00 to 100.00
+}
+
+function crashHandleCrash() {
+  crashState.status = 'crashed';
+  if (crashState.animationId) cancelAnimationFrame(crashState.animationId);
+  const mainBtn = document.getElementById('crash-main-btn');
+  const gameArea = document.getElementById('crash-game-area');
+
+  const finalMult = crashState.multiplier;
+
+  if (gameArea) gameArea.classList.remove('flying');
+
+  if (isCrashViewActive()) {
+    crashSetMultiplierDisplay(finalMult.toFixed(2) + 'x', 'crashed');
+    crashSetCountdownDisplay('', false);
+  }
+
+  const betWasActive = crashState.hasBet && !crashState.hasCashedOut;
+  const recordedMult = crashState.hasCashedOut
+    ? (crashState.cashoutMultiplier || finalMult)
+    : finalMult;
+
+  crashPushHistory(recordedMult);
+
+  if (betWasActive) {
+    saveCrashRound(finalMult, crashState.activeBet, 'lost');
+    clearActiveCrashRound();
+    crashState.hasBet = false;
+    crashState.activeBet = 0;
+    if (mainBtn) {
+      mainBtn.innerText = 'Crashed';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
+  } else if (crashState.hasCashedOut) {
+    if (mainBtn) {
+      mainBtn.innerText = 'You won!';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
+  } else {
+    if (mainBtn) {
+      mainBtn.innerText = 'Crashed';
+      mainBtn.className = 'crash-main-btn disabled';
+    }
+  }
+
+  crashSetRocketActive(false);
+  crashSetWaitingActive(false);
+  crashSetExplosionActive(true);
+
+  setTimeout(() => {
+    crashSetExplosionActive(false);
+    crashStartWaitingPhase();
+  }, 2500);
+}
+
+function crashDoCashOut() {
+  if (!crashState.hasBet || crashState.hasCashedOut) return;
+  crashState.hasCashedOut = true;
+  crashState.cashoutMultiplier = crashState.multiplier;
+  const winAmount = crashState.activeBet * crashState.multiplier;
+
+  if (isCrashViewActive()) {
+    crashSetMultiplierDisplay(crashState.multiplier.toFixed(2) + 'x', 'cashed');
+  }
+
+  user.stars += winAmount;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
+  updateBalances();
+  saveCrashRound(crashState.multiplier, crashState.activeBet, 'won');
+  clearActiveCrashRound();
+
+  crashState.hasBet = false;
+  crashState.activeBet = 0;
+
+  const gameArea = document.getElementById('crash-game-area');
+  if (gameArea && isCrashViewActive()) {
+    gameArea.classList.add('cashout-anim');
+    setTimeout(() => gameArea.classList.remove('cashout-anim'), 300);
+  }
+  const mainBtn = document.getElementById('crash-main-btn');
+  if (mainBtn) {
+    mainBtn.innerText = `WON ${winAmount.toFixed(2)}`;
+    mainBtn.className = 'crash-main-btn disabled';
+  }
+}
+
+function crashHandleMainBtn() {
+  if (crashState.status === 'waiting') {
+    if (!crashState.hasBet) crashPlaceBet();
+    else crashCancelBet();
+  } else if (crashState.status === 'flying') {
+    if (crashState.hasBet && !crashState.hasCashedOut) crashDoCashOut();
+  }
+}
+
+function crashPlaceBet() {
+  crashValidateBet();
+  const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
+  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+  user.stars -= bet;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
+  updateBalances();
+  crashState.activeBet = bet;
+  crashState.hasBet = true;
+  crashState.hasCashedOut = false;
+  saveActiveCrashRound({ status: 'waiting', activeBet: bet, hasCashedOut: false });
+  const mainBtn = document.getElementById('crash-main-btn');
+  if (mainBtn) {
+    mainBtn.innerText = 'Cancel bet';
+    mainBtn.className = 'crash-main-btn cancel';
+  }
+}
+
+function crashCancelBet() {
+  if (!crashState.hasBet) return;
+  user.stars += crashState.activeBet;
+  syncUserData({ stars: firebase.firestore.FieldValue.increment(crashState.activeBet) });
+  updateBalances();
+  crashState.activeBet = 0;
+  crashState.hasBet = false;
+  clearActiveCrashRound();
+  const mainBtn = document.getElementById('crash-main-btn');
+  if (mainBtn) {
+    mainBtn.innerText = 'Place bet';
+    mainBtn.className = 'crash-main-btn';
+  }
+}
+
+function crashValidateBet() {
+  const input = document.getElementById('crash-bet-input');
+  let val = parseInt(input.value) || 1;
+  if (val < 1) val = 1;
+  if (val > 1000) val = 1000;
+  input.value = val;
+}
+function crashAddBet(amount) {
+  const input = document.getElementById('crash-bet-input');
+  let current = parseInt(input.value) || 0;
+  let newVal = Math.min(current + amount, 1000);
+  input.value = newVal;
+}
+function crashToggleAutoCashout(checkbox) { crashState.autoCashout = checkbox.checked; }
+function crashUpdateAutoCashout(input) {
+  let val = parseFloat(input.value) || 2.00;
+  if (val < 1.01) val = 1.01;
+  if (val > 100) val = 100;
+  input.value = val.toFixed(2);
+  crashState.autoCashoutValue = val;
+}
 </script>
 
 </body>
