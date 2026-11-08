@@ -773,7 +773,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ DOCK ============ */
+/* ============ DOCK (أكثر شفافية + ضبابية أقل) ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -846,28 +846,26 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.08);
 }
 
-/* ============ CRASH GAME (Light Theme) ============ */
-.main-scroll.crash-mode { padding: 0; overflow: hidden; }
+/* ============ CRASH GAME (Full Screen + Light Theme) ============ */
 #view-crash.active {
-  display: flex; flex-direction: column; height: 100%;
-  padding-top: calc(var(--top-bar-height) + var(--safe-top) + 60px);
-  padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  z-index: 500;
+  background: linear-gradient(to bottom, #7bc6ff 0%, #d6edff 50%, #e8f5ff 85%, #f2f9ff 100%);
   animation: viewIn 0.35s var(--ease-out);
 }
 .crash-game-area {
-  flex: 1; position: relative; display: flex;
+  flex: 0 0 75%; /* 75% من الشاشة */
+  position: relative;
+  display: flex;
   align-items: center; justify-content: center;
-  overflow: hidden; min-height: 0;
-  contain: layout style paint;
-  transition: transform 0.35s var(--ease-out);
-}
-.crash-game-area.cashout-anim { transform: scale(1.03); }
-
-/* Sky Background */
-.crash-sky-bg {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, #7bc6ff 0%, #cceaff 45%, #f0f8ff 80%, #ffffff 100%);
-  z-index: 0;
+  overflow: hidden;
 }
 .crash-game-area::after {
   content: ''; position: absolute; inset: 0;
@@ -903,7 +901,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .crash-multiplier-display {
   position: absolute;
-  left: 50%; top: 12%;
+  left: 50%; top: 15%;
   transform: translateX(-50%);
   font-size: 68px;
   font-weight: 900;
@@ -968,16 +966,24 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
 .crash-explosion.active { opacity: 1; }
 
-.crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
+.crash-bottom-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 0;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom)); /* مساحة لزر الخروج */
+}
+
+/* بطاقة الرهان مدموجة مع الخلفية */
 .crash-bet-controls {
-  background: rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 248, 255, 0.95) 100%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
   border-radius: 22px;
   padding: 12px; display: flex; flex-direction: column;
   gap: 8px;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 10px 28px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(30,40,80,0.08);
   contain: layout style paint;
 }
 .crash-history-strip {
@@ -1066,6 +1072,38 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cashout { background: var(--gradient-success); box-shadow: 0 10px 26px rgba(52,211,153,0.3), inset 0 1px 0 rgba(255,255,255,0.28); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
+
+/* ============ EXIT GAME BTN ============ */
+.exit-game-btn {
+  position: absolute;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  left: 14px; right: 14px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px rgba(30,40,80,0.15);
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 600;
+  transition: transform 0.15s var(--spring);
+}
+.exit-game-btn:active { transform: scale(0.97); }
+.exit-game-btn i { font-size: 20px; color: var(--currency-blue); }
+
+/* Hide normal UI when in game */
+body.in-game .top-app-bar,
+body.in-game .floating-balances,
+body.in-game .dock {
+  display: none !important;
+}
 
 @media (max-width: 380px) {
   .home-card { min-height: 100px; padding: 16px 18px; }
@@ -1417,7 +1455,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     <!-- CRASH GAME VIEW -->
     <div class="view" id="view-crash">
       <div class="crash-game-area" id="crash-game-area">
-        <div class="crash-sky-bg"></div>
         <div class="crash-air-waves">
           <span></span><span></span><span></span><span></span>
         </div>
@@ -1454,6 +1491,9 @@ input:checked + .slider:before { transform: translateX(22px); }
           <button class="crash-main-btn" id="crash-main-btn" onclick="crashHandleMainBtn()">Place bet</button>
         </div>
       </div>
+      <button class="exit-game-btn" onclick="exitGame()">
+        <i class="fas fa-arrow-right"></i> خروج من اللعبة
+      </button>
     </div>
 
   </main>
@@ -1849,10 +1889,16 @@ window.addEventListener('pagehide', () => {
   saveActiveRoundState();
 });
 
+function exitGame() {
+  go('home');
+}
+
 function go(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
   if (target) target.classList.add('active');
+
+  document.body.classList.toggle('in-game', viewName === 'crash');
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
@@ -1874,10 +1920,8 @@ function go(viewName) {
   }
 
   const mainScroll = document.getElementById('mainScroll');
-  mainScroll.classList.remove('crash-mode');
-
+  
   if (viewName === 'crash') {
-    mainScroll.classList.add('crash-mode');
     startCrashGame();
     setTimeout(() => {
       TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']);
