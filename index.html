@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>Cute Bee Stars</title>
+<title>Star Nova</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -512,6 +512,35 @@ input[type="number"], .num-input {
   min-width: 0;
 }
 .manual-ref-input::placeholder { color: var(--text-tertiary); font-weight: 500; }
+
+/* إصلاح: تنسيق حقل إدخال معرف الدعوة اليدوي وزر التأكيد */
+.manual-ref-card .link-box {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  padding: 5px;
+  margin-bottom: 0;
+  gap: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(30, 40, 80, 0.04);
+}
+.manual-ref-card .manual-ref-input {
+  padding: 9px 12px;
+  font-size: 13px;
+}
+.manual-ref-card .btn-copy {
+  padding: 9px 16px;
+  border-radius: 11px;
+  font-size: 12px;
+  min-width: 68px;
+  justify-content: center;
+  gap: 0;
+}
+.manual-ref-card .btn-copy:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.manual-ref-card .btn-copy .fa-spinner {
+  font-size: 12px;
+}
 
 /* ============ HISTORY ============ */
 .history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
@@ -1608,7 +1637,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
       <div id="dep-tab-crypto" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
-          <!-- REDESIGNED: crypto pending banner (rectangular, short, single row) -->
           <div id="cryptoPendingBanner" class="crypto-pending-banner">
             <span class="crypto-pending-title"><i class="fas fa-clock"></i> إيداع معلق</span>
             <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
@@ -1687,7 +1715,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
       <div id="ref-tab-invite" class="ref-tab-content">
 
-        <!-- NEW: Manual referral code card (only shows if user has no referrer) -->
         <div class="manual-ref-card" id="manualRefCard">
           <h3><i class="fas fa-key"></i> إدخال معرف دعوة</h3>
           <p>إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على تذكرة مجانية.</p>
@@ -2053,7 +2080,6 @@ const SLOTS_CONFIG = {
   999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
-// IMPORTANT: No fake starting balance. Everything starts at 0 until real data loads.
 let user = { id: '123456789', name: 'لاعب', photo: '', stars: 0, tickets: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
 let depositAmount = 200;
 let withdrawalHistory = [];
@@ -2170,9 +2196,6 @@ function initTelegram() {
 }
 
 /* ============ REFERRAL: REWARDS SYSTEM ============ */
-/* Referrer gets +2 tickets + 1 referral count
-   Invitee gets +1 ticket
-   Both use atomic transaction to avoid double-counting */
 
 async function awardReferral(referrerId, source = 'url') {
   const currentUserId = user.id;
@@ -2182,19 +2205,16 @@ async function awardReferral(referrerId, source = 'url') {
   const userRef = db.collection('users').doc(currentUserId);
   const referrerRef = db.collection('users').doc(referrerId);
 
-  // Check current user not already referred
   const userDoc = await userRef.get();
   if (userDoc.exists && userDoc.data().referredBy) {
     return { ok: false, error: 'already_referred' };
   }
 
-  // Check referrer exists
   const referrerDoc = await referrerRef.get();
   if (!referrerDoc.exists) {
     return { ok: false, error: 'referrer_not_found' };
   }
 
-  // Atomic transaction: invitee gets 1 ticket, referrer gets 2 tickets + 1 count
   await db.runTransaction(async (transaction) => {
     const freshUser = await transaction.get(userRef);
     if (freshUser.exists && freshUser.data().referredBy) {
@@ -2204,11 +2224,11 @@ async function awardReferral(referrerId, source = 'url') {
       referredBy: referrerId,
       referredAt: firebase.firestore.FieldValue.serverTimestamp(),
       referredSource: source,
-      tickets: firebase.firestore.FieldValue.increment(1)  // invitee reward
+      tickets: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     transaction.update(referrerRef, {
       referralCount: firebase.firestore.FieldValue.increment(1),
-      tickets: firebase.firestore.FieldValue.increment(2)  // referrer reward
+      tickets: firebase.firestore.FieldValue.increment(2)
     });
   });
 
@@ -2225,7 +2245,7 @@ async function processReferralOnStartup() {
     const result = await awardReferral(referrerId, 'url');
     if (result.ok) {
       user.referredBy = referrerId;
-      user.tickets = (user.tickets || 0) + 1; // invitee got 1 ticket
+      user.tickets = (user.tickets || 0) + 1;
       updateBalances();
       updateManualRefCardVisibility();
       console.log('[Referral] Success via URL. Referrer:', referrerId);
@@ -2322,7 +2342,6 @@ async function fetchUserData() {
       user.completedTasks = d.completedTasks || [];
       user.referredBy = d.referredBy || null;
     } else {
-      // NEW USER: start with ZERO balance — no virtual stars or tickets
       await ref.set({
         telegramId: user.id, name: user.name, photoUrl: user.photo,
         stars: 0, tickets: 0, referralCount: 0,
