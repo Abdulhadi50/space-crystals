@@ -14,753 +14,729 @@
 :root {
   --bg-main: #ffffff;
   --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-soft: rgba(0, 0, 0, 0.03);
   --text-primary: #151622;
   --text-secondary: #5b5d6e;
   --text-tertiary: #9395a5;
   --border: rgba(0, 0, 0, 0.08);
   --success: #0fa96e;
   --danger: #e03858;
-  --warning: #c9791a;
-  --gold: #b8912a;
-  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --gold: #c9a227;
+  --purple: #8B5CF6;
+  --purple-dark: #6D28D9;
   --safe-top: env(safe-area-inset-top, 20px);
-  --dock-height: 64px;
-  --top-bar-height: 10vh;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --nav-bg: rgba(255, 255, 255, 0.4);
-  --nav-border: rgba(0, 0, 0, 0.06);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
-  --gradient-blue: linear-gradient(135deg, #5B8DEF 0%, #3B6FDB 100%);
+  --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
   --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
-  --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
-  --gradient-danger: linear-gradient(135deg, #FF6B81 0%, #E63950 100%);
-  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06), 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-glass: 0 6px 22px rgba(30, 40, 80, 0.05), inset 0 1px 0 rgba(255,255,255,0.85);
+  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06);
+  --shadow-purple: 0 12px 30px rgba(139, 92, 246, 0.4);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-  background: var(--bg-main); color: var(--text-primary);
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #ffffff; color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
-  overscroll-behavior: none; user-select: none; -webkit-user-select: none; direction: rtl;
-  position: relative;
+  user-select: none; -webkit-user-select: none;
 }
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(245, 215, 110, 0.06), transparent 55%),
-    radial-gradient(ellipse 55% 40% at 98% 12%, rgba(201, 162, 39, 0.04), transparent 55%),
-    radial-gradient(ellipse 75% 55% at 50% 108%, rgba(140, 90, 220, 0.04), transparent 60%);
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, 0.08), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 50% 100%, rgba(201, 162, 39, 0.05), transparent 60%);
   pointer-events: none; z-index: 0;
 }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
-img { pointer-events: none; -webkit-touch-callout: none; }
 ::-webkit-scrollbar { display: none; }
 
-input[type="number"], .num-input {
-  font-variant-numeric: tabular-nums lining-nums;
-  direction: ltr !important;
-  font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+.app-container {
+  display: flex; flex-direction: column;
+  height: 100dvh; max-width: 480px;
+  margin: 0 auto; position: relative; z-index: 1;
+  overflow: hidden;
 }
 
-/* APP SHELL */
-.app-container {
-  display: flex; flex-direction: column; height: 100dvh;
-  position: relative; z-index: 1;
-  max-width: 480px; margin: 0 auto; overflow: hidden;
-}
-.top-app-bar {
-  position: absolute; top: 0; left: 0; right: 0;
-  height: calc(var(--top-bar-height) + var(--safe-top));
-  background: rgba(255, 255, 255, 0.55);
+.page-header {
+  display: flex; align-items: center;
+  padding: calc(var(--safe-top) + 10px) 16px 10px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.7);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  border: none; border-radius: 0; box-shadow: none;
-  z-index: 50; padding-top: var(--safe-top);
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
 }
-.floating-balances {
-  position: absolute;
-  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
-  left: 16px; right: 16px;
-  display: flex; justify-content: space-between; z-index: 51;
+.back-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+  font-size: 16px;
+  transition: transform 0.15s var(--spring);
+  flex-shrink: 0;
+}
+.back-btn:active { transform: scale(0.9); }
+.page-header h1 {
+  font-size: 18px; font-weight: 800;
+  flex: 1; letter-spacing: -0.3px;
 }
 .balance-pill {
   display: flex; align-items: center;
   background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
-  -webkit-backdrop-filter: blur(14px) saturate(170%);
-  backdrop-filter: blur(14px) saturate(170%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 3px 10px 3px 10px; gap: 6px;
-  color: var(--text-primary); font-weight: 800; font-size: 15px;
-  box-shadow: 0 6px 18px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+  padding: 6px 12px; gap: 6px;
+  font-weight: 800; font-size: 14px;
+  box-shadow: 0 4px 14px rgba(30,40,80,0.06);
+  flex-shrink: 0;
 }
-.balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
+.balance-pill img { width: 18px; height: 18px; border-radius: 50%; }
 .balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
 
-.main-scroll {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px calc(var(--safe-bottom) + 30px);
   -webkit-overflow-scrolling: touch;
 }
 
-/* PAGE HEADER */
-.page-header { margin-bottom: 20px; }
-.page-title {
-  font-size: 26px; font-weight: 800; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 10px;
+.loading-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 14px; padding: 60px 20px;
+  color: var(--text-secondary);
+}
+.loading-state i { font-size: 32px; color: var(--purple); }
+.loading-state p { font-weight: 700; font-size: 14px; }
+
+/* ============ CLOCK HERO ============ */
+.clock-hero {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  height: 280px;
+  margin-bottom: 10px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(201, 162, 39, 0.1), transparent 60%);
+  pointer-events: none;
+}
+.clock-wrap {
+  position: relative;
+  width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.clock-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.4), transparent 60%);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.clock-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(201, 162, 39, 0.4);
+  pointer-events: none;
+}
+.clock-orbit.o1 { inset: -15px; animation: orbitSpin 20s linear infinite; }
+.clock-orbit.o2 { inset: -30px; border-color: rgba(201, 162, 39, 0.2); animation: orbitSpin 30s linear infinite reverse; }
+@keyframes orbitSpin { to { transform: rotate(360deg); } }
+
+.clock-face {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2a2a40, #0f0f1a 70%);
+  border: 4px solid var(--gold);
+  box-shadow:
+    0 0 50px rgba(201, 162, 39, 0.5),
+    inset 0 0 40px rgba(201, 162, 39, 0.15);
+  z-index: 1;
+}
+.clock-marker {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 3px; height: 14px;
+  background: var(--gold);
+  border-radius: 2px;
+  transform-origin: 50% 80px;
+  opacity: 0.6;
+  margin-left: -1.5px;
+  margin-top: -14px;
+}
+.clock-marker.m1 { transform: rotate(0deg); }
+.clock-marker.m2 { transform: rotate(90deg); }
+.clock-marker.m3 { transform: rotate(180deg); }
+.clock-marker.m4 { transform: rotate(270deg); }
+
+.clock-hand {
+  position: absolute;
+  bottom: 50%; left: 50%;
+  transform-origin: bottom center;
+  background: linear-gradient(to top, #c9a227, #f5d76e);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.6);
+  z-index: 2;
+}
+.clock-hand.hour { width: 5px; height: 50px; margin-left: -2.5px; animation: rotateHour 60s linear infinite; }
+.clock-hand.minute { width: 4px; height: 75px; margin-left: -2px; animation: rotateMinute 20s linear infinite; }
+@keyframes rotateHour { to { transform: rotate(360deg); } }
+@keyframes rotateMinute { to { transform: rotate(360deg); } }
+.clock-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 12px; height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.8);
+}
+
+.hero-title {
+  text-align: center;
+  font-size: 26px; font-weight: 800;
   letter-spacing: -0.5px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #2d3048, #6D28D9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.page-title-icon {
-  width: 44px; height: 44px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(245,215,110,0.20), rgba(201,162,39,0.08));
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid rgba(201,162,39,0.20);
+.hero-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 16px;
 }
-.page-title-icon img { width: 28px; height: 28px; object-fit: contain; }
-.page-title-icon i { font-size: 20px; color: var(--gold); }
-.page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
-/* INFO CARD (Battle Pass summary) */
-.info-card {
-  border-radius: 26px; padding: 20px;
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(254,249,238,1));
-  border: 1px solid rgba(201,162,39,0.20);
-  box-shadow: var(--shadow-card);
+.rarity-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 auto 16px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 20px;
+  color: var(--gold);
+  font-weight: 800; font-size: 12px;
+  position: relative; left: 50%; transform: translateX(-50%);
+  width: fit-content;
+}
+.rarity-badge i { font-size: 12px; }
+
+.value-row {
+  display: flex;
+  justify-content: center;
   margin-bottom: 24px;
-  position: relative; overflow: hidden;
 }
-.info-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 105% -10%, rgba(245, 215, 110, 0.25), transparent 65%);
-  pointer-events: none; border-radius: inherit;
+.value-item {
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 10px 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
 }
-.info-card > * { position: relative; z-index: 1; }
+.value-label { font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-bottom: 2px; }
+.value-amount { font-size: 18px; font-weight: 800; color: var(--gold); direction: ltr; }
 
-.info-header {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 16px;
+/* ============ SEASON CARD (subscribe) ============ */
+.season-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #2a1f4d 0%, #1a1235 100%);
+  border-radius: 24px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 14px 40px rgba(109, 40, 217, 0.25);
+  border: 1px solid rgba(139, 92, 246, 0.3);
 }
-.info-icon {
-  width: 46px; height: 46px; border-radius: 14px;
-  background: var(--gradient-primary);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 18px; flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(22,24,42,0.20), inset 0 1px 0 rgba(255,255,255,0.15);
+.season-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
-.info-titles { flex: 1; min-width: 0; }
-.info-titles h3 {
-  font-size: 17px; font-weight: 800; margin-bottom: 3px;
-  color: var(--text-primary);
+.season-stars span {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  animation: starTwinkle 2.5s ease-in-out infinite;
 }
-.info-titles p {
-  font-size: 12px; color: var(--text-secondary);
-  font-weight: 600; line-height: 1.4;
-}
-
-.info-features {
-  display: flex; flex-direction: column; gap: 8px;
-  margin-bottom: 16px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 14px;
-  border: 1px solid rgba(201,162,39,0.12);
-}
-.info-feature {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 12.5px; font-weight: 600; color: var(--text-primary);
-}
-.info-feature i {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: rgba(15,169,110,0.12);
-  color: var(--success);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; flex-shrink: 0;
+.season-stars span:nth-child(1) { top: 8%; left: 12%; animation-delay: 0s; }
+.season-stars span:nth-child(2) { top: 15%; left: 78%; animation-delay: 0.3s; font-size: 10px; }
+.season-stars span:nth-child(3) { top: 40%; left: 8%; animation-delay: 0.6s; font-size: 12px; }
+.season-stars span:nth-child(4) { top: 55%; left: 88%; animation-delay: 0.9s; }
+.season-stars span:nth-child(5) { top: 75%; left: 20%; animation-delay: 1.2s; font-size: 10px; }
+.season-stars span:nth-child(6) { top: 82%; left: 70%; animation-delay: 1.5s; font-size: 12px; }
+.season-stars span:nth-child(7) { top: 30%; left: 45%; animation-delay: 1.8s; font-size: 8px; }
+.season-stars span:nth-child(8) { top: 65%; left: 55%; animation-delay: 2.1s; font-size: 9px; }
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.3); }
 }
 
-.info-price-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 0;
-  border-top: 1px dashed rgba(201,162,39,0.20);
-  border-bottom: 1px dashed rgba(201,162,39,0.20);
+.season-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 20px;
+  color: #c4b5fd;
+  font-weight: 800; font-size: 12px;
   margin-bottom: 14px;
+  position: relative;
 }
-.info-price-label {
-  font-size: 11px; color: var(--text-secondary);
-  font-weight: 700; margin-bottom: 4px;
+.season-badge i { color: #f5d76e; }
+
+.season-card h3 {
+  color: #ffffff;
+  font-size: 20px; font-weight: 800;
+  margin-bottom: 6px;
+  position: relative;
 }
-.info-price {
-  font-size: 24px; font-weight: 800; color: var(--text-primary);
-  display: flex; align-items: center; gap: 6px;
-  direction: ltr;
-}
-.info-price img { width: 22px; height: 22px; border-radius: 50%; }
-.info-duration {
-  font-size: 11px; color: var(--text-secondary);
-  font-weight: 700;
-  background: rgba(0,0,0,0.04);
-  padding: 7px 13px; border-radius: 10px;
-  display: flex; align-items: center; gap: 5px;
+.season-card p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .subscribe-btn {
-  width: 100%; padding: 16px; border-radius: 18px;
-  background: var(--gradient-primary); color: #fff;
-  font-size: 15px; font-weight: 800;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 10px 24px rgba(22,24,42,0.20), inset 0 1px 0 rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--gradient-purple);
+  color: #ffffff;
+  box-shadow: var(--shadow-purple);
   transition: transform 0.15s var(--spring);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
 }
 .subscribe-btn:active { transform: scale(0.97); }
-.subscribe-btn.active {
-  background: rgba(15,169,110,0.10);
-  color: var(--success);
-  box-shadow: inset 0 0 0 1.5px rgba(15,169,110,0.30);
+.subscribe-btn:disabled { opacity: 0.6; pointer-events: none; }
+.btn-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
-.subscribe-btn.expired {
-  background: rgba(224,56,88,0.10);
-  color: var(--danger);
-  box-shadow: inset 0 0 0 1.5px rgba(224,56,88,0.30);
+.btn-stars span {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+  animation: btnStarPulse 2s ease-in-out infinite;
 }
-
-/* SECTION HEADER */
-.section-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 14px;
-  padding: 0 4px;
+.btn-stars span:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+.btn-stars span:nth-child(2) { top: 70%; left: 15%; animation-delay: 0.3s; font-size: 8px; }
+.btn-stars span:nth-child(3) { top: 25%; left: 45%; animation-delay: 0.6s; }
+.btn-stars span:nth-child(4) { top: 60%; left: 60%; animation-delay: 0.9s; font-size: 8px; }
+.btn-stars span:nth-child(5) { top: 80%; left: 85%; animation-delay: 1.2s; }
+.btn-stars span:nth-child(6) { top: 10%; left: 92%; animation-delay: 1.5s; font-size: 8px; }
+@keyframes btnStarPulse {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.4); }
 }
-.section-title {
-  font-size: 17px; font-weight: 800;
-  display: flex; align-items: center; gap: 8px;
-  color: var(--text-primary);
-}
-.section-title i { color: var(--text-secondary); font-size: 15px; }
-.section-count {
-  font-size: 12px; font-weight: 800;
-  color: var(--text-secondary);
-  background: rgba(0,0,0,0.05);
-  padding: 5px 12px; border-radius: 10px;
-  border: 1px solid var(--border);
-  direction: ltr;
-}
-
-/* LEVELS HORIZONTAL SCROLL */
-.levels-scroll-wrap {
-  margin: 0 -16px;
-  padding: 0 16px;
-  overflow: visible;
-}
-.levels-scroll {
-  display: flex;
+.btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
   gap: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 4px 16px 20px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  margin: 0 -16px;
 }
-.levels-scroll::-webkit-scrollbar { display: none; }
+.btn-label { font-size: 16px; font-weight: 800; }
+.btn-price {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 800; font-size: 14px;
+  direction: ltr;
+  backdrop-filter: blur(4px);
+}
 
-.level-card {
-  flex: 0 0 145px;
-  scroll-snap-align: start;
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(248,250,255,1));
+/* ============ PROGRESS ============ */
+.progress-card {
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 14px;
-  box-shadow: 0 6px 18px rgba(30,40,80,0.05);
-  display: flex;
-  flex-direction: column;
-  min-height: 200px;
-  position: relative;
-  transition: transform 0.2s var(--spring), box-shadow 0.2s;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
 }
-.level-card.completed {
-  border-color: rgba(15,169,110,0.30);
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(240,253,246,1));
-}
-.level-card.current {
-  border-color: rgba(201,162,39,0.30);
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(254,249,238,1));
-  box-shadow: 0 8px 24px rgba(201,162,39,0.12);
-  transform: translateY(-2px);
-}
-.level-card.locked {
-  opacity: 0.75;
-}
-
-.level-num-badge {
-  align-self: flex-start;
-  font-size: 11px; font-weight: 800;
-  color: var(--text-secondary);
-  background: rgba(0,0,0,0.05);
-  padding: 3px 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  direction: ltr;
-  border: 1px solid var(--border);
-}
-.level-card.completed .level-num-badge {
-  background: rgba(15,169,110,0.12);
-  color: var(--success);
-  border-color: rgba(15,169,110,0.20);
-}
-.level-card.current .level-num-badge {
-  background: rgba(201,162,39,0.12);
-  color: var(--gold);
-  border-color: rgba(201,162,39,0.25);
-}
-
-.level-icon-box {
-  width: 46px; height: 46px;
-  border-radius: 13px;
-  background: rgba(0,0,0,0.04);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 19px;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-  border: 1px solid var(--border);
-}
-.level-card.completed .level-icon-box {
-  background: rgba(15,169,110,0.10);
-  color: var(--success);
-  border-color: rgba(15,169,110,0.20);
-}
-.level-card.current .level-icon-box {
-  background: rgba(201,162,39,0.10);
-  color: var(--gold);
-  border-color: rgba(201,162,39,0.20);
-}
-.level-card.final .level-icon-box {
-  background: linear-gradient(135deg, rgba(245,215,110,0.20), rgba(201,162,39,0.08));
-  border-color: rgba(201,162,39,0.20);
-}
-.level-card.final .level-icon-box img {
-  width: 30px; height: 30px;
-  object-fit: contain;
-}
-.level-card.final.completed .level-icon-box {
-  background: linear-gradient(135deg, rgba(245,215,110,0.30), rgba(201,162,39,0.15));
-}
-
-.level-task-name {
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1.35;
-  margin-bottom: 4px;
-  min-height: 34px;
-  display: flex;
-  align-items: flex-start;
-}
-.level-task-desc {
-  font-size: 10.5px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 10px;
-  min-height: 28px;
-}
-
-.level-progress-bar-wrap {
-  height: 5px;
-  background: rgba(0,0,0,0.05);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 6px;
-  margin-top: auto;
-}
-.level-progress-fill {
-  height: 100%;
-  background: var(--gradient-primary);
-  border-radius: 3px;
-  transition: width 0.6s var(--ease-out);
-  width: 0%;
-}
-.level-card.completed .level-progress-fill { background: var(--gradient-success); }
-.level-card.current .level-progress-fill { background: var(--gradient-gold); }
-
-.level-progress-row {
+.progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
+  margin-bottom: 12px;
   font-weight: 800;
-  color: var(--text-tertiary);
+  font-size: 14px;
+}
+.progress-header span:last-child {
+  color: var(--purple);
   direction: ltr;
+  font-variant-numeric: tabular-nums;
 }
-.level-progress-row .pct {
-  color: var(--text-secondary);
-  font-weight: 800;
+.progress-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
 }
-.level-card.completed .level-progress-row .pct { color: var(--success); }
-.level-card.current .level-progress-row .pct { color: var(--gold); }
-
-.level-status-icon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-}
-.level-card.completed .level-status-icon {
-  background: var(--gradient-success);
-  color: #fff;
-  box-shadow: 0 3px 8px rgba(15,169,110,0.3);
-}
-.level-card.current .level-status-icon {
-  background: var(--gradient-gold);
-  color: #1a1400;
-  box-shadow: 0 3px 8px rgba(201,162,39,0.3);
-  animation: pulseDot 1.8s ease-in-out infinite;
-}
-@keyframes pulseDot {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-purple);
+  border-radius: 999px;
+  transition: width 0.5s var(--ease-out);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
 }
 
-/* NOTICE */
-.notice-bar {
-  background: linear-gradient(135deg, rgba(201,121,26,0.08), rgba(201,121,26,0.02));
-  border: 1px solid rgba(201,121,26,0.20);
-  border-radius: 16px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
+/* ============ MISSIONS ============ */
+.missions-list {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
+  margin-bottom: 20px;
 }
-.notice-bar i {
-  color: var(--warning);
-  font-size: 16px;
+.mission-item {
+  display: flex; align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s;
+}
+.mission-item.completed {
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.08), rgba(15, 169, 110, 0.02));
+  border-color: rgba(15, 169, 110, 0.3);
+}
+.mission-icon {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
+  color: var(--purple);
+  font-size: 18px;
   flex-shrink: 0;
 }
-.notice-bar p {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.5;
-  margin: 0;
+.mission-item.completed .mission-icon {
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.2), rgba(15, 169, 110, 0.05));
+  color: var(--success);
+}
+.mission-body { flex: 1; min-width: 0; }
+.mission-title {
+  font-weight: 800; font-size: 13px;
+  margin-bottom: 3px;
+}
+.mission-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.mission-progress {
+  font-size: 11px;
+  color: var(--purple);
+  font-weight: 800;
+  direction: ltr;
+}
+.mission-item.completed .mission-progress { color: var(--success); }
+.mission-check {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  color: transparent;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.mission-item.completed .mission-check {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
 }
 
-/* DOCK BACK BUTTON */
-.dock {
-  position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
-  left: 14px; right: 14px;
-  z-index: 100;
+/* ============ CLAIM BUTTON ============ */
+.claim-btn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 16px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.22);
+  transition: transform 0.15s var(--spring);
 }
-.back-btn {
-  width: 100%; height: 56px; border-radius: 28px;
-  background: var(--nav-bg);
-  border: 1px solid var(--nav-border);
-  -webkit-backdrop-filter: blur(4px) saturate(160%);
-  backdrop-filter: blur(4px) saturate(160%);
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  color: var(--text-primary);
-  font-size: 15px; font-weight: 800;
-  transition: all 0.25s var(--spring);
-  box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+.claim-btn:active:not(:disabled) { transform: scale(0.97); }
+.claim-btn:disabled {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-secondary);
+  box-shadow: none;
+  cursor: not-allowed;
 }
-.back-btn i { font-size: 18px; color: var(--text-secondary); }
-.back-btn:active { transform: scale(0.97); }
+.claim-btn.ready {
+  background: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
+  color: #1a1400;
+  box-shadow: 0 12px 30px rgba(245, 215, 110, 0.5);
+  animation: claimPulse 2s ease-in-out infinite;
+}
+@keyframes claimPulse {
+  0%, 100% { box-shadow: 0 12px 30px rgba(245, 215, 110, 0.5); }
+  50% { box-shadow: 0 12px 40px rgba(245, 215, 110, 0.8); }
+}
 
-/* MODALS */
+/* ============ OWNED ============ */
+.owned-card {
+  background: linear-gradient(160deg, rgba(15, 169, 110, 0.1), rgba(15, 169, 110, 0.02));
+  border: 1px solid rgba(15, 169, 110, 0.3);
+  border-radius: 24px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(15, 169, 110, 0.15);
+}
+.owned-icon {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.2), rgba(15, 169, 110, 0.05));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.owned-icon i { font-size: 36px; color: var(--success); }
+.owned-card h3 {
+  font-size: 20px; font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.owned-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.view-props-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.2);
+  transition: transform 0.15s var(--spring);
+}
+.view-props-btn:active { transform: scale(0.97); }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed; top: 20px; left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: linear-gradient(135deg, #ffffff, #f5f7fc);
+  color: var(--text-primary);
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  z-index: 2000;
+  transition: transform 0.4s var(--spring);
+  border: 1px solid var(--border);
+  max-width: 90%; text-align: center;
+  box-shadow: 0 14px 40px rgba(30, 40, 80, 0.18);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { background: linear-gradient(135deg, #fff0f2, #ffe6ea); border-color: rgba(224, 56, 88, 0.3); color: var(--danger); }
+.toast.success { background: linear-gradient(135deg, #f0fff6, #e6faf0); border-color: rgba(15, 169, 110, 0.3); color: var(--success); }
+
+/* ============ MODAL ============ */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(20,22,40,0.42);
-  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  background: rgba(20, 22, 40, 0.5);
+  z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
   background: linear-gradient(160deg, #ffffff 0%, #f5f7fc 100%);
-  border-radius: 28px; padding: 28px 24px;
-  width: 100%; max-width: 340px; text-align: center;
-  animation: popInModal 0.32s var(--spring);
-  border: 1px solid rgba(0,0,0,0.06);
-  box-shadow: 0 26px 70px rgba(30,40,80,0.25), inset 0 1px 0 rgba(255,255,255,0.9);
-}
-@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-.modal-icon {
-  width: 76px; height: 76px; border-radius: 24px;
-  background: linear-gradient(135deg, rgba(245,215,110,0.20), rgba(201,162,39,0.08));
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  border: 1.5px solid rgba(201,162,39,0.20);
-}
-.modal-icon img { width: 44px; height: 44px; object-fit: contain; }
-.modal-icon i { font-size: 32px; color: var(--gold); }
-
-.modal-content h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
-.modal-content p {
-  color: var(--text-secondary); font-size: 13px;
-  margin-bottom: 20px; font-weight: 600; line-height: 1.55;
-}
-.modal-price-box {
-  background: rgba(0,0,0,0.03);
-  border: 1px solid var(--border);
-  border-radius: 16px; padding: 14px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-bottom: 18px;
-  direction: ltr;
-}
-.modal-price-box img { width: 26px; height: 26px; border-radius: 50%; }
-.modal-price-box span { font-size: 26px; font-weight: 800; color: var(--text-primary); }
-.modal-price-box small {
-  font-size: 12px; color: var(--text-secondary);
-  font-weight: 700; margin-right: 4px;
-}
-.modal-balance-info {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-bottom: 14px;
+  border-radius: 28px;
+  padding: 30px 24px;
+  width: 100%; max-width: 340px;
   text-align: center;
+  animation: popIn 0.32s var(--spring);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 26px 70px rgba(30, 40, 80, 0.25);
 }
-.modal-balance-info strong {
-  color: var(--text-primary);
-  font-weight: 800;
-  direction: ltr;
-  display: inline-block;
-}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; }
+.modal-content p { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 22px; line-height: 1.55; }
 .modal-btn {
-  width: 100%; padding: 15px; border-radius: 16px;
-  background: var(--gradient-primary); color: #fff;
-  font-size: 15px; font-weight: 800;
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-weight: 800; font-size: 15px;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.22);
   transition: transform 0.15s var(--spring);
-  box-shadow: 0 10px 24px rgba(22,24,42,0.22), inset 0 1px 0 rgba(255,255,255,0.15);
-  margin-bottom: 8px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .modal-btn:active { transform: scale(0.97); }
-.modal-btn:disabled { opacity: 0.6; pointer-events: none; }
-.modal-btn-cancel {
-  width: 100%; padding: 13px; border-radius: 16px;
-  background: rgba(0,0,0,0.05);
-  color: var(--text-secondary);
-  font-size: 14px; font-weight: 700;
-  border: 1px solid var(--border);
-  transition: transform 0.15s var(--spring);
-}
-.modal-btn-cancel:active { transform: scale(0.97); }
-
-.success-icon {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--gradient-success);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 36px;
-  margin: 0 auto 16px;
-  box-shadow: 0 12px 30px rgba(15,169,110,0.35);
-  animation: successPop 0.5s var(--spring);
-}
-@keyframes successPop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
-
-/* TOAST */
-.toast {
-  position: fixed; top: calc(var(--safe-top) + 20px); left: 50%;
-  transform: translateX(-50%) translateY(-120px);
-  background: linear-gradient(135deg, #ffffff, #f5f7fc);
-  color: var(--text-primary);
-  padding: 14px 26px; border-radius: 999px;
-  font-size: 13px; font-weight: 700;
-  z-index: 2000;
-  transition: transform 0.4s var(--spring);
-  border: 1px solid rgba(0,0,0,0.08);
-  max-width: 90%; text-align: center;
-  box-shadow: 0 14px 40px rgba(30,40,80,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-@media (max-width: 380px) {
-  .page-title { font-size: 22px; }
-  .page-title-icon { width: 40px; height: 40px; }
-  .page-title-icon img { width: 24px; height: 24px; }
-  .info-price { font-size: 22px; }
-  .level-card { flex: 0 0 132px; padding: 12px; min-height: 190px; }
-  .level-icon-box { width: 42px; height: 42px; font-size: 17px; }
-  .level-task-name { font-size: 12px; }
-  .balance-pill { font-size: 13px; padding: 3px 9px; }
-  .balance-pill img { width: 17px; height: 17px; }
-}
 </style>
 </head>
 <body>
 
 <div class="app-container">
-  <header class="top-app-bar"></header>
-  <div class="floating-balances">
+  <header class="page-header">
+    <button class="back-btn" onclick="goBack()" aria-label="رجوع">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+    <h1>ساعة الفضاء</h1>
     <div class="balance-pill">
-      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
-      <span id="topTickets">0</span>
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+      <span id="starsBalance">0</span>
     </div>
-    <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
-      <span id="topStars">0</span>
-    </div>
-  </div>
+  </header>
 
-  <main class="main-scroll">
-    <div class="page-header">
-      <h1 class="page-title">
-        <div class="page-title-icon">
-          <img src="https://img.icons8.com/liquid-glass-color/999/alarm-clock.png" alt="clock">
-        </div>
-        ساعة الفضاء
-      </h1>
-      <p class="page-subtitle">اشترك في Battle Pass وأكمل التحديات للحصول على الساعة الأسطورية</p>
+  <main class="scroll-area">
+    <div class="loading-state" id="loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>جاري التحميل...</p>
     </div>
 
-    <!-- Battle Pass Info Card -->
-    <div class="info-card">
-      <div class="info-header">
-        <div class="info-icon"><i class="fas fa-crown"></i></div>
-        <div class="info-titles">
-          <h3>Battle Pass</h3>
-          <p>اشترك مرة واحدة وأكمل التحديات خلال 14 يوماً</p>
-        </div>
-      </div>
+    <div id="mainContent" style="display:none;">
 
-      <div class="info-features">
-        <div class="info-feature">
-          <i class="fas fa-check"></i>
-          <span>15 مستوى من التحديات المتنوعة</span>
-        </div>
-        <div class="info-feature">
-          <i class="fas fa-check"></i>
-          <span>تتبع تلقائي لتقدمك في التطبيق</span>
-        </div>
-        <div class="info-feature">
-          <i class="fas fa-check"></i>
-          <span>ساعة الفضاء الأسطورية عند إكمال جميع المستويات</span>
-        </div>
-      </div>
-
-      <div class="info-price-row">
-        <div>
-          <div class="info-price-label">سعر الاشتراك</div>
-          <div class="info-price">
-            <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
-            <span>499</span>
+      <div class="clock-hero">
+        <div class="hero-bg"></div>
+        <div class="clock-wrap">
+          <div class="clock-glow"></div>
+          <div class="clock-orbit o1"></div>
+          <div class="clock-orbit o2"></div>
+          <div class="clock-face">
+            <div class="clock-marker m1"></div>
+            <div class="clock-marker m2"></div>
+            <div class="clock-marker m3"></div>
+            <div class="clock-marker m4"></div>
+            <div class="clock-hand hour"></div>
+            <div class="clock-hand minute"></div>
+            <div class="clock-center"></div>
           </div>
         </div>
-        <div class="info-duration">
-          <i class="fas fa-calendar-alt"></i>
-          14 يوم
+      </div>
+
+      <h2 class="hero-title">ساعة الفضاء</h2>
+      <p class="hero-subtitle">هدية أسطورية من الموسم الأول</p>
+
+      <div class="rarity-badge">
+        <i class="fas fa-crown"></i>
+        <span>أسطورية</span>
+      </div>
+
+      <div class="value-row">
+        <div class="value-item">
+          <span class="value-label">قيمة البيع</span>
+          <span class="value-amount" id="sellPriceDisplay">12,000 ⭐</span>
         </div>
       </div>
 
-      <button class="subscribe-btn" id="subscribeBtn" onclick="openSubscribeModal()">
-        <i class="fas fa-rocket"></i>
-        اشترك الآن
-      </button>
-    </div>
-
-    <div class="notice-bar" id="noticeBar">
-      <i class="fas fa-info-circle"></i>
-      <p>يجب الاشتراك أولاً لبدء إكمال المستويات والحصول على ساعة الفضاء</p>
-    </div>
-
-    <div class="section-header">
-      <div class="section-title">
-        <i class="fas fa-list-check"></i>
-        المستويات
+      <!-- Not subscribed -->
+      <div id="subscribeState">
+        <div class="season-card">
+          <div class="season-stars" aria-hidden="true">
+            <span>✦</span><span>★</span><span>✦</span><span>★</span>
+            <span>✦</span><span>★</span><span>✦</span><span>★</span>
+          </div>
+          <div class="season-badge">
+            <i class="fas fa-star"></i>
+            الموسم الأول
+          </div>
+          <h3>اشترك واكمل المهام</h3>
+          <p>احصل على الساعة الأسطورية بعد إتمام جميع مهام الموسم</p>
+          <button class="subscribe-btn" id="subscribeBtn" onclick="handleSubscribe()">
+            <div class="btn-stars" aria-hidden="true">
+              <span>★</span><span>✦</span><span>★</span><span>✦</span><span>★</span><span>✦</span>
+            </div>
+            <div class="btn-content">
+              <span class="btn-label">اشترك الآن</span>
+              <span class="btn-price" id="subPrice">3,000 ⭐</span>
+            </div>
+          </button>
+        </div>
       </div>
-      <div class="section-count" id="progressCount">0 / 15</div>
-    </div>
 
-    <div class="levels-scroll-wrap">
-      <div class="levels-scroll" id="levelsScroll"></div>
+      <!-- Subscribed, missions -->
+      <div id="missionsState" style="display:none;">
+        <div class="progress-card">
+          <div class="progress-header">
+            <span>المهام المكتملة</span>
+            <span id="progressText">0 / 4</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="missions-list" id="missionsList"></div>
+
+        <button class="claim-btn" id="claimBtn" onclick="handleClaim()" disabled>
+          <i class="fas fa-gift"></i>
+          <span id="claimBtnText">اكمل جميع المهام أولاً</span>
+        </button>
+      </div>
+
+      <!-- Owned -->
+      <div id="ownedState" style="display:none;">
+        <div class="owned-card">
+          <div class="owned-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>الساعة في ممتلكاتك!</h3>
+          <p>يمكنك الآن بيعها من صفحة الممتلكات</p>
+          <button class="view-props-btn" onclick="goToProperties()">
+            <i class="fas fa-box"></i>
+            عرض الممتلكات
+          </button>
+        </div>
+      </div>
+
     </div>
   </main>
-
-  <div class="dock">
-    <button class="back-btn" onclick="goHome()">
-      <i class="fas fa-arrow-right"></i>
-      العودة للرئيسية
-    </button>
-  </div>
 </div>
 
-<!-- SUBSCRIBE MODAL -->
-<div class="modal-overlay" id="subscribeModal">
-  <div class="modal-content">
-    <div class="modal-icon">
-      <i class="fas fa-crown"></i>
-    </div>
-    <h3>تأكيد الاشتراك</h3>
-    <p>سيتم خصم المبلغ من رصيدك لتفعيل Battle Pass لمدة 14 يوماً</p>
-    <div class="modal-price-box">
-      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
-      <span>499</span>
-      <small>نجمة</small>
-    </div>
-    <div class="modal-balance-info">
-      رصيدك الحالي: <strong id="modalCurrentBalance">0</strong> نجمة
-    </div>
-    <button class="modal-btn" id="confirmSubBtn" onclick="confirmSubscribe()">
-      <i class="fas fa-check"></i>
-      تأكيد الدفع
-    </button>
-    <button class="modal-btn-cancel" onclick="closeModal('subscribeModal')">إلغاء</button>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
 
-<!-- SUCCESS MODAL -->
 <div class="modal-overlay" id="successModal">
   <div class="modal-content">
-    <div class="success-icon"><i class="fas fa-check"></i></div>
-    <h3>تم الاشتراك بنجاح</h3>
-    <p>تم تفعيل Battle Pass لمدة 14 يوماً. ابدأ الآن بإكمال التحديات للحصول على ساعة الفضاء</p>
-    <button class="modal-btn" onclick="closeModal('successModal')">ابدأ التحديات</button>
+    <div style="font-size:70px; margin-bottom:16px;">🎁</div>
+    <h3>مبروك!</h3>
+    <p>تمت إضافة ساعة الفضاء إلى ممتلكاتك</p>
+    <button class="modal-btn" onclick="goToProperties()">عرض الممتلكات</button>
   </div>
 </div>
 
-<!-- INSUFFICIENT MODAL -->
-<div class="modal-overlay" id="insufficientModal">
-  <div class="modal-content">
-    <div class="modal-icon" style="background:rgba(224,56,88,0.10); border-color:rgba(224,56,88,0.20);">
-      <i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>
-    </div>
-    <h3>رصيدك غير كافٍ</h3>
-    <p>تحتاج <strong id="shortAmount" style="color:var(--danger);">0</strong> نجمة إضافية للاشتراك</p>
-    <button class="modal-btn" onclick="closeModal('insufficientModal'); goHome();">العودة للشحن</button>
-    <button class="modal-btn-cancel" onclick="closeModal('insufficientModal')">إغلاق</button>
-  </div>
-</div>
+<script>'use strict';
 
-<!-- CLOCK EARNED MODAL -->
-<div class="modal-overlay" id="clockEarnedModal">
-  <div class="modal-content">
-    <div class="modal-icon" style="background:linear-gradient(135deg,rgba(245,215,110,0.30),rgba(201,162,39,0.15)); border-color:rgba(201,162,39,0.30);">
-      <img src="https://img.icons8.com/liquid-glass-color/999/alarm-clock.png" alt="clock">
-    </div>
-    <h3>مبروك</h3>
-    <p>لقد أكملت جميع مستويات Battle Pass وحصلت على <strong>ساعة الفضاء</strong>. تمت إضافتها إلى ممتلكاتك</p>
-    <button class="modal-btn" onclick="closeModal('clockEarnedModal'); window.location.href='properties.html';">مشاهدة الممتلكات</button>
-  </div>
-</div>
-
-<div class="toast" id="toast">رسالة</div>
-
-<script>
-'use strict';
-
+/* ============ CONFIG ============ */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCX29raUbUMwSFMIlKo_t7aDA6p6hvx7HI",
   authDomain: "starnovagame.firebaseapp.com",
@@ -770,355 +746,366 @@ const FIREBASE_CONFIG = {
   appId: "1:571608140423:web:f1516e0572efada7068622"
 };
 
-const ASSETS = {
-  star: 'https://up6.cc/2026/10/17932600818491.png',
-  ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png',
-  clock: 'https://img.icons8.com/liquid-glass-color/999/alarm-clock.png'
+const SEASON_CONFIG = {
+  id: 'season1',
+  name: 'الموسم الأول',
+  price: 3000,
+  missions: [
+    { key: 'invite', title: 'ادعُ 3 أصدقاء', desc: 'شارك رابط الدعوة وادعُ 3 أصدقاء', icon: 'fa-user-friends', goal: 3 },
+    { key: 'crash', title: 'العب 10 جولات Crash', desc: 'العب 10 جولات كاملة في لعبة Crash', icon: 'fa-rocket', goal: 10 },
+    { key: 'streak', title: 'حافظ على 3 أيام متتالية', desc: 'استلم المكافأة اليومية 3 أيام متتالية', icon: 'fa-fire', goal: 3 },
+    { key: 'tickets', title: 'اجمع 10 تذاكر', desc: 'اجمع 10 تذاكر من المهام والدعوات', icon: 'fa-ticket-alt', goal: 10 }
+  ]
 };
 
-const BP_PRICE = 499;
-const BP_DURATION_MS = 14 * 24 * 60 * 60 * 1000;
-
-let user = {
-  id: '123456789', name: 'لاعب', photo: '',
-  stars: 0, tickets: 0, referralCount: 0,
-  completedTasks: [], dailyStreak: 0,
-  totalDeposited: 0, slotsSpins: 0,
-  crashPlays: 0, crashMaxMultiplier: 0,
-  battlePass: null,
-  properties: []
+const CLOCK_ITEM = {
+  id: 'spaceClock',
+  name: 'ساعة الفضاء',
+  rarity: 'legendary',
+  sellPrice: 12000,
+  season: SEASON_CONFIG.id
 };
-let db = null;
+
+/* ============ STATE ============ */
 const tg = window.Telegram?.WebApp;
-
-/* ============ LEVELS ============ */
-const LEVELS = [
-  { num: 1, title: 'تسجيل الدخول', desc: 'سجّل دخولك مرة', field: 'dailyStreak', target: 1, icon: 'fa-calendar-check' },
-  { num: 2, title: 'دعوة صديق', desc: 'ادعُ صديقاً واحداً', field: 'referralCount', target: 1, icon: 'fa-user-plus' },
-  { num: 3, title: 'العب Slots', desc: 'العب 3 مرات', field: 'slotsSpins', target: 3, icon: 'fa-dice' },
-  { num: 4, title: 'إيداع 50 نجمة', desc: 'أودع 50 نجمة', field: 'totalDeposited', target: 50, icon: 'fa-coins' },
-  { num: 5, title: '3 أصدقاء', desc: 'ادعُ 3 إجمالاً', field: 'referralCount', target: 3, icon: 'fa-users' },
-  { num: 6, title: '10 Crash', desc: 'العب 10 جولات', field: 'crashPlays', target: 10, icon: 'fa-rocket' },
-  { num: 7, title: 'مهمتان', desc: 'أكمل مهمتين', field: 'completedTasksCount', target: 2, icon: 'fa-tasks' },
-  { num: 8, title: 'إيداع 150', desc: 'أودع 150 إجمالاً', field: 'totalDeposited', target: 150, icon: 'fa-star' },
-  { num: 9, title: '6 أصدقاء', desc: 'ادعُ 6 إجمالاً', field: 'referralCount', target: 6, icon: 'fa-user-friends' },
-  { num: 10, title: '15 Slots', desc: 'العب 15 مرة', field: 'slotsSpins', target: 15, icon: 'fa-dice' },
-  { num: 11, title: 'x1.5 في Crash', desc: 'اصعد إلى x1.5', field: 'crashMaxMultiplier', target: 1.5, icon: 'fa-arrow-trend-up' },
-  { num: 12, title: 'إيداع 300', desc: 'أودع 300 إجمالاً', field: 'totalDeposited', target: 300, icon: 'fa-sack-dollar' },
-  { num: 13, title: '10 أصدقاء', desc: 'ادعُ 10 إجمالاً', field: 'referralCount', target: 10, icon: 'fa-medal' },
-  { num: 14, title: 'إيداع 500', desc: 'أودع 500 إجمالاً', field: 'totalDeposited', target: 500, icon: 'fa-gem' },
-  { num: 15, title: 'الساعة', desc: 'أكمل كل المستويات', field: 'previousComplete', target: 14, icon: 'fa-clock', isFinal: true }
-];
+let db = null;
+let userId = null;
+let userData = {};
+let crashCount = 0;
+let isLoading = false;
 
 /* ============ HELPERS ============ */
 function formatNum(n) {
   if (n === null || n === undefined) return '0';
   const num = Number(n);
   if (!isFinite(num)) return '0';
-  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
-  const [intPart, decPart] = str.split('.');
-  const f = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return decPart ? f + '.' + decPart : f;
+  return String(Math.floor(num)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
-function showToast(msg) {
+
+function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
 }
-function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-/* ============ TELEGRAM ============ */
+function goBack() {
+  try {
+    if (window.history.length > 1) { window.history.back(); return; }
+  } catch(e) {}
+  window.location.href = './index.html';
+}
+
+function goToProperties() {
+  window.location.href = './properties.html';
+}
+
+/* ============ TELEGRAM INIT ============ */
 function initTelegram() {
-  if (!tg) return;
-  tg.ready(); tg.expand();
-  tg.setHeaderColor?.('#ffffff');
-  tg.setBackgroundColor?.('#ffffff');
-  if (tg.initDataUnsafe?.user) {
-    user.id = String(tg.initDataUnsafe.user.id);
-    user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
-    user.photo = tg.initDataUnsafe.user.photo_url || '';
+  if (!tg) {
+    // Not in Telegram - demo fallback
+    userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
+    localStorage.setItem('sn_demo_id', userId);
+    return false;
   }
-  // Show native back button
+  tg.ready();
+  tg.expand();
+  if (tg.setHeaderColor) tg.setHeaderColor('#ffffff');
+  if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
   if (tg.BackButton) {
     tg.BackButton.show();
-    tg.BackButton.onClick(() => goHome());
+    tg.BackButton.onClick(() => goBack());
   }
+  const u = tg.initDataUnsafe?.user;
+  if (u) {
+    userId = String(u.id);
+    return true;
+  }
+  userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
+  localStorage.setItem('sn_demo_id', userId);
+  return false;
 }
 
 /* ============ FIREBASE ============ */
-function initFirebase() {
-  try {
-    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.firestore();
-    db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    loadUserData().then(() => {
-      renderBalances();
-      renderLevels();
-      updateSubscribeState();
-    });
-  } catch (e) {
-    console.log('[BP] Firebase error:', e.message);
-  }
+async function initFirebase() {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
 }
 
 async function loadUserData() {
-  if (!db) return;
+  if (!db || !userId) throw new Error('no user');
+  const ref = db.collection('users').doc(userId);
+  const doc = await ref.get();
+  if (!doc.exists) {
+    // Create minimal user doc
+    await ref.set({
+      telegramId: userId,
+      name: 'لاعب',
+      stars: 0, tickets: 0, referralCount: 0,
+      dailyStreak: 0,
+      ownedItems: [],
+      seasonSubscription: {},
+      createdAt: Date.now()
+    }, { merge: true });
+    userData = {
+      stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0,
+      ownedItems: [], seasonSubscription: {}
+    };
+  } else {
+    userData = doc.data();
+  }
+  // Load crash rounds count
   try {
-    const doc = await db.collection('users').doc(user.id).get();
-    if (doc.exists) {
-      const d = doc.data();
-      user.stars = d.stars || 0;
-      user.tickets = d.tickets || 0;
-      user.referralCount = d.referralCount || 0;
-      user.completedTasks = d.completedTasks || [];
-      user.dailyStreak = d.dailyStreak || 0;
-      user.totalDeposited = d.totalDeposited || 0;
-      user.slotsSpins = d.slotsSpins || 0;
-      user.crashPlays = d.crashPlays || 0;
-      user.crashMaxMultiplier = d.crashMaxMultiplier || 0;
-      user.battlePass = d.battlePass || null;
-      user.properties = d.properties || [];
-    }
-  } catch (e) {
-    console.log('[BP] Load error:', e.message);
+    const snap = await db.collection('users').doc(userId).collection('crash_rounds').get();
+    crashCount = snap.size;
+  } catch (e) { crashCount = 0; }
+}
+
+/* ============ STATE DETECTION ============ */
+function getSeasonState() {
+  const sub = userData.seasonSubscription?.[SEASON_CONFIG.id];
+  const owned = Array.isArray(userData.ownedItems) && userData.ownedItems.some(i => i.id === CLOCK_ITEM.id);
+  const claimed = sub?.claimed === true;
+  const subscribed = sub?.subscribed === true;
+
+  if (owned) return { state: 'owned' };
+  if (claimed) return { state: 'owned' }; // claimed but maybe sold - still considered "completed"
+  if (subscribed) return { state: 'missions' };
+  return { state: 'subscribe' };
+}
+
+/* ============ MISSIONS ============ */
+function getMissionProgress(mission) {
+  switch (mission.key) {
+    case 'invite': return userData.referralCount || 0;
+    case 'crash': return crashCount || 0;
+    case 'streak': return userData.dailyStreak || 0;
+    case 'tickets': return userData.tickets || 0;
+    default: return 0;
   }
 }
 
-/* ============ RENDER ============ */
-function renderBalances() {
-  document.getElementById('topStars').innerText = formatNum(user.stars);
-  document.getElementById('topTickets').innerText = formatNum(user.tickets);
-}
-
-function isBattlePassActive() {
-  if (!user.battlePass || !user.battlePass.subscribed) return false;
-  if (user.battlePass.expiresAt && Date.now() > user.battlePass.expiresAt) return false;
-  return true;
-}
-
-function getLevelProgress(level) {
-  if (level.isFinal) {
-    let prevComplete = 0;
-    for (let i = 0; i < LEVELS.length - 1; i++) {
-      const p = getLevelProgress(LEVELS[i]);
-      if (p.current >= p.target) prevComplete++;
-    }
-    return { current: prevComplete, target: 14 };
-  }
-  if (level.field === 'completedTasksCount') {
-    return { current: Math.min(user.completedTasks.length, level.target), target: level.target };
-  }
-  const val = Number(user[level.field]) || 0;
-  return { current: Math.min(val, level.target), target: level.target };
-}
-
-function renderLevels() {
-  const container = document.getElementById('levelsScroll');
-  if (!container) return;
-  container.innerHTML = '';
-
-  const bpActive = isBattlePassActive();
+function renderMissions() {
+  const list = document.getElementById('missionsList');
+  list.innerHTML = '';
   let completedCount = 0;
-  let currentLevelSet = false;
 
-  LEVELS.forEach((level) => {
-    const progress = getLevelProgress(level);
-    const pct = Math.min(100, Math.round((progress.current / progress.target) * 100));
-    const isCompleted = pct >= 100;
-    if (isCompleted) completedCount++;
+  SEASON_CONFIG.missions.forEach(m => {
+    const current = Math.min(getMissionProgress(m), m.goal);
+    const done = current >= m.goal;
+    if (done) completedCount++;
 
-    let cardClass = 'level-card';
-    if (level.isFinal) cardClass += ' final';
-    if (isCompleted) cardClass += ' completed';
-    else if (bpActive && !currentLevelSet) { cardClass += ' current'; currentLevelSet = true; }
-    else if (bpActive) cardClass += ' current';
-    else cardClass += ' locked';
-
-    // Icon HTML
-    let iconHTML;
-    if (level.isFinal) {
-      iconHTML = `<img src="${ASSETS.clock}" alt="clock">`;
-    } else {
-      iconHTML = `<i class="fas ${level.icon}"></i>`;
-    }
-
-    // Status icon
-    let statusIcon = '';
-    if (isCompleted) statusIcon = '<div class="level-status-icon"><i class="fas fa-check"></i></div>';
-    else if (cardClass.includes('current')) statusIcon = '<div class="level-status-icon"><i class="fas fa-circle" style="font-size:6px;"></i></div>';
-
-    const card = document.createElement('div');
-    card.className = cardClass;
-    card.innerHTML = `
-      ${statusIcon}
-      <div class="level-num-badge">LV ${level.num}</div>
-      <div class="level-icon-box">${iconHTML}</div>
-      <div class="level-task-name">${level.title}</div>
-      <div class="level-task-desc">${level.desc}</div>
-      <div class="level-progress-bar-wrap">
-        <div class="level-progress-fill" style="width: ${pct}%"></div>
+    const item = document.createElement('div');
+    item.className = 'mission-item' + (done ? ' completed' : '');
+    item.innerHTML = `
+      <div class="mission-icon"><i class="fas ${m.icon}"></i></div>
+      <div class="mission-body">
+        <div class="mission-title">${m.title}</div>
+        <div class="mission-desc">${m.desc}</div>
+        <div class="mission-progress">${current} / ${m.goal}</div>
       </div>
-      <div class="level-progress-row">
-        <span class="pct">${pct}%</span>
-        <span>${formatNum(progress.current)}/${formatNum(progress.target)}</span>
-      </div>
+      <div class="mission-check"><i class="fas fa-check"></i></div>
     `;
-    container.appendChild(card);
+    list.appendChild(item);
   });
 
-  document.getElementById('progressCount').textContent = `${completedCount} / ${LEVELS.length}`;
+  const total = SEASON_CONFIG.missions.length;
+  document.getElementById('progressText').textContent = `${completedCount} / ${total}`;
+  document.getElementById('progressFill').style.width = (completedCount / total * 100) + '%';
 
-  // Check clock reward
-  if (completedCount >= LEVELS.length && bpActive && !user.battlePass?.clockEarned) {
-    awardClock();
-  }
-}
+  const claimBtn = document.getElementById('claimBtn');
+  const claimBtnText = document.getElementById('claimBtnText');
+  const allDone = completedCount === total;
 
-async function awardClock() {
-  if (!db) return;
-  try {
-    const clockItem = {
-      id: 'space_clock',
-      name: 'ساعة الفضاء',
-      image: ASSETS.clock,
-      rarity: 'legendary',
-      source: 'battle_pass',
-      category: 'clocks',
-      acquiredAt: Date.now(),
-      sellPrice: 799,
-      description: 'ساعة أسطورية حصلت عليها من إكمال Battle Pass'
-    };
-    await db.collection('users').doc(user.id).update({
-      'battlePass.clockEarned': true,
-      'battlePass.clockEarnedAt': Date.now(),
-      properties: firebase.firestore.FieldValue.arrayUnion(clockItem)
-    });
-    user.battlePass.clockEarned = true;
-    if (!user.properties) user.properties = [];
-    user.properties.push(clockItem);
-    setTimeout(() => openModal('clockEarnedModal'), 500);
-  } catch (e) {
-    console.log('[BP] Clock award error:', e.message);
-  }
-}
-
-/* ============ SUBSCRIBE STATE ============ */
-function updateSubscribeState() {
-  const btn = document.getElementById('subscribeBtn');
-  const notice = document.getElementById('noticeBar');
-  const bpActive = isBattlePassActive();
-  const hasExpired = user.battlePass?.subscribed && user.battlePass?.expiresAt && Date.now() > user.battlePass.expiresAt;
-
-  if (bpActive) {
-    const daysLeft = Math.max(0, Math.ceil((user.battlePass.expiresAt - Date.now()) / (1000 * 60 * 60 * 24)));
-    btn.className = 'subscribe-btn active';
-    btn.innerHTML = `<i class="fas fa-check-circle"></i> مشترك - ${daysLeft} يوم متبقي`;
-    btn.onclick = () => showToast(`اشتراكك ساري حتى ${new Date(user.battlePass.expiresAt).toLocaleDateString('ar-EG')}`);
-    notice.style.display = 'none';
-  } else if (hasExpired) {
-    btn.className = 'subscribe-btn expired';
-    btn.innerHTML = '<i class="fas fa-redo"></i> تجديد الاشتراك';
-    btn.onclick = openSubscribeModal;
-    notice.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>انتهى اشتراكك. جدّد لمتابعة التحديات</p>';
-    notice.style.display = 'flex';
+  if (allDone) {
+    claimBtn.disabled = false;
+    claimBtn.classList.add('ready');
+    claimBtnText.textContent = 'استلم ساعة الفضاء';
   } else {
-    btn.className = 'subscribe-btn';
-    btn.innerHTML = '<i class="fas fa-rocket"></i> اشترك الآن';
-    btn.onclick = openSubscribeModal;
-    notice.innerHTML = '<i class="fas fa-info-circle"></i><p>يجب الاشتراك أولاً لبدء إكمال المستويات</p>';
-    notice.style.display = 'flex';
+    claimBtn.disabled = true;
+    claimBtn.classList.remove('ready');
+    claimBtnText.textContent = `اكمل ${total - completedCount} مهام متبقية`;
   }
 }
 
-/* ============ SUBSCRIBE FLOW ============ */
-function openSubscribeModal() {
-  if (isBattlePassActive()) { showToast('أنت مشترك بالفعل'); return; }
-  document.getElementById('modalCurrentBalance').textContent = formatNum(user.stars);
-  openModal('subscribeModal');
+/* ============ RENDER UI ============ */
+function renderUI() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('starsBalance').textContent = formatNum(userData.stars || 0);
+  document.getElementById('subPrice').textContent = formatNum(SEASON_CONFIG.price) + ' ⭐';
+  document.getElementById('sellPriceDisplay').textContent = formatNum(CLOCK_ITEM.sellPrice) + ' ⭐';
+
+  const { state } = getSeasonState();
+  document.getElementById('subscribeState').style.display = 'none';
+  document.getElementById('missionsState').style.display = 'none';
+  document.getElementById('ownedState').style.display = 'none';
+
+  if (state === 'subscribe') {
+    document.getElementById('subscribeState').style.display = 'block';
+  } else if (state === 'missions') {
+    document.getElementById('missionsState').style.display = 'block';
+    renderMissions();
+  } else {
+    document.getElementById('ownedState').style.display = 'block';
+  }
 }
 
-async function confirmSubscribe() {
-  const btn = document.getElementById('confirmSubBtn');
-  if (btn.disabled) return;
+/* ============ ACTIONS ============ */
+async function handleSubscribe() {
+  if (isLoading) return;
+  const { state } = getSeasonState();
+  if (state !== 'subscribe') return;
 
-  if (user.stars < BP_PRICE) {
-    closeModal('subscribeModal');
-    document.getElementById('shortAmount').textContent = formatNum(BP_PRICE - user.stars);
-    openModal('insufficientModal');
+  if ((userData.stars || 0) < SEASON_CONFIG.price) {
+    showToast('رصيدك غير كافٍ. تحتاج ' + formatNum(SEASON_CONFIG.price - (userData.stars || 0)) + ' نجمة إضافية', 'error');
     return;
   }
 
+  if (!confirm(`هل تريد الاشتراك في ${SEASON_CONFIG.name} مقابل ${formatNum(SEASON_CONFIG.price)} نجمة؟`)) return;
+
+  isLoading = true;
+  const btn = document.getElementById('subscribeBtn');
   btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+  const originalHTML = btn.querySelector('.btn-content').innerHTML;
+  btn.querySelector('.btn-content').innerHTML = '<span class="btn-label"><i class="fas fa-spinner fa-spin"></i> جاري الاشتراك...</span>';
 
   try {
-    const userRef = db.collection('users').doc(user.id);
-    await db.runTransaction(async (transaction) => {
-      const doc = await transaction.get(userRef);
-      if (!doc.exists) throw new Error('USER_NOT_FOUND');
-      const data = doc.data();
-      const currentStars = data.stars || 0;
-      if (currentStars < BP_PRICE) throw new Error('INSUFFICIENT');
+    const userRef = db.collection('users').doc(userId);
+    await db.runTransaction(async (tx) => {
+      const doc = await tx.get(userRef);
+      const data = doc.data() || {};
+      const balance = data.stars || 0;
+      if (balance < SEASON_CONFIG.price) throw new Error('insufficient');
 
-      const now = Date.now();
-      transaction.update(userRef, {
-        stars: currentStars - BP_PRICE,
-        battlePass: {
-          subscribed: true,
-          subscribedAt: now,
-          expiresAt: now + BP_DURATION_MS,
-          clockEarned: false,
-          clockEarnedAt: null
-        }
+      const sub = data.seasonSubscription || {};
+      if (sub[SEASON_CONFIG.id]?.subscribed) throw new Error('already');
+
+      sub[SEASON_CONFIG.id] = {
+        subscribed: true,
+        subscribedAt: Date.now(),
+        claimed: false
+      };
+      tx.update(userRef, {
+        stars: balance - SEASON_CONFIG.price,
+        seasonSubscription: sub
       });
     });
 
-    user.stars -= BP_PRICE;
-    user.battlePass = {
+    userData.stars = (userData.stars || 0) - SEASON_CONFIG.price;
+    userData.seasonSubscription = userData.seasonSubscription || {};
+    userData.seasonSubscription[SEASON_CONFIG.id] = {
       subscribed: true,
       subscribedAt: Date.now(),
-      expiresAt: Date.now() + BP_DURATION_MS,
-      clockEarned: false
+      claimed: false
     };
 
-    renderBalances();
-    updateSubscribeState();
-    renderLevels();
-    closeModal('subscribeModal');
-    setTimeout(() => openModal('successModal'), 200);
-    showToast('تم تفعيل Battle Pass');
+    showToast('تم الاشتراك بنجاح! ابدأ بإكمال المهام', 'success');
+    renderUI();
   } catch (e) {
-    closeModal('subscribeModal');
-    if (e.message === 'INSUFFICIENT') {
-      document.getElementById('shortAmount').textContent = formatNum(BP_PRICE - user.stars);
-      openModal('insufficientModal');
-    } else {
-      showToast('حدث خطأ، حاول لاحقاً');
-    }
-  } finally {
+    if (e.message === 'insufficient') showToast('رصيدك غير كافٍ', 'error');
+    else if (e.message === 'already') showToast('أنت مشترك بالفعل', 'error');
+    else showToast('حدث خطأ. حاول لاحقاً', 'error');
     btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-check"></i> تأكيد الدفع';
+    btn.querySelector('.btn-content').innerHTML = originalHTML;
+  } finally {
+    isLoading = false;
   }
 }
 
-/* ============ NAVIGATION ============ */
-function goHome() {
-  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-  if (tg?.BackButton) tg.BackButton.hide();
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.replace('index.html');
+async function handleClaim() {
+  if (isLoading) return;
+  const { state } = getSeasonState();
+  if (state !== 'missions') return;
+
+  // Verify all missions
+  const allDone = SEASON_CONFIG.missions.every(m => getMissionProgress(m) >= m.goal);
+  if (!allDone) {
+    showToast('لم تكمل جميع المهام بعد', 'error');
+    return;
+  }
+
+  if (!confirm('هل أنت متأكد من استلام ساعة الفضاء؟ لن تتمكن من استلامها مرة أخرى.')) return;
+
+  isLoading = true;
+  const btn = document.getElementById('claimBtn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'جاري الاستلام...';
+
+  try {
+    const userRef = db.collection('users').doc(userId);
+    const newItem = {
+      id: CLOCK_ITEM.id,
+      name: CLOCK_ITEM.name,
+      rarity: CLOCK_ITEM.rarity,
+      sellPrice: CLOCK_ITEM.sellPrice,
+      season: CLOCK_ITEM.season,
+      acquiredAt: Date.now()
+    };
+
+    await db.runTransaction(async (tx) => {
+      const doc = await tx.get(userRef);
+      const data = doc.data() || {};
+      const sub = data.seasonSubscription || {};
+      const s = sub[SEASON_CONFIG.id] || {};
+      if (s.claimed) throw new Error('already_claimed');
+
+      const owned = Array.isArray(data.ownedItems) ? data.ownedItems.slice() : [];
+      if (owned.some(i => i.id === CLOCK_ITEM.id)) throw new Error('already_owned');
+      owned.push(newItem);
+
+      s.claimed = true;
+      s.claimedAt = Date.now();
+      sub[SEASON_CONFIG.id] = s;
+
+      tx.update(userRef, {
+        ownedItems: owned,
+        seasonSubscription: sub
+      });
+    });
+
+    userData.ownedItems = (userData.ownedItems || []).concat([newItem]);
+    userData.seasonSubscription = userData.seasonSubscription || {};
+    userData.seasonSubscription[SEASON_CONFIG.id] = {
+      ...(userData.seasonSubscription[SEASON_CONFIG.id] || {}),
+      claimed: true,
+      claimedAt: Date.now()
+    };
+
+    document.getElementById('successModal').classList.add('show');
+    renderUI();
+  } catch (e) {
+    if (e.message === 'already_claimed' || e.message === 'already_owned') {
+      showToast('لقد استلمت الساعة بالفعل', 'error');
+      renderUI();
+    } else {
+      showToast('حدث خطأ. حاول لاحقاً', 'error');
+      btn.disabled = false;
+    }
+  } finally {
+    isLoading = false;
   }
 }
 
 /* ============ INIT ============ */
-document.addEventListener('DOMContentLoaded', () => {
-  initTelegram();
-  initFirebase();
-});
+async function init() {
+  try {
+    initTelegram();
+    await initFirebase();
+    await loadUserData();
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('loading').innerHTML = `
+      <i class="fas fa-exclamation-circle" style="color:#e03858"></i>
+      <p>تعذر تحميل البيانات</p>
+      <button onclick="location.reload()" style="margin-top:12px; padding:10px 20px; background:#1a1c2e; color:#fff; border-radius:12px; font-weight:800;">إعادة المحاولة</button>
+    `;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
