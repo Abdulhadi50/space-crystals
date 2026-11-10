@@ -10,200 +10,148 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <style>
 :root {
   --bg-main: #ffffff;
   --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-soft: rgba(0, 0, 0, 0.03);
   --text-primary: #151622;
   --text-secondary: #5b5d6e;
   --text-tertiary: #9395a5;
   --border: rgba(0, 0, 0, 0.08);
   --success: #0fa96e;
   --danger: #e03858;
-  --gold: #c9a227;
+  --warning: #c9791a;
+  --gold: #b8912a;
   --purple: #8B5CF6;
-  --purple-dark: #6D28D9;
-  --safe-top: env(safe-area-inset-top, 20px);
   --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --safe-top: env(safe-area-inset-top, 20px);
+  --top-bar-height: 10vh;
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
   --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
-  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06);
-  --shadow-purple: 0 12px 30px rgba(139, 92, 246, 0.4);
+  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-purple: 0 12px 30px rgba(139, 92, 246, 0.35);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body {
-  height: 100%; overflow: hidden;
-  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #ffffff; color: var(--text-primary);
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+  background: var(--bg-main); color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
-  user-select: none; -webkit-user-select: none;
+  overscroll-behavior: none; user-select: none; -webkit-user-select: none;
+  direction: rtl; position: relative;
 }
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, 0.08), transparent 60%),
-    radial-gradient(ellipse 55% 40% at 50% 100%, rgba(201, 162, 39, 0.05), transparent 60%);
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(91, 141, 239, 0.05), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 98% 12%, rgba(201, 162, 39, 0.03), transparent 55%),
+    radial-gradient(ellipse 75% 55% at 50% 108%, rgba(140, 90, 220, 0.04), transparent 60%);
   pointer-events: none; z-index: 0;
 }
 button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input { font: inherit; }
 ::-webkit-scrollbar { display: none; }
 
 .app-container {
-  display: flex; flex-direction: column;
-  height: 100dvh; max-width: 480px;
-  margin: 0 auto; position: relative; z-index: 1;
-  overflow: hidden;
+  display: flex; flex-direction: column; height: 100dvh;
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto; overflow: hidden;
 }
 
-.page-header {
-  display: flex; align-items: center;
-  padding: calc(var(--safe-top) + 10px) 16px 10px;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.7);
+/* ============ APP BAR (same as index) ============ */
+.top-app-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: calc(var(--top-bar-height) + var(--safe-top));
+  background: rgba(255, 255, 255, 0.55);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  z-index: 10;
-  border-bottom: 1px solid var(--border);
+  z-index: 50; padding-top: var(--safe-top);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
 }
-.back-btn {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary);
-  font-size: 16px;
-  transition: transform 0.15s var(--spring);
-  flex-shrink: 0;
-}
-.back-btn:active { transform: scale(0.9); }
-.page-header h1 {
-  font-size: 18px; font-weight: 800;
-  flex: 1; letter-spacing: -0.3px;
+.floating-balances {
+  position: absolute;
+  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between; z-index: 51;
 }
 .balance-pill {
   display: flex; align-items: center;
   background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
-  border: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 999px;
-  padding: 6px 12px; gap: 6px;
-  font-weight: 800; font-size: 14px;
-  box-shadow: 0 4px 14px rgba(30,40,80,0.06);
-  flex-shrink: 0;
+  padding: 3px 10px; gap: 6px;
+  color: var(--text-primary); font-weight: 800; font-size: 15px;
+  box-shadow: 0 6px 18px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.balance-pill img { width: 18px; height: 18px; border-radius: 50%; }
+.balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
 .balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
 
-.scroll-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 16px calc(var(--safe-bottom) + 30px);
+.main-scroll {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--safe-bottom) + 40px);
   -webkit-overflow-scrolling: touch;
 }
 
-.loading-state {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 14px; padding: 60px 20px;
-  color: var(--text-secondary);
-}
-.loading-state i { font-size: 32px; color: var(--purple); }
-.loading-state p { font-weight: 700; font-size: 14px; }
-
-/* ============ CLOCK HERO ============ */
+/* ============ HERO CLOCK (TGS) ============ */
 .clock-hero {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   height: 280px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .hero-bg {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.15), transparent 70%),
-    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(201, 162, 39, 0.1), transparent 60%);
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.12), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(201, 162, 39, 0.08), transparent 60%);
   pointer-events: none;
-}
-.clock-wrap {
-  position: relative;
-  width: 220px; height: 220px;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2;
 }
 .clock-glow {
   position: absolute;
-  inset: -30px;
+  width: 260px; height: 260px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 162, 39, 0.4), transparent 60%);
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.35), transparent 60%);
   animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
 }
 @keyframes glowPulse {
   0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 .clock-orbit {
   position: absolute;
   border-radius: 50%;
-  border: 1px dashed rgba(201, 162, 39, 0.4);
+  border: 1px dashed rgba(201, 162, 39, 0.35);
   pointer-events: none;
-}
-.clock-orbit.o1 { inset: -15px; animation: orbitSpin 20s linear infinite; }
-.clock-orbit.o2 { inset: -30px; border-color: rgba(201, 162, 39, 0.2); animation: orbitSpin 30s linear infinite reverse; }
-@keyframes orbitSpin { to { transform: rotate(360deg); } }
-
-.clock-face {
-  position: absolute;
-  inset: 20px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #2a2a40, #0f0f1a 70%);
-  border: 4px solid var(--gold);
-  box-shadow:
-    0 0 50px rgba(201, 162, 39, 0.5),
-    inset 0 0 40px rgba(201, 162, 39, 0.15);
   z-index: 1;
 }
-.clock-marker {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 3px; height: 14px;
-  background: var(--gold);
-  border-radius: 2px;
-  transform-origin: 50% 80px;
-  opacity: 0.6;
-  margin-left: -1.5px;
-  margin-top: -14px;
-}
-.clock-marker.m1 { transform: rotate(0deg); }
-.clock-marker.m2 { transform: rotate(90deg); }
-.clock-marker.m3 { transform: rotate(180deg); }
-.clock-marker.m4 { transform: rotate(270deg); }
-
-.clock-hand {
-  position: absolute;
-  bottom: 50%; left: 50%;
-  transform-origin: bottom center;
-  background: linear-gradient(to top, #c9a227, #f5d76e);
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(201, 162, 39, 0.6);
+.clock-orbit.o1 { width: 280px; height: 280px; animation: orbitSpin 20s linear infinite; }
+.clock-orbit.o2 { width: 320px; height: 320px; border-color: rgba(201, 162, 39, 0.15); animation: orbitSpin 30s linear infinite reverse; }
+@keyframes orbitSpin { to { transform: rotate(360deg); } }
+.clock-tgs-wrap {
+  position: relative;
+  width: 240px; height: 240px;
   z-index: 2;
+  display: flex; align-items: center; justify-content: center;
 }
-.clock-hand.hour { width: 5px; height: 50px; margin-left: -2.5px; animation: rotateHour 60s linear infinite; }
-.clock-hand.minute { width: 4px; height: 75px; margin-left: -2px; animation: rotateMinute 20s linear infinite; }
-@keyframes rotateHour { to { transform: rotate(360deg); } }
-@keyframes rotateMinute { to { transform: rotate(360deg); } }
-.clock-center {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 12px; height: 12px;
-  background: var(--gold);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  box-shadow: 0 0 12px rgba(201, 162, 39, 0.8);
+.clock-tgs-wrap svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  filter: drop-shadow(0 12px 28px rgba(201, 162, 39, 0.35));
 }
 
 .hero-title {
@@ -224,7 +172,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 
 .rarity-badge {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   margin: 0 auto 16px;
   padding: 6px 14px;
   background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
@@ -232,32 +180,33 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   border-radius: 20px;
   color: var(--gold);
   font-weight: 800; font-size: 12px;
-  position: relative; left: 50%; transform: translateX(-50%);
   width: fit-content;
 }
 .rarity-badge i { font-size: 12px; }
 
 .value-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
+  display: flex; justify-content: center;
+  margin-bottom: 20px;
 }
 .value-item {
-  display: flex; flex-direction: column;
-  align-items: center;
-  padding: 10px 22px;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 24px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
 }
 .value-label { font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-bottom: 2px; }
-.value-amount { font-size: 18px; font-weight: 800; color: var(--gold); direction: ltr; }
+.value-amount {
+  font-size: 17px; font-weight: 800; color: var(--gold);
+  direction: ltr;
+  display: flex; align-items: center; gap: 6px;
+}
+.value-amount img { width: 16px; height: 16px; border-radius: 50%; }
 
-/* ============ SEASON CARD (subscribe) ============ */
+/* ============ SEASON CARD ============ */
 .season-card {
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   background: linear-gradient(160deg, #2a1f4d 0%, #1a1235 100%);
   border-radius: 24px;
   padding: 28px 22px;
@@ -266,24 +215,22 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   border: 1px solid rgba(139, 92, 246, 0.3);
 }
 .season-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  position: absolute; inset: 0; pointer-events: none;
 }
-.season-stars span {
+.season-stars i {
   position: absolute;
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   animation: starTwinkle 2.5s ease-in-out infinite;
 }
-.season-stars span:nth-child(1) { top: 8%; left: 12%; animation-delay: 0s; }
-.season-stars span:nth-child(2) { top: 15%; left: 78%; animation-delay: 0.3s; font-size: 10px; }
-.season-stars span:nth-child(3) { top: 40%; left: 8%; animation-delay: 0.6s; font-size: 12px; }
-.season-stars span:nth-child(4) { top: 55%; left: 88%; animation-delay: 0.9s; }
-.season-stars span:nth-child(5) { top: 75%; left: 20%; animation-delay: 1.2s; font-size: 10px; }
-.season-stars span:nth-child(6) { top: 82%; left: 70%; animation-delay: 1.5s; font-size: 12px; }
-.season-stars span:nth-child(7) { top: 30%; left: 45%; animation-delay: 1.8s; font-size: 8px; }
-.season-stars span:nth-child(8) { top: 65%; left: 55%; animation-delay: 2.1s; font-size: 9px; }
+.season-stars i:nth-child(1) { top: 8%; left: 12%; animation-delay: 0s; }
+.season-stars i:nth-child(2) { top: 15%; left: 78%; animation-delay: 0.3s; font-size: 10px; }
+.season-stars i:nth-child(3) { top: 40%; left: 8%; animation-delay: 0.6s; font-size: 12px; }
+.season-stars i:nth-child(4) { top: 55%; left: 88%; animation-delay: 0.9s; }
+.season-stars i:nth-child(5) { top: 75%; left: 20%; animation-delay: 1.2s; font-size: 10px; }
+.season-stars i:nth-child(6) { top: 82%; left: 70%; animation-delay: 1.5s; font-size: 12px; }
+.season-stars i:nth-child(7) { top: 30%; left: 45%; animation-delay: 1.8s; font-size: 8px; }
+.season-stars i:nth-child(8) { top: 65%; left: 55%; animation-delay: 2.1s; font-size: 9px; }
 @keyframes starTwinkle {
   0%, 100% { opacity: 0.2; transform: scale(0.7); }
   50% { opacity: 1; transform: scale(1.3); }
@@ -301,7 +248,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   position: relative;
 }
 .season-badge i { color: #f5d76e; }
-
 .season-card h3 {
   color: #ffffff;
   font-size: 20px; font-weight: 800;
@@ -316,8 +262,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 
 .subscribe-btn {
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   width: 100%;
   padding: 18px 20px;
   border-radius: 20px;
@@ -328,39 +273,35 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px;
 }
-.subscribe-btn:active { transform: scale(0.97); }
-.subscribe-btn:disabled { opacity: 0.6; pointer-events: none; }
+.subscribe-btn:active:not(:disabled) { transform: scale(0.97); }
+.subscribe-btn:disabled { opacity: 0.7; pointer-events: none; }
 .btn-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  position: absolute; inset: 0; pointer-events: none;
 }
-.btn-stars span {
+.btn-stars i {
   position: absolute;
   color: rgba(255, 255, 255, 0.8);
   font-size: 10px;
   animation: btnStarPulse 2s ease-in-out infinite;
 }
-.btn-stars span:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
-.btn-stars span:nth-child(2) { top: 70%; left: 15%; animation-delay: 0.3s; font-size: 8px; }
-.btn-stars span:nth-child(3) { top: 25%; left: 45%; animation-delay: 0.6s; }
-.btn-stars span:nth-child(4) { top: 60%; left: 60%; animation-delay: 0.9s; font-size: 8px; }
-.btn-stars span:nth-child(5) { top: 80%; left: 85%; animation-delay: 1.2s; }
-.btn-stars span:nth-child(6) { top: 10%; left: 92%; animation-delay: 1.5s; font-size: 8px; }
+.btn-stars i:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+.btn-stars i:nth-child(2) { top: 70%; left: 15%; animation-delay: 0.3s; font-size: 8px; }
+.btn-stars i:nth-child(3) { top: 25%; left: 45%; animation-delay: 0.6s; }
+.btn-stars i:nth-child(4) { top: 60%; left: 60%; animation-delay: 0.9s; font-size: 8px; }
+.btn-stars i:nth-child(5) { top: 80%; left: 85%; animation-delay: 1.2s; }
+.btn-stars i:nth-child(6) { top: 10%; left: 92%; animation-delay: 1.5s; font-size: 8px; }
 @keyframes btnStarPulse {
   0%, 100% { opacity: 0.15; transform: scale(0.8); }
   50% { opacity: 1; transform: scale(1.4); }
 }
 .btn-content {
-  position: relative;
-  z-index: 2;
+  position: relative; z-index: 2;
   display: flex; align-items: center; justify-content: space-between;
-  width: 100%;
-  gap: 12px;
+  width: 100%; gap: 12px;
 }
 .btn-label { font-size: 16px; font-weight: 800; }
 .btn-price {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255, 255, 255, 0.2);
   padding: 6px 12px;
   border-radius: 12px;
@@ -368,6 +309,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   direction: ltr;
   backdrop-filter: blur(4px);
 }
+.btn-price img { width: 14px; height: 14px; border-radius: 50%; }
 
 /* ============ PROGRESS ============ */
 .progress-card {
@@ -379,12 +321,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   box-shadow: var(--shadow-card);
 }
 .progress-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 12px;
-  font-weight: 800;
-  font-size: 14px;
+  font-weight: 800; font-size: 14px;
 }
 .progress-header span:last-child {
   color: var(--purple);
@@ -398,8 +337,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   overflow: hidden;
 }
 .progress-fill {
-  height: 100%;
-  width: 0%;
+  height: 100%; width: 0%;
   background: var(--gradient-purple);
   border-radius: 999px;
   transition: width 0.5s var(--ease-out);
@@ -408,14 +346,11 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* ============ MISSIONS ============ */
 .missions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  display: flex; flex-direction: column;
+  gap: 10px; margin-bottom: 20px;
 }
 .mission-item {
-  display: flex; align-items: center;
-  gap: 14px;
+  display: flex; align-items: center; gap: 14px;
   padding: 14px;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -441,20 +376,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   color: var(--success);
 }
 .mission-body { flex: 1; min-width: 0; }
-.mission-title {
-  font-weight: 800; font-size: 13px;
-  margin-bottom: 3px;
-}
-.mission-desc {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-bottom: 4px;
-}
+.mission-title { font-weight: 800; font-size: 13px; margin-bottom: 3px; }
+.mission-desc { font-size: 11px; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px; }
 .mission-progress {
-  font-size: 11px;
-  color: var(--purple);
-  font-weight: 800;
+  font-size: 11px; color: var(--purple); font-weight: 800;
   direction: ltr;
 }
 .mission-item.completed .mission-progress { color: var(--success); }
@@ -463,8 +388,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.12);
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px;
-  color: transparent;
+  font-size: 11px; color: transparent;
   flex-shrink: 0;
   transition: all 0.3s;
 }
@@ -476,8 +400,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* ============ CLAIM BUTTON ============ */
 .claim-btn {
-  width: 100%;
-  padding: 18px;
+  width: 100%; padding: 18px;
   border-radius: 20px;
   background: var(--gradient-primary);
   color: #ffffff;
@@ -495,7 +418,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   cursor: not-allowed;
 }
 .claim-btn.ready {
-  background: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
+  background: var(--gradient-gold);
   color: #1a1400;
   box-shadow: 0 12px 30px rgba(245, 215, 110, 0.5);
   animation: claimPulse 2s ease-in-out infinite;
@@ -534,8 +457,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   margin-bottom: 22px;
 }
 .view-props-btn {
-  width: 100%;
-  padding: 16px;
+  width: 100%; padding: 16px;
   border-radius: 18px;
   background: var(--gradient-primary);
   color: #ffffff;
@@ -547,20 +469,29 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .view-props-btn:active { transform: scale(0.97); }
 
+/* ============ LOADING ============ */
+.loading-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; padding: 80px 20px;
+  color: var(--text-secondary);
+}
+.loading-state i { font-size: 32px; color: var(--purple); }
+.loading-state p { font-weight: 700; font-size: 14px; }
+
 /* ============ TOAST ============ */
 .toast {
   position: fixed; top: 20px; left: 50%;
   transform: translateX(-50%) translateY(-120px);
   background: linear-gradient(135deg, #ffffff, #f5f7fc);
   color: var(--text-primary);
-  padding: 14px 24px;
+  padding: 14px 26px;
   border-radius: 999px;
   font-size: 13px; font-weight: 700;
   z-index: 2000;
   transition: transform 0.4s var(--spring);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(0,0,0,0.08);
   max-width: 90%; text-align: center;
-  box-shadow: 0 14px 40px rgba(30, 40, 80, 0.18);
+  box-shadow: 0 14px 40px rgba(30,40,80,0.18);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.error { background: linear-gradient(135deg, #fff0f2, #ffe6ea); border-color: rgba(224, 56, 88, 0.3); color: var(--danger); }
@@ -569,35 +500,39 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 /* ============ MODAL ============ */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(20, 22, 40, 0.5);
-  z-index: 1000;
-  display: none; align-items: center; justify-content: center;
-  padding: 20px;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  background: rgba(20,22,40,0.42);
+  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
   background: linear-gradient(160deg, #ffffff 0%, #f5f7fc 100%);
-  border-radius: 28px;
-  padding: 30px 24px;
-  width: 100%; max-width: 340px;
-  text-align: center;
-  animation: popIn 0.32s var(--spring);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 26px 70px rgba(30, 40, 80, 0.25);
+  border-radius: 28px; padding: 30px;
+  width: 100%; max-width: 340px; text-align: center;
+  animation: popInModal 0.32s var(--spring);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 26px 70px rgba(30,40,80,0.25);
 }
-@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; }
-.modal-content p { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 22px; line-height: 1.55; }
+.modal-content p { color: var(--text-secondary); font-size: 14px; margin-bottom: 22px; font-weight: 600; line-height: 1.55; }
+.modal-icon-wrap {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.18), rgba(201, 162, 39, 0.05));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  border: 2px solid rgba(201, 162, 39, 0.3);
+}
+.modal-icon-wrap i { font-size: 42px; color: var(--gold); }
 .modal-btn {
-  width: 100%;
-  padding: 16px;
+  width: 100%; padding: 16px;
   border-radius: 18px;
   background: var(--gradient-primary);
   color: #ffffff;
-  font-weight: 800; font-size: 15px;
+  font-size: 15px; font-weight: 800;
   box-shadow: 0 10px 28px rgba(22, 24, 42, 0.22);
   transition: transform 0.15s var(--spring);
 }
@@ -607,41 +542,32 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 <body>
 
 <div class="app-container">
-  <header class="page-header">
-    <button class="back-btn" onclick="goBack()" aria-label="رجوع">
-      <i class="fas fa-arrow-right"></i>
-    </button>
-    <h1>ساعة الفضاء</h1>
+  <header class="top-app-bar"></header>
+  <div class="floating-balances">
     <div class="balance-pill">
-      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
-      <span id="starsBalance">0</span>
+      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
+      <span id="topTickets">0</span>
     </div>
-  </header>
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
+      <span id="topStars">0</span>
+    </div>
+  </div>
 
-  <main class="scroll-area">
+  <main class="main-scroll" id="mainScroll">
     <div class="loading-state" id="loading">
       <i class="fas fa-spinner fa-spin"></i>
       <p>جاري التحميل...</p>
     </div>
 
     <div id="mainContent" style="display:none;">
-
+      <!-- Hero Clock (TGS) -->
       <div class="clock-hero">
         <div class="hero-bg"></div>
-        <div class="clock-wrap">
-          <div class="clock-glow"></div>
-          <div class="clock-orbit o1"></div>
-          <div class="clock-orbit o2"></div>
-          <div class="clock-face">
-            <div class="clock-marker m1"></div>
-            <div class="clock-marker m2"></div>
-            <div class="clock-marker m3"></div>
-            <div class="clock-marker m4"></div>
-            <div class="clock-hand hour"></div>
-            <div class="clock-hand minute"></div>
-            <div class="clock-center"></div>
-          </div>
-        </div>
+        <div class="clock-orbit o1"></div>
+        <div class="clock-orbit o2"></div>
+        <div class="clock-glow"></div>
+        <div class="clock-tgs-wrap" id="space-clock-tgs"></div>
       </div>
 
       <h2 class="hero-title">ساعة الفضاء</h2>
@@ -655,36 +581,53 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
       <div class="value-row">
         <div class="value-item">
           <span class="value-label">قيمة البيع</span>
-          <span class="value-amount" id="sellPriceDisplay">12,000 ⭐</span>
+          <span class="value-amount">
+            <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+            <span id="sellPriceDisplay">1,200</span>
+          </span>
         </div>
       </div>
 
-      <!-- Not subscribed -->
+      <!-- Subscribe -->
       <div id="subscribeState">
         <div class="season-card">
           <div class="season-stars" aria-hidden="true">
-            <span>✦</span><span>★</span><span>✦</span><span>★</span>
-            <span>✦</span><span>★</span><span>✦</span><span>★</span>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
           </div>
           <div class="season-badge">
-            <i class="fas fa-star"></i>
+            <i class="fas fa-medal"></i>
             الموسم الأول
           </div>
           <h3>اشترك واكمل المهام</h3>
           <p>احصل على الساعة الأسطورية بعد إتمام جميع مهام الموسم</p>
           <button class="subscribe-btn" id="subscribeBtn" onclick="handleSubscribe()">
             <div class="btn-stars" aria-hidden="true">
-              <span>★</span><span>✦</span><span>★</span><span>✦</span><span>★</span><span>✦</span>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
             </div>
             <div class="btn-content">
               <span class="btn-label">اشترك الآن</span>
-              <span class="btn-price" id="subPrice">3,000 ⭐</span>
+              <span class="btn-price">
+                <img src="https://up6.cc/2026/10/17932600818491.png" alt="">
+                <span id="subPrice">1,000</span>
+              </span>
             </div>
           </button>
         </div>
       </div>
 
-      <!-- Subscribed, missions -->
+      <!-- Missions -->
       <div id="missionsState" style="display:none;">
         <div class="progress-card">
           <div class="progress-header">
@@ -695,9 +638,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
             <div class="progress-fill" id="progressFill"></div>
           </div>
         </div>
-
         <div class="missions-list" id="missionsList"></div>
-
         <button class="claim-btn" id="claimBtn" onclick="handleClaim()" disabled>
           <i class="fas fa-gift"></i>
           <span id="claimBtnText">اكمل جميع المهام أولاً</span>
@@ -706,19 +647,18 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
       <!-- Owned -->
       <div id="ownedState" style="display:none;">
-        <div class="owned-card">
+        <div class="owned-card" id="ownedCardBox">
           <div class="owned-icon">
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-check-circle" id="ownedIcon"></i>
           </div>
-          <h3>الساعة في ممتلكاتك!</h3>
-          <p>يمكنك الآن بيعها من صفحة الممتلكات</p>
-          <button class="view-props-btn" onclick="goToProperties()">
+          <h3 id="ownedTitle">الساعة في ممتلكاتك</h3>
+          <p id="ownedDesc">يمكنك الآن بيعها من صفحة الممتلكات</p>
+          <button class="view-props-btn" id="ownedActionBtn" onclick="goToProperties()">
             <i class="fas fa-box"></i>
-            عرض الممتلكات
+            <span>عرض الممتلكات</span>
           </button>
         </div>
       </div>
-
     </div>
   </main>
 </div>
@@ -727,7 +667,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 <div class="modal-overlay" id="successModal">
   <div class="modal-content">
-    <div style="font-size:70px; margin-bottom:16px;">🎁</div>
+    <div class="modal-icon-wrap"><i class="fas fa-check"></i></div>
     <h3>مبروك!</h3>
     <p>تمت إضافة ساعة الفضاء إلى ممتلكاتك</p>
     <button class="modal-btn" onclick="goToProperties()">عرض الممتلكات</button>
@@ -736,7 +676,6 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 <script>'use strict';
 
-/* ============ CONFIG ============ */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCX29raUbUMwSFMIlKo_t7aDA6p6hvx7HI",
   authDomain: "starnovagame.firebaseapp.com",
@@ -746,10 +685,14 @@ const FIREBASE_CONFIG = {
   appId: "1:571608140423:web:f1516e0572efada7068622"
 };
 
+const API_BASE = 'https://starnova-api.starlimitedcom.workers.dev';
+const STAR_ICON = 'https://up6.cc/2026/10/17932600818491.png';
+const TICKET_ICON = 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png';
+
 const SEASON_CONFIG = {
   id: 'season1',
   name: 'الموسم الأول',
-  price: 3000,
+  price: 1000,
   missions: [
     { key: 'invite', title: 'ادعُ 3 أصدقاء', desc: 'شارك رابط الدعوة وادعُ 3 أصدقاء', icon: 'fa-user-friends', goal: 3 },
     { key: 'crash', title: 'العب 10 جولات Crash', desc: 'العب 10 جولات كاملة في لعبة Crash', icon: 'fa-rocket', goal: 10 },
@@ -762,17 +705,19 @@ const CLOCK_ITEM = {
   id: 'spaceClock',
   name: 'ساعة الفضاء',
   rarity: 'legendary',
-  sellPrice: 12000,
+  sellPrice: 1200,
   season: SEASON_CONFIG.id
 };
 
-/* ============ STATE ============ */
+const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
+
 const tg = window.Telegram?.WebApp;
 let db = null;
 let userId = null;
 let userData = {};
 let crashCount = 0;
 let isLoading = false;
+let clockAnimLoaded = false;
 
 /* ============ HELPERS ============ */
 function formatNum(n) {
@@ -781,7 +726,11 @@ function formatNum(n) {
   if (!isFinite(num)) return '0';
   return String(Math.floor(num)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
-
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s ?? '');
+  return d.innerHTML;
+}
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -789,28 +738,84 @@ function showToast(msg, type = '') {
   clearTimeout(t._timer);
   t._timer = setTimeout(() => t.classList.remove('show'), 3000);
 }
-
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 function goBack() {
   try {
     if (window.history.length > 1) { window.history.back(); return; }
   } catch(e) {}
   window.location.href = './index.html';
 }
-
 function goToProperties() {
+  closeModal('successModal');
   window.location.href = './properties.html';
 }
 
-/* ============ TELEGRAM INIT ============ */
+/* ============ TGS LOADER ============ */
+const TGS = {
+  _zipCache: {}, _loading: {}, _anims: {},
+  async loadZip(zipName) {
+    if (this._zipCache[zipName]) return this._zipCache[zipName];
+    if (this._loading[zipName]) return this._loading[zipName];
+    this._loading[zipName] = (async () => {
+      if (!window.JSZip || !window.pako) throw new Error('libs not ready');
+      const resp = await fetch('./' + zipName, { cache: 'force-cache' });
+      if (!resp.ok) throw new Error('ZIP fetch ' + resp.status);
+      const zip = await JSZip.loadAsync(await resp.arrayBuffer());
+      const files = Object.values(zip.files).filter(f => !f.dir && f.name.toLowerCase().endsWith('.tgs')).sort((a, b) => a.name.localeCompare(b.name));
+      const list = [];
+      for (const f of files) {
+        try {
+          const compressed = await f.async('uint8array');
+          const text = pako.ungzip(compressed, { to: 'string' });
+          list.push(JSON.parse(text));
+        } catch (e) {}
+      }
+      if (!list.length) throw new Error('No valid TGS');
+      this._zipCache[zipName] = list;
+      return list;
+    })();
+    try { return await this._loading[zipName]; } finally { delete this._loading[zipName]; }
+  },
+  async playIn(element, zipName, opts = {}) {
+    if (!element) throw new Error('element missing');
+    const list = await this.loadZip(zipName);
+    const data = list[(opts.index || 0) % list.length];
+    if (this._anims[element.id]) { try { this._anims[element.id].destroy(); } catch(e) {} }
+    element.innerHTML = '';
+    const anim = lottie.loadAnimation({
+      container: element, renderer: 'svg', loop: opts.loop !== false, autoplay: true,
+      animationData: data,
+      rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+    });
+    this._anims[element.id] = anim;
+    return anim;
+  }
+};
+
+async function loadClockAnimation() {
+  if (clockAnimLoaded) return;
+  for (let i = 0; i < 60; i++) {
+    if (window.lottie && window.JSZip && window.pako) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if (!window.lottie) return;
+  try {
+    await TGS.playIn(document.getElementById('space-clock-tgs'), ZIP_SPACE_CLOCK);
+    clockAnimLoaded = true;
+  } catch(e) {
+    console.warn('TGS clock failed to load:', e);
+  }
+}
+
+/* ============ TELEGRAM ============ */
 function initTelegram() {
   if (!tg) {
-    // Not in Telegram - demo fallback
     userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
     localStorage.setItem('sn_demo_id', userId);
     return false;
   }
-  tg.ready();
-  tg.expand();
+  tg.ready(); tg.expand();
   if (tg.setHeaderColor) tg.setHeaderColor('#ffffff');
   if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
   if (tg.BackButton) {
@@ -818,10 +823,7 @@ function initTelegram() {
     tg.BackButton.onClick(() => goBack());
   }
   const u = tg.initDataUnsafe?.user;
-  if (u) {
-    userId = String(u.id);
-    return true;
-  }
+  if (u) { userId = String(u.id); return true; }
   userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
   localStorage.setItem('sn_demo_id', userId);
   return false;
@@ -831,6 +833,7 @@ function initTelegram() {
 async function initFirebase() {
   if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
+  try { await db.enablePersistence({ synchronizeTabs: true }); } catch(e) {}
 }
 
 async function loadUserData() {
@@ -838,44 +841,34 @@ async function loadUserData() {
   const ref = db.collection('users').doc(userId);
   const doc = await ref.get();
   if (!doc.exists) {
-    // Create minimal user doc
     await ref.set({
-      telegramId: userId,
-      name: 'لاعب',
-      stars: 0, tickets: 0, referralCount: 0,
-      dailyStreak: 0,
-      ownedItems: [],
-      seasonSubscription: {},
+      telegramId: userId, name: 'لاعب',
+      stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0,
+      ownedItems: [], seasonSubscription: {},
       createdAt: Date.now()
     }, { merge: true });
-    userData = {
-      stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0,
-      ownedItems: [], seasonSubscription: {}
-    };
+    userData = { stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0, ownedItems: [], seasonSubscription: {} };
   } else {
     userData = doc.data();
   }
-  // Load crash rounds count
   try {
     const snap = await db.collection('users').doc(userId).collection('crash_rounds').get();
     crashCount = snap.size;
   } catch (e) { crashCount = 0; }
 }
 
-/* ============ STATE DETECTION ============ */
+/* ============ STATE ============ */
 function getSeasonState() {
   const sub = userData.seasonSubscription?.[SEASON_CONFIG.id];
   const owned = Array.isArray(userData.ownedItems) && userData.ownedItems.some(i => i.id === CLOCK_ITEM.id);
   const claimed = sub?.claimed === true;
   const subscribed = sub?.subscribed === true;
-
-  if (owned) return { state: 'owned' };
-  if (claimed) return { state: 'owned' }; // claimed but maybe sold - still considered "completed"
+  if (owned) return { state: 'owned', hasItem: true };
+  if (claimed) return { state: 'owned', hasItem: false };
   if (subscribed) return { state: 'missions' };
   return { state: 'subscribe' };
 }
 
-/* ============ MISSIONS ============ */
 function getMissionProgress(mission) {
   switch (mission.key) {
     case 'invite': return userData.referralCount || 0;
@@ -886,38 +879,34 @@ function getMissionProgress(mission) {
   }
 }
 
+/* ============ RENDER ============ */
 function renderMissions() {
   const list = document.getElementById('missionsList');
   list.innerHTML = '';
   let completedCount = 0;
-
   SEASON_CONFIG.missions.forEach(m => {
     const current = Math.min(getMissionProgress(m), m.goal);
     const done = current >= m.goal;
     if (done) completedCount++;
-
     const item = document.createElement('div');
     item.className = 'mission-item' + (done ? ' completed' : '');
     item.innerHTML = `
       <div class="mission-icon"><i class="fas ${m.icon}"></i></div>
       <div class="mission-body">
-        <div class="mission-title">${m.title}</div>
-        <div class="mission-desc">${m.desc}</div>
+        <div class="mission-title">${escapeHtml(m.title)}</div>
+        <div class="mission-desc">${escapeHtml(m.desc)}</div>
         <div class="mission-progress">${current} / ${m.goal}</div>
       </div>
       <div class="mission-check"><i class="fas fa-check"></i></div>
     `;
     list.appendChild(item);
   });
-
   const total = SEASON_CONFIG.missions.length;
   document.getElementById('progressText').textContent = `${completedCount} / ${total}`;
   document.getElementById('progressFill').style.width = (completedCount / total * 100) + '%';
-
   const claimBtn = document.getElementById('claimBtn');
   const claimBtnText = document.getElementById('claimBtnText');
   const allDone = completedCount === total;
-
   if (allDone) {
     claimBtn.disabled = false;
     claimBtn.classList.add('ready');
@@ -929,104 +918,169 @@ function renderMissions() {
   }
 }
 
-/* ============ RENDER UI ============ */
 function renderUI() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
-  document.getElementById('starsBalance').textContent = formatNum(userData.stars || 0);
-  document.getElementById('subPrice').textContent = formatNum(SEASON_CONFIG.price) + ' ⭐';
-  document.getElementById('sellPriceDisplay').textContent = formatNum(CLOCK_ITEM.sellPrice) + ' ⭐';
+  document.getElementById('topStars').textContent = formatNum(userData.stars || 0);
+  document.getElementById('topTickets').textContent = formatNum(userData.tickets || 0);
+  document.getElementById('subPrice').textContent = formatNum(SEASON_CONFIG.price);
+  document.getElementById('sellPriceDisplay').textContent = formatNum(CLOCK_ITEM.sellPrice);
 
-  const { state } = getSeasonState();
+  const { state, hasItem } = getSeasonState();
   document.getElementById('subscribeState').style.display = 'none';
   document.getElementById('missionsState').style.display = 'none';
   document.getElementById('ownedState').style.display = 'none';
 
   if (state === 'subscribe') {
     document.getElementById('subscribeState').style.display = 'block';
+    // Reset subscribe button
+    const btn = document.getElementById('subscribeBtn');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `
+        <div class="btn-stars" aria-hidden="true">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="btn-content">
+          <span class="btn-label">اشترك الآن</span>
+          <span class="btn-price">
+            <img src="${STAR_ICON}" alt="">
+            <span>${formatNum(SEASON_CONFIG.price)}</span>
+          </span>
+        </div>
+      `;
+    }
   } else if (state === 'missions') {
     document.getElementById('missionsState').style.display = 'block';
     renderMissions();
   } else {
     document.getElementById('ownedState').style.display = 'block';
+    const box = document.getElementById('ownedCardBox');
+    if (hasItem) {
+      box.style.background = 'linear-gradient(160deg, rgba(15,169,110,0.10), rgba(15,169,110,0.02))';
+      box.style.borderColor = 'rgba(15,169,110,0.3)';
+      document.getElementById('ownedIcon').className = 'fas fa-check-circle';
+      document.getElementById('ownedIcon').style.color = 'var(--success)';
+      document.getElementById('ownedTitle').textContent = 'الساعة في ممتلكاتك';
+      document.getElementById('ownedDesc').textContent = 'يمكنك الآن بيعها من صفحة الممتلكات';
+      const btn = document.getElementById('ownedActionBtn');
+      btn.style.display = 'flex';
+      btn.innerHTML = '<i class="fas fa-box"></i><span>عرض الممتلكات</span>';
+      btn.onclick = goToProperties;
+    } else {
+      box.style.background = 'linear-gradient(160deg, rgba(201,162,39,0.10), rgba(201,162,39,0.02))';
+      box.style.borderColor = 'rgba(201,162,39,0.3)';
+      document.getElementById('ownedIcon').className = 'fas fa-history';
+      document.getElementById('ownedIcon').style.color = 'var(--gold)';
+      document.getElementById('ownedTitle').textContent = 'لقد حصلت على هذه الساعة سابقاً';
+      document.getElementById('ownedDesc').textContent = 'لقد استلمتها وبعتها بالفعل. انتظر المواسم القادمة لهدايا جديدة!';
+      const btn = document.getElementById('ownedActionBtn');
+      btn.style.display = 'flex';
+      btn.innerHTML = '<i class="fas fa-arrow-right"></i><span>العودة للرئيسية</span>';
+      btn.onclick = () => { window.location.href = './index.html'; };
+    }
   }
 }
 
-/* ============ ACTIONS ============ */
+/* ============ SUBSCRIBE (Direct Telegram Purchase) ============ */
 async function handleSubscribe() {
   if (isLoading) return;
   const { state } = getSeasonState();
   if (state !== 'subscribe') return;
-
-  if ((userData.stars || 0) < SEASON_CONFIG.price) {
-    showToast('رصيدك غير كافٍ. تحتاج ' + formatNum(SEASON_CONFIG.price - (userData.stars || 0)) + ' نجمة إضافية', 'error');
+  if (!tg || !tg.openInvoice) {
+    showToast('الشراء يعمل فقط داخل تيليجرام', 'error');
     return;
   }
-
-  if (!confirm(`هل تريد الاشتراك في ${SEASON_CONFIG.name} مقابل ${formatNum(SEASON_CONFIG.price)} نجمة؟`)) return;
 
   isLoading = true;
   const btn = document.getElementById('subscribeBtn');
   btn.disabled = true;
-  const originalHTML = btn.querySelector('.btn-content').innerHTML;
-  btn.querySelector('.btn-content').innerHTML = '<span class="btn-label"><i class="fas fa-spinner fa-spin"></i> جاري الاشتراك...</span>';
+  btn.innerHTML = `
+    <div class="btn-stars" aria-hidden="true">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+    </div>
+    <div class="btn-content">
+      <span class="btn-label"><i class="fas fa-spinner fa-spin"></i> جاري إنشاء الفاتورة...</span>
+    </div>
+  `;
 
   try {
-    const userRef = db.collection('users').doc(userId);
-    await db.runTransaction(async (tx) => {
-      const doc = await tx.get(userRef);
-      const data = doc.data() || {};
-      const balance = data.stars || 0;
-      if (balance < SEASON_CONFIG.price) throw new Error('insufficient');
-
-      const sub = data.seasonSubscription || {};
-      if (sub[SEASON_CONFIG.id]?.subscribed) throw new Error('already');
-
-      sub[SEASON_CONFIG.id] = {
-        subscribed: true,
-        subscribedAt: Date.now(),
-        claimed: false
-      };
-      tx.update(userRef, {
-        stars: balance - SEASON_CONFIG.price,
-        seasonSubscription: sub
-      });
+    const resp = await fetch(`${API_BASE}/api/create-invoice`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        stars: SEASON_CONFIG.price,
+        purpose: SEASON_CONFIG.id
+      })
     });
+    const data = await resp.json();
+    if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
 
-    userData.stars = (userData.stars || 0) - SEASON_CONFIG.price;
-    userData.seasonSubscription = userData.seasonSubscription || {};
-    userData.seasonSubscription[SEASON_CONFIG.id] = {
-      subscribed: true,
-      subscribedAt: Date.now(),
-      claimed: false
-    };
-
-    showToast('تم الاشتراك بنجاح! ابدأ بإكمال المهام', 'success');
-    renderUI();
+    tg.openInvoice(data.invoiceLink, async (status) => {
+      if (status === 'paid') {
+        showToast('تم الدفع، جاري تفعيل الاشتراك...');
+        const granted = await grantSubscriptionAfterPayment();
+        if (granted) {
+          try { await loadUserData(); } catch(e) {}
+          renderUI();
+          showToast('تم الاشتراك بنجاح! ابدأ بإكمال المهام', 'success');
+        } else {
+          showToast('تم الدفع لكن تعذر التفعيل. أعد فتح الصفحة للمحاولة', 'error');
+          isLoading = false;
+          return;
+        }
+      } else if (status === 'cancelled') {
+        showToast('تم إلغاء الشراء', 'error');
+      } else {
+        showToast('فشل الدفع، حاول لاحقاً', 'error');
+      }
+      isLoading = false;
+      renderUI();
+    });
   } catch (e) {
-    if (e.message === 'insufficient') showToast('رصيدك غير كافٍ', 'error');
-    else if (e.message === 'already') showToast('أنت مشترك بالفعل', 'error');
-    else showToast('حدث خطأ. حاول لاحقاً', 'error');
-    btn.disabled = false;
-    btn.querySelector('.btn-content').innerHTML = originalHTML;
-  } finally {
+    showToast(e.message || 'تعذر بدء الدفع', 'error');
     isLoading = false;
+    renderUI();
   }
 }
 
+async function grantSubscriptionAfterPayment() {
+  const userRef = db.collection('users').doc(userId);
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await db.runTransaction(async (tx) => {
+        const doc = await tx.get(userRef);
+        const data = doc.data() || {};
+        const sub = data.seasonSubscription || {};
+        const updates = {};
+        if (!sub[SEASON_CONFIG.id]?.subscribed) {
+          sub[SEASON_CONFIG.id] = { subscribed: true, subscribedAt: Date.now(), claimed: false };
+          updates.seasonSubscription = sub;
+        }
+        // Neutralize credited stars from invoice
+        const currentStars = data.stars || 0;
+        updates.stars = Math.max(0, currentStars - SEASON_CONFIG.price);
+        tx.update(userRef, updates);
+      });
+      return true;
+    } catch(e) {
+      console.warn('Grant attempt ' + attempt + ' failed:', e);
+      if (attempt < 2) await new Promise(r => setTimeout(r, 1200));
+    }
+  }
+  return false;
+}
+
+/* ============ CLAIM ============ */
 async function handleClaim() {
   if (isLoading) return;
   const { state } = getSeasonState();
   if (state !== 'missions') return;
-
-  // Verify all missions
   const allDone = SEASON_CONFIG.missions.every(m => getMissionProgress(m) >= m.goal);
-  if (!allDone) {
-    showToast('لم تكمل جميع المهام بعد', 'error');
-    return;
-  }
-
-  if (!confirm('هل أنت متأكد من استلام ساعة الفضاء؟ لن تتمكن من استلامها مرة أخرى.')) return;
+  if (!allDone) { showToast('لم تكمل جميع المهام بعد', 'error'); return; }
 
   isLoading = true;
   const btn = document.getElementById('claimBtn');
@@ -1043,45 +1097,32 @@ async function handleClaim() {
       season: CLOCK_ITEM.season,
       acquiredAt: Date.now()
     };
-
     await db.runTransaction(async (tx) => {
       const doc = await tx.get(userRef);
       const data = doc.data() || {};
       const sub = data.seasonSubscription || {};
       const s = sub[SEASON_CONFIG.id] || {};
       if (s.claimed) throw new Error('already_claimed');
-
       const owned = Array.isArray(data.ownedItems) ? data.ownedItems.slice() : [];
       if (owned.some(i => i.id === CLOCK_ITEM.id)) throw new Error('already_owned');
       owned.push(newItem);
-
       s.claimed = true;
       s.claimedAt = Date.now();
       sub[SEASON_CONFIG.id] = s;
-
-      tx.update(userRef, {
-        ownedItems: owned,
-        seasonSubscription: sub
-      });
+      tx.update(userRef, { ownedItems: owned, seasonSubscription: sub });
     });
-
-    userData.ownedItems = (userData.ownedItems || []).concat([newItem]);
-    userData.seasonSubscription = userData.seasonSubscription || {};
-    userData.seasonSubscription[SEASON_CONFIG.id] = {
-      ...(userData.seasonSubscription[SEASON_CONFIG.id] || {}),
-      claimed: true,
-      claimedAt: Date.now()
-    };
-
+    try { await loadUserData(); } catch(e) {}
     document.getElementById('successModal').classList.add('show');
     renderUI();
   } catch (e) {
     if (e.message === 'already_claimed' || e.message === 'already_owned') {
       showToast('لقد استلمت الساعة بالفعل', 'error');
+      try { await loadUserData(); } catch(err) {}
       renderUI();
     } else {
-      showToast('حدث خطأ. حاول لاحقاً', 'error');
+      showToast('حدث خطأ، حاول لاحقاً', 'error');
       btn.disabled = false;
+      btn.querySelector('span').textContent = 'استلم ساعة الفضاء';
     }
   } finally {
     isLoading = false;
@@ -1095,6 +1136,7 @@ async function init() {
     await initFirebase();
     await loadUserData();
     renderUI();
+    loadClockAnimation();
   } catch (e) {
     console.error(e);
     document.getElementById('loading').innerHTML = `
