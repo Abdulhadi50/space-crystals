@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#7c3aed">
+<title>ساعة الفضاء - Star Nova</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root {
+  --text-primary: #151622;
+  --text-secondary: #5b5d6e;
+  --text-tertiary: #9395a5;
+  --border: rgba(0, 0, 0, 0.08);
+  --bg-main: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --success: #0fa96e;
+  --danger: #e03858;
+  --warning: #c9791a;
+  --gold: #b8912a;
+  --purple: #7c3aed;
+  --purple-light: #a855f7;
+  --gradient-purple: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%);
+  --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
+  --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --safe-top: env(safe-area-inset-top, 20px);
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.5;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  direction: rtl;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+::-webkit-scrollbar { display: none; }
+
+/* SPLASH */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: url('https://up6.cc/2026/11/179433008951731.jpg') center/cover no-repeat;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding-bottom: 10vh; transition: opacity 0.45s ease;
+}
+.splash.hide { opacity: 0; pointer-events: none; }
+.loader-wrap { width: 80%; max-width: 400px; display: flex; justify-content: center; }
+.loader-bar {
+  width: 100%; height: 26px; background: rgba(0,0,0,0.35);
+  border-radius: 999px; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.2);
+  position: relative;
+}
+.loader-fill {
+  width: 0%; height: 100%;
+  background: linear-gradient(90deg, #FFFFFF, #F5D76E, #FFFFFF);
+  border-radius: 999px; transition: width 0.25s ease;
+  box-shadow: 0 0 14px rgba(245,215,110,0.7);
+  position: relative; z-index: 1;
+}
+.loader-percent {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #ffffff; font-weight: 800; font-size: 13px;
+  font-variant-numeric: tabular-nums; direction: ltr;
+  letter-spacing: 0.5px; z-index: 2; pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+/* PAGE */
+.space-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+  display: none;
+}
+.space-page.ready { display: flex; }
+
+/* TOP BALANCES */
+.floating-balances {
+  position: absolute;
+  top: calc(var(--safe-top) + 8px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between; z-index: 60;
+  pointer-events: none;
+}
+.balance-pill {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.95);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 4px 11px; gap: 6px;
+  color: var(--text-primary); font-weight: 800; font-size: 14px;
+  box-shadow: 0 6px 18px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  pointer-events: auto;
+}
+.balance-pill img { width: 18px; height: 18px; border-radius: 50%; }
+.balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
+
+/* HERO */
+.hero {
+  position: relative;
+  background: var(--gradient-purple);
+  padding: calc(var(--safe-top) + 60px) 20px 26px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15), transparent 45%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 30px;
+  background: linear-gradient(to top, var(--bg-main), transparent);
+  pointer-events: none;
+}
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.hero-back {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px;
+  transition: transform 0.2s var(--spring);
+}
+.hero-back:active { transform: scale(0.9); }
+.hero-badge {
+  background: rgba(255,255,255,0.22);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; padding: 6px 14px; border-radius: 999px;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; gap: 5px;
+}
+.hero-icon-wrap {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.hero-icon {
+  width: 100px; height: 100px; border-radius: 30px;
+  background: rgba(255,255,255,0.2);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; color: #fff;
+  margin-bottom: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
+  animation: floatClock 3s ease-in-out infinite;
+  position: relative;
+}
+.hero-icon::before {
+  content: '';
+  position: absolute;
+  inset: -8px; border-radius: 35px;
+  border: 1px solid rgba(255,255,255,0.25);
+  animation: pulseRing 2.5s ease-in-out infinite;
+}
+@keyframes floatClock { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes pulseRing { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.05); } }
+.hero-title {
+  font-size: 26px; font-weight: 900; color: #fff;
+  letter-spacing: -0.5px; margin-bottom: 6px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.88);
+  font-weight: 600; margin-bottom: 20px;
+  max-width: 300px; line-height: 1.5;
+}
+
+/* CONTENT */
+.space-content {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 20px 16px calc(120px + var(--safe-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+/* BP CARD */
+.bp-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8f6ff 100%);
+  border: 1.5px solid rgba(124,58,237,0.18);
+  border-radius: 24px; padding: 20px; margin-bottom: 24px;
+  box-shadow: 0 12px 32px rgba(124,58,237,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  position: relative; overflow: hidden;
+}
+.bp-card::before {
+  content: '';
+  position: absolute; top: -50%; right: -30%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%);
+  pointer-events: none;
+}
+.bp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; position: relative; }
+.bp-logo {
+  width: 46px; height: 46px; border-radius: 14px;
+  background: var(--gradient-purple);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 20px; flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(124,58,237,0.35);
+}
+.bp-titles h3 { font-size: 16px; font-weight: 900; margin-bottom: 2px; }
+.bp-titles p { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+.bp-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.bp-feature { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+.bp-feature i {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(15,169,110,0.12); color: var(--success);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0;
+}
+.bp-price-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 14px; border-top: 1px dashed rgba(124,58,237,0.2);
+  margin-bottom: 14px;
+}
+.bp-price-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; margin-bottom: 2px; }
+.bp-price { font-size: 22px; font-weight: 900; color: var(--purple); display: flex; align-items: center; gap: 5px; direction: ltr; }
+.bp-price img { width: 20px; height: 20px; border-radius: 50%; }
+.bp-duration {
+  font-size: 11px; color: var(--text-secondary); font-weight: 700;
+  background: rgba(124,58,237,0.08); padding: 6px 12px; border-radius: 10px;
+  display: flex; align-items: center; gap: 5px;
+}
+.bp-subscribe-btn {
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: var(--gradient-purple); color: #fff;
+  font-size: 15px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 10px 28px rgba(124,58,237,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 0.15s var(--spring);
+}
+.bp-subscribe-btn:active { transform: scale(0.97); }
+.bp-subscribed-btn {
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: var(--gradient-success); color: #fff;
+  font-size: 15px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 10px 28px rgba(15,169,110,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.bp-expired-btn {
+  background: rgba(224,56,88,0.10) !important;
+  color: var(--danger) !important;
+  box-shadow: 0 4px 14px rgba(224,56,88,0.15) !important;
+  border: 1px solid rgba(224,56,88,0.3);
+}
+
+/* SECTION TITLE */
+.section-title {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.section-title h3 {
+  font-size: 17px; font-weight: 900;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title h3 i { color: var(--purple); font-size: 16px; }
+.section-progress {
+  font-size: 12px; font-weight: 800; color: var(--purple);
+  background: rgba(124,58,237,0.10); padding: 5px 12px; border-radius: 10px;
+  direction: ltr;
+}
+
+/* TIMELINE */
+.timeline { position: relative; padding-right: 12px; }
+.timeline-line {
+  position: absolute; top: 0; bottom: 0; right: 32px; width: 3px;
+  background: linear-gradient(to bottom,
+    rgba(124,58,237,0.5) 0%, rgba(124,58,237,0.3) 40%,
+    rgba(124,58,237,0.15) 70%, rgba(124,58,237,0.08) 100%);
+  border-radius: 3px;
+}
+.timeline-line-progress {
+  position: absolute; top: 0; right: 32px; width: 3px;
+  background: linear-gradient(to bottom, #a855f7, #7c3aed);
+  border-radius: 3px; height: 0%;
+  box-shadow: 0 0 12px rgba(124,58,237,0.6);
+  transition: height 0.8s var(--ease-out);
+}
+
+.level {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 0; position: relative; opacity: 0.7;
+  transition: opacity 0.3s;
+}
+.level.unlocked { opacity: 1; }
+.level.completed { opacity: 1; }
+.level.current { opacity: 1; }
+.level-badge {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bg-soft, #f5f6fa);
+  border: 3px solid rgba(124,58,237,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; color: var(--text-secondary);
+  flex-shrink: 0; position: relative; z-index: 2;
+  transition: transform 0.3s var(--spring), background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.level.completed .level-badge {
+  background: var(--gradient-success); border-color: #0fa96e;
+  color: #fff; box-shadow: 0 6px 18px rgba(15,169,110,0.35);
+}
+.level.completed .level-badge i { font-size: 18px; }
+.level.current .level-badge {
+  background: var(--gradient-purple); border-color: #7c3aed;
+  color: #fff; box-shadow: 0 6px 20px rgba(124,58,237,0.5);
+  animation: currentPulse 2s ease-in-out infinite;
+}
+@keyframes currentPulse {
+  0%,100% { box-shadow: 0 6px 20px rgba(124,58,237,0.5); }
+  50% { box-shadow: 0 6px 30px rgba(124,58,237,0.8), 0 0 0 6px rgba(124,58,237,0.15); }
+}
+.level.locked .level-badge {
+  background: #f0f0f5; border-color: #e0e0ea; color: #b0b0c0;
+}
+.level-body {
+  flex: 1; min-width: 0; padding: 8px 12px;
+  background: var(--bg-card, #fff);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.level.completed .level-body {
+  border-color: rgba(15,169,110,0.25);
+  background: linear-gradient(135deg, rgba(15,169,110,0.04), rgba(15,169,110,0.01));
+}
+.level.current .level-body {
+  border-color: rgba(124,58,237,0.35);
+  background: linear-gradient(135deg, rgba(124,58,237,0.06), rgba(124,58,237,0.02));
+  box-shadow: 0 6px 20px rgba(124,58,237,0.12);
+}
+.level-title { font-size: 14px; font-weight: 900; margin-bottom: 4px; line-height: 1.3; }
+.level-desc {
+  font-size: 11.5px; color: var(--text-secondary);
+  font-weight: 600; line-height: 1.5; margin-bottom: 8px;
+}
+.level-progress-bar {
+  height: 6px; background: rgba(0,0,0,0.06);
+  border-radius: 3px; overflow: hidden; margin-bottom: 6px;
+}
+.level-progress-fill {
+  height: 100%; background: var(--gradient-purple);
+  border-radius: 3px; transition: width 0.6s var(--ease-out);
+}
+.level.completed .level-progress-fill { background: var(--gradient-success); }
+.level-progress-text {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 10.5px; font-weight: 800; color: var(--text-secondary);
+  direction: ltr;
+}
+.level-progress-text .pct { color: var(--purple); }
+.level.completed .level-progress-text .pct { color: var(--success); }
+.level-reward {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(124,58,237,0.08); color: var(--purple);
+  padding: 3px 8px; border-radius: 8px;
+  font-size: 10.5px; font-weight: 800; margin-top: 8px;
+}
+.level-reward.clock-reward {
+  background: var(--gradient-gold); color: #1a1400;
+  box-shadow: 0 4px 12px rgba(245,215,110,0.35);
+}
+.final-level .level-badge {
+  background: var(--gradient-gold) !important;
+  border-color: #C9A227 !important; color: #1a1400 !important;
+  box-shadow: 0 6px 24px rgba(245,215,110,0.55) !important;
+}
+.final-level.completed .level-badge i { color: #1a1400; }
+
+/* NOTICE */
+.subscribe-notice {
+  background: linear-gradient(135deg, rgba(201,121,26,0.10), rgba(201,121,26,0.03));
+  border: 1.5px solid rgba(201,121,26,0.3);
+  border-radius: 16px; padding: 14px; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.subscribe-notice i { color: var(--warning); font-size: 18px; flex-shrink: 0; }
+.subscribe-notice p { font-size: 12px; font-weight: 700; line-height: 1.5; }
+
+.expired-notice {
+  background: linear-gradient(135deg, rgba(224,56,88,0.10), rgba(224,56,88,0.03));
+  border: 1.5px solid rgba(224,56,88,0.3);
+  border-radius: 16px; padding: 14px; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.expired-notice i { color: var(--danger); font-size: 18px; flex-shrink: 0; }
+.expired-notice p { font-size: 12px; font-weight: 700; line-height: 1.5; }
+
+/* BACK BTN */
+.back-btn-wrap {
+  position: absolute; bottom: calc(14px + var(--safe-bottom));
+  left: 14px; right: 14px; z-index: 100;
+}
+.back-btn {
+  width: 100%; padding: 16px; border-radius: 32px;
+  background: rgba(255,255,255,0.75);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1.5px solid rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 15px; font-weight: 800;
+  box-shadow: 0 8px 24px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.15s var(--spring);
+}
+.back-btn:active { transform: scale(0.97); }
+.back-btn i { font-size: 16px; color: var(--purple); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,22,40,0.55);
+  z-index: 1000; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+  background: linear-gradient(160deg, #ffffff 0%, #f8f6ff 100%);
+  border-radius: 28px; padding: 28px 24px;
+  width: 100%; max-width: 360px; text-align: center;
+  animation: popInModal 0.32s var(--spring);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 26px 70px rgba(30,40,80,0.30), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-icon {
+  width: 80px; height: 80px; border-radius: 24px;
+  background: var(--gradient-purple);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 36px; margin: 0 auto 18px;
+  box-shadow: 0 12px 32px rgba(124,58,237,0.4);
+}
+.modal-content h3 { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.modal-content p {
+  color: var(--text-secondary); font-size: 13px;
+  margin-bottom: 20px; font-weight: 600; line-height: 1.55;
+}
+.modal-price {
+  background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(124,58,237,0.04));
+  border: 1.5px solid rgba(124,58,237,0.25);
+  border-radius: 18px; padding: 16px; margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.modal-price img { width: 26px; height: 26px; border-radius: 50%; }
+.modal-price span {
+  font-size: 28px; font-weight: 900; color: var(--purple); direction: ltr;
+}
+.modal-price small { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-right: 4px; }
+.modal-btn {
+  width: 100%; padding: 15px; border-radius: 16px;
+  background: var(--gradient-purple); color: #fff;
+  font-size: 15px; font-weight: 900;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 10px 26px rgba(124,58,237,0.32), inset 0 1px 0 rgba(255,255,255,0.25);
+  margin-bottom: 8px;
+}
+.modal-btn:active { transform: scale(0.97); }
+.modal-btn:disabled { opacity: 0.5; pointer-events: none; }
+.modal-btn-cancel {
+  width: 100%; padding: 13px; border-radius: 16px;
+  background: rgba(0,0,0,0.05); color: var(--text-secondary);
+  font-size: 14px; font-weight: 800; border: 1px solid var(--border);
+  transition: transform 0.15s var(--spring);
+}
+.modal-btn-cancel:active { transform: scale(0.97); }
+.success-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: var(--gradient-success);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 44px; margin: 0 auto 20px;
+  box-shadow: 0 12px 32px rgba(15,169,110,0.4);
+  animation: successPop 0.5s var(--spring);
+}
+@keyframes successPop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+/* TOAST */
+.toast {
+  position: fixed; top: calc(var(--safe-top) + 20px); left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: linear-gradient(135deg, #1a1c2e, #2d3048);
+  color: #fff; padding: 14px 26px; border-radius: 999px;
+  font-size: 13px; font-weight: 700; z-index: 2000;
+  transition: transform 0.4s var(--spring);
+  max-width: 90%; text-align: center;
+  box-shadow: 0 14px 40px rgba(30,40,80,0.30);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 380px) {
+  .hero-icon { width: 88px; height: 88px; font-size: 42px; }
+  .hero-title { font-size: 22px; }
+  .hero-sub { font-size: 12px; }
+  .level-badge { width: 40px; height: 40px; font-size: 13px; }
+  .timeline-line, .timeline-line-progress { right: 30px; }
+  .bp-price { font-size: 20px; }
+  .balance-pill { font-size: 13px; padding: 3px 9px; }
+  .balance-pill img { width: 16px; height: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="loader-wrap">
+    <div class="loader-bar">
+      <div class="loader-fill" id="loaderFill"></div>
+      <span class="loader-percent" id="loaderPercent">0%</span>
+    </div>
+  </div>
+</div>
+
+<div class="space-page" id="spacePage">
+
+  <!-- BALANCES -->
+  <div class="floating-balances">
+    <div class="balance-pill">
+      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="tickets">
+      <span id="topTickets">0</span>
+    </div>
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="stars">
+      <span id="topStars">0</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-top">
+      <button class="hero-back" onclick="backToHome()">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+      <div class="hero-badge">
+        <i class="fas fa-crown"></i>
+        Battle Pass
+      </div>
+    </div>
+    <div class="hero-icon-wrap">
+      <div class="hero-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <h1 class="hero-title">ساعة الفضاء</h1>
+      <p class="hero-sub">اشترك في Battle Pass وأكمل التحديات للحصول على ساعة الفضاء الأسطورية</p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="space-content" id="spaceContent">
+
+    <!-- BP CARD -->
+    <div class="bp-card">
+      <div class="bp-header">
+        <div class="bp-logo"><i class="fas fa-crown"></i></div>
+        <div class="bp-titles">
+          <h3>Battle Pass - ساعة الفضاء</h3>
+          <p>اشترك الآن وابدأ رحلتك في التحديات</p>
+        </div>
+      </div>
+      <div class="bp-features">
+        <div class="bp-feature"><i class="fas fa-check"></i><span>15 مستوى من التحديات المتنوعة</span></div>
+        <div class="bp-feature"><i class="fas fa-check"></i><span>تتبع تلقائي لتقدمك في التطبيق</span></div>
+        <div class="bp-feature"><i class="fas fa-check"></i><span>ساعة الفضاء الأسطورية عند إكمال جميع المستويات</span></div>
+      </div>
+      <div class="bp-price-row">
+        <div>
+          <div class="bp-price-label">سعر الاشتراك</div>
+          <div class="bp-price">
+            <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+            <span>499</span>
+          </div>
+        </div>
+        <div class="bp-duration"><i class="fas fa-calendar-alt"></i> 14 يوم</div>
+      </div>
+      <button class="bp-subscribe-btn" id="subscribeBtn" onclick="openSubscribeModal()">
+        <i class="fas fa-rocket"></i> اشترك الآن
+      </button>
+    </div>
+
+    <!-- NOTICES -->
+    <div class="subscribe-notice" id="subscribeNotice">
+      <i class="fas fa-info-circle"></i>
+      <p>يجب الاشتراك أولاً لبدء إكمال مستويات Battle Pass والحصول على ساعة الفضاء</p>
+    </div>
+    <div class="expired-notice" id="expiredNotice" style="display:none;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>انتهى اشتراكك في Battle Pass. جدّد الاشتراك لمتابعة التحديات!</p>
+    </div>
+
+    <!-- SECTION TITLE -->
+    <div class="section-title">
+      <h3><i class="fas fa-list-check"></i> مستويات Battle Pass</h3>
+      <span class="section-progress" id="progressText">0 / 15</span>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+      <div class="timeline-line"></div>
+      <div class="timeline-line-progress" id="timelineProgress"></div>
+      <div id="levelsContainer"></div>
+    </div>
+  </div>
+
+  <!-- BACK BTN -->
+  <div class="back-btn-wrap">
+    <button class="back-btn" onclick="backToHome()">
+      <i class="fas fa-home"></i> العودة للرئيسية
+    </button>
+  </div>
+</div>
+
+<!-- SUBSCRIBE MODAL -->
+<div class="modal-overlay" id="subscribeModal">
+  <div class="modal-content">
+    <div class="modal-icon"><i class="fas fa-crown"></i></div>
+    <h3>تأكيد الاشتراك</h3>
+    <p>سيتم خصم 499 نجمة من رصيدك لتفعيل Battle Pass لمدة 14 يوماً</p>
+    <div class="modal-price">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+      <span>499</span>
+      <small>نجمة</small>
+    </div>
+    <div style="text-align:center; margin-bottom:12px; font-size:12px; color:var(--text-secondary);">
+      رصيدك الحالي: <strong id="modalCurrentBalance" style="color:var(--purple); direction:ltr; display:inline-block;">0</strong> نجمة
+    </div>
+    <button class="modal-btn" id="confirmSubBtn" onclick="confirmSubscribe()">
+      <i class="fas fa-check"></i> تأكيد الدفع
+    </button>
+    <button class="modal-btn-cancel" onclick="closeModal('subscribeModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-content">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h3>🎉 تم الاشتراك بنجاح!</h3>
+    <p>تم تفعيل Battle Pass لمدة 14 يوماً. ابدأ الآن بإكمال التحديات للحصول على ساعة الفضاء!</p>
+    <button class="modal-btn" onclick="closeModal('successModal')">ابدأ التحديات</button>
+  </div>
+</div>
+
+<!-- INSUFFICIENT MODAL -->
+<div class="modal-overlay" id="insufficientModal">
+  <div class="modal-content">
+    <div class="modal-icon" style="background:linear-gradient(135deg,#FF6B81,#E63950);">
+      <i class="fas fa-times"></i>
+    </div>
+    <h3>رصيدك غير كافٍ</h3>
+    <p>تحتاج <strong id="shortAmount" style="color:var(--danger);">0</strong> نجمة إضافية للاشتراك في Battle Pass</p>
+    <button class="modal-btn" onclick="closeModal('insufficientModal'); backToDeposit();">شحن الرصيد</button>
+    <button class="modal-btn-cancel" onclick="closeModal('insufficientModal')">إغلاق</button>
+  </div>
+</div>
+
+<!-- CLOCK EARNED MODAL -->
+<div class="modal-overlay" id="clockEarnedModal">
+  <div class="modal-content">
+    <div class="success-icon" style="background:var(--gradient-gold); box-shadow:0 12px 32px rgba(245,215,110,0.5);">
+      <i class="fas fa-clock" style="color:#1a1400;"></i>
+    </div>
+    <h3>🏆 مبروك!</h3>
+    <p>لقد أكملت جميع مستويات Battle Pass وحصلت على <strong>ساعة الفضاء</strong>! تمت إضافتها إلى ممتلكاتك.</p>
+    <button class="modal-btn" onclick="closeModal('clockEarnedModal'); backToHome();">مشاهدة الممتلكات</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">رسالة</div>
+
+<script>
+'use strict';
+
+/* ============ FIREBASE CONFIG (same as main app) ============ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCX29raUbUMwSFMIlKo_t7aDA6p6hvx7HI",
+  authDomain: "starnovagame.firebaseapp.com",
+  projectId: "starnovagame",
+  storageBucket: "starnovagame.firebasestorage.app",
+  messagingSenderId: "571608140423",
+  appId: "1:571608140423:web:f1516e0572efada7068622"
+};
+
+const ASSETS = {
+  star: 'https://up6.cc/2026/10/17932600818491.png',
+  ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png',
+  clock: 'https://up6.cc/2026/10/179327300871781.png'
+};
+
+const BP_PRICE = 499;
+const BP_DURATION_MS = 14 * 24 * 60 * 60 * 1000;
+
+/* ============ USER STATE ============ */
+let user = {
+  id: '123456789', name: 'لاعب', photo: '',
+  stars: 0, tickets: 0, referralCount: 0,
+  completedTasks: [], dailyStreak: 0,
+  totalDeposited: 0, slotsSpins: 0,
+  crashPlays: 0, crashMaxMultiplier: 0,
+  battlePass: null,
+  properties: []
+};
+let db = null;
+const tg = window.Telegram?.WebApp;
+
+/* ============ LEVELS DEFINITION ============ */
+/* Each level has a field computed from user data */
+const LEVELS = [
+  { num: 1,  title: 'دعوة الأصدقاء',       desc: 'قم بدعوة 3 أصدقاء للانضمام إلى Star Nova', field: 'referralCount',      target: 3,    icon: 'fa-user-plus' },
+  { num: 2,  title: 'إيداع النجوم',         desc: 'قم بإيداع 100 نجمة على الأقل',              field: 'totalDeposited',    target: 100,  icon: 'fa-coins' },
+  { num: 3,  title: 'العب Slots',            desc: 'قم بتدوير ماكينة الحظ 10 مرات',            field: 'slotsSpins',        target: 10,   icon: 'fa-dice' },
+  { num: 4,  title: 'تسجيل الدخول اليومي',  desc: 'سجّل دخولك 3 أيام متتالية',                field: 'dailyStreak',       target: 3,    icon: 'fa-calendar-check' },
+  { num: 5,  title: 'دعوات إضافية',         desc: 'ادعُ 5 أصدقاء آخرين (المجموع 8)',          field: 'referralCount',     target: 8,    icon: 'fa-users' },
+  { num: 6,  title: 'إيداع متقدم',          desc: 'قم بإيداع 250 نجمة إضافية (المجموع 350)',   field: 'totalDeposited',    target: 350,  icon: 'fa-sack-dollar' },
+  { num: 7,  title: 'مغامرة Crash',         desc: 'العب Crash 20 مرة',                        field: 'crashPlays',        target: 20,   icon: 'fa-rocket' },
+  { num: 8,  title: 'مدمن المهام',          desc: 'أكمل 5 مهام من قسم المهام',                field: 'completedTasksCount', target: 5,  icon: 'fa-tasks' },
+  { num: 9,  title: 'داعية محترف',          desc: 'ادعُ 18 صديقاً إجمالاً',                   field: 'referralCount',     target: 18,   icon: 'fa-crown' },
+  { num: 10, title: 'نجم الصعود',           desc: 'الوصول إلى x2 في لعبة Crash',              field: 'crashMaxMultiplier', target: 2,   icon: 'fa-arrow-trend-up' },
+  { num: 11, title: 'إيداع كبير',           desc: 'قم بإيداع 500 نجمة إضافية (المجموع 850)',   field: 'totalDeposited',    target: 850,  icon: 'fa-vault' },
+  { num: 12, title: 'لاعب محترف',           desc: 'العب 60 جولة في Slots',                    field: 'slotsSpins',        target: 60,   icon: 'fa-trophy' },
+  { num: 13, title: 'سفير Star Nova',       desc: 'ادعُ 20 صديقاً إجمالاً',                   field: 'referralCount',     target: 20,   icon: 'fa-medal' },
+  { num: 14, title: 'الكنز الذهبي',          desc: 'قم بإيداع 1000 نجمة إضافية (المجموع 1850)', field: 'totalDeposited',    target: 1850, icon: 'fa-gem' },
+  { num: 15, title: '🏆 الجائزة الكبرى',     desc: 'أكمل جميع المستويات السابقة للحصول على ساعة الفضاء', field: 'previousComplete', target: 14, icon: 'fa-clock', isFinal: true }
+];
+
+/* ============ HELPERS ============ */
+function formatNum(n) {
+  if (n === null || n === undefined) return '0';
+  const num = Number(n);
+  if (!isFinite(num)) return '0';
+  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
+  const [intPart, decPart] = str.split('.');
+  const f = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart ? f + '.' + decPart : f;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+/* ============ LOADER ============ */
+function startLoaderAnimation() {
+  const fill = document.getElementById('loaderFill');
+  const pct = document.getElementById('loaderPercent');
+  if (!fill || !pct) return;
+  let v = 0;
+  const iv = setInterval(() => {
+    if (v >= 95) { clearInterval(iv); return; }
+    v = Math.min(95, v + Math.max(2, Math.floor((100 - v) / 8)));
+    fill.style.width = v + '%';
+    pct.innerText = v + '%';
+  }, 100);
+}
+function finishLoader() {
+  const fill = document.getElementById('loaderFill');
+  const pct = document.getElementById('loaderPercent');
+  if (fill) fill.style.width = '100%';
+  if (pct) pct.innerText = '100%';
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('spacePage').classList.add('ready');
+  }, 400);
+}
+
+/* ============ TELEGRAM ============ */
+function initTelegram() {
+  if (!tg) return;
+  tg.ready(); tg.expand();
+  tg.setHeaderColor?.('#7c3aed');
+  tg.setBackgroundColor?.('#ffffff');
+  if (tg.initDataUnsafe?.user) {
+    user.id = String(tg.initDataUnsafe.user.id);
+    user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
+    user.photo = tg.initDataUnsafe.user.photo_url || '';
+  }
+}
+
+/* ============ FIREBASE ============ */
+function initFirebase() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+    loadUserData().then(() => {
+      renderBalances();
+      renderLevels();
+      updateSubscribeState();
+      finishLoader();
+    }).catch(() => finishLoader());
+  } catch (e) { finishLoader(); }
+}
+
+async function loadUserData() {
+  if (!db) return;
+  try {
+    const doc = await db.collection('users').doc(user.id).get();
+    if (doc.exists) {
+      const d = doc.data();
+      user.stars = d.stars || 0;
+      user.tickets = d.tickets || 0;
+      user.referralCount = d.referralCount || 0;
+      user.completedTasks = d.completedTasks || [];
+      user.dailyStreak = d.dailyStreak || 0;
+      user.totalDeposited = d.totalDeposited || 0;
+      user.slotsSpins = d.slotsSpins || 0;
+      user.crashPlays = d.crashPlays || 0;
+      user.crashMaxMultiplier = d.crashMaxMultiplier || 0;
+      user.battlePass = d.battlePass || null;
+      user.properties = d.properties || [];
+    }
+  } catch (e) {
+    console.log('[BP] Load error:', e.message);
+  }
+}
+
+/* ============ RENDER BALANCES ============ */
+function renderBalances() {
+  document.getElementById('topStars').innerText = formatNum(user.stars);
+  document.getElementById('topTickets').innerText = formatNum(user.tickets);
+}
+
+/* ============ COMPUTE LEVEL PROGRESS ============ */
+function getLevelProgress(level) {
+  if (level.isFinal) {
+    // Count completed previous levels
+    let prevComplete = 0;
+    for (let i = 0; i < LEVELS.length - 1; i++) {
+      const p = getLevelProgress(LEVELS[i]);
+      if (p.current >= p.target) prevComplete++;
+    }
+    return { current: prevComplete, target: 14 };
+  }
+  if (level.field === 'completedTasksCount') {
+    return { current: Math.min(user.completedTasks.length, level.target), target: level.target };
+  }
+  const val = Number(user[level.field]) || 0;
+  return { current: Math.min(val, level.target), target: level.target };
+}
+
+function isBattlePassActive() {
+  if (!user.battlePass || !user.battlePass.subscribed) return false;
+  if (user.battlePass.expiresAt && Date.now() > user.battlePass.expiresAt) return false;
+  return true;
+}
+
+/* ============ RENDER LEVELS ============ */
+function renderLevels() {
+  const container = document.getElementById('levelsContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const bpActive = isBattlePassActive();
+  let completedCount = 0;
+  let currentLevelSet = false;
+
+  LEVELS.forEach((level, index) => {
+    const progress = getLevelProgress(level);
+    const pct = Math.min(100, Math.round((progress.current / progress.target) * 100));
+    const isCompleted = pct >= 100;
+    if (isCompleted) completedCount++;
+
+    let levelClass = 'level';
+    let badgeHTML;
+
+    if (isCompleted) {
+      levelClass += ' completed';
+      badgeHTML = '<i class="fas fa-check"></i>';
+    } else if (bpActive && !currentLevelSet) {
+      levelClass += ' current';
+      badgeHTML = `<span>${level.num}</span>`;
+      currentLevelSet = true;
+    } else if (bpActive) {
+      levelClass += ' unlocked';
+      badgeHTML = `<span>${level.num}</span>`;
+    } else {
+      levelClass += ' locked';
+      badgeHTML = `<span>${level.num}</span>`;
+    }
+
+    if (level.isFinal) levelClass += ' final-level';
+
+    const rewardHTML = level.isFinal
+      ? `<div class="level-reward clock-reward"><i class="fas fa-clock"></i> ساعة الفضاء</div>`
+      : '';
+
+    const el = document.createElement('div');
+    el.className = levelClass;
+    el.innerHTML = `
+      <div class="level-badge">${badgeHTML}</div>
+      <div class="level-body">
+        <div class="level-title">${level.title}</div>
+        <div class="level-desc">${level.desc}</div>
+        <div class="level-progress-bar">
+          <div class="level-progress-fill" style="width: ${pct}%"></div>
+        </div>
+        <div class="level-progress-text">
+          <span class="pct">${pct}%</span>
+          <span>${formatNum(progress.current)} / ${formatNum(progress.target)}</span>
+        </div>
+        ${rewardHTML}
+      </div>
+    `;
+    container.appendChild(el);
+  });
+
+  // Update progress header
+  document.getElementById('progressText').textContent = `${completedCount} / 15`;
+
+  // Update timeline line
+  const totalPct = (completedCount / LEVELS.length) * 100;
+  document.getElementById('timelineProgress').style.height = totalPct + '%';
+
+  // Check if clock should be awarded
+  checkClockReward(completedCount);
+}
+
+/* ============ CLOCK REWARD ============ */
+async function checkClockReward(completedCount) {
+  if (completedCount < 15) return;
+  if (!isBattlePassActive()) return;
+  if (user.battlePass?.clockEarned) return;
+
+  // Award clock
+  try {
+    const clockItem = {
+      id: 'space_clock',
+      name: 'ساعة الفضاء',
+      image: ASSETS.clock,
+      rarity: 'legendary',
+      acquiredAt: Date.now(),
+      sellPrice: 2000,
+      description: 'ساعة أسطورية من Battle Pass'
+    };
+
+    await db.collection('users').doc(user.id).update({
+      'battlePass.clockEarned': true,
+      'battlePass.clockEarnedAt': Date.now(),
+      properties: firebase.firestore.FieldValue.arrayUnion(clockItem)
+    });
+
+    user.battlePass.clockEarned = true;
+    if (!user.properties) user.properties = [];
+    user.properties.push(clockItem);
+
+    setTimeout(() => openModal('clockEarnedModal'), 500);
+  } catch (e) {
+    console.log('[BP] Clock award error:', e.message);
+  }
+}
+
+/* ============ SUBSCRIBE STATE ============ */
+function updateSubscribeState() {
+  const btn = document.getElementById('subscribeBtn');
+  const notice = document.getElementById('subscribeNotice');
+  const expiredNotice = document.getElementById('expiredNotice');
+
+  const bpActive = isBattlePassActive();
+  const hasExpired = user.battlePass?.subscribed && user.battlePass?.expiresAt && Date.now() > user.battlePass.expiresAt;
+
+  if (bpActive) {
+    const daysLeft = Math.max(0, Math.ceil((user.battlePass.expiresAt - Date.now()) / (1000 * 60 * 60 * 24)));
+    btn.className = 'bp-subscribed-btn';
+    btn.innerHTML = `<i class="fas fa-check-circle"></i> مشترك - ${daysLeft} يوم متبقي`;
+    btn.onclick = () => showToast(`اشتراكك ساري حتى ${new Date(user.battlePass.expiresAt).toLocaleDateString('ar-EG')}`);
+    notice.style.display = 'none';
+    expiredNotice.style.display = 'none';
+  } else if (hasExpired) {
+    btn.className = 'bp-subscribe-btn bp-expired-btn';
+    btn.innerHTML = '<i class="fas fa-redo"></i> تجديد الاشتراك';
+    btn.onclick = openSubscribeModal;
+    notice.style.display = 'none';
+    expiredNotice.style.display = 'flex';
+  } else {
+    btn.className = 'bp-subscribe-btn';
+    btn.innerHTML = '<i class="fas fa-rocket"></i> اشترك الآن';
+    btn.onclick = openSubscribeModal;
+    notice.style.display = 'flex';
+    expiredNotice.style.display = 'none';
+  }
+}
+
+/* ============ SUBSCRIBE FLOW ============ */
+function openSubscribeModal() {
+  if (isBattlePassActive()) {
+    showToast('أنت مشترك بالفعل!');
+    return;
+  }
+  document.getElementById('modalCurrentBalance').textContent = formatNum(user.stars);
+  openModal('subscribeModal');
+}
+
+async function confirmSubscribe() {
+  const btn = document.getElementById('confirmSubBtn');
+  if (btn.disabled) return;
+
+  if (user.stars < BP_PRICE) {
+    closeModal('subscribeModal');
+    const short = BP_PRICE - user.stars;
+    document.getElementById('shortAmount').textContent = formatNum(short);
+    openModal('insufficientModal');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+
+  try {
+    const userRef = db.collection('users').doc(user.id);
+
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(userRef);
+      if (!doc.exists) throw new Error('User not found');
+      const data = doc.data();
+      const currentStars = data.stars || 0;
+
+      if (currentStars < BP_PRICE) {
+        throw new Error('INSUFFICIENT');
+      }
+
+      const now = Date.now();
+      const expiresAt = now + BP_DURATION_MS;
+
+      transaction.update(userRef, {
+        stars: currentStars - BP_PRICE,
+        battlePass: {
+          subscribed: true,
+          subscribedAt: now,
+          expiresAt: expiresAt,
+          clockEarned: false,
+          clockEarnedAt: null
+        }
+      });
+    });
+
+    // Local update
+    user.stars -= BP_PRICE;
+    user.battlePass = {
+      subscribed: true,
+      subscribedAt: Date.now(),
+      expiresAt: Date.now() + BP_DURATION_MS,
+      clockEarned: false
+    };
+
+    renderBalances();
+    updateSubscribeState();
+    renderLevels();
+
+    closeModal('subscribeModal');
+    setTimeout(() => openModal('successModal'), 200);
+    showToast('تم تفعيل Battle Pass بنجاح! 🎉');
+
+  } catch (e) {
+    console.log('[BP] Subscribe error:', e.message);
+    closeModal('subscribeModal');
+    if (e.message === 'INSUFFICIENT') {
+      const short = BP_PRICE - user.stars;
+      document.getElementById('shortAmount').textContent = formatNum(short);
+      openModal('insufficientModal');
+    } else {
+      showToast('حدث خطأ أثناء الاشتراك');
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> تأكيد الدفع';
+  }
+}
+
+/* ============ NAVIGATION ============ */
+function backToHome() {
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  if (tg?.close) {
+    // If inside Telegram Mini App - close
+    try { window.location.href = 'index.html'; } catch(e) { tg.close(); }
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+function backToDeposit() {
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  try { window.location.href = 'index.html#deposit'; } catch(e) { tg?.close?.(); }
+}
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  startLoaderAnimation();
+  initTelegram();
+  initFirebase();
+  setTimeout(finishLoader, 5000); // Fallback
+});
+</script>
+
+</body>
+</html>
