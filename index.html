@@ -76,53 +76,6 @@ input[type="number"], .num-input {
   font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* ============ SPLASH (with % loader) ============ */
-.splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: url('https://up6.cc/2026/11/179433008951731.jpg') center/cover no-repeat;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: 10vh; transition: opacity 0.45s ease;
-}
-.splash.hide { opacity: 0; pointer-events: none; }
-.loader-wrap {
-  width: 80%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-}
-.loader-bar {
-  width: 100%; height: 26px;
-  background: rgba(0,0,0,0.35);
-  border-radius: 999px; overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.2);
-  position: relative;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-}
-.loader-fill {
-  width: 0%; height: 100%;
-  background: linear-gradient(90deg, #FFFFFF, #F5D76E, #FFFFFF);
-  border-radius: 999px;
-  transition: width 0.25s ease;
-  box-shadow: 0 0 14px rgba(245,215,110,0.7);
-  position: relative;
-  z-index: 1;
-}
-.loader-percent {
-  position: absolute;
-  inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  direction: ltr;
-  letter-spacing: 0.5px;
-  z-index: 2;
-  pointer-events: none;
-  mix-blend-mode: difference;
-}
-
 /* ============ APP SHELL ============ */
 .app-container {
   display: flex; flex-direction: column; height: 100dvh;
@@ -517,7 +470,7 @@ input[type="number"], .num-input {
 .manual-ref-card .btn-copy:disabled { opacity: 0.6; pointer-events: none; }
 .manual-ref-card .btn-copy .fa-spinner { font-size: 12px; }
 
-/* ============ WALLET ADDRESS INPUT (FIXED CSS) ============ */
+/* ============ WALLET ADDRESS INPUT ============ */
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
 .wd-input-group label {
   display: block; margin-bottom: 8px;
@@ -1338,8 +1291,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crypto-pending-title { font-size: 11px; }
   .crypto-pending-timer { font-size: 12px; }
   .crypto-btn { padding: 6px 9px; font-size: 10px; }
-  .loader-bar { height: 22px; }
-  .loader-percent { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1351,15 +1302,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 </style>
 </head>
 <body>
-
-<div class="splash" id="splash">
-  <div class="loader-wrap">
-    <div class="loader-bar">
-      <div class="loader-fill" id="loaderFill"></div>
-      <span class="loader-percent" id="loaderPercent">0%</span>
-    </div>
-  </div>
-</div>
 
 <div class="app-container" id="app">
   <header class="top-app-bar"></header>
@@ -1420,7 +1362,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- SLOTS GAME VIEW -->
     <div class="view" id="view-slots">
       <div class="slots-container">
         <div class="slots-reels" id="slotsReels">
@@ -1618,7 +1559,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- ===== PROFILE ===== -->
     <div class="view" id="view-profile">
       <div class="profile-centered">
         <div class="profile-avatar" id="profileAvatar">
@@ -1684,7 +1624,6 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- CRASH GAME VIEW -->
     <div class="view" id="view-crash">
       <div class="crash-sky-bg"></div>
       <div class="crash-game-area" id="crash-game-area">
@@ -1753,6 +1692,21 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
       <i class="fas fa-user"></i>
     </div>
+  </div>
+</div>
+
+<!-- Load Error Modal -->
+<div class="modal-overlay" id="modalLoadError">
+  <div class="modal-content">
+    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,121,26,0.15), rgba(201,121,26,0.05)); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+      <i class="fas fa-wifi" style="font-size: 36px; color: var(--warning);"></i>
+    </div>
+    <h3>تعذر تحميل البيانات</h3>
+    <p>لم نتمكن من الاتصال بالخادم. تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.</p>
+    <button class="modal-btn" onclick="retryLoad()">
+      <i class="fas fa-rotate" style="margin-left: 6px;"></i>
+      حاول مجدداً
+    </button>
   </div>
 </div>
 
@@ -1967,6 +1921,11 @@ let slotsState = { currentBet: 69, isSpinning: false };
 
 let isWithdrawing = false;
 
+/* ============ LOAD STATE ============ */
+let userDataLoaded = false;
+let loadTimeoutHandle = null;
+const LOAD_TIMEOUT_MS = 10000;
+
 const tg = window.Telegram?.WebApp;
 let db = null;
 
@@ -2051,11 +2010,7 @@ async function calibrateServerTime() {
 function serverNow() { return Date.now() + serverOffset; }
 function getNextMidnight() { const n = new Date(serverNow()); n.setHours(24, 0, 0, 0); return n.getTime(); }
 
-// ============================================================
-// [تعديل 13] تكامل زر الرجوع في Telegram Mini App
-// ============================================================
 let telegramBackButtonHandler = null;
-
 function updateTelegramBackButton(viewName) {
   const bb = window.Telegram?.WebApp?.BackButton;
   if (!bb) return;
@@ -2082,9 +2037,64 @@ function initTelegram() {
       user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
-    // إخفاء زر الرجوع افتراضياً على الصفحة الرئيسية
     try { updateTelegramBackButton('home'); } catch(e) {}
   }
+}
+
+/* ============ LOAD MANAGEMENT ============ */
+function markUserDataLoaded() {
+  userDataLoaded = true;
+  if (loadTimeoutHandle) {
+    clearTimeout(loadTimeoutHandle);
+    loadTimeoutHandle = null;
+  }
+  closeModal('modalLoadError');
+}
+
+function startLoadTimer() {
+  if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
+  loadTimeoutHandle = setTimeout(() => {
+    if (!userDataLoaded) {
+      openModal('modalLoadError');
+    }
+  }, LOAD_TIMEOUT_MS);
+}
+
+async function retryLoad() {
+  closeModal('modalLoadError');
+  userDataLoaded = false;
+
+  // Reset displayed balances to 0 while retrying
+  user.stars = 0;
+  user.tickets = 0;
+  user.referrals = 0;
+  updateBalances();
+
+  startLoadTimer();
+
+  // Reinit Firebase if needed
+  if (!db) {
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+      db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+    } catch (e) {
+      console.error('Firebase reinit failed:', e);
+      return;
+    }
+  }
+
+  await fetchUserData();
+
+  Promise.all([
+    loadTasks(),
+    loadWithdrawalHistory(),
+    calibrateServerTime(),
+    loadCrashHistory()
+  ]).then(async () => {
+    await processReferralOnStartup().catch(() => {});
+    updateManualRefCardVisibility();
+  }).catch(e => console.error('Secondary load failed:', e));
 }
 
 /* ============ REFERRAL: AWARD SYSTEM ============ */
@@ -2188,48 +2198,31 @@ function updateManualRefCardVisibility() {
   else card.classList.add('show');
 }
 
-function initFirebase() {
+/* ============ INIT FIREBASE (called on start & retry) ============ */
+async function initFirebase() {
+  userDataLoaded = false;
+  startLoadTimer();
+
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    Promise.all([
-      fetchUserData(), loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
-    ]).then(async () => {
-      await processReferralOnStartup().catch(() => {});
-      updateManualRefCardVisibility();
-      hideSplash();
-    }).catch(() => hideSplash());
-  } catch (e) { hideSplash(); }
-}
+  } catch (e) {
+    console.error('Firebase init failed:', e);
+    return;
+  }
 
-function forceLoaderComplete() {
-  const fill = document.getElementById('loaderFill');
-  const pct = document.getElementById('loaderPercent');
-  if (fill) fill.style.width = '100%';
-  if (pct) pct.innerText = '100%';
-}
+  await fetchUserData();
 
-function hideSplash() {
-  forceLoaderComplete();
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
-    document.getElementById('app').classList.add('ready');
-  }, 400);
-}
-
-function startLoaderAnimation() {
-  const fill = document.getElementById('loaderFill');
-  const pct = document.getElementById('loaderPercent');
-  if (!fill || !pct) return;
-  let v = 0;
-  const iv = setInterval(() => {
-    if (v >= 100) { clearInterval(iv); return; }
-    v = Math.min(100, v + Math.max(2, Math.floor((100 - v) / 10)));
-    fill.style.width = v + '%';
-    pct.innerText = v + '%';
-    if (v >= 100) clearInterval(iv);
-  }, 90);
+  Promise.all([
+    loadTasks(),
+    loadWithdrawalHistory(),
+    calibrateServerTime(),
+    loadCrashHistory()
+  ]).then(async () => {
+    await processReferralOnStartup().catch(() => {});
+    updateManualRefCardVisibility();
+  }).catch(e => console.error('Secondary load failed:', e));
 }
 
 async function fetchUserData() {
@@ -2258,7 +2251,10 @@ async function fetchUserData() {
     updateBalances(); initDailyLogin(); renderProfile();
     document.getElementById('refLinkText').innerText = `https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-  } catch (e) {}
+    markUserDataLoaded();
+  } catch (e) {
+    console.error('fetchUserData failed:', e);
+  }
 }
 
 async function syncUserData(updates) {
@@ -2267,7 +2263,9 @@ async function syncUserData(updates) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  startLoaderAnimation();
+  // Show the app immediately - no splash
+  document.getElementById('app').classList.add('ready');
+
   initTelegram();
   initCountryTgs();
   initSlots();
@@ -2285,12 +2283,7 @@ window.addEventListener('pagehide', () => saveActiveRoundState());
 
 function exitGame() { go('home'); }
 
-// ============================================================
-// [تعديل 14] التنقل: الصفحات الخارجية (properties / spaceClock)
-//          تحويل مباشر إلى الملفات المستقلة
-// ============================================================
 function go(viewName) {
-  // صفحات خارجية - تحويل إلى ملفات HTML مستقلة
   if (viewName === 'properties') { window.location.href = './properties.html'; return; }
   if (viewName === 'spaceClock') { window.location.href = './space.html'; return; }
 
@@ -2319,7 +2312,6 @@ function go(viewName) {
     activeProfile.classList.add('active');
   }
 
-  // تحديث زر الرجوع في Telegram
   updateTelegramBackButton(viewName);
 
   const mainScroll = document.getElementById('mainScroll');
