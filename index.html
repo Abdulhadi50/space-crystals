@@ -1861,9 +1861,6 @@ document.addEventListener('dragstart', e => {
   if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
 });
 
-// ============================================================
-// [تعديل 9] formatNum: دعم الأعداد السالبة بشكل صحيح
-// ============================================================
 function formatNum(n) {
   if (n === null || n === undefined) return '0';
   const num = Number(n);
@@ -1876,9 +1873,6 @@ function formatNum(n) {
   return (neg ? '-' : '') + (decPart ? f + '.' + decPart : f);
 }
 
-// ============================================================
-// [تعديل 1] escapeHtml: حماية من XSS في الأسماء والعناوين
-// ============================================================
 function escapeHtml(s) {
   const d = document.createElement('div');
   d.textContent = String(s ?? '');
@@ -1971,7 +1965,6 @@ let taskStartTime = 0;
 let tasksCache = [];
 let slotsState = { currentBet: 69, isSpinning: false };
 
-// [تعديل 12] علم لمنع النقر المزدوج على السحب
 let isWithdrawing = false;
 
 const tg = window.Telegram?.WebApp;
@@ -2257,7 +2250,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSlots();
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
-  loadCryptoInvoice();  // [تعديل 8] استرجاع فاتورة كريبتو محفوظة
+  loadCryptoInvoice();
   initFirebase();
 });
 
@@ -2268,6 +2261,27 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('pagehide', () => saveActiveRoundState());
 
 function exitGame() { go('home'); }
+
+// ============================================================
+// [تعديل 13 - جديد] تكامل زر الرجوع في Telegram Mini App
+// يظهر في جميع الصفحات ما عدا الرئيسية، ويستبدل زر الإغلاق (X)
+// ============================================================
+let telegramBackButtonHandler = null;
+function updateTelegramBackButton(viewName) {
+  const bb = window.Telegram?.WebApp?.BackButton;
+  if (!bb) return;
+  if (telegramBackButtonHandler) {
+    try { bb.offClick(telegramBackButtonHandler); } catch(e) {}
+    telegramBackButtonHandler = null;
+  }
+  if (viewName === 'home') {
+    bb.hide();
+  } else {
+    telegramBackButtonHandler = () => go('home');
+    bb.onClick(telegramBackButtonHandler);
+    bb.show();
+  }
+}
 
 function go(viewName) {
   const GAME_VIEWS = ['crash'];
@@ -2294,6 +2308,9 @@ function go(viewName) {
   } else if (activeProfile) {
     activeProfile.classList.add('active');
   }
+
+  // [تعديل 13 - جديد] تحديث زر الرجوع في Telegram
+  updateTelegramBackButton(viewName);
 
   const mainScroll = document.getElementById('mainScroll');
   mainScroll.classList.remove('crash-mode');
@@ -2369,15 +2386,12 @@ function slotsUpdateBalance() {
   if (el && !slotsState.isSpinning) { el.innerText = 'اختر رهانك'; el.className = 'slots-result'; }
 }
 
-// ============================================================
-// [تعديل 7] إعادة توزيع احتمالات Slots لرفع RTP من 43% إلى ~92%
-// ============================================================
 function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
-  if (roll < 65) return { type: 'lose' };                                          // 65% خسارة (كانت 75%)
-  if (roll >= 95) return { type: 'win', id: 'p10', value: config.table['p10'] };    // 5% جاكبوت (كان 1%)
+  if (roll < 65) return { type: 'lose' };
+  if (roll >= 95) return { type: 'win', id: 'p10', value: config.table['p10'] };
   const keys = Object.keys(config.table).filter(k => k !== 'p10');
   const randomKey = keys[Math.floor(Math.random() * keys.length)];
   return { type: 'win', id: randomKey, value: config.table[randomKey] };
@@ -2661,7 +2675,6 @@ async function loadTasks() {
       const isCompleted = user.completedTasks.includes(task.id);
       let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
       let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>تم</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
-      // [تعديل 2] escapeHtml لعنوان المهمة
       html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(task.title)}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
@@ -2800,7 +2813,6 @@ async function processDeposit(type) {
       const payUrl = data.pay_url || data.payment_url || data.url;
       if (!payUrl) throw new Error(data.error || 'لم يتم استلام رابط الدفع');
       cryptoPendingInvoice = { id: data.invoice_id || data.id, createdAt: Date.now() };
-      // [تعديل 8] حفظ الفاتورة في localStorage للاسترجاع عند إعادة الفتح
       try { localStorage.setItem('sn_crypto_inv', JSON.stringify(cryptoPendingInvoice)); } catch(e) {}
       startCryptoTimer();
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch(e) { window.open(payUrl, '_blank'); }
@@ -2824,7 +2836,6 @@ function startCryptoTimer() {
   }, 1000);
 }
 
-// [تعديل 8] استرجاع فاتورة كريبتو محفوظة عند فتح التطبيق
 function loadCryptoInvoice() {
   try {
     const raw = localStorage.getItem('sn_crypto_inv');
@@ -2889,7 +2900,6 @@ async function loadWithdrawalHistory() {
     q.forEach(doc => rows.push(doc.data()));
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
-    // [تعديل 4] احتساب المكتملة فقط في totalWithdrawn
     user.totalWithdrawn = rows
       .filter(w => w.status === 'completed')
       .reduce((sum, w) => sum + (w.amount || 0), 0);
@@ -2943,7 +2953,6 @@ function renderWithdrawHistory() {
 }
 
 async function processWithdraw(method) {
-  // [تعديل 12] منع النقر المزدوج
   if (isWithdrawing) return;
 
   let id, amount, payoutStr;
@@ -2957,7 +2966,6 @@ async function processWithdraw(method) {
     payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
 
-  // [تعديل 3] تحقق فعلي من صيغة TON و Binance
   if (method === 'gram') {
     if (!id) return showToast('أدخل عنوان محفظة TON');
     const tonOk = /^[EU]Q[A-Za-z0-9_-]{46}$/.test(id) || /^[A-Za-z0-9_-]{48}$/.test(id);
@@ -3051,7 +3059,6 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const el = document.createElement('div');
       el.className = `podium-item rank-${rank}${isMe ? ' me' : ''}`;
-      // [تعديل 1] escapeHtml للاسم في الـ podium
       el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${escapeHtml(u.name || 'لاعب')}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} إحالة</div>`;
       podium.appendChild(el);
     });
@@ -3064,7 +3071,6 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      // [تعديل 1] escapeHtml للاسم في القائمة
       div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${escapeHtml(u.name || 'لاعب')} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} إحالة</div></div>`;
       list.appendChild(div);
     });
@@ -3326,7 +3332,6 @@ function crashHandleCrash() {
     crashSetMultiplierDisplay(final.toFixed(2) + 'x', 'crashed');
     crashSetCountdownDisplay('', false);
   }
-  // [تعديل 5] الشريط يجب أن يعرض دائمًا نقطة انهيار الجولة
   crashPushHistory(final);
   if (crashState.hasBet && !crashState.hasCashedOut) {
     saveCrashRound(final, crashState.activeBet, 'lost');
@@ -3375,7 +3380,6 @@ function crashHandleMainBtn() {
 }
 function crashPlaceBet() {
   crashValidateBet();
-  // [تعديل 11] قراءة autoCashout مباشرة عند الرهان (بدل الاعتماد على onchange فقط)
   if (crashState.autoCashout) {
     const inp = document.getElementById('crash-auto-cashout-val');
     const v = parseFloat(inp.value);
@@ -3395,7 +3399,6 @@ function crashPlaceBet() {
 }
 function crashCancelBet() {
   if (!crashState.hasBet) return;
-  // [تعديل 6] منع إلغاء الرهان أثناء الطيران (حماية من استدعاء Console)
   if (crashState.status !== 'waiting') return;
   user.stars += crashState.activeBet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(crashState.activeBet) });
@@ -3409,7 +3412,6 @@ function crashCancelBet() {
 function crashValidateBet() {
   const input = document.getElementById('crash-bet-input');
   sanitizeDigits(input);
-  // [تعديل 10] isFinite يمنع NaN
   let val = parseInt(input.value);
   if (!isFinite(val) || val < 1) val = 1;
   if (val > 1000) val = 1000;
