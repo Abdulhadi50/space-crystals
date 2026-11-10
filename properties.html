@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#b45309">
+<title>ممتلكاتي - Star Nova</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root {
+  --text-primary: #151622;
+  --text-secondary: #5b5d6e;
+  --text-tertiary: #9395a5;
+  --border: rgba(0, 0, 0, 0.08);
+  --bg-main: #ffffff;
+  --bg-card: #ffffff;
+  --bg-soft: #f5f6fa;
+  --success: #0fa96e;
+  --danger: #e03858;
+  --warning: #c9791a;
+  --gold: #b8912a;
+  --purple: #7c3aed;
+  --blue: #3b6fdb;
+  --gradient-gold: linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #B45309 100%);
+  --gradient-purple: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%);
+  --gradient-blue: linear-gradient(135deg, #5B8DEF 0%, #3B6FDB 100%);
+  --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  --gradient-gray: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+  --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --safe-top: env(safe-area-inset-top, 20px);
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.5;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  direction: rtl;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+::-webkit-scrollbar { display: none; }
+
+/* SPLASH */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: url('https://up6.cc/2026/11/179433008951731.jpg') center/cover no-repeat;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding-bottom: 10vh; transition: opacity 0.45s ease;
+}
+.splash.hide { opacity: 0; pointer-events: none; }
+.loader-wrap { width: 80%; max-width: 400px; display: flex; justify-content: center; }
+.loader-bar {
+  width: 100%; height: 26px; background: rgba(0,0,0,0.35);
+  border-radius: 999px; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.2);
+  position: relative;
+}
+.loader-fill {
+  width: 0%; height: 100%;
+  background: linear-gradient(90deg, #FFFFFF, #FCD34D, #FFFFFF);
+  border-radius: 999px; transition: width 0.25s ease;
+  box-shadow: 0 0 14px rgba(252,211,77,0.7);
+  position: relative; z-index: 1;
+}
+.loader-percent {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #ffffff; font-weight: 800; font-size: 13px;
+  font-variant-numeric: tabular-nums; direction: ltr;
+  z-index: 2; pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+/* PAGE */
+.props-page {
+  display: flex; flex-direction: column;
+  height: 100dvh; max-width: 480px; margin: 0 auto;
+  background: var(--bg-main); position: relative; overflow: hidden;
+  display: none;
+}
+.props-page.ready { display: flex; }
+
+/* BALANCES */
+.floating-balances {
+  position: absolute; top: calc(var(--safe-top) + 8px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between; z-index: 60;
+  pointer-events: none;
+}
+.balance-pill {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.95);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px; padding: 4px 11px; gap: 6px;
+  color: var(--text-primary); font-weight: 800; font-size: 14px;
+  box-shadow: 0 6px 18px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  pointer-events: auto;
+}
+.balance-pill img { width: 18px; height: 18px; border-radius: 50%; }
+.balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
+
+/* HERO GOLD */
+.hero {
+  position: relative;
+  background: var(--gradient-gold);
+  padding: calc(var(--safe-top) + 60px) 20px 26px;
+  overflow: hidden; flex-shrink: 0;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.30), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15), transparent 45%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 30px;
+  background: linear-gradient(to top, var(--bg-main), transparent);
+  pointer-events: none;
+}
+.hero-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px; position: relative; z-index: 1;
+}
+.hero-back {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.35);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px;
+  transition: transform 0.2s var(--spring);
+}
+.hero-back:active { transform: scale(0.9); }
+.hero-badge {
+  background: rgba(255,255,255,0.25);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff; padding: 6px 14px; border-radius: 999px;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; gap: 5px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.hero-icon-wrap {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.hero-icon {
+  width: 100px; height: 100px; border-radius: 30px;
+  background: rgba(255,255,255,0.25);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255,255,255,0.45);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; color: #fff;
+  margin-bottom: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
+  animation: floatIcon 3s ease-in-out infinite;
+  position: relative;
+}
+.hero-icon::before {
+  content: ''; position: absolute;
+  inset: -8px; border-radius: 35px;
+  border: 1px solid rgba(255,255,255,0.30);
+  animation: pulseRing 2.5s ease-in-out infinite;
+}
+@keyframes floatIcon { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes pulseRing { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.05); } }
+.hero-title {
+  font-size: 26px; font-weight: 900; color: #fff;
+  letter-spacing: -0.5px; margin-bottom: 6px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.92);
+  font-weight: 600; line-height: 1.5;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* CONTENT */
+.props-content {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 20px 16px calc(120px + var(--safe-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+/* STATS */
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 20px;
+}
+.stat-box {
+  background: linear-gradient(160deg, #ffffff 0%, #fef9ee 100%);
+  border: 1.5px solid rgba(180,83,9,0.15);
+  border-radius: 18px; padding: 16px;
+  box-shadow: 0 8px 24px rgba(180,83,9,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+  position: relative; overflow: hidden;
+}
+.stat-box::before {
+  content: ''; position: absolute;
+  top: -40%; left: -20%; width: 100px; height: 100px;
+  background: radial-gradient(circle, rgba(252,211,77,0.20), transparent 70%);
+  pointer-events: none;
+}
+.stat-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 6px;
+  display: flex; align-items: center; gap: 5px;
+}
+.stat-label i { color: var(--gold); font-size: 11px; }
+.stat-value {
+  font-size: 22px; font-weight: 900;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 6px;
+  direction: ltr; line-height: 1;
+}
+.stat-value img {
+  width: 20px; height: 20px; border-radius: 50%;
+}
+.stat-value small {
+  font-size: 12px; font-weight: 700;
+  color: var(--text-secondary);
+  margin-right: 2px;
+}
+
+/* FILTERS */
+.filters {
+  display: flex; gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 4px;
+  margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.filters::-webkit-scrollbar { display: none; }
+.filter-btn {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  padding: 9px 14px;
+  border-radius: 14px;
+  font-size: 12px; font-weight: 800;
+  color: var(--text-secondary);
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s var(--ease-out);
+  box-shadow: 0 2px 8px rgba(30,40,80,0.04);
+}
+.filter-btn i { font-size: 12px; }
+.filter-btn.active {
+  background: var(--gradient-gold);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(180,83,9,0.25), inset 0 1px 0 rgba(255,255,255,0.30);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.filter-btn.active i { color: #fff; }
+.filter-count {
+  background: rgba(0,0,0,0.08);
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-size: 10px; font-weight: 900;
+  direction: ltr;
+}
+.filter-btn.active .filter-count {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* SECTION HEADER */
+.section-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px;
+}
+.section-header h3 {
+  font-size: 16px; font-weight: 900;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-header h3 i { color: var(--gold); font-size: 15px; }
+.section-count {
+  font-size: 11px; font-weight: 800;
+  background: rgba(180,83,9,0.10);
+  color: var(--gold);
+  padding: 4px 11px; border-radius: 10px;
+  direction: ltr;
+}
+
+/* GRID */
+.props-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* PROPERTY CARD */
+.prop-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 6px 20px rgba(30,40,80,0.06);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform 0.15s var(--spring);
+  cursor: pointer;
+}
+.prop-card:active { transform: scale(0.97); }
+.prop-card::before {
+  content: ''; position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--rarity-border, transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.prop-card.legendary { --rarity-border: var(--gradient-gold); background: linear-gradient(160deg, #ffffff 0%, #fef9ee 100%); }
+.prop-card.epic { --rarity-border: var(--gradient-purple); background: linear-gradient(160deg, #ffffff 0%, #f8f6ff 100%); }
+.prop-card.rare { --rarity-border: var(--gradient-blue); background: linear-gradient(160deg, #ffffff 0%, #f0f6ff 100%); }
+.prop-card.common { --rarity-border: var(--gradient-gray); background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%); }
+
+.prop-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.prop-card.legendary .prop-image-wrap { background: radial-gradient(circle at 50% 40%, rgba(252,211,77,0.25), rgba(252,211,77,0.05)); }
+.prop-card.epic .prop-image-wrap { background: radial-gradient(circle at 50% 40%, rgba(168,85,247,0.20), rgba(168,85,247,0.04)); }
+.prop-card.rare .prop-image-wrap { background: radial-gradient(circle at 50% 40%, rgba(91,141,239,0.20), rgba(91,141,239,0.04)); }
+.prop-card.common .prop-image-wrap { background: radial-gradient(circle at 50% 40%, rgba(148,163,184,0.20), rgba(148,163,184,0.04)); }
+
+.prop-image {
+  width: 78%; height: 78%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(30,40,80,0.20));
+  transition: transform 0.3s var(--spring);
+}
+.prop-card:active .prop-image { transform: scale(1.05); }
+
+.rarity-badge {
+  position: absolute; top: 6px; right: 6px;
+  padding: 3px 8px; border-radius: 8px;
+  font-size: 9px; font-weight: 900;
+  letter-spacing: 0.3px;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 2;
+}
+.rarity-badge.legendary { background: var(--gradient-gold); color: #1a1400; }
+.rarity-badge.epic { background: var(--gradient-purple); }
+.rarity-badge.rare { background: var(--gradient-blue); }
+.rarity-badge.common { background: var(--gradient-gray); }
+
+.prop-name {
+  font-size: 13px; font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.prop-source {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 4px;
+}
+.prop-source i { font-size: 9px; }
+.prop-price {
+  background: rgba(252,211,77,0.15);
+  border: 1px solid rgba(180,83,9,0.20);
+  border-radius: 10px;
+  padding: 7px 10px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-size: 12px; font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 8px;
+  direction: ltr;
+}
+.prop-price img { width: 14px; height: 14px; border-radius: 50%; }
+.prop-sell-btn {
+  width: 100%; padding: 9px;
+  border-radius: 12px;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 4px 12px rgba(22,24,42,0.20);
+}
+.prop-sell-btn:active { transform: scale(0.96); }
+.prop-sell-btn i { font-size: 11px; }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  grid-column: 1 / -1;
+}
+.empty-icon {
+  width: 100px; height: 100px;
+  border-radius: 28px;
+  background: linear-gradient(160deg, #f5f6fa, #e8ebf3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; color: #b0b0c0;
+  margin: 0 auto 16px;
+  border: 2px solid #e0e0ea;
+}
+.empty-state h3 {
+  font-size: 17px; font-weight: 900;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.empty-state p {
+  font-size: 13px; color: var(--text-secondary);
+  font-weight: 600; line-height: 1.5;
+  max-width: 280px; margin: 0 auto;
+}
+.empty-action {
+  margin-top: 18px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: var(--gradient-gold);
+  color: #fff;
+  font-size: 13px; font-weight: 900;
+  box-shadow: 0 8px 24px rgba(180,83,9,0.30);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  transition: transform 0.15s var(--spring);
+}
+.empty-action:active { transform: scale(0.97); }
+
+/* BACK BUTTON */
+.back-btn-wrap {
+  position: absolute; bottom: calc(14px + var(--safe-bottom));
+  left: 14px; right: 14px; z-index: 100;
+}
+.back-btn {
+  width: 100%; padding: 16px; border-radius: 32px;
+  background: rgba(255,255,255,0.85);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1.5px solid rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 15px; font-weight: 800;
+  box-shadow: 0 8px 24px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.15s var(--spring);
+}
+.back-btn:active { transform: scale(0.97); }
+.back-btn i { font-size: 16px; color: var(--gold); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,22,40,0.60);
+  z-index: 1000; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+  background: linear-gradient(160deg, #ffffff 0%, #fef9ee 100%);
+  border-radius: 28px; padding: 24px;
+  width: 100%; max-width: 360px; text-align: center;
+  animation: popInModal 0.32s var(--spring);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 26px 70px rgba(30,40,80,0.30), inset 0 1px 0 rgba(255,255,255,0.9);
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-img-wrap {
+  width: 130px; height: 130px;
+  border-radius: 24px;
+  margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.modal-img-wrap.legendary { background: radial-gradient(circle at 50% 40%, rgba(252,211,77,0.30), rgba(252,211,77,0.05)); border: 2px solid rgba(180,83,9,0.20); }
+.modal-img-wrap.epic { background: radial-gradient(circle at 50% 40%, rgba(168,85,247,0.25), rgba(168,85,247,0.04)); border: 2px solid rgba(124,58,237,0.20); }
+.modal-img-wrap.rare { background: radial-gradient(circle at 50% 40%, rgba(91,141,239,0.25), rgba(91,141,239,0.04)); border: 2px solid rgba(59,111,219,0.20); }
+.modal-img-wrap.common { background: radial-gradient(circle at 50% 40%, rgba(148,163,184,0.25), rgba(148,163,184,0.04)); border: 2px solid rgba(100,116,139,0.20); }
+.modal-img { width: 75%; height: 75%; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(30,40,80,0.25)); }
+.modal-content h3 { font-size: 19px; font-weight: 900; margin-bottom: 6px; }
+.modal-rarity {
+  display: inline-block;
+  padding: 3px 10px; border-radius: 8px;
+  font-size: 10px; font-weight: 900;
+  margin-bottom: 14px;
+  color: #fff;
+}
+.modal-rarity.legendary { background: var(--gradient-gold); color: #1a1400; }
+.modal-rarity.epic { background: var(--gradient-purple); }
+.modal-rarity.rare { background: var(--gradient-blue); }
+.modal-rarity.common { background: var(--gradient-gray); }
+.modal-desc {
+  font-size: 12px; color: var(--text-secondary);
+  font-weight: 600; line-height: 1.6;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+.modal-price-box {
+  background: linear-gradient(135deg, rgba(252,211,77,0.20), rgba(252,211,77,0.05));
+  border: 1.5px solid rgba(180,83,9,0.25);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.modal-price-box img { width: 24px; height: 24px; border-radius: 50%; }
+.modal-price-box span {
+  font-size: 24px; font-weight: 900;
+  color: var(--gold); direction: ltr;
+}
+.modal-price-box small {
+  font-size: 12px; font-weight: 700;
+  color: var(--text-secondary); margin-right: 4px;
+}
+.modal-btn {
+  width: 100%; padding: 15px;
+  border-radius: 16px;
+  background: var(--gradient-gold);
+  color: #fff;
+  font-size: 15px; font-weight: 900;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 10px 26px rgba(180,83,9,0.32), inset 0 1px 0 rgba(255,255,255,0.25);
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.modal-btn:active { transform: scale(0.97); }
+.modal-btn:disabled { opacity: 0.6; pointer-events: none; }
+.modal-btn-cancel {
+  width: 100%; padding: 13px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.05);
+  color: var(--text-secondary);
+  font-size: 14px; font-weight: 800;
+  border: 1px solid var(--border);
+  transition: transform 0.15s var(--spring);
+}
+.modal-btn-cancel:active { transform: scale(0.97); }
+
+/* SUCCESS */
+.success-icon {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: var(--gradient-success);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 44px;
+  margin: 0 auto 20px;
+  box-shadow: 0 12px 32px rgba(15,169,110,0.4);
+  animation: successPop 0.5s var(--spring);
+}
+@keyframes successPop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.success-amount {
+  background: linear-gradient(135deg, rgba(252,211,77,0.20), rgba(252,211,77,0.05));
+  border: 1.5px solid rgba(180,83,9,0.25);
+  border-radius: 16px; padding: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 14px 0 18px;
+}
+.success-amount img { width: 24px; height: 24px; border-radius: 50%; }
+.success-amount span { font-size: 26px; font-weight: 900; color: var(--gold); direction: ltr; }
+
+/* TOAST */
+.toast {
+  position: fixed; top: calc(var(--safe-top) + 20px); left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: linear-gradient(135deg, #1a1c2e, #2d3048);
+  color: #fff; padding: 14px 26px; border-radius: 999px;
+  font-size: 13px; font-weight: 700; z-index: 2000;
+  transition: transform 0.4s var(--spring);
+  max-width: 90%; text-align: center;
+  box-shadow: 0 14px 40px rgba(30,40,80,0.30);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* SKELETON */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.skeleton-card {
+  background: linear-gradient(90deg, #f0f0f5 25%, #e8e8f0 50%, #f0f0f5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 20px;
+  aspect-ratio: 0.75;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 380px) {
+  .hero-icon { width: 88px; height: 88px; font-size: 42px; }
+  .hero-title { font-size: 22px; }
+  .hero-sub { font-size: 12px; }
+  .stat-value { font-size: 19px; }
+  .prop-card { padding: 12px; }
+  .prop-name { font-size: 12px; }
+  .balance-pill { font-size: 13px; padding: 3px 9px; }
+  .balance-pill img { width: 16px; height: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="loader-wrap">
+    <div class="loader-bar">
+      <div class="loader-fill" id="loaderFill"></div>
+      <span class="loader-percent" id="loaderPercent">0%</span>
+    </div>
+  </div>
+</div>
+
+<div class="props-page" id="propsPage">
+
+  <!-- BALANCES -->
+  <div class="floating-balances">
+    <div class="balance-pill">
+      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="tickets">
+      <span id="topTickets">0</span>
+    </div>
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="stars">
+      <span id="topStars">0</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-top">
+      <button class="hero-back" onclick="backToHome()">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+      <div class="hero-badge">
+        <i class="fas fa-gem"></i>
+        Inventory
+      </div>
+    </div>
+    <div class="hero-icon-wrap">
+      <div class="hero-icon">
+        <i class="fas fa-box-open"></i>
+      </div>
+      <h1 class="hero-title">ممتلكاتي</h1>
+      <p class="hero-sub">كل الجوائز والمكافآت والاشتراكات التي كسبتها، جاهزة للبيع</p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="props-content" id="propsContent">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label"><i class="fas fa-cubes"></i> عدد الممتلكات</div>
+        <div class="stat-value" id="statCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label"><i class="fas fa-sack-dollar"></i> القيمة الإجمالية</div>
+        <div class="stat-value">
+          <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+          <span id="statValue">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters" id="filtersContainer">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
+        <i class="fas fa-layer-group"></i>
+        الكل
+        <span class="filter-count" id="count-all">0</span>
+      </button>
+      <button class="filter-btn" data-filter="clocks" onclick="setFilter('clocks', this)">
+        <i class="fas fa-clock"></i>
+        ساعات
+        <span class="filter-count" id="count-clocks">0</span>
+      </button>
+      <button class="filter-btn" data-filter="gifts" onclick="setFilter('gifts', this)">
+        <i class="fas fa-gift"></i>
+        هدايا
+        <span class="filter-count" id="count-gifts">0</span>
+      </button>
+      <button class="filter-btn" data-filter="rewards" onclick="setFilter('rewards', this)">
+        <i class="fas fa-trophy"></i>
+        مكافآت
+        <span class="filter-count" id="count-rewards">0</span>
+      </button>
+      <button class="filter-btn" data-filter="subscriptions" onclick="setFilter('subscriptions', this)">
+        <i class="fas fa-crown"></i>
+        اشتراكات
+        <span class="filter-count" id="count-subscriptions">0</span>
+      </button>
+    </div>
+
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <h3><i class="fas fa-list"></i> <span id="sectionTitle">جميع الممتلكات</span></h3>
+      <span class="section-count" id="sectionCount">0</span>
+    </div>
+
+    <!-- GRID -->
+    <div class="props-grid" id="propsGrid">
+      <div class="skeleton-grid" style="grid-column: 1 / -1;">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK BTN -->
+  <div class="back-btn-wrap">
+    <button class="back-btn" onclick="backToHome()">
+      <i class="fas fa-home"></i> العودة للرئيسية
+    </button>
+  </div>
+</div>
+
+<!-- SELL MODAL -->
+<div class="modal-overlay" id="sellModal">
+  <div class="modal-content">
+    <div class="modal-img-wrap" id="sellModalImgWrap">
+      <img class="modal-img" id="sellModalImg" src="" alt="">
+    </div>
+    <h3 id="sellModalName">اسم العنصر</h3>
+    <div class="modal-rarity" id="sellModalRarity">أسطوري</div>
+    <p class="modal-desc" id="sellModalDesc">وصف العنصر</p>
+    <div class="modal-price-box">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+      <span id="sellModalPrice">0</span>
+      <small>نجمة</small>
+    </div>
+    <button class="modal-btn" id="confirmSellBtn" onclick="confirmSell()">
+      <i class="fas fa-hand-holding-dollar"></i> تأكيد البيع
+    </button>
+    <button class="modal-btn-cancel" onclick="closeModal('sellModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-content">
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    <h3>🎉 تم البيع بنجاح</h3>
+    <p style="color: var(--text-secondary); font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+      تمت إضافة ثمن العنصر إلى رصيدك
+    </p>
+    <div class="success-amount">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+      <span id="successAmount">0</span>
+    </div>
+    <button class="modal-btn" onclick="closeModal('successModal')">حسناً</button>
+  </div>
+</div>
+
+<!-- ERROR MODAL -->
+<div class="modal-overlay" id="errorModal">
+  <div class="modal-content">
+    <div class="success-icon" style="background: linear-gradient(135deg, #FF6B81, #E63950); box-shadow: 0 12px 32px rgba(224,56,88,0.4);">
+      <i class="fas fa-times"></i>
+    </div>
+    <h3>تعذر إتمام البيع</h3>
+    <p id="errorMsg" style="color: var(--text-secondary); font-size: 13px; font-weight: 600; margin-bottom: 20px;">
+      حدث خطأ غير متوقع
+    </p>
+    <button class="modal-btn" onclick="closeModal('errorModal')">حسناً</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">رسالة</div>
+
+<script>
+'use strict';
+
+/* ============ FIREBASE CONFIG ============ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCX29raUbUMwSFMIlKo_t7aDA6p6hvx7HI",
+  authDomain: "starnovagame.firebaseapp.com",
+  projectId: "starnovagame",
+  storageBucket: "starnovagame.firebasestorage.app",
+  messagingSenderId: "571608140423",
+  appId: "1:571608140423:web:f1516e0572efada7068622"
+};
+
+/* ============ ASSETS ============ */
+const ASSETS = {
+  star: 'https://up6.cc/2026/10/17932600818491.png',
+  ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png',
+  clock: 'https://img.icons8.com/liquid-glass-color/999/alarm-clock.png',
+  gift: 'https://img.icons8.com/liquid-glass-color/999/gift.png',
+  trophy: 'https://img.icons8.com/liquid-glass-color/999/trophy.png',
+  crown: 'https://img.icons8.com/liquid-glass-color/999/crown.png',
+  medal: 'https://img.icons8.com/liquid-glass-color/999/medal.png'
+};
+
+/* ============ PRICES OVERRIDE ============ */
+/* السعر المعروض للبيع - يتفوق على أي sellPrice محفوظ */
+const SELL_PRICES = {
+  space_clock: 799
+};
+
+/* ============ SOURCE LABELS ============ */
+const SOURCE_LABELS = {
+  battle_pass: { text: 'Battle Pass', icon: 'fa-crown' },
+  gift: { text: 'هدية', icon: 'fa-gift' },
+  reward: { text: 'مكافأة', icon: 'fa-trophy' },
+  subscription: { text: 'اشتراك', icon: 'fa-star' },
+  event: { text: 'حدث خاص', icon: 'fa-fire' }
+};
+
+/* ============ RARITY LABELS ============ */
+const RARITY_LABELS = {
+  legendary: 'أسطوري',
+  epic: 'ملحمي',
+  rare: 'نادر',
+  common: 'عادي'
+};
+
+/* ============ STATE ============ */
+let user = {
+  id: '123456789',
+  name: 'لاعب',
+  stars: 0,
+  tickets: 0,
+  properties: []
+};
+let db = null;
+let currentFilter = 'all';
+let selectedItemForSell = null;
+const tg = window.Telegram?.WebApp;
+
+/* ============ HELPERS ============ */
+function formatNum(n) {
+  if (n === null || n === undefined) return '0';
+  const num = Number(n);
+  if (!isFinite(num)) return '0';
+  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
+  const [intPart, decPart] = str.split('.');
+  const f = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decPart ? f + '.' + decPart : f;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function getItemCategory(item) {
+  if (item.category) return item.category;
+  if (item.id === 'space_clock') return 'clocks';
+  if (item.source === 'gift') return 'gifts';
+  if (item.source === 'subscription') return 'subscriptions';
+  return 'rewards';
+}
+
+function getSellPrice(item) {
+  if (SELL_PRICES[item.id] !== undefined) return SELL_PRICES[item.id];
+  return Number(item.sellPrice) || 0;
+}
+
+function getItemImage(item) {
+  if (item.image) return item.image;
+  if (item.id === 'space_clock') return ASSETS.clock;
+  return ASSETS.gift;
+}
+
+/* ============ LOADER ============ */
+function startLoaderAnimation() {
+  const fill = document.getElementById('loaderFill');
+  const pct = document.getElementById('loaderPercent');
+  if (!fill || !pct) return;
+  let v = 0;
+  const iv = setInterval(() => {
+    if (v >= 95) { clearInterval(iv); return; }
+    v = Math.min(95, v + Math.max(2, Math.floor((100 - v) / 8)));
+    fill.style.width = v + '%';
+    pct.innerText = v + '%';
+  }, 100);
+}
+function finishLoader() {
+  const fill = document.getElementById('loaderFill');
+  const pct = document.getElementById('loaderPercent');
+  if (fill) fill.style.width = '100%';
+  if (pct) pct.innerText = '100%';
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('propsPage').classList.add('ready');
+  }, 400);
+}
+
+/* ============ TELEGRAM ============ */
+function initTelegram() {
+  if (!tg) return;
+  tg.ready(); tg.expand();
+  tg.setHeaderColor?.('#b45309');
+  tg.setBackgroundColor?.('#ffffff');
+  if (tg.initDataUnsafe?.user) {
+    user.id = String(tg.initDataUnsafe.user.id);
+    user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
+  }
+}
+
+/* ============ FIREBASE ============ */
+function initFirebase() {
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+    loadUserData().then(() => {
+      renderAll();
+      finishLoader();
+    }).catch(() => finishLoader());
+  } catch (e) { finishLoader(); }
+}
+
+async function loadUserData() {
+  if (!db) return;
+  try {
+    const doc = await db.collection('users').doc(user.id).get();
+    if (doc.exists) {
+      const d = doc.data();
+      user.stars = d.stars || 0;
+      user.tickets = d.tickets || 0;
+      user.properties = Array.isArray(d.properties) ? d.properties : [];
+    }
+  } catch (e) {
+    console.log('[Props] Load error:', e.message);
+  }
+}
+
+/* ============ RENDER ============ */
+function renderAll() {
+  renderBalances();
+  renderStats();
+  renderFilters();
+  renderGrid();
+}
+
+function renderBalances() {
+  document.getElementById('topStars').innerText = formatNum(user.stars);
+  document.getElementById('topTickets').innerText = formatNum(user.tickets);
+}
+
+function renderStats() {
+  const count = user.properties.length;
+  const totalValue = user.properties.reduce((sum, item) => sum + getSellPrice(item), 0);
+  document.getElementById('statCount').innerText = formatNum(count);
+  document.getElementById('statValue').innerText = formatNum(totalValue);
+}
+
+function renderFilters() {
+  const counts = {
+    all: user.properties.length,
+    clocks: 0,
+    gifts: 0,
+    rewards: 0,
+    subscriptions: 0
+  };
+  user.properties.forEach(item => {
+    const cat = getItemCategory(item);
+    if (counts[cat] !== undefined) counts[cat]++;
+    else counts.rewards++;
+  });
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('count-' + k);
+    if (el) el.innerText = counts[k];
+  });
+}
+
+function renderGrid() {
+  const grid = document.getElementById('propsGrid');
+  const filtered = currentFilter === 'all'
+    ? user.properties
+    : user.properties.filter(item => getItemCategory(item) === currentFilter);
+
+  document.getElementById('sectionCount').innerText = filtered.length;
+
+  const titles = {
+    all: 'جميع الممتلكات',
+    clocks: 'الساعات',
+    gifts: 'الهدايا',
+    rewards: 'المكافآت',
+    subscriptions: 'الاشتراكات'
+  };
+  document.getElementById('sectionTitle').innerText = titles[currentFilter] || 'الممتلكات';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = renderEmptyState();
+    return;
+  }
+
+  grid.innerHTML = filtered.map((item, i) => renderCard(item, i)).join('');
+}
+
+function renderCard(item, index) {
+  const rarity = item.rarity || 'common';
+  const rarityLabel = RARITY_LABELS[rarity] || 'عادي';
+  const price = getSellPrice(item);
+  const image = getItemImage(item);
+  const source = SOURCE_LABELS[item.source] || SOURCE_LABELS.reward;
+  const name = item.name || 'عنصر';
+  const canSell = price > 0;
+
+  return `
+    <div class="prop-card ${rarity}" onclick='openSellModal(${JSON.stringify(JSON.stringify(item))})'>
+      <div class="prop-image-wrap">
+        <span class="rarity-badge ${rarity}">${rarityLabel}</span>
+        <img class="prop-image" src="${image}" alt="${name}" onerror="this.src='${ASSETS.gift}'">
+      </div>
+      <div class="prop-name">${name}</div>
+      <div class="prop-source">
+        <i class="fas ${source.icon}"></i>
+        <span>${source.text}</span>
+      </div>
+      ${canSell ? `
+        <div class="prop-price">
+          <img src="${ASSETS.star}" alt="star">
+          <span>${formatNum(price)}</span>
+        </div>
+        <button class="prop-sell-btn" onclick='event.stopPropagation(); openSellModal(${JSON.stringify(JSON.stringify(item))})'>
+          <i class="fas fa-hand-holding-dollar"></i>
+          بيع
+        </button>
+      ` : `
+        <div class="prop-price" style="background: rgba(0,0,0,0.04); border-color: var(--border); color: var(--text-tertiary);">
+          غير قابل للبيع
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function renderEmptyState() {
+  const messages = {
+    all: { icon: 'fa-box-open', title: 'لا توجد ممتلكات بعد', desc: 'اشترك في Battle Pass أو أكمل التحديات للحصول على أول ممتلكاتك', showAction: true },
+    clocks: { icon: 'fa-clock', title: 'لا توجد ساعات', desc: 'احصل على ساعة الفضاء الأسطورية من خلال إكمال Battle Pass', showAction: true },
+    gifts: { icon: 'fa-gift', title: 'لا توجد هدايا', desc: 'ستظهر الهدايا هنا عند استلامها من الأحداث والمناسبات', showAction: false },
+    rewards: { icon: 'fa-trophy', title: 'لا توجد مكافآت', desc: 'أكمل المهام والتحديات لكسب المكافآت', showAction: false },
+    subscriptions: { icon: 'fa-crown', title: 'لا توجد اشتراكات', desc: 'ستظهر عناصر الاشتراكات هنا بعد الاشتراك', showAction: false }
+  };
+  const m = messages[currentFilter] || messages.all;
+
+  return `
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="fas ${m.icon}"></i>
+      </div>
+      <h3>${m.title}</h3>
+      <p>${m.desc}</p>
+      ${m.showAction ? `
+        <button class="empty-action" onclick="goToBattlePass()">
+          <i class="fas fa-rocket"></i>
+          اذهب إلى Battle Pass
+        </button>
+      ` : ''}
+    </div>
+  `;
+}
+
+/* ============ FILTER ============ */
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+/* ============ SELL FLOW ============ */
+function openSellModal(itemJson) {
+  // itemJson is already a JSON string from the onclick
+  let item;
+  try {
+    item = typeof itemJson === 'string' ? JSON.parse(itemJson) : itemJson;
+    if (typeof item === 'string') item = JSON.parse(item);
+  } catch (e) {
+    return;
+  }
+
+  const price = getSellPrice(item);
+  if (price <= 0) {
+    showToast('هذا العنصر غير قابل للبيع');
+    return;
+  }
+
+  selectedItemForSell = item;
+  const rarity = item.rarity || 'common';
+
+  const imgWrap = document.getElementById('sellModalImgWrap');
+  imgWrap.className = 'modal-img-wrap ' + rarity;
+  document.getElementById('sellModalImg').src = getItemImage(item);
+  document.getElementById('sellModalName').textContent = item.name || 'عنصر';
+
+  const rarityEl = document.getElementById('sellModalRarity');
+  rarityEl.className = 'modal-rarity ' + rarity;
+  rarityEl.textContent = RARITY_LABELS[rarity] || 'عادي';
+
+  document.getElementById('sellModalDesc').textContent = item.description || 'عنصر من ممتلكاتك يمكنك بيعه مقابل نجوم.';
+  document.getElementById('sellModalPrice').textContent = formatNum(price);
+
+  const btn = document.getElementById('confirmSellBtn');
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-hand-holding-dollar"></i> تأكيد البيع';
+
+  openModal('sellModal');
+}
+
+async function confirmSell() {
+  if (!selectedItemForSell) return;
+  const btn = document.getElementById('confirmSellBtn');
+  if (btn.disabled) return;
+
+  const item = selectedItemForSell;
+  const sellPrice = getSellPrice(item);
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البيع...';
+
+  try {
+    const userRef = db.collection('users').doc(user.id);
+
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(userRef);
+      if (!doc.exists) throw new Error('USER_NOT_FOUND');
+
+      const data = doc.data();
+      const properties = Array.isArray(data.properties) ? data.properties : [];
+      const itemIndex = properties.findIndex(p => p.id === item.id && p.acquiredAt === item.acquiredAt);
+
+      if (itemIndex === -1) throw new Error('ITEM_NOT_FOUND');
+
+      const currentStars = data.stars || 0;
+      const newProperties = properties.filter((_, i) => i !== itemIndex);
+
+      transaction.update(userRef, {
+        stars: currentStars + sellPrice,
+        properties: newProperties
+      });
+    });
+
+    // Local update
+    user.stars += sellPrice;
+    user.properties = user.properties.filter(p =>
+      !(p.id === item.id && p.acquiredAt === item.acquiredAt)
+    );
+
+    // UI updates
+    renderAll();
+    closeModal('sellModal');
+    document.getElementById('successAmount').textContent = formatNum(sellPrice);
+    setTimeout(() => openModal('successModal'), 200);
+
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.notificationOccurred('success');
+    }
+
+  } catch (e) {
+    console.log('[Sell] Error:', e.message);
+    closeModal('sellModal');
+
+    let errorText = 'حدث خطأ أثناء إتمام البيع. حاول مرة أخرى.';
+    if (e.message === 'ITEM_NOT_FOUND') errorText = 'هذا العنصر لم يعد موجوداً في ممتلكاتك.';
+    else if (e.message === 'USER_NOT_FOUND') errorText = 'تعذر العثور على حسابك.';
+
+    document.getElementById('errorMsg').textContent = errorText;
+    setTimeout(() => openModal('errorModal'), 200);
+
+    // Reload from DB to sync state
+    await loadUserData();
+    renderAll();
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-hand-holding-dollar"></i> تأكيد البيع';
+    selectedItemForSell = null;
+  }
+}
+
+/* ============ NAVIGATION ============ */
+function backToHome() {
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  try { window.location.href = 'index.html'; } catch(e) { tg?.close?.(); }
+}
+
+function goToBattlePass() {
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+  try { window.location.href = 'space.html'; } catch(e) { tg?.close?.(); }
+}
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  startLoaderAnimation();
+  initTelegram();
+  initFirebase();
+  setTimeout(finishLoader, 5000);
+});
+</script>
+
+</body>
+</html>
