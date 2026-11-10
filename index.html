@@ -1380,13 +1380,13 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="home-cards">
 
         <div class="home-cards-row">
-          <div class="home-card card-properties" onclick="window.location.href='properties.html'">
+          <div class="home-card card-properties" onclick="go('properties')">
             <div class="card-video-icon" id="home-properties-tgs"></div>
             <div class="card-text">
               <h3>الممتلكات</h3>
             </div>
           </div>
-          <div class="home-card card-space-clock" onclick="window.location.href='space.html'">
+          <div class="home-card card-space-clock" onclick="go('spaceClock')">
             <div class="card-video-icon" id="home-space-clock-tgs"></div>
             <div class="card-text">
               <h3>ساعة الفضاء</h3>
@@ -1645,7 +1645,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
 
-        <div class="profile-nav-card" onclick="window.location.href='properties.html'">
+        <div class="profile-nav-card" onclick="go('properties')">
           <div class="profile-nav-card-icon" style="background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,215,0,0.05));">
             <i class="fas fa-building" style="color: #c9a227;"></i>
           </div>
@@ -2286,8 +2286,8 @@ function go(viewName) {
     setTimeout(() => TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']), 100);
   } else if (viewName === 'slots') slotsUpdateBalance();
   else if (viewName === 'withdraw') loadWithdrawalHistory();
-  else if (viewName === 'properties') { window.location.href = 'properties.html'; }
-  else if (viewName === 'spaceClock') { window.location.href = 'space.html'; }
+  else if (viewName === 'properties') { showToast('الممتلكات - قريباً'); go('home'); }
+  else if (viewName === 'spaceClock') { showToast('ساعة الفضاء - قريباً'); go('home'); }
   else if (viewName === 'referral') updateManualRefCardVisibility();
 
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
