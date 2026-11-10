@@ -2051,6 +2051,27 @@ async function calibrateServerTime() {
 function serverNow() { return Date.now() + serverOffset; }
 function getNextMidnight() { const n = new Date(serverNow()); n.setHours(24, 0, 0, 0); return n.getTime(); }
 
+// ============================================================
+// [تعديل 13] تكامل زر الرجوع في Telegram Mini App
+// ============================================================
+let telegramBackButtonHandler = null;
+
+function updateTelegramBackButton(viewName) {
+  const bb = window.Telegram?.WebApp?.BackButton;
+  if (!bb) return;
+  if (telegramBackButtonHandler) {
+    try { bb.offClick(telegramBackButtonHandler); } catch(e) {}
+    telegramBackButtonHandler = null;
+  }
+  if (viewName === 'home') {
+    bb.hide();
+  } else {
+    telegramBackButtonHandler = () => go('home');
+    bb.onClick(telegramBackButtonHandler);
+    bb.show();
+  }
+}
+
 function initTelegram() {
   if (tg) {
     tg.ready(); tg.expand();
@@ -2061,6 +2082,8 @@ function initTelegram() {
       user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
+    // إخفاء زر الرجوع افتراضياً على الصفحة الرئيسية
+    try { updateTelegramBackButton('home'); } catch(e) {}
   }
 }
 
@@ -2263,27 +2286,14 @@ window.addEventListener('pagehide', () => saveActiveRoundState());
 function exitGame() { go('home'); }
 
 // ============================================================
-// [تعديل 13 - جديد] تكامل زر الرجوع في Telegram Mini App
-// يظهر في جميع الصفحات ما عدا الرئيسية، ويستبدل زر الإغلاق (X)
+// [تعديل 14] التنقل: الصفحات الخارجية (properties / spaceClock)
+//          تحويل مباشر إلى الملفات المستقلة
 // ============================================================
-let telegramBackButtonHandler = null;
-function updateTelegramBackButton(viewName) {
-  const bb = window.Telegram?.WebApp?.BackButton;
-  if (!bb) return;
-  if (telegramBackButtonHandler) {
-    try { bb.offClick(telegramBackButtonHandler); } catch(e) {}
-    telegramBackButtonHandler = null;
-  }
-  if (viewName === 'home') {
-    bb.hide();
-  } else {
-    telegramBackButtonHandler = () => go('home');
-    bb.onClick(telegramBackButtonHandler);
-    bb.show();
-  }
-}
-
 function go(viewName) {
+  // صفحات خارجية - تحويل إلى ملفات HTML مستقلة
+  if (viewName === 'properties') { window.location.href = './properties.html'; return; }
+  if (viewName === 'spaceClock') { window.location.href = './space.html'; return; }
+
   const GAME_VIEWS = ['crash'];
   const appContainer = document.getElementById('app');
   if (GAME_VIEWS.includes(viewName)) appContainer.classList.add('in-game');
@@ -2309,7 +2319,7 @@ function go(viewName) {
     activeProfile.classList.add('active');
   }
 
-  // [تعديل 13 - جديد] تحديث زر الرجوع في Telegram
+  // تحديث زر الرجوع في Telegram
   updateTelegramBackButton(viewName);
 
   const mainScroll = document.getElementById('mainScroll');
@@ -2321,8 +2331,6 @@ function go(viewName) {
     setTimeout(() => TGS.replay(['crash-rocket-tgs', 'crash-waiting-tgs', 'crash-explosion-tgs']), 100);
   } else if (viewName === 'slots') slotsUpdateBalance();
   else if (viewName === 'withdraw') loadWithdrawalHistory();
-  else if (viewName === 'properties') { showToast('الممتلكات - قريباً'); go('home'); }
-  else if (viewName === 'spaceClock') { showToast('ساعة الفضاء - قريباً'); go('home'); }
   else if (viewName === 'referral') updateManualRefCardVisibility();
 
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
