@@ -198,7 +198,6 @@ input[type="number"], .num-input {
 .home-card > * { position: relative; z-index: 1; }
 .home-card:active { transform: scale(0.975); }
 .home-card.referral { --card-accent: radial-gradient(circle at 105% -10%, rgba(150,60,255,0.18), transparent 62%); }
-.home-card.country-uae   { --card-accent: radial-gradient(circle at 105% -10%, rgba(239,68,68,0.28), transparent 65%); }
 .home-card.card-crash    { --card-accent: radial-gradient(circle at 105% -10%, rgba(91,141,239,0.30), transparent 62%); }
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
 .home-card.card-properties { --card-accent: radial-gradient(circle at 105% -10%, rgba(255, 215, 0, 0.35), transparent 65%); }
@@ -440,7 +439,7 @@ input[type="number"], .num-input {
 .btn-secondary:active { background: rgba(0,0,0,0.06); transform: scale(0.98); }
 .btn-secondary i { font-size: 16px; color: var(--text-secondary); }
 
-/* ============ CRYPTO PENDING BANNER (SHORT SINGLE ROW) ============ */
+/* ============ CRYPTO PENDING BANNER ============ */
 .crypto-pending-banner {
   display: none;
   background: linear-gradient(135deg, rgba(201,121,26,0.10), rgba(201,121,26,0.03));
@@ -517,6 +516,40 @@ input[type="number"], .num-input {
 }
 .manual-ref-card .btn-copy:disabled { opacity: 0.6; pointer-events: none; }
 .manual-ref-card .btn-copy .fa-spinner { font-size: 12px; }
+
+/* ============ WALLET ADDRESS INPUT (FIXED CSS) ============ */
+.wd-input-group { margin-bottom: 20px; margin-top: 20px; }
+.wd-input-group label {
+  display: block; margin-bottom: 8px;
+  color: var(--text-secondary); font-weight: 600; font-size: 13px;
+  text-align: center;
+}
+.wd-input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 1);
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(30, 40, 80, 0.04);
+  direction: ltr;
+  font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+}
+.wd-input::placeholder {
+  color: var(--text-tertiary);
+  font-weight: 500;
+  font-size: 14px;
+}
+.wd-input:focus {
+  border-color: rgba(59, 111, 219, 0.55);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 111, 219, 0.10), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
 
 /* ============ HISTORY ============ */
 .history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
@@ -691,7 +724,7 @@ input[type="number"], .num-input {
 .ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
 .ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; direction: ltr; text-align: right; }
 
-/* ============ PROFILE (NEW CENTERED LAYOUT) ============ */
+/* ============ PROFILE ============ */
 .profile-centered {
   display: flex;
   flex-direction: column;
@@ -1346,14 +1379,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view active" id="view-home">
       <div class="home-cards">
 
-        <div class="home-card country-uae" onclick="go('referral')">
-          <div class="card-text">
-            <h3>الإمارات العربية المتحدة</h3>
-            <p>اكتشف واربح</p>
-          </div>
-          <div class="card-video-icon" id="home-uae-tgs"></div>
-        </div>
-
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
             <div class="card-video-icon" id="home-properties-tgs"></div>
@@ -1382,7 +1407,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <h3>Crash</h3>
             <p>لعبة السرعة</p>
           </div>
-          <div class="card-video-icon" id="home-crash-tgs"></div>
+          <img src="IMG_20261110_200620_178.png" class="card-icon" alt="Crash" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
@@ -1593,7 +1618,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       </div>
     </div>
 
-    <!-- ===== PROFILE (NEW CENTERED) ===== -->
+    <!-- ===== PROFILE ===== -->
     <div class="view" id="view-profile">
       <div class="profile-centered">
         <div class="profile-avatar" id="profileAvatar">
@@ -1917,7 +1942,6 @@ const SLOTS_CONFIG = {
   999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
-// No fake starting balance. Everything starts at 0 until real data loads.
 let user = { id: '123456789', name: 'لاعب', photo: '', stars: 0, tickets: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
 let depositAmount = 200;
 let withdrawalHistory = [];
@@ -1985,7 +2009,6 @@ const TGS = {
 const ZIP_ROCKET = 'Rocketblowwowboom23_5c65_by_StickerEmojiRobot-01-tgs.zip';
 const ZIP_WAITING = 'SteampunkJulia-018-tgs-by-StickerEmojiRobot.zip';
 const ZIP_EXPLOSION = 'SteampunkJulia-008-tgs-by-StickerEmojiRobot.zip';
-const ZIP_UAE = 'RestrictedEmoji-897-tgs-by-StickerEmojiRobot.zip';
 const ZIP_PROPERTIES = 'MoodPack-017-tgs-by-StickerEmojiRobot.zip';
 const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
 
@@ -1995,10 +2018,8 @@ async function initCountryTgs() {
     await new Promise(r => setTimeout(r, 100));
   }
   if (!window.lottie) return;
-  TGS.playIn(document.getElementById('home-uae-tgs'), ZIP_UAE).catch(() => {});
   TGS.playIn(document.getElementById('home-properties-tgs'), ZIP_PROPERTIES).catch(() => {});
   TGS.playIn(document.getElementById('home-space-clock-tgs'), ZIP_SPACE_CLOCK).catch(() => {});
-  TGS.playIn(document.getElementById('home-crash-tgs'), ZIP_ROCKET).catch(() => {});
   TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET).catch(() => {});
   TGS.playIn(document.getElementById('crash-waiting-tgs'), ZIP_WAITING).catch(() => {});
   TGS.playIn(document.getElementById('crash-explosion-tgs'), ZIP_EXPLOSION, { loop: false }).catch(() => {});
@@ -2034,9 +2055,6 @@ function initTelegram() {
 }
 
 /* ============ REFERRAL: AWARD SYSTEM ============ */
-/* Referrer gets +2 tickets & referralCount +1
-   Invitee gets +1 ticket
-   Atomic transaction prevents double-counting */
 async function awardReferral(referrerId, source = 'url') {
   const currentUserId = user.id;
   if (!db) return { ok: false, error: 'no_db' };
@@ -2060,11 +2078,11 @@ async function awardReferral(referrerId, source = 'url') {
       referredBy: referrerId,
       referredAt: firebase.firestore.FieldValue.serverTimestamp(),
       referredSource: source,
-      tickets: firebase.firestore.FieldValue.increment(1) // invitee gets 1 ticket
+      tickets: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     transaction.update(referrerRef, {
       referralCount: firebase.firestore.FieldValue.increment(1),
-      tickets: firebase.firestore.FieldValue.increment(2) // referrer gets 2 tickets
+      tickets: firebase.firestore.FieldValue.increment(2)
     });
   });
 
