@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+٠<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -26,6 +26,7 @@
   --success: #0fa96e;
   --danger: #e03858;
   --warning: #c9791a;
+  --platinum: #ffffff;
   --gold: #b8912a;
   --safe-bottom: env(safe-area-inset-bottom, 20px);
   --safe-top: env(safe-area-inset-top, 20px);
@@ -38,6 +39,7 @@
   --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.10), rgba(22, 24, 42, 0.03));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
+  --gradient-platinum: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-blue: linear-gradient(135deg, #5B8DEF 0%, #3B6FDB 100%);
   --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
   --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
@@ -67,27 +69,40 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 input, textarea { font: inherit; color: inherit; user-select: text; -webkit-user-select: text; }
 img, video { pointer-events: none; -webkit-touch-callout: none; }
 ::-webkit-scrollbar { display: none; }
+
 input[type="number"], .num-input {
   font-variant-numeric: tabular-nums lining-nums;
   direction: ltr !important;
   font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-.app-container { display: flex; flex-direction: column; height: 100dvh; position: relative; z-index: 1; max-width: 480px; margin: 0 auto; overflow: hidden; display: none; }
+/* ============ APP SHELL ============ */
+.app-container {
+  display: flex; flex-direction: column; height: 100dvh;
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto; overflow: hidden;
+  display: none;
+}
 .app-container.ready { display: flex; }
+
 .top-app-bar {
   position: absolute; top: 0; left: 0; right: 0;
   height: calc(var(--top-bar-height) + var(--safe-top));
   background: rgba(255, 255, 255, 0.55);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
-  z-index: 50; padding-top: var(--safe-top); overflow: hidden;
+  border: none; border-radius: 0; box-shadow: none;
+  z-index: 50; padding-top: var(--safe-top);
+  overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
 }
+
 .floating-balances {
-  position: absolute; top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
-  left: 16px; right: 16px; display: flex; justify-content: space-between; z-index: 51;
+  position: absolute;
+  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between; z-index: 51;
 }
 .balance-pill {
   display: flex; align-items: center;
@@ -95,12 +110,16 @@ input[type="number"], .num-input {
   -webkit-backdrop-filter: blur(14px) saturate(170%);
   backdrop-filter: blur(14px) saturate(170%);
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 999px; padding: 3px 10px; gap: 6px;
+  border-radius: 999px;
+  padding: 3px 10px 3px 10px; gap: 6px;
   color: var(--text-primary); font-weight: 800; font-size: 15px;
   box-shadow: 0 6px 18px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.2s var(--spring);
 }
+.balance-pill:active { transform: scale(0.96); }
 .balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
 .balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
+
 .main-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
   padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--dock-height) + 40px + var(--safe-bottom));
@@ -110,15 +129,19 @@ input[type="number"], .num-input {
 .view.active { display: block; animation: viewIn 0.35s var(--ease-out); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ============ HOME ============ */
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
   border-radius: 26px; padding: 20px 24px;
   display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; transition: transform 0.25s var(--spring);
+  cursor: pointer;
+  transition: transform 0.25s var(--spring);
   position: relative; overflow: hidden; min-height: 108px;
   background: linear-gradient(135deg, rgba(255,255,255,1), rgba(248,250,255,1));
-  border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   contain: layout style paint;
+  will-change: transform;
 }
 .home-card::before {
   content: ''; position: absolute; inset: 0;
@@ -132,26 +155,76 @@ input[type="number"], .num-input {
 .home-card.card-slots    { --card-accent: radial-gradient(circle at 105% -10%, rgba(255,165,0,0.30), transparent 62%); }
 .home-card.card-properties { --card-accent: radial-gradient(circle at 105% -10%, rgba(255, 215, 0, 0.35), transparent 65%); }
 .home-card.card-space-clock { --card-accent: radial-gradient(circle at 105% -10%, rgba(150, 60, 255, 0.35), transparent 65%); }
-.home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
-.home-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: var(--text-primary); letter-spacing: -0.6px; }
-.home-card p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-.home-card .card-icon { width: 95px; height: 95px; object-fit: contain; margin-left: -5px; transform: scale(1.06); filter: drop-shadow(0 8px 20px rgba(30,40,80,0.18)); }
-.home-card .card-video-icon { width: 95px; height: 95px; margin-left: -5px; background: transparent; pointer-events: none; flex-shrink: 0; }
-.home-card .card-video-icon svg { width: 100% !important; height: 100% !important; display: block; }
-.home-cards-row { display: flex; gap: 10px; width: 100%; }
-.home-cards-row .home-card { flex: 1; flex-direction: row; align-items: center; justify-content: flex-start; padding: 12px 14px; min-height: 70px; gap: 12px; }
-.home-cards-row .home-card .card-text { align-items: flex-start; text-align: right; margin-bottom: 0; }
-.home-cards-row .home-card h3 { font-size: 15px; margin-bottom: 0; white-space: nowrap; }
-.home-cards-row .home-card .card-video-icon { width: 48px; height: 48px; margin: 0; }
 
+.home-card .card-text { display: flex; flex-direction: column; justify-content: center; }
+.home-card h3 {
+  font-size: 20px; font-weight: 800; margin-bottom: 4px;
+  color: var(--text-primary); letter-spacing: -0.6px;
+}
+.home-card p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+.home-card .card-icon {
+  width: 95px; height: 95px; object-fit: contain;
+  margin-left: -5px; transform: scale(1.06);
+  filter: drop-shadow(0 8px 20px rgba(30,40,80,0.18));
+}
+.home-card .card-video-icon {
+  width: 95px; height: 95px;
+  margin-left: -5px;
+  background: transparent;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.home-card .card-video-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.home-cards-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.home-cards-row .home-card {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 14px;
+  min-height: 70px;
+  gap: 12px;
+}
+.home-cards-row .home-card .card-text {
+  align-items: flex-start;
+  text-align: right;
+  margin-bottom: 0;
+}
+.home-cards-row .home-card h3 {
+  font-size: 15px;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.home-cards-row .home-card .card-video-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+}
+
+/* ============ HEADERS ============ */
 .page-header { margin-bottom: 24px; }
 .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
 .page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
+/* ============ DAILY ============ */
 .daily-claim-card {
-  background: var(--bg-card); border: 1px solid var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 26px; padding: 20px; margin-bottom: 20px;
-  box-shadow: var(--shadow-card); position: relative; overflow: hidden;
+  box-shadow: var(--shadow-card);
+  position: relative; overflow: hidden;
+  contain: layout style paint;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 .daily-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; position: relative; }
 .daily-title-area h3 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
@@ -168,7 +241,8 @@ input[type="number"], .num-input {
 .daily-week-days { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 18px; min-height: 40px; position: relative; }
 .daily-day-circle {
   flex: 1; aspect-ratio: 1; border-radius: 50%;
-  background: rgba(0,0,0,0.04); border: 2px solid transparent;
+  background: rgba(0,0,0,0.04);
+  border: 2px solid transparent;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 800; color: var(--text-secondary);
   transition: transform 0.3s var(--spring), background 0.25s, border-color 0.25s;
@@ -181,7 +255,8 @@ input[type="number"], .num-input {
 }
 .daily-day-circle.claimed {
   background: radial-gradient(circle, rgba(15,169,110,0.12), rgba(15,169,110,0.03));
-  color: #0a8a5a; border-color: rgba(15,169,110,0.22);
+  color: #0a8a5a;
+  border-color: rgba(15,169,110,0.22);
 }
 .daily-day-circle.claimed i { font-size: 14px; }
 .daily-claim-btn {
@@ -192,15 +267,22 @@ input[type="number"], .num-input {
   transition: transform 0.15s var(--spring);
   box-shadow: 0 8px 24px rgba(22,24,42,0.20), inset 0 1px 0 rgba(255,255,255,0.15);
 }
+.daily-claim-btn:active:not(:disabled) { transform: scale(0.97); }
 .daily-claim-btn:disabled {
   background: rgba(0,0,0,0.06); color: var(--text-secondary);
   cursor: not-allowed; font-family: monospace; letter-spacing: 0.5px;
   box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
 }
 
+/* ============ TASKS ============ */
 .task-group {
-  background: var(--bg-card); border-radius: 24px; margin-bottom: 16px; overflow: hidden;
-  border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  background: var(--bg-card);
+  border-radius: 24px; margin-bottom: 16px; overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  contain: layout style paint;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid rgba(0,0,0,0.05); gap: 10px; }
 .task-item:last-child { border-bottom: none; }
@@ -209,7 +291,8 @@ input[type="number"], .num-input {
   width: 50px; height: 50px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; font-size: 24px;
   background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(235,238,248,0.7));
-  border: 1px solid rgba(0,0,0,0.06); overflow: hidden; flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden; flex-shrink: 0;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.06);
 }
 .task-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -223,18 +306,23 @@ input[type="number"], .num-input {
   background: var(--gradient-primary); color: #fff;
   padding: 10px 20px; border-radius: 14px;
   font-weight: 800; font-size: 13px;
+  transition: transform 0.15s var(--spring);
   box-shadow: 0 4px 14px rgba(22,24,42,0.18), inset 0 1px 0 rgba(255,255,255,0.15);
   flex-shrink: 0;
 }
+.start-btn:active:not(:disabled) { transform: scale(0.95); }
 .start-btn:disabled {
   background: rgba(0,0,0,0.06); color: var(--text-secondary);
   cursor: not-allowed; box-shadow: none;
 }
 
+/* ============ TABS ============ */
 .tabs {
-  display: flex; background: var(--bg-card);
+  display: flex;
+  background: var(--bg-card);
   border-radius: 18px; padding: 5px; margin-bottom: 24px;
-  border: 1px solid var(--border); overflow-x: auto;
+  border: 1px solid var(--border);
+  overflow-x: auto;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 18px rgba(30,40,80,0.06);
 }
 .tab {
@@ -242,16 +330,19 @@ input[type="number"], .num-input {
   border-radius: 14px; color: var(--text-secondary);
   font-weight: 700; font-size: 13px;
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: all 0.25s var(--ease-out); border: 1px solid transparent;
+  transition: all 0.25s var(--ease-out);
+  border: 1px solid transparent;
 }
 .tab.active {
   background: linear-gradient(135deg, rgba(22,24,42,0.10), rgba(22,24,42,0.03));
-  color: var(--text-primary); border-color: rgba(0,0,0,0.06);
+  color: var(--text-primary);
+  border-color: rgba(0,0,0,0.06);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.06);
 }
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; }
 
+/* ============ DEPOSIT / WITHDRAW ============ */
 .dep-layout { display: flex; flex-direction: column; padding-top: 15px; }
 .dep-top-section { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; margin-bottom: 10px; }
 .amount-display { text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; direction: ltr; }
@@ -259,8 +350,8 @@ input[type="number"], .num-input {
   font-size: 3rem; font-weight: 800; background: transparent;
   border: none; color: var(--text-primary); text-align: center;
   width: auto; max-width: 220px; outline: none;
-  field-sizing: content; direction: ltr;
-  font-variant-numeric: tabular-nums lining-nums;
+  field-sizing: content; transition: width 0.1s;
+  direction: ltr; font-variant-numeric: tabular-nums lining-nums;
   font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
 .amount-display input::-webkit-outer-spin-button,
@@ -271,9 +362,11 @@ input[type="number"], .num-input {
 .dep-bottom-section { display: flex; flex-direction: column; gap: 40px; margin-top: 20px; }
 .quick-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .chip {
-  background: var(--bg-card); border: 1px solid var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   padding: 12px 20px; border-radius: 16px;
   color: var(--text-primary); font-weight: 700; font-size: 14px;
+  transition: transform 0.15s var(--spring), background 0.2s;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 14px rgba(30,40,80,0.05);
   direction: ltr;
 }
@@ -282,67 +375,136 @@ input[type="number"], .num-input {
   width: 100%; background: var(--gradient-primary); color: #fff;
   padding: 18px; border-radius: 20px;
   font-size: 17px; font-weight: 800;
+  transition: transform 0.15s var(--spring);
   box-shadow: 0 12px 30px rgba(22,24,42,0.20), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .topup-btn:active { transform: scale(0.97); }
 .btn-secondary {
   width: 100%; padding: 16px; border-radius: 18px;
   font-size: 15px; font-weight: 800;
-  background: var(--bg-card); color: var(--text-primary);
+  background: var(--bg-card);
+  color: var(--text-primary);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.2s, transform 0.15s var(--spring);
   box-shadow: var(--shadow-glass);
 }
 .btn-secondary:active { background: rgba(0,0,0,0.06); transform: scale(0.98); }
 .btn-secondary i { font-size: 16px; color: var(--text-secondary); }
 
+/* ============ CRYPTO PENDING BANNER ============ */
 .crypto-pending-banner {
   display: none;
   background: linear-gradient(135deg, rgba(201,121,26,0.10), rgba(201,121,26,0.03));
   border: 1px solid rgba(201,121,26,0.28);
-  border-radius: 14px; padding: 8px 10px; margin-bottom: 16px;
-  align-items: center; gap: 8px;
+  border-radius: 14px;
+  padding: 8px 10px;
+  margin-bottom: 16px;
+  align-items: center;
+  gap: 8px;
   box-shadow: 0 4px 14px rgba(201,121,26,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
 }
 .crypto-pending-banner.active { display: flex; }
-.crypto-pending-title { font-weight: 800; color: var(--warning); font-size: 12px; white-space: nowrap; flex-shrink: 0; }
-.crypto-pending-timer { font-family: monospace; font-weight: 800; font-size: 13px; color: var(--text-primary); direction: ltr; flex: 1; text-align: center; }
+.crypto-pending-title {
+  font-weight: 800; color: var(--warning); font-size: 12px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.crypto-pending-timer {
+  font-family: monospace; font-weight: 800; font-size: 13px;
+  color: var(--text-primary); direction: ltr; flex: 1; text-align: center;
+}
 .crypto-pending-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.crypto-btn { padding: 7px 11px; border-radius: 9px; font-weight: 800; font-size: 11px; white-space: nowrap; }
+.crypto-btn {
+  padding: 7px 11px; border-radius: 9px; font-weight: 800; font-size: 11px;
+  white-space: nowrap; transition: transform 0.15s var(--spring);
+}
+.crypto-btn:active { transform: scale(0.94); }
 .crypto-btn.check { background: var(--gradient-primary); color: #fff; box-shadow: 0 2px 8px rgba(22,24,42,0.15); }
 .crypto-btn.cancel { background: rgba(0,0,0,0.06); color: var(--text-secondary); border: 1px solid var(--border); }
 
+/* ============ MANUAL REFERRAL CARD ============ */
 .manual-ref-card {
   background: linear-gradient(135deg, rgba(91,141,239,0.10), rgba(91,141,239,0.03));
-  border: 1px solid rgba(91,141,239,0.25); border-radius: 20px;
-  padding: 16px; margin-bottom: 20px;
+  border: 1px solid rgba(91,141,239,0.25);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
   box-shadow: 0 6px 18px rgba(91,141,239,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
   display: none;
 }
 .manual-ref-card.show { display: block; }
-.manual-ref-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 6px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+.manual-ref-card h3 {
+  font-size: 15px; font-weight: 800; margin-bottom: 6px;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 8px;
+}
 .manual-ref-card h3 i { color: #3b6fdb; font-size: 14px; }
-.manual-ref-card p { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 600; line-height: 1.5; }
-.manual-ref-input { flex: 1; border: none; background: transparent; padding: 9px 12px; font-size: 13px; font-weight: 700; outline: none; direction: ltr; text-align: left; color: var(--text-primary); min-width: 0; }
+.manual-ref-card p {
+  font-size: 12px; color: var(--text-secondary);
+  margin-bottom: 12px; font-weight: 600; line-height: 1.5;
+}
+.manual-ref-input {
+  flex: 1; border: none; background: transparent;
+  padding: 8px 12px; font-size: 14px; font-weight: 700;
+  outline: none; direction: ltr; text-align: left;
+  color: var(--text-primary); min-width: 0;
+}
 .manual-ref-input::placeholder { color: var(--text-tertiary); font-weight: 500; }
-.manual-ref-card .link-box { background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border); padding: 5px; margin-bottom: 0; gap: 4px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(30, 40, 80, 0.04); }
-.manual-ref-card .btn-copy { padding: 9px 16px; border-radius: 11px; font-size: 12px; min-width: 68px; justify-content: center; gap: 0; }
+.manual-ref-card .link-box {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  padding: 5px;
+  margin-bottom: 0;
+  gap: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(30, 40, 80, 0.04);
+}
+.manual-ref-card .manual-ref-input { padding: 9px 12px; font-size: 13px; }
+.manual-ref-card .btn-copy {
+  padding: 9px 16px;
+  border-radius: 11px;
+  font-size: 12px;
+  min-width: 68px;
+  justify-content: center;
+  gap: 0;
+}
+.manual-ref-card .btn-copy:disabled { opacity: 0.6; pointer-events: none; }
+.manual-ref-card .btn-copy .fa-spinner { font-size: 12px; }
 
+/* ============ WALLET ADDRESS INPUT ============ */
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
-.wd-input-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 600; font-size: 13px; text-align: center; }
+.wd-input-group label {
+  display: block; margin-bottom: 8px;
+  color: var(--text-secondary); font-weight: 600; font-size: 13px;
+  text-align: center;
+}
 .wd-input {
-  width: 100%; padding: 16px; border-radius: 18px;
-  background: #fff; border: 1.5px solid rgba(0, 0, 0, 0.12);
-  color: var(--text-primary); font-size: 15px; font-weight: 600;
-  outline: none; text-align: center;
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 1);
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  text-align: center;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(30, 40, 80, 0.04);
   direction: ltr;
   font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
-.wd-input::placeholder { color: var(--text-tertiary); font-weight: 500; font-size: 14px; }
-.wd-input:focus { border-color: rgba(59, 111, 219, 0.55); background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 111, 219, 0.10), inset 0 1px 0 rgba(255, 255, 255, 1); }
+.wd-input::placeholder {
+  color: var(--text-tertiary);
+  font-weight: 500;
+  font-size: 14px;
+}
+.wd-input:focus {
+  border-color: rgba(59, 111, 219, 0.55);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 111, 219, 0.10), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
 
+/* ============ HISTORY ============ */
 .history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
 .history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
 .history-list { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
@@ -362,19 +524,31 @@ input[type="number"], .num-input {
 .st-processing { background: rgba(59,111,219,0.10); color: #3b6fdb; border: 1px solid rgba(59,111,219,0.20); }
 .st-completed  { background: rgba(15,169,110,0.10); color: #0a8a5a; border: 1px solid rgba(15,169,110,0.20); }
 .st-rejected   { background: rgba(224,56,88,0.10); color: #c02944; border: 1px solid rgba(224,56,88,0.20); }
-.show-all-btn { width: 100%; padding: 10px; background: rgba(0,0,0,0.05); border: 1px solid var(--border); color: var(--text-primary); border-radius: 12px; font-weight: 700; font-size: 12px; margin-bottom: 8px; display: none; }
+.show-all-btn {
+  width: 100%; padding: 10px; background: rgba(0,0,0,0.05);
+  border: 1px solid var(--border); color: var(--text-primary);
+  border-radius: 12px; font-weight: 700; font-size: 12px;
+  margin-bottom: 8px; display: none;
+}
 .show-all-btn.visible { display: block; }
+.show-all-btn:active { background: rgba(0,0,0,0.09); }
 .history-modal .modal-btn { padding: 11px !important; font-size: 13px !important; border-radius: 12px !important; margin-top: 4px; }
 
+/* ============ REFERRAL ============ */
 .referral-header { text-align: center; margin-bottom: 24px; }
 .referral-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; line-height: 1.45; letter-spacing: -0.4px; }
 .referral-header p { color: var(--text-secondary); font-size: 14px; font-weight: 600; }
 .ref-stats { display: flex; gap: 14px; margin-bottom: 24px; }
 .ref-stat-box {
-  flex: 1; background: var(--bg-card);
+  flex: 1;
+  background: var(--bg-card);
   padding: 20px; border-radius: 22px; text-align: center;
-  border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   position: relative; overflow: hidden;
+  contain: layout style paint;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 .ref-stat-box::before {
   content: ''; position: absolute; top: -60%; right: -30%; width: 80%; height: 200%;
@@ -384,74 +558,229 @@ input[type="number"], .num-input {
 .ref-stat-box h3 { font-size: 28px; font-weight: 800; margin-bottom: 4px; position: relative; direction: ltr; }
 .ref-stat-box p { font-size: 12px; color: var(--text-secondary); font-weight: 600; position: relative; }
 .link-box {
-  background: var(--bg-card); border: 1px solid var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 20px; padding: 6px; display: flex;
   align-items: center; margin-bottom: 12px;
   box-shadow: var(--shadow-glass);
 }
-.link-box-text { flex: 1; font-size: 12px; color: var(--text-secondary); padding: 8px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; font-weight: 600; }
+.link-box-text {
+  flex: 1; font-size: 12px; color: var(--text-secondary); padding: 8px 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  direction: ltr; text-align: left; font-weight: 600;
+}
 .link-box-id { flex: 1; font-size: 15px; color: var(--text-primary); padding: 8px 12px; font-weight: 800; direction: ltr; text-align: left; letter-spacing: 1px; }
 .btn-copy {
   background: var(--gradient-primary); color: #fff;
   padding: 12px 18px; border-radius: 14px;
   font-weight: 800; font-size: 13px;
   display: flex; align-items: center; gap: 6px;
-  flex-shrink: 0;
+  transition: transform 0.15s var(--spring); flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(22,24,42,0.18), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .btn-copy:active { transform: scale(0.95); }
 
-.podium { display: flex; justify-content: center; align-items: flex-end; gap: 10px; padding: 8px 0 24px; margin-bottom: 6px; min-height: 210px; }
-.podium-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; max-width: 96px; }
+/* ============ PODIUM ============ */
+.podium {
+  display: flex; justify-content: center; align-items: flex-end;
+  gap: 10px; padding: 8px 0 24px;
+  margin-bottom: 6px; min-height: 210px;
+}
+.podium-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; flex: 1; max-width: 96px;
+  transition: transform 0.4s var(--spring);
+}
 .podium-item.rank-1 { order: 2; transform: translateY(-18px); }
 .podium-item.rank-2 { order: 1; }
 .podium-item.rank-3 { order: 3; }
-.podium-rank { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; background: rgba(255,255,255,0.72); border: 2px solid rgba(0,0,0,0.10); box-shadow: 0 4px 12px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9); }
-.podium-item.rank-1 .podium-rank { background: var(--gradient-gold); color: #1a1400; width: 42px; height: 42px; font-size: 18px; }
-.podium-item.rank-2 .podium-rank { background: linear-gradient(135deg, #F0F0F5, #A8A8B8); color: #14141a; width: 36px; height: 36px; font-size: 16px; }
-.podium-item.rank-3 .podium-rank { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; width: 36px; height: 36px; font-size: 16px; }
-.podium-avatar { border-radius: 50%; overflow: hidden; background: rgba(255,255,255,0.72); display: flex; align-items: center; justify-content: center; border: 2px solid rgba(0,0,0,0.08); }
-.podium-item.rank-1 .podium-avatar { width: 86px; height: 86px; border-color: rgba(245,215,110,0.55); }
-.podium-item.rank-2 .podium-avatar { width: 72px; height: 72px; }
-.podium-item.rank-3 .podium-avatar { width: 72px; height: 72px; }
+.podium-rank {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px;
+  background: rgba(255,255,255,0.72);
+  border: 2px solid rgba(0,0,0,0.10);
+  box-shadow: 0 4px 12px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.podium-item.rank-1 .podium-rank {
+  background: var(--gradient-gold); color: #1a1400;
+  width: 42px; height: 42px; font-size: 18px;
+  border-color: rgba(255,255,255,0.6);
+  box-shadow: 0 8px 24px rgba(245,215,110,0.5), inset 0 1px 0 rgba(255,255,255,0.55);
+}
+.podium-item.rank-2 .podium-rank {
+  background: linear-gradient(135deg, #F0F0F5, #A8A8B8); color: #14141a;
+  width: 36px; height: 36px; font-size: 16px;
+  box-shadow: 0 6px 18px rgba(220,220,235,0.6), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.podium-item.rank-3 .podium-rank {
+  background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff;
+  width: 36px; height: 36px; font-size: 16px;
+  box-shadow: 0 6px 18px rgba(205,127,50,0.4), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.podium-avatar {
+  border-radius: 50%; overflow: hidden;
+  background: rgba(255,255,255,0.72);
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 22px rgba(30,40,80,0.12);
+}
+.podium-item.rank-1 .podium-avatar { width: 86px; height: 86px; border-color: rgba(245,215,110,0.55); box-shadow: 0 12px 30px rgba(245,215,110,0.25); }
+.podium-item.rank-2 .podium-avatar { width: 72px; height: 72px; border-color: rgba(150,150,170,0.45); }
+.podium-item.rank-3 .podium-avatar { width: 72px; height: 72px; border-color: rgba(205,127,50,0.45); }
 .podium-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .podium-avatar i { font-size: 28px; color: var(--text-secondary); }
-.podium-name { font-size: 11px; font-weight: 800; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; color: var(--text-primary); }
-.podium-count { font-size: 10px; font-weight: 700; color: var(--text-secondary); background: rgba(0,0,0,0.04); padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); direction: ltr; }
+.podium-name {
+  font-size: 11px; font-weight: 800; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 90px; color: var(--text-primary);
+}
+.podium-count {
+  font-size: 10px; font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(0,0,0,0.04);
+  padding: 2px 8px; border-radius: 10px;
+  border: 1px solid var(--border);
+  direction: ltr;
+}
+.podium-item.rank-1 .podium-count { color: var(--gold); background: rgba(245,215,110,0.14); border-color: rgba(245,215,110,0.30); }
+
 .ranking-list { display: flex; flex-direction: column; gap: 9px; padding-bottom: 20px; margin-top: 20px; }
-.ranking-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 6px 18px rgba(30,40,80,0.06); }
-.ranking-row.me { border-color: rgba(26,28,46,0.28); }
-.ranking-rank { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text-primary); flex-shrink: 0; font-size: 13px; border: 1px solid var(--border); }
-.ranking-avatar { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); flex-shrink: 0; border: 1px solid var(--border); }
+.ranking-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(30,40,80,0.06);
+  contain: layout style paint;
+}
+.ranking-row.me {
+  border-color: rgba(26,28,46,0.28);
+  box-shadow: 0 6px 22px rgba(30,40,80,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.ranking-rank {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(0,0,0,0.04);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: var(--text-primary); flex-shrink: 0; font-size: 13px;
+  border: 1px solid var(--border);
+}
+.ranking-avatar {
+  width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
+  background: rgba(0,0,0,0.04);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); flex-shrink: 0;
+  border: 1px solid var(--border);
+}
 .ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ranking-info { flex: 1; min-width: 0; }
 .ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
 .ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; direction: ltr; text-align: right; }
 
-.profile-centered { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px 0 24px; margin-bottom: 22px; }
-.profile-centered .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #f5f6fa, #e0e4f0); display: flex; align-items: center; justify-content: center; font-size: 40px; overflow: hidden; border: 3px solid #ffffff; box-shadow: 0 12px 30px rgba(30,40,80,0.15); margin-bottom: 14px; color: var(--text-secondary); }
+/* ============ PROFILE ============ */
+.profile-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0 24px;
+  margin-bottom: 22px;
+}
+.profile-centered .profile-avatar {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5f6fa, #e0e4f0);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; overflow: hidden;
+  border: 3px solid #ffffff;
+  box-shadow: 0 12px 30px rgba(30,40,80,0.15);
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+}
 .profile-centered .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-username { font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.4px; color: var(--text-primary); }
-.profile-centered .profile-id-row { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-secondary); font-size: 13px; font-weight: 600; direction: ltr; }
+.profile-username {
+  font-size: 22px; font-weight: 800;
+  margin-bottom: 8px; letter-spacing: -0.4px;
+  color: var(--text-primary);
+}
+.profile-centered .profile-id-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; color: var(--text-secondary);
+  font-size: 13px; font-weight: 600; direction: ltr;
+}
 .profile-centered .profile-id-row > span { font-variant-numeric: tabular-nums; }
-.profile-centered .profile-id-copy { width: 30px; height: 30px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); border: 1px solid var(--border); color: var(--text-primary); font-size: 12px; cursor: pointer; }
-.profile-nav-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.profile-nav-card { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 14px rgba(30,40,80,0.05); cursor: pointer; min-height: 60px; }
-.profile-nav-card:active { transform: scale(0.98); background: rgba(0,0,0,0.02); }
-.profile-nav-card-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.profile-centered .profile-id-copy {
+  width: 30px; height: 30px; padding: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 12px; cursor: pointer;
+  transition: transform 0.15s var(--spring), background 0.2s;
+}
+.profile-centered .profile-id-copy:active {
+  transform: scale(0.92);
+  background: rgba(0,0,0,0.10);
+}
+
+.profile-nav-cards {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 20px;
+}
+.profile-nav-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(30,40,80,0.05);
+  transition: transform 0.15s var(--spring), background 0.2s;
+  cursor: pointer;
+  min-height: 60px;
+}
+.profile-nav-card:active {
+  transform: scale(0.98);
+  background: rgba(0,0,0,0.02);
+}
+.profile-nav-card-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
 .profile-nav-card-text { flex: 1; min-width: 0; text-align: right; }
-.profile-nav-card-text h4 { font-size: 14px; font-weight: 800; margin-bottom: 2px; color: var(--text-primary); }
-.profile-nav-card-text p { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
-.profile-nav-card-arrow { color: var(--text-tertiary); font-size: 13px; flex-shrink: 0; }
+.profile-nav-card-text h4 {
+  font-size: 14px; font-weight: 800; margin-bottom: 2px;
+  color: var(--text-primary);
+}
+.profile-nav-card-text p {
+  font-size: 11px; color: var(--text-secondary); font-weight: 600;
+}
+.profile-nav-card-arrow {
+  color: var(--text-tertiary);
+  font-size: 13px; flex-shrink: 0;
+}
+
 .profile-actions { display: flex; flex-direction: column; gap: 10px; }
-.profile-action-btn { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); padding: 16px 20px; border-radius: 18px; font-size: 14px; font-weight: 700; color: var(--text-primary); box-shadow: 0 6px 18px rgba(30,40,80,0.05); }
+.profile-action-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 16px 20px; border-radius: 18px;
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 6px 18px rgba(30,40,80,0.05);
+}
 .profile-action-btn:active { transform: scale(0.98); }
 .profile-action-btn i { color: var(--text-secondary); }
 
+/* ============ MODALS ============ */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(20,22,40,0.42);
+  position: fixed; inset: 0;
+  background: rgba(20,22,40,0.42);
   z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
-  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -466,58 +795,96 @@ input[type="number"], .num-input {
 @keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.4px; }
 .modal-content p { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; font-weight: 600; line-height: 1.55; }
-.modal-btn { width: 100%; padding: 16px; border-radius: 18px; background: var(--gradient-primary); color: #fff; font-size: 15px; font-weight: 800; box-shadow: 0 10px 28px rgba(22,24,42,0.22), inset 0 1px 0 rgba(255,255,255,0.15); }
+.modal-btn {
+  width: 100%; padding: 16px; border-radius: 18px;
+  background: var(--gradient-primary); color: #fff;
+  font-size: 15px; font-weight: 800;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 10px 28px rgba(22,24,42,0.22), inset 0 1px 0 rgba(255,255,255,0.15);
+}
 .modal-btn:active { transform: scale(0.97); }
-.modal-btn-blue { background: var(--gradient-blue) !important; color: #fff !important; box-shadow: 0 10px 28px rgba(59,111,219,0.32), inset 0 1px 0 rgba(255,255,255,0.28) !important; }
+.modal-btn-blue {
+  background: var(--gradient-blue) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 28px rgba(59,111,219,0.32), inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}
 
-.switch-row { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.04); padding: 16px; border-radius: 18px; margin-bottom: 20px; border: 1px solid var(--border); }
+.switch-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.04);
+  padding: 16px; border-radius: 18px; margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
 .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
 .switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.12); transition: .35s var(--ease-out); border-radius: 34px; border: 1px solid var(--border); }
-.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: linear-gradient(135deg, #FFFFFF, #E8E8F5); transition: .35s var(--spring); border-radius: 50%; box-shadow: 0 2px 8px rgba(30,40,80,0.20); }
+.slider {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.12);
+  transition: .35s var(--ease-out); border-radius: 34px;
+  border: 1px solid var(--border);
+}
+.slider:before {
+  position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+  background: linear-gradient(135deg, #FFFFFF, #E8E8F5);
+  transition: .35s var(--spring); border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(30,40,80,0.20);
+}
 input:checked + .slider { background: var(--gradient-success); border-color: rgba(15,169,110,0.4); box-shadow: 0 0 14px rgba(15,169,110,0.3); }
 input:checked + .slider:before { transform: translateX(22px); }
 
 #tsIcon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 #tsIcon i { font-size: 40px; color: #fff; }
+
 .info-modal { text-align: right; }
 .info-modal h3 { text-align: center; margin-bottom: 16px; }
 .info-modal p { font-size: 13px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
 .info-modal ul { padding-right: 20px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
-[dir="ltr"] .info-modal ul { padding-right: 0; padding-left: 20px; }
 
 .toast {
   position: fixed; top: 20px; left: 50%;
   transform: translateX(-50%) translateY(-120px);
   background: linear-gradient(135deg, #ffffff, #f5f7fc);
-  color: var(--text-primary); padding: 14px 26px; border-radius: 999px;
-  font-size: 13px; font-weight: 700; z-index: 2000;
+  color: var(--text-primary);
+  padding: 14px 26px; border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  z-index: 2000;
   transition: transform 0.4s var(--spring);
-  border: 1px solid rgba(0,0,0,0.08); max-width: 90%; text-align: center;
+  border: 1px solid rgba(0,0,0,0.08);
+  max-width: 90%; text-align: center;
   box-shadow: 0 14px 40px rgba(30,40,80,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* ============ DOCK ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
-  left: 14px; right: 14px; display: flex; align-items: center; gap: 10px; z-index: 100;
+  left: 14px; right: 14px;
+  display: flex; align-items: center; gap: 10px; z-index: 100;
 }
 .dock-home-btn {
   width: 56px; height: 56px; border-radius: 50%;
-  background: var(--nav-bg); border: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
   -webkit-backdrop-filter: blur(4px) saturate(160%);
   backdrop-filter: blur(4px) saturate(160%);
   display: flex; align-items: center; justify-content: center;
   color: var(--text-secondary); font-size: 20px; flex-shrink: 0;
+  transition: all 0.25s var(--spring);
   box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
-.dock-home-btn.active { color: var(--text-primary); border-color: rgba(59,111,219,0.55); }
+.dock-home-btn.active {
+  color: var(--text-primary);
+  border-color: rgba(59,111,219,0.55);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+}
 .dock-home-btn:active { transform: scale(0.92); }
 .dock-nav {
   flex: 1; height: 64px; position: relative;
   isolation: isolate; overflow: hidden; --nav-index: 0;
-  background: var(--nav-bg); border: 1px solid var(--nav-border);
-  border-radius: 32px; display: flex; align-items: center; justify-content: space-between;
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
+  border-radius: 32px;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 6px;
   -webkit-backdrop-filter: blur(4px) saturate(160%);
   backdrop-filter: blur(4px) saturate(160%);
@@ -527,100 +894,188 @@ input:checked + .slider:before { transform: translateX(22px); }
   content: ''; position: absolute; z-index: 0;
   top: 6px; bottom: 6px; right: 6px;
   width: calc((100% - 12px) / 3); border-radius: 26px;
-  background: var(--nav-indicator-bg); box-shadow: var(--nav-indicator-shadow);
+  background: var(--nav-indicator-bg);
+  box-shadow: var(--nav-indicator-shadow);
   transform: translateX(calc(var(--nav-index) * -100%));
   transition: transform 480ms cubic-bezier(.22, 1.4, .36, 1);
   pointer-events: none;
-}
-[dir="ltr"] .dock-nav::before {
-  right: auto; left: 6px;
-  transform: translateX(calc(var(--nav-index) * 100%));
 }
 .nav-item {
   flex: 1; height: 100%; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 4px;
   color: var(--text-secondary); font-size: 10px; font-weight: 700;
-  border-radius: 26px; position: relative; z-index: 1; background: transparent;
+  border-radius: 26px; transition: color 0.25s;
+  position: relative; z-index: 1; background: transparent;
 }
 .nav-item i { font-size: 18px; }
 .nav-item.active { color: var(--text-primary); }
 .nav-profile {
   width: 56px; height: 56px; padding: 3px;
-  background: var(--nav-bg); border: 1px solid var(--nav-border);
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+  backdrop-filter: blur(4px) saturate(160%);
+  border: 1px solid var(--nav-border);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s var(--spring);
   color: var(--text-secondary); font-size: 20px; overflow: hidden; flex-shrink: 0;
   box-shadow: 0 8px 24px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .nav-profile:active { transform: scale(0.92); }
 .nav-profile img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
-.nav-profile.active { border-color: rgba(59,111,219,0.55); color: var(--text-primary); }
+.nav-profile.active {
+  border-color: rgba(59,111,219,0.55); color: var(--text-primary);
+  box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.06);
+}
 
+/* ============ SLOTS GAME ============ */
 #view-slots { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-slots.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
   background: radial-gradient(ellipse 68% 48% at 50% 40%, rgba(255, 165, 0, 0.08) 0%, transparent 72%);
   border-radius: 30px; padding: 24px 12px;
 }
-.slots-container { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.slots-container {
+  width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 20px;
+}
 .slots-reels {
   display: flex; gap: 10px;
   background: linear-gradient(165deg, #ffffff, #f5f7fc);
-  border-radius: 28px; padding: 16px 12px;
+  border-radius: 28px;
+  padding: 16px 12px;
   border: 1px solid rgba(0,0,0,0.06);
   box-shadow: var(--shadow-card);
-  width: 100%; height: 240px; overflow: hidden;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
 }
-.slots-reel { flex: 1; background: rgba(0,0,0,0.03); border-radius: 18px; border: 1px solid rgba(0,0,0,0.05); position: relative; overflow: hidden; height: 100%; }
-.slots-reel::before, .slots-reel::after { content: ''; position: absolute; left: 0; right: 0; height: 60px; z-index: 2; pointer-events: none; }
+.slots-reel {
+  flex: 1;
+  background: rgba(0,0,0,0.03);
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+.slots-reel::before, .slots-reel::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 60px;
+  z-index: 2; pointer-events: none;
+}
 .slots-reel::before { top: 0; background: linear-gradient(to bottom, #ffffff, transparent); }
 .slots-reel::after { bottom: 0; background: linear-gradient(to top, #ffffff, transparent); }
-.slots-reel-track { display: flex; flex-direction: column; align-items: center; width: 100%; will-change: transform; }
-.slots-reel-item { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.slots-reel-item img { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(30,40,80,0.15)); pointer-events: none; }
-.slots-reel-item.win { background: rgba(15,169,110,0.15); box-shadow: inset 0 0 16px rgba(15,169,110,0.3); transform: scale(1.05); }
-.slots-result { font-size: 20px; font-weight: 800; text-align: center; min-height: 28px; color: var(--text-primary); }
+.slots-reel-track {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; will-change: transform;
+}
+.slots-reel-item {
+  width: 100%; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.slots-reel-item img {
+  width: 60px; height: 60px; object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(30,40,80,0.15));
+  pointer-events: none;
+}
+.slots-reel-item.win {
+  background: rgba(15,169,110,0.15);
+  box-shadow: inset 0 0 16px rgba(15,169,110,0.3);
+  transform: scale(1.05);
+}
+.slots-result {
+  font-size: 20px; font-weight: 800; text-align: center;
+  min-height: 28px; color: var(--text-primary);
+  transition: color 0.2s;
+}
 .slots-result.win { color: var(--success); text-shadow: 0 0 20px rgba(15,169,110,0.3); }
 .slots-result.lose { color: var(--text-secondary); }
 .slots-bet-levels {
-  display: flex; background: var(--bg-card); border-radius: 18px; padding: 5px;
-  border: 1px solid var(--border); width: 100%;
+  display: flex;
+  background: var(--bg-card);
+  border-radius: 18px; padding: 5px;
+  border: 1px solid var(--border);
+  width: 100%;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 18px rgba(30,40,80,0.05);
 }
 .slots-bet-btn {
   flex: 1; text-align: center; padding: 12px 4px; white-space: nowrap;
-  border-radius: 14px; color: var(--text-secondary); font-weight: 700; font-size: 13px;
+  border-radius: 14px; color: var(--text-secondary);
+  font-weight: 700; font-size: 13px;
   display: flex; align-items: center; justify-content: center; gap: 4px;
-  border: 1px solid transparent; direction: ltr;
+  transition: all 0.25s var(--ease-out);
+  border: 1px solid transparent;
+  direction: ltr;
 }
 .slots-bet-btn img { width: 14px; height: 14px; }
-.slots-bet-btn.active { background: var(--nav-indicator-bg); color: var(--text-primary); border-color: rgba(0,0,0,0.06); box-shadow: var(--nav-indicator-shadow); }
+.slots-bet-btn.active {
+  background: var(--nav-indicator-bg);
+  color: var(--text-primary);
+  border-color: rgba(0,0,0,0.06);
+  box-shadow: var(--nav-indicator-shadow);
+}
+.slots-bet-btn:active:not(:disabled) { transform: scale(0.95); }
 .slots-bet-btn:disabled { opacity: 0.5; pointer-events: none; }
 .slots-spin-btn {
-  flex: 2; padding: 16px; border-radius: 18px;
-  background: var(--gradient-blue); color: #fff; font-size: 18px; font-weight: 800;
+  flex: 2;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-blue);
+  color: #fff;
+  font-size: 18px; font-weight: 800;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 10px 28px rgba(59,111,219,0.3), inset 0 1px 0 rgba(255,255,255,0.28);
+  transition: transform 0.15s var(--spring);
   direction: ltr;
 }
+.slots-spin-btn:active:not(:disabled) { transform: scale(0.97); }
 .slots-spin-btn:disabled { opacity: 0.5; pointer-events: none; }
 .slots-spin-btn img { width: 24px; height: 24px; }
 .prizes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; max-height: 50vh; overflow-y: auto; padding: 4px; }
-.prize-grid-item { background: var(--bg-card); border-radius: 18px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--border); box-shadow: var(--shadow-card); min-width: 0; }
+.prize-grid-item {
+  background: var(--bg-card);
+  border-radius: 18px; padding: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
 .prize-grid-item img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(30,40,80,0.15)); }
-.prize-val { background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: var(--text-primary); border: 1px solid var(--border); direction: ltr; }
+.prize-val {
+  background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: var(--text-primary);
+  border: 1px solid var(--border);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  direction: ltr;
+}
 
+/* ============ CRASH GAME ============ */
 .main-scroll.crash-mode { padding: 0; overflow: hidden; }
 #view-crash.active {
   display: flex; flex-direction: column; height: 100%;
   position: relative;
   padding-top: calc(var(--top-bar-height) + var(--safe-top) + 60px);
   padding-bottom: calc(var(--dock-height) + 24px + var(--safe-bottom));
+  animation: viewIn 0.35s var(--ease-out);
 }
-.crash-game-area { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; }
+.crash-game-area { position: relative; z-index: 1; }
+.crash-bottom-panel { position: relative; z-index: 1; }
+.crash-game-area {
+  flex: 1; position: relative; display: flex;
+  align-items: center; justify-content: center;
+  overflow: hidden; min-height: 0;
+  contain: layout style paint;
+  transition: transform 0.35s var(--ease-out);
+}
+.crash-game-area.cashout-anim { transform: scale(1.03); }
 .crash-sky-bg {
-  position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 0; bottom: 0;
+  left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 480px;
   background: linear-gradient(to bottom, #4a9eff 0%, #6fb5ff 25%, #a8d8ff 50%, #cceaff 70%, #e0f0ff 78%, #f0f8ff 88%, #ffffff 100%);
   z-index: 0; pointer-events: none;
@@ -632,7 +1087,12 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .crash-air-waves { position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease; overflow: hidden; }
 .crash-game-area.flying .crash-air-waves { opacity: 1; }
-.crash-air-waves span { position: absolute; height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent); border-radius: 2px; animation: airWave 2.5s linear infinite; }
+.crash-air-waves span {
+  position: absolute; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+  border-radius: 2px; animation: airWave 2.5s linear infinite;
+  box-shadow: 0 0 6px rgba(255,255,255,0.6);
+}
 .crash-air-waves span:nth-child(1) { top: 15%; left: 5%; width: 120px; animation-delay: 0s; }
 .crash-air-waves span:nth-child(2) { top: 25%; left: 55%; width: 160px; animation-delay: 0.4s; }
 .crash-air-waves span:nth-child(3) { top: 40%; left: 20%; width: 180px; animation-delay: 0.8s; }
@@ -646,39 +1106,53 @@ input:checked + .slider:before { transform: translateX(22px); }
   100% { transform: translate(-50vw, 50vh) rotate(-45deg) scaleX(1.4); opacity: 0; }
 }
 .crash-multiplier-display {
-  position: absolute; left: 50%; top: 5%; transform: translateX(-50%);
-  font-size: 68px; font-weight: 900; color: #182C44;
+  position: absolute; left: 50%; top: 5%;
+  transform: translateX(-50%);
+  font-size: 68px; font-weight: 900;
+  color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
-  letter-spacing: -2px; z-index: 5; pointer-events: none; direction: ltr;
+  letter-spacing: -2px;
+  z-index: 5; pointer-events: none; direction: ltr;
+  transition: color 0.2s, opacity 0.2s;
   white-space: nowrap; line-height: 1;
 }
 .crash-multiplier-display:empty { opacity: 0; }
 .crash-multiplier-display.waiting { opacity: 0.6; color: #5b5d6e; font-size: 52px; }
 .crash-multiplier-display.cashed { color: var(--success); }
-.crash-multiplier-display.crashed { color: var(--danger); text-shadow: 0 6px 30px rgba(224,56,88,0.4); }
+.crash-multiplier-display.crashed { color: var(--danger); text-shadow: 0 6px 30px rgba(224,56,88,0.4), 0 0 60px rgba(224,56,88,0.2); }
 .crash-countdown-display {
-  position: absolute; left: 50%; bottom: 20%; transform: translateX(-50%);
-  font-size: 44px; font-weight: 900; color: #182C44;
+  position: absolute; left: 50%; bottom: 20%;
+  transform: translateX(-50%);
+  font-size: 44px; font-weight: 900;
+  color: #182C44;
   font-family: system-ui, -apple-system, "SF Pro Display", sans-serif;
-  letter-spacing: -1px; text-shadow: 0 4px 26px rgba(24,44,68,0.15);
-  z-index: 5; pointer-events: none; opacity: 0; direction: ltr; line-height: 1;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 26px rgba(24,44,68,0.15), 0 0 40px rgba(255,255,255,0.5);
+  z-index: 5; pointer-events: none; opacity: 0;
+  transition: opacity 0.25s; direction: ltr; line-height: 1;
 }
 .crash-countdown-display.active { opacity: 1; }
-.crash-rocket, .crash-waiting-icon, .crash-explosion { position: absolute; opacity: 0; pointer-events: none; z-index: 2; display: block; }
-.crash-rocket { width: 180px; height: 180px; filter: drop-shadow(0 12px 28px rgba(30,40,80,0.3)); }
+.crash-rocket, .crash-waiting-icon, .crash-explosion {
+  position: absolute; transition: opacity 0.25s ease; opacity: 0;
+  pointer-events: none; z-index: 2; display: block;
+}
+.crash-rocket { width: 180px; height: 180px; filter: drop-shadow(0 12px 28px rgba(30,40,80,0.3)) drop-shadow(0 0 26px rgba(91,141,239,0.15)); }
 .crash-rocket.active { opacity: 1; }
 .crash-waiting-icon { width: 130px; height: 130px; filter: drop-shadow(0 10px 22px rgba(30,40,80,0.2)); }
 .crash-waiting-icon.active { opacity: 1; }
-.crash-explosion { width: 230px; height: 230px; z-index: 3; }
+.crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
 .crash-explosion.active { opacity: 1; }
 .crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
 .crash-bet-controls {
   background: rgba(255, 255, 255, 0.85);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   backdrop-filter: blur(14px) saturate(160%);
-  border-radius: 22px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  border-radius: 22px;
+  padding: 12px; display: flex; flex-direction: column;
+  gap: 8px;
   border: 1px solid rgba(0,0,0,0.08);
   box-shadow: 0 10px 28px rgba(30,40,80,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+  contain: layout style paint;
 }
 .crash-history-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; direction: ltr; border-bottom: 1px solid rgba(0,0,0,0.05); }
 .crash-history-strip::-webkit-scrollbar { display: none; }
@@ -687,6 +1161,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   background: rgba(0,0,0,0.05); color: var(--text-primary); flex-shrink: 0;
   border: 1px solid rgba(0,0,0,0.05);
   font-family: system-ui, -apple-system, sans-serif;
+  transition: max-width 0.3s ease, opacity 0.25s ease, padding 0.3s ease, border-width 0.3s ease;
   max-width: 200px; overflow: hidden; white-space: nowrap;
 }
 .crash-history-pill.removing { opacity: 0; max-width: 0; padding: 4px 0; border-width: 0; }
@@ -694,32 +1169,69 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-toggle-left { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
 .crash-toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
 .crash-toggle-switch input { opacity: 0; width: 0; height: 0; }
-.crash-toggle-slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.12); transition: .35s var(--ease-out); border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); }
-.crash-toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: linear-gradient(135deg, #FFFFFF, #E8E8F5); transition: .35s var(--spring); border-radius: 50%; box-shadow: 0 2px 6px rgba(30,40,80,0.2); }
-.crash-toggle-switch input:checked + .crash-toggle-slider { background: var(--gradient-success); border-color: rgba(52,211,153,0.5); }
+.crash-toggle-slider {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.12);
+  transition: .35s var(--ease-out); border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.crash-toggle-slider:before {
+  position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
+  background: linear-gradient(135deg, #FFFFFF, #E8E8F5);
+  transition: .35s var(--spring); border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(30,40,80,0.2);
+}
+.crash-toggle-switch input:checked + .crash-toggle-slider { background: var(--gradient-success); border-color: rgba(52,211,153,0.5); box-shadow: 0 0 12px rgba(52,211,153,0.4); }
 .crash-toggle-switch input:checked + .crash-toggle-slider:before { transform: translateX(16px); }
 .crash-auto-input-wrap { display: flex; align-items: center; gap: 4px; color: var(--text-primary); }
-.crash-auto-input-wrap input { width: 46px; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; color: var(--text-primary); font-weight: 700; font-size: 12px; text-align: center; outline: none; direction: ltr; padding: 2px 0; }
-.crash-bet-input-row { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0,0,0,0.03); padding: 4px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); }
+.crash-auto-input-wrap input {
+  width: 46px; background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px; color: var(--text-primary);
+  font-weight: 700; font-size: 12px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+  padding: 2px 0;
+}
+.crash-bet-input-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(0,0,0,0.03);
+  padding: 4px; border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+}
 .crash-bet-input-row img { width: 20px; height: 20px; }
-.crash-bet-input-row input { background: transparent; border: none; color: var(--text-primary); font-size: 24px; font-weight: 800; width: 100px; text-align: center; outline: none; direction: ltr; }
+.crash-bet-input-row input {
+  background: transparent; border: none; color: var(--text-primary);
+  font-size: 24px; font-weight: 800; width: 100px; text-align: center; outline: none;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+}
 .crash-bet-input-row input::-webkit-outer-spin-button,
 .crash-bet-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .crash-quick-chips { display: flex; gap: 6px; }
-.crash-quick-chips button { flex: 1; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.06); color: var(--text-primary); padding: 8px; border-radius: 10px; font-weight: 700; font-size: 12px; direction: ltr; }
+.crash-quick-chips button {
+  flex: 1;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06); color: var(--text-primary);
+  padding: 8px; border-radius: 10px; font-weight: 700; font-size: 12px;
+  direction: ltr; font-family: system-ui, -apple-system, sans-serif;
+  transition: transform 0.15s var(--spring), background 0.2s;
+}
 .crash-quick-chips button:active { transform: scale(0.95); background: rgba(0,0,0,0.08); }
 .crash-main-btn {
   width: 100%; padding: 14px; border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.2);
   font-size: 16px; font-weight: 800; color: #fff;
-  background: var(--gradient-blue); direction: ltr;
+  background: var(--gradient-blue);
+  direction: ltr;
+  transition: transform 0.15s var(--spring);
   box-shadow: 0 10px 26px rgba(59,111,219,0.3), inset 0 1px 0 rgba(255,255,255,0.28);
 }
 .crash-main-btn:active { transform: scale(0.97); }
-.crash-main-btn.cashout { background: var(--gradient-success); }
-.crash-main-btn.cancel { background: var(--gradient-danger); }
+.crash-main-btn.cashout { background: var(--gradient-success); box-shadow: 0 10px 26px rgba(52,211,153,0.3), inset 0 1px 0 rgba(255,255,255,0.28); }
+.crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
 
+/* ============ IN-GAME MODE ============ */
 .app-container.in-game .top-app-bar { display: none !important; }
 .app-container.in-game .main-scroll { padding: 0 !important; }
 .app-container.in-game #view-crash.active {
@@ -731,8 +1243,22 @@ input:checked + .slider:before { transform: translateX(22px); }
 .app-container.in-game .dock-nav .nav-item[data-view] { display: none !important; }
 .app-container.in-game .dock-nav::before { display: none !important; }
 .app-container.in-game .dock-nav { justify-content: center; }
-.nav-exit { display: none; height: 100%; flex: 1; padding: 0 8px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--text-primary); background: var(--nav-indicator-bg); border: 1px solid rgba(0,0,0,0.08); border-radius: 26px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08); }
+.nav-exit {
+  display: none;
+  height: 100%; flex: 1;
+  padding: 0 8px;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; font-size: 10px; font-weight: 700;
+  color: var(--text-primary);
+  background: var(--nav-indicator-bg);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 26px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
+  transition: transform 0.15s var(--spring);
+  position: relative; z-index: 1;
+}
 .nav-exit i { font-size: 18px; }
+.nav-exit:active { transform: scale(0.94); }
 .app-container.in-game .nav-exit { display: flex; }
 
 @media (max-width: 380px) {
@@ -744,6 +1270,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .home-cards-row .home-card h3 { font-size: 13px; }
   .amount-display input, .amount-display .dollar-sign { font-size: 2.5rem; }
   .page-title { font-size: 23px; }
+  .podium-item.rank-1 .podium-avatar { width: 76px; height: 76px; }
+  .podium-item.rank-2 .podium-avatar, .podium-item.rank-3 .podium-avatar { width: 64px; height: 64px; }
   .crash-multiplier-display { font-size: 54px; }
   .crash-multiplier-display.waiting { font-size: 42px; }
   .crash-countdown-display { font-size: 36px; }
@@ -751,8 +1279,25 @@ input:checked + .slider:before { transform: translateX(22px); }
   .slots-reel-item { height: 70px; }
   .slots-reel-item img { width: 50px; height: 50px; }
   .slots-reel::before, .slots-reel::after { height: 50px; }
-  .balance-pill { font-size: 13px; padding: 3px 9px; }
-  .balance-pill img { width: 16px; height: 16px; }
+  .slots-bet-btn { font-size: 12px; padding: 10px 2px; }
+  .slots-spin-btn { font-size: 15px; padding: 14px; }
+  .prize-val { font-size: 10px; padding: 2px 4px; }
+  .profile-centered .profile-avatar { width: 84px; height: 84px; font-size: 34px; }
+  .profile-username { font-size: 20px; }
+  .profile-nav-card { padding: 10px 12px; min-height: 56px; }
+  .profile-nav-card-icon { width: 36px; height: 36px; font-size: 16px; }
+  .profile-nav-card-text h4 { font-size: 13px; }
+  .profile-nav-card-text p { font-size: 10px; }
+  .crypto-pending-title { font-size: 11px; }
+  .crypto-pending-timer { font-size: 12px; }
+  .crypto-btn { padding: 6px 9px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 </style>
 </head>
@@ -775,17 +1320,18 @@ input:checked + .slider:before { transform: translateX(22px); }
     
     <div class="view active" id="view-home">
       <div class="home-cards">
+
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
             <div class="card-video-icon" id="home-properties-tgs"></div>
             <div class="card-text">
-              <h3 data-i18n="home.properties">الممتلكات</h3>
+              <h3>الممتلكات</h3>
             </div>
           </div>
           <div class="home-card card-space-clock" onclick="go('spaceClock')">
             <div class="card-video-icon" id="home-space-clock-tgs"></div>
             <div class="card-text">
-              <h3 data-i18n="home.space_clock">ساعة الفضاء</h3>
+              <h3>ساعة الفضاء</h3>
             </div>
           </div>
         </div>
@@ -793,7 +1339,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="home-card card-slots" onclick="go('slots')">
           <div class="card-text">
             <h3>Slots</h3>
-            <p data-i18n="home.slots_sub">ماكينة الحظ</p>
+            <p>ماكينة الحظ</p>
           </div>
           <img src="IMG_20261107_094800_698.png" class="card-icon" alt="Slots" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
@@ -801,15 +1347,15 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="home-card card-crash" onclick="go('crash')">
           <div class="card-text">
             <h3>Crash</h3>
-            <p data-i18n="home.crash_sub">لعبة السرعة</p>
+            <p>لعبة السرعة</p>
           </div>
           <img src="IMG_20261110_200620_178.png" class="card-icon" alt="Crash" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
           <div class="card-text">
-            <h3 data-i18n="home.referral">دعوة الأصدقاء</h3>
-            <p data-i18n="home.referral_sub">اربح 2 تيكت عن كل صديق</p>
+            <h3>دعوة الأصدقاء</h3>
+            <p>اربح 2 تيكت عن كل صديق</p>
           </div>
           <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
@@ -823,7 +1369,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           <div class="slots-reel" id="reel1"><div class="slots-reel-track" id="reelTrack1"></div></div>
           <div class="slots-reel" id="reel2"><div class="slots-reel-track" id="reelTrack2"></div></div>
         </div>
-        <div class="slots-result" id="slotsResult" data-i18n="slots.choose_bet">اختر رهانك</div>
+        <div class="slots-result" id="slotsResult">اختر رهانك</div>
         <div class="slots-bet-levels" id="slotsBetLevels">
           <button class="slots-bet-btn" data-bet="69" onclick="slotsChangeBet(69)"><img src="https://up6.cc/2026/10/17932600818491.png"> 69</button>
           <button class="slots-bet-btn" data-bet="149" onclick="slotsChangeBet(149)"><img src="https://up6.cc/2026/10/17932600818491.png"> 149</button>
@@ -832,7 +1378,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
         <div style="display: flex; gap: 10px; width: 100%; max-width: 360px;">
           <button class="slots-prizes-btn" onclick="slotsShowPrizes()" style="flex: 1; padding: 16px; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <i class="fas fa-gift"></i> <span data-i18n="slots.prizes">الجوائز</span>
+            <i class="fas fa-gift"></i> الجوائز
           </button>
           <button class="slots-spin-btn" id="slotsSpinBtn" onclick="slotsSpin()" style="flex: 2; margin: 0;">
             Spin for <img src="https://up6.cc/2026/10/17932600818491.png" alt="star"> <span id="slotsSpinCost">69</span>
@@ -843,14 +1389,14 @@ input:checked + .slider:before { transform: translateX(22px); }
 
     <div class="view" id="view-tasks">
       <div class="page-header">
-        <h2 class="page-title" data-i18n="tasks.title">المهام</h2>
-        <p class="page-subtitle" data-i18n="tasks.subtitle">أكمل المهام السهلة لتربح التذاكر!</p>
+        <h2 class="page-title">المهام</h2>
+        <p class="page-subtitle">أكمل المهام السهلة لتربح التذاكر!</p>
       </div>
       <div class="daily-claim-card">
         <div class="daily-card-header">
           <div class="daily-title-area">
-            <h3 data-i18n="tasks.daily">المكافأة اليومية</h3>
-            <p data-i18n="tasks.daily_sub">احصل على تذكرة كل يوم</p>
+            <h3>المكافأة اليومية</h3>
+            <p>احصل على تذكرة كل يوم</p>
           </div>
           <div class="daily-streak-badge">
             <i class="fas fa-fire"></i>
@@ -860,23 +1406,23 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="daily-week-days" id="dailyWeekDays"></div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
           <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
-          <span id="claimBtnText" data-i18n="tasks.checking">جاري التحقق...</span>
+          <span id="claimBtnText">جاري التحقق...</span>
         </button>
       </div>
       <div id="tasksContainer">
-        <div style="text-align:center; padding:30px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> <span data-i18n="tasks.loading">جاري تحميل المهام...</span></div>
+        <div style="text-align:center; padding:30px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المهام...</div>
       </div>
     </div>
 
     <div class="view" id="view-deposit">
       <div class="page-header" style="text-align:center; margin-bottom: 15px;">
         <h2 class="page-title" style="justify-content: center;">
-          <span data-i18n="deposit.title">شراء نجوم</span> <img src="https://up6.cc/2026/10/17932600818491.png" style="width: 28px; height: 28px; border-radius: 50%;">
+          شراء نجوم <img src="https://up6.cc/2026/10/17932600818491.png" style="width: 28px; height: 28px; border-radius: 50%;">
         </h2>
       </div>
       <div class="tabs">
-        <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> <span data-i18n="deposit.tab_stars">نجوم</span></div>
-        <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> <span data-i18n="deposit.tab_crypto">كريبتو</span></div>
+        <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> نجوم</div>
+        <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو</div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
@@ -891,17 +1437,17 @@ input:checked + .slider:before { transform: translateX(22px); }
             <button class="chip" onclick="addChip(2000)">+ 2,000</button>
             <button class="chip" onclick="addChip(5000)">+ 5,000</button>
           </div>
-          <button class="topup-btn" onclick="processDeposit('stars')" data-i18n="deposit.topup">شحن الرصيد</button>
+          <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
         </div>
       </div>
       <div id="dep-tab-crypto" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
           <div id="cryptoPendingBanner" class="crypto-pending-banner">
-            <span class="crypto-pending-title"><i class="fas fa-clock"></i> <span data-i18n="deposit.pending">إيداع معلق</span></span>
+            <span class="crypto-pending-title"><i class="fas fa-clock"></i> إيداع معلق</span>
             <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
             <div class="crypto-pending-actions">
-              <button class="crypto-btn check" onclick="checkCryptoStatus(this)" title="Check"><i class="fas fa-rotate"></i></button>
-              <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()" title="Cancel"><i class="fas fa-xmark"></i></button>
+              <button class="crypto-btn check" onclick="checkCryptoStatus(this)" title="تحقق"><i class="fas fa-rotate"></i></button>
+              <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()" title="إلغاء"><i class="fas fa-xmark"></i></button>
             </div>
           </div>
           <div class="amount-display">
@@ -918,15 +1464,15 @@ input:checked + .slider:before { transform: translateX(22px); }
             <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
             <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
           </div>
-          <button class="topup-btn" onclick="processDeposit('crypto')" data-i18n="deposit.pay_crypto">ادفع بالكريبتو</button>
-          <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;" data-i18n="deposit.crypto_limits">الحد الأدنى $1 - الأقصى $1000</p>
+          <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
+          <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
         </div>
       </div>
     </div>
 
     <div class="view" id="view-withdraw">
       <div class="page-header" style="text-align:center;">
-        <h2 class="page-title" style="justify-content: center;" data-i18n="withdraw.title">سحب الأرباح</h2>
+        <h2 class="page-title" style="justify-content: center;">سحب الأرباح</h2>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="switchWithdrawTab('binance', this)"><img src="https://up6.cc/2026/09/178982889076391.png"> Binance</div>
@@ -939,11 +1485,11 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
         <div class="calc-subtext" id="wdBinanceResult">$0.00</div>
         <div class="wd-input-group">
-          <label data-i18n="withdraw.binance_id">معرّف Binance Pay</label>
+          <label>معرّف Binance Pay</label>
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;" data-i18n="withdraw.binance_rules">10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
-        <button class="topup-btn" onclick="processWithdraw('binance')" data-i18n="withdraw.submit">تقديم الطلب</button>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
+        <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
       </div>
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
@@ -952,55 +1498,57 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
         <div class="calc-subtext" id="wdGramResult">0 TON</div>
         <div class="wd-input-group">
-          <label data-i18n="withdraw.ton_address">عنوان محفظة TON</label>
+          <label>عنوان محفظة TON</label>
           <input type="text" class="wd-input" placeholder="TON Wallet Address" id="wdGramId">
         </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;" data-i18n="withdraw.ton_rules">10 نجوم = 0.1 TON | الحد الأدنى 10 نجوم</p>
-        <button class="topup-btn" onclick="processWithdraw('gram')" data-i18n="withdraw.submit">تقديم الطلب</button>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 0.1 TON | الحد الأدنى 10 نجوم</p>
+        <button class="topup-btn" onclick="processWithdraw('gram')">تقديم الطلب</button>
       </div>
       <button class="btn-secondary" style="margin-top: 20px;" onclick="openWithdrawHistory()">
-        <i class="fas fa-history"></i> <span data-i18n="withdraw.history">سجل السحوبات</span>
+        <i class="fas fa-history"></i> سجل السحوبات
       </button>
     </div>
 
     <div class="view" id="view-referral">
       <div class="tabs" style="margin-bottom: 20px;">
-        <div class="tab active" onclick="switchRefTab('invite', this)" data-i18n="referral.tab_invite">دعوة الأصدقاء</div>
-        <div class="tab" onclick="switchRefTab('ranking', this)" data-i18n="referral.tab_ranking">التصنيفات</div>
+        <div class="tab active" onclick="switchRefTab('invite', this)">دعوة الأصدقاء</div>
+        <div class="tab" onclick="switchRefTab('ranking', this)">التصنيفات</div>
       </div>
       <div id="ref-tab-invite" class="ref-tab-content">
+
         <div class="manual-ref-card" id="manualRefCard">
-          <h3><i class="fas fa-key"></i> <span data-i18n="referral.manual_title">إدخال معرف دعوة</span></h3>
-          <p data-i18n="referral.manual_desc">إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على تذكرة مجانية.</p>
+          <h3><i class="fas fa-key"></i> إدخال معرف دعوة</h3>
+          <p>إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على تذكرة مجانية.</p>
           <div class="link-box">
-            <input type="text" class="manual-ref-input" id="manualRefInput" placeholder="أدخل معرف الداعي" data-i18n-placeholder="referral.manual_placeholder" inputmode="numeric" />
-            <button class="btn-copy" onclick="submitManualReferral(this)" data-i18n="referral.confirm">تأكيد</button>
+            <input type="text" class="manual-ref-input" id="manualRefInput" placeholder="أدخل معرف الداعي" inputmode="numeric" />
+            <button class="btn-copy" onclick="submitManualReferral(this)">تأكيد</button>
           </div>
         </div>
+
         <div class="referral-header">
-          <h2 data-i18n="referral.title">ادعُ أصدقاءك واربح تذكرتين</h2>
-          <p data-i18n="referral.desc">احصل على تذكرتين مقابل كل صديق ينضم عبر رابطك، وصديقك يحصل على تذكرة!</p>
+          <h2>ادعُ أصدقاءك واربح تذكرتين</h2>
+          <p>احصل على تذكرتين مقابل كل صديق ينضم عبر رابطك، وصديقك يحصل على تذكرة!</p>
         </div>
         <div class="ref-stats">
           <div class="ref-stat-box">
             <h3 id="refInvited">0</h3>
-            <p data-i18n="referral.invited">المدعوين</p>
+            <p>المدعوين</p>
           </div>
           <div class="ref-stat-box">
             <h3 id="refEarned">0</h3>
-            <p data-i18n="referral.earned">التذاكر المكتسبة</p>
+            <p>التذاكر المكتسبة</p>
           </div>
         </div>
-        <button class="topup-btn" onclick="shareReferral()" style="margin-bottom: 24px;"><i class="fas fa-share-alt"></i> <span data-i18n="referral.share">شارك الرابط</span></button>
-        <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;" data-i18n="referral.link_title">رابط الدعوة</h3>
+        <button class="topup-btn" onclick="shareReferral()" style="margin-bottom: 24px;"><i class="fas fa-share-alt"></i> شارك الرابط</button>
+        <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;">رابط الدعوة</h3>
         <div class="link-box">
           <div class="link-box-text" id="refLinkText">...</div>
-          <button class="btn-copy" onclick="copyText(document.getElementById('refLinkText').innerText)"><i class="fas fa-copy"></i> <span data-i18n="referral.copy">نسخ</span></button>
+          <button class="btn-copy" onclick="copyText(document.getElementById('refLinkText').innerText)"><i class="fas fa-copy"></i> نسخ</button>
         </div>
-        <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;" data-i18n="referral.id_title">معرف الدعوة الخاص بك</h3>
+        <h3 style="margin-bottom:10px; font-weight:800; font-size:16px;">معرف الدعوة الخاص بك</h3>
         <div class="link-box">
           <div class="link-box-id" id="refIdText">...</div>
-          <button class="btn-copy" onclick="copyText(document.getElementById('refIdText').innerText)"><i class="fas fa-copy"></i> <span data-i18n="referral.copy">نسخ</span></button>
+          <button class="btn-copy" onclick="copyText(document.getElementById('refIdText').innerText)"><i class="fas fa-copy"></i> نسخ</button>
         </div>
       </div>
       <div id="ref-tab-ranking" class="ref-tab-content" style="display:none;">
@@ -1019,7 +1567,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         <h2 class="profile-username" id="profileName">اسم المستخدم</h2>
         <div class="profile-id-row">
           <span id="profileId">123456789</span>
-          <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)" title="Copy ID" data-i18n-title="profile.copy_id">
+          <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)" title="نسخ المعرف">
             <i class="fas fa-copy"></i>
           </button>
         </div>
@@ -1031,8 +1579,8 @@ input:checked + .slider:before { transform: translateX(22px); }
             <i class="fas fa-user-friends" style="color: #963cff;"></i>
           </div>
           <div class="profile-nav-card-text">
-            <h4 data-i18n="profile.invite">دعوة الأصدقاء</h4>
-            <p data-i18n="profile.invite_desc">اربح 2 تيكت عن كل صديق</p>
+            <h4>دعوة الأصدقاء</h4>
+            <p>اربح 2 تيكت عن كل صديق</p>
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
@@ -1042,8 +1590,8 @@ input:checked + .slider:before { transform: translateX(22px); }
             <i class="fas fa-building" style="color: #c9a227;"></i>
           </div>
           <div class="profile-nav-card-text">
-            <h4 data-i18n="profile.properties">الممتلكات</h4>
-            <p data-i18n="profile.properties_desc">اكتشف ممتلكاتك</p>
+            <h4>الممتلكات</h4>
+            <p>اكتشف ممتلكاتك</p>
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
@@ -1053,8 +1601,8 @@ input:checked + .slider:before { transform: translateX(22px); }
             <i class="fas fa-wallet" style="color: #3b6fdb;"></i>
           </div>
           <div class="profile-nav-card-text">
-            <h4 data-i18n="profile.deposit">إيداع</h4>
-            <p data-i18n="profile.deposit_desc">اشحن رصيدك من النجوم</p>
+            <h4>إيداع</h4>
+            <p>اشحن رصيدك من النجوم</p>
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
@@ -1062,15 +1610,15 @@ input:checked + .slider:before { transform: translateX(22px); }
 
       <div class="profile-actions">
         <button class="profile-action-btn" onclick="openModal('modal-help')">
-          <span><i class="fas fa-question-circle" style="margin-inline-end: 8px;"></i> <span data-i18n="profile.help">المساعدة</span></span>
+          <span><i class="fas fa-question-circle" style="margin-left: 8px;"></i> المساعدة</span>
           <i class="fas fa-chevron-left"></i>
         </button>
         <button class="profile-action-btn" onclick="openModal('modal-privacy')">
-          <span><i class="fas fa-shield-alt" style="margin-inline-end: 8px;"></i> <span data-i18n="profile.privacy">سياسة الخصوصية</span></span>
+          <span><i class="fas fa-shield-alt" style="margin-left: 8px;"></i> سياسة الخصوصية</span>
           <i class="fas fa-chevron-left"></i>
         </button>
         <button class="profile-action-btn" onclick="openModal('modal-terms')">
-          <span><i class="fas fa-file-contract" style="margin-inline-end: 8px;"></i> <span data-i18n="profile.terms">شروط اللعب والنزاهة</span></span>
+          <span><i class="fas fa-file-contract" style="margin-left: 8px;"></i> شروط اللعب والنزاهة</span>
           <i class="fas fa-chevron-left"></i>
         </button>
       </div>
@@ -1126,19 +1674,19 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="dock-nav">
       <div class="nav-item" data-view="tasks" onclick="go('tasks')">
         <i class="fas fa-tasks"></i>
-        <span class="nav-text" data-i18n="dock.tasks">المهام</span>
+        <span class="nav-text">المهام</span>
       </div>
       <div class="nav-item" data-view="deposit" onclick="go('deposit')">
         <i class="fas fa-wallet"></i>
-        <span class="nav-text" data-i18n="dock.deposit">إيداع</span>
+        <span class="nav-text">إيداع</span>
       </div>
       <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
         <i class="fas fa-money-bill-transfer"></i>
-        <span class="nav-text" data-i18n="dock.withdraw">سحب</span>
+        <span class="nav-text">سحب</span>
       </div>
       <button class="nav-item nav-exit" onclick="exitGame()">
         <i class="fas fa-door-open"></i>
-        <span data-i18n="dock.exit">الخروج</span>
+        <span>الخروج</span>
       </button>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
@@ -1147,69 +1695,84 @@ input:checked + .slider:before { transform: translateX(22px); }
   </div>
 </div>
 
+<!-- Load Error Modal -->
+<div class="modal-overlay" id="modalLoadError">
+  <div class="modal-content">
+    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,121,26,0.15), rgba(201,121,26,0.05)); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+      <i class="fas fa-wifi" style="font-size: 36px; color: var(--warning);"></i>
+    </div>
+    <h3>تعذر تحميل البيانات</h3>
+    <p>لم نتمكن من الاتصال بالخادم. تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.</p>
+    <button class="modal-btn" onclick="retryLoad()">
+      <i class="fas fa-rotate" style="margin-left: 6px;"></i>
+      حاول مجدداً
+    </button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
-    <h3 data-i18n="modal.insufficient_title">رصيدك غير كافٍ!</h3>
-    <p><span data-i18n="modal.insufficient_desc">تحتاج</span> <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> <span data-i18n="modal.insufficient_desc2">نجمة إضافية. يرجى شحن رصيدك.</span></p>
-    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');" data-i18n="modal.topup">شحن الرصيد</button>
+    <h3>رصيدك غير كافٍ!</h3>
+    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> نجمة إضافية. يرجى شحن رصيدك.</p>
+    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">شحن الرصيد</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalWithdrawSuccess">
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
-    <h3 data-i18n="modal.withdraw_success">تم تقديم الطلب بنجاح</h3>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;"><span data-i18n="modal.withdrew">قمت بسحب</span> <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> <span data-i18n="modal.stars">نجمة</span></p>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;"><span data-i18n="modal.you_will_get">وستحصل على</span> <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
+    <h3>تم تقديم الطلب بنجاح</h3>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> نجمة</p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">وستحصل على <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
     <div style="background: rgba(201,121,26,0.10); color: #a86810; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; margin-bottom: 24px; border: 1px solid rgba(201,121,26,0.22);">
-      <i class="fas fa-clock"></i> <span data-i18n="modal.processing">سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.</span>
+      <i class="fas fa-clock"></i> سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.
     </div>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')" data-i18n="modal.ok">حسناً</button>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')">حسناً</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalWithdrawHistory">
   <div class="modal-content history-modal">
-    <h3 data-i18n="modal.withdraw_history">سجل السحوبات</h3>
+    <h3>سجل السحوبات</h3>
     <div class="history-list" id="withdrawHistoryList"></div>
-    <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()" data-i18n="modal.show_all">عرض الكل</button>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')" data-i18n="modal.close">إغلاق</button>
+    <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">عرض الكل</button>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-help">
   <div class="modal-content info-modal">
-    <h3 data-i18n="modal.help_title">المساعدة والدعم</h3>
-    <p data-i18n="modal.help_desc1">إذا واجهت أي مشكلة في التطبيق أو كانت لديك استفسارات، يمكنك التواصل مع فريق الدعم عبر البوت الرسمي.</p>
-    <p data-i18n="modal.help_desc2">يرجى تقديم معرف المستخدم الخاص بك (الموجود في الملف الشخصي) لتسهيل عملية الدعم.</p>
-    <button class="modal-btn" onclick="closeModal('modal-help')" data-i18n="modal.close">إغلاق</button>
+    <h3>المساعدة والدعم</h3>
+    <p>إذا واجهت أي مشكلة في التطبيق أو كانت لديك استفسارات، يمكنك التواصل مع فريق الدعم عبر البوت الرسمي.</p>
+    <p>يرجى تقديم معرف المستخدم الخاص بك (الموجود في الملف الشخصي) لتسهيل عملية الدعم.</p>
+    <button class="modal-btn" onclick="closeModal('modal-help')">إغلاق</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-privacy">
   <div class="modal-content info-modal">
-    <h3 data-i18n="modal.privacy_title">سياسة الخصوصية</h3>
-    <p data-i18n="modal.privacy_intro">نحن نأخذ خصوصيتك على محمل الجد. إليك كيف نتعامل مع بياناتك:</p>
-    <ul id="privacy-list">
-      <li data-i18n="modal.privacy_1">نقوم بجمع معرف تيليجرام (Telegram ID) واسم المستخدم لتخصيص تجربتك وحفظ تقدمك.</li>
-      <li data-i18n="modal.privacy_2">لا نقوم بمشاركة بياناتك مع أي أطراف ثالثة لأغراض تسويقية.</li>
-      <li data-i18n="modal.privacy_3">يتم تأمين جميع المعاملات المالية من خلال بوابات دفع موثوقة.</li>
+    <h3>سياسة الخصوصية</h3>
+    <p>نحن نأخذ خصوصيتك على محمل الجد. إليك كيف نتعامل مع بياناتك:</p>
+    <ul>
+      <li>نقوم بجمع معرف تيليجرام (Telegram ID) واسم المستخدم لتخصيص تجربتك وحفظ تقدمك.</li>
+      <li>لا نقوم بمشاركة بياناتك مع أي أطراف ثالثة لأغراض تسويقية.</li>
+      <li>يتم تأمين جميع المعاملات المالية من خلال بوابات دفع موثوقة.</li>
     </ul>
-    <button class="modal-btn" onclick="closeModal('modal-privacy')" data-i18n="modal.close">إغلاق</button>
+    <button class="modal-btn" onclick="closeModal('modal-privacy')">إغلاق</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-terms">
   <div class="modal-content info-modal">
-    <h3 data-i18n="modal.terms_title">شروط اللعب والنزاهة</h3>
-    <p data-i18n="modal.terms_intro">باستخدامك للتطبيق، فإنك توافق على الشروط التالية:</p>
+    <h3>شروط اللعب والنزاهة</h3>
+    <p>باستخدامك للتطبيق، فإنك توافق على الشروط التالية:</p>
     <ul>
-      <li data-i18n="modal.terms_1">النزاهة ومنع الغش: يُمنع منعاً باتاً استخدام أي برامج آلية أو ثغرات أو محاولة التلاعب في نتائج الألعاب.</li>
-      <li data-i18n="modal.terms_2">النتائج العشوائية: تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
-      <li data-i18n="modal.terms_3">حظر السحب: يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح عند الاشتباه في أنشطة غير قانونية.</li>
-      <li data-i18n="modal.terms_4">المسؤولية: اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية.</li>
+      <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
+      <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
+      <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
+      <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمله من خسارة.</li>
     </ul>
-    <button class="modal-btn" onclick="closeModal('modal-terms')" data-i18n="modal.agree">موافق</button>
+    <button class="modal-btn" onclick="closeModal('modal-terms')">موافق</button>
   </div>
 </div>
 
@@ -1217,7 +1780,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   <div class="modal-content" style="position: relative; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
     <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
     <div class="task-modal-icon" id="tsIcon" style="width: 80px; height: 80px; border-radius: 50%; background: #229ED9; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
-    <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: var(--text-primary); line-height: 1.4; padding: 0 10px;">Task</h3>
+    <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: var(--text-primary); line-height: 1.4; padding: 0 10px;">اسم المهمة</h3>
     <button class="modal-btn" id="tsStartBtn" onclick="startTaskAction()" style="margin-bottom: 12px;">Start</button>
     <button class="modal-btn modal-btn-blue" onclick="checkTaskAction()">Check task</button>
   </div>
@@ -1226,349 +1789,48 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="modal-overlay" id="slots-win-modal">
   <div class="modal-content spin-win-modal" style="border: 1px solid rgba(245,215,110,0.28);">
     <div class="modal-icon" id="slots-win-icon" style="width: 100px; height: 100px; margin: 0 auto 20px;"></div>
-    <h3 data-i18n="modal.win_title">مبروك! لقد ربحت</h3>
-    <p style="margin-bottom: 10px;" data-i18n="modal.win_desc">لقد حصلت على</p>
+    <h3>مبروك! لقد ربحت</h3>
+    <p style="margin-bottom: 10px;">لقد حصلت على</p>
     <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45); direction: ltr;"></div>
-    <button class="modal-btn" onclick="closeModal('slots-win-modal')" data-i18n="modal.ok">حسناً</button>
+    <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="slots-prizes-modal">
   <div class="modal-content" style="max-width: 400px; padding: 20px;">
-    <h3 style="margin-bottom: 20px;" data-i18n="modal.prizes_title">جدول الجوائز</h3>
+    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
     <div class="prizes-grid" id="slots-prizes-grid"></div>
-    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')" data-i18n="modal.close">إغلاق</button>
+    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')">إغلاق</button>
   </div>
 </div>
 
-<div class="toast" id="toast">Message</div>
+<div class="toast" id="toast">رسالة</div>
 
 <script>'use strict';
+document.addEventListener('contextmenu', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  e.preventDefault();
+});
+document.addEventListener('dragstart', e => {
+  if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
+});
 
-/* ============ INTERNATIONALIZATION ============ */
-const I18N = {
-  ar: {
-    "app.title": "Star Nova",
-    "home.properties": "الممتلكات",
-    "home.space_clock": "ساعة الفضاء",
-    "home.slots_sub": "ماكينة الحظ",
-    "home.crash_sub": "لعبة السرعة",
-    "home.referral": "دعوة الأصدقاء",
-    "home.referral_sub": "اربح 2 تيكت عن كل صديق",
-    "tasks.title": "المهام",
-    "tasks.subtitle": "أكمل المهام السهلة لتربح التذاكر!",
-    "tasks.daily": "المكافأة اليومية",
-    "tasks.daily_sub": "احصل على تذكرة كل يوم",
-    "tasks.checking": "جاري التحقق...",
-    "tasks.loading": "جاري تحميل المهام...",
-    "tasks.claim": "استلام المكافأة",
-    "tasks.renews_in": "يتجدد خلال",
-    "tasks.no_tasks": "لا توجد مهام متاحة حالياً",
-    "tasks.done": "تم",
-    "tasks.start": "ابدأ",
-    "deposit.title": "شراء نجوم",
-    "deposit.tab_stars": "نجوم",
-    "deposit.tab_crypto": "كريبتو",
-    "deposit.topup": "شحن الرصيد",
-    "deposit.pay_crypto": "ادفع بالكريبتو",
-    "deposit.crypto_limits": "الحد الأدنى $1 - الأقصى $1000",
-    "deposit.pending": "إيداع معلق",
-    "withdraw.title": "سحب الأرباح",
-    "withdraw.binance_id": "معرّف Binance Pay",
-    "withdraw.ton_address": "عنوان محفظة TON",
-    "withdraw.binance_rules": "10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة",
-    "withdraw.ton_rules": "10 نجوم = 0.1 TON | الحد الأدنى 10 نجوم",
-    "withdraw.submit": "تقديم الطلب",
-    "withdraw.history": "سجل السحوبات",
-    "referral.tab_invite": "دعوة الأصدقاء",
-    "referral.tab_ranking": "التصنيفات",
-    "referral.manual_title": "إدخال معرف دعوة",
-    "referral.manual_desc": "إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على تذكرة مجانية.",
-    "referral.manual_placeholder": "أدخل معرف الداعي",
-    "referral.confirm": "تأكيد",
-    "referral.title": "ادعُ أصدقاءك واربح تذكرتين",
-    "referral.desc": "احصل على تذكرتين مقابل كل صديق ينضم عبر رابطك، وصديقك يحصل على تذكرة!",
-    "referral.invited": "المدعوين",
-    "referral.earned": "التذاكر المكتسبة",
-    "referral.share": "شارك الرابط",
-    "referral.link_title": "رابط الدعوة",
-    "referral.id_title": "معرف الدعوة الخاص بك",
-    "referral.copy": "نسخ",
-    "profile.copy_id": "نسخ المعرف",
-    "profile.invite": "دعوة الأصدقاء",
-    "profile.invite_desc": "اربح 2 تيكت عن كل صديق",
-    "profile.properties": "الممتلكات",
-    "profile.properties_desc": "اكتشف ممتلكاتك",
-    "profile.deposit": "إيداع",
-    "profile.deposit_desc": "اشحن رصيدك من النجوم",
-    "profile.help": "المساعدة",
-    "profile.privacy": "سياسة الخصوصية",
-    "profile.terms": "شروط اللعب والنزاهة",
-    "dock.tasks": "المهام",
-    "dock.deposit": "إيداع",
-    "dock.withdraw": "سحب",
-    "dock.exit": "الخروج",
-    "slots.choose_bet": "اختر رهانك",
-    "slots.prizes": "الجوائز",
-    "slots.nothing": "لا شيء! حظ أوفر المرة القادمة",
-    "modal.insufficient_title": "رصيدك غير كافٍ!",
-    "modal.insufficient_desc": "تحتاج",
-    "modal.insufficient_desc2": "نجمة إضافية. يرجى شحن رصيدك.",
-    "modal.topup": "شحن الرصيد",
-    "modal.withdraw_success": "تم تقديم الطلب بنجاح",
-    "modal.withdrew": "قمت بسحب",
-    "modal.stars": "نجمة",
-    "modal.you_will_get": "وستحصل على",
-    "modal.processing": "سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.",
-    "modal.ok": "حسناً",
-    "modal.withdraw_history": "سجل السحابات",
-    "modal.show_all": "عرض الكل",
-    "modal.close": "إغلاق",
-    "modal.help_title": "المساعدة والدعم",
-    "modal.help_desc1": "إذا واجهت أي مشكلة في التطبيق أو كانت لديك استفسارات، يمكنك التواصل مع فريق الدعم عبر البوت الرسمي.",
-    "modal.help_desc2": "يرجى تقديم معرف المستخدم الخاص بك (الموجود في الملف الشخصي) لتسهيل عملية الدعم.",
-    "modal.privacy_title": "سياسة الخصوصية",
-    "modal.privacy_intro": "نحن نأخذ خصوصيتك على محمل الجد. إليك كيف نتعامل مع بياناتك:",
-    "modal.privacy_1": "نقوم بجمع معرف تيليجرام (Telegram ID) واسم المستخدم لتخصيص تجربتك وحفظ تقدمك.",
-    "modal.privacy_2": "لا نقوم بمشاركة بياناتك مع أي أطراف ثالثة لأغراض تسويقية.",
-    "modal.privacy_3": "يتم تأمين جميع المعاملات المالية من خلال بوابات دفع موثوقة.",
-    "modal.terms_title": "شروط اللعب والنزاهة",
-    "modal.terms_intro": "باستخدامك للتطبيق، فإنك توافق على الشروط التالية:",
-    "modal.terms_1": "النزاهة ومنع الغش: يُمنع منعاً باتاً استخدام أي برامج آلية أو ثغرات أو محاولة التلاعب في نتائج الألعاب.",
-    "modal.terms_2": "النتائج العشوائية: تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.",
-    "modal.terms_3": "حظر السحب: يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح عند الاشتباه في أنشطة غير قانونية.",
-    "modal.terms_4": "المسؤولية: اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية.",
-    "modal.agree": "موافق",
-    "modal.win_title": "مبروك! لقد ربحت",
-    "modal.win_desc": "لقد حصلت على",
-    "modal.prizes_title": "جدول الجوائز",
-    "toast.copied": "تم النسخ!",
-    "toast.no_history": "لا يوجد سجل سحب بعد",
-    "toast.insufficient": "رصيدك غير كافٍ!",
-    "toast.already_referred": "لديك داعٍ بالفعل",
-    "toast.referrer_not_found": "معرف الداعي غير موجود",
-    "toast.cant_use_self": "لا يمكنك استخدام معرفك الخاص",
-    "toast.enter_referrer": "أدخل معرف الداعي",
-    "toast.referral_success": "تم قبول الدعوة! +1 تذكرة",
-    "toast.referral_url_success": "تم قبول الدعوة! حصلت على تذكرة",
-    "toast.generic_error": "حدث خطأ، حاول لاحقاً",
-    "toast.not_time_yet": "لم يحن وقت الاستلام بعد",
-    "toast.daily_success": "تم استلام المكافأة بنجاح!",
-    "toast.daily_error": "حدث خطأ أثناء الاستلام",
-    "toast.task_already_done": "لقد قمت بإكمال هذه المهمة بالفعل",
-    "toast.press_start": "يجب الضغط على Start أولاً",
-    "toast.wait_5s": "لم تمر 5 ثوانٍ بعد",
-    "toast.task_done": "تم إكمال المهمة!",
-    "toast.task_error": "حدث خطأ",
-    "toast.return_after_5s": "يرجى العودة بعد 5 ثوانٍ للتحقق",
-    "toast.enter_amount": "أدخل مبلغاً صحيحاً",
-    "toast.tg_only": "هذه الميزة تعمل فقط داخل تيليجرام",
-    "toast.invoice_creating": "جاري إنشاء الفاتورة...",
-    "toast.paid": "تم استلام الدفع بنجاح!",
-    "toast.invoice_added": "تمت الإضافة بنجاح!",
-    "toast.cancelled": "تم إلغاء الدفع",
-    "toast.failed": "فشل الدفع",
-    "toast.invoice_expired": "انتهت الفاتورة",
-    "toast.crypto_pending": "الفاتورة لا تزال قيد الانتظار",
-    "toast.crypto_verify_failed": "تعذر التحقق",
-    "toast.enter_wallet": "أدخل معرّف محفظة صحيح",
-    "toast.min_50": "الحد الأدنى 50 نجمة",
-    "toast.min_10": "الحد الأدنى 10 نجوم",
-    "toast.max_5000": "الحد الأقصى 5000 نجمة",
-    "toast.insufficient_balance": "رصيدك غير كافٍ",
-    "toast.sending": "جاري الإرسال...",
-    "toast.withdraw_error": "حدث خطأ أثناء السحب",
-    "toast.min_1usd": "الحد الأدنى $1",
-    "toast.max_1000usd": "الحد الأقصى $1000",
-    "toast.bio_cancelled": "تم إلغاء المصادقة",
-    "toast.bio_failed": "فشلت المصادقة الحيوية",
-    "toast.promo_creating": "جاري إنشاء الفاتورة..."
-  },
-  en: {
-    "app.title": "Star Nova",
-    "home.properties": "Properties",
-    "home.space_clock": "Space Clock",
-    "home.slots_sub": "Lucky Machine",
-    "home.crash_sub": "Speed Game",
-    "home.referral": "Invite Friends",
-    "home.referral_sub": "Earn 2 tickets per friend",
-    "tasks.title": "Tasks",
-    "tasks.subtitle": "Complete easy tasks to earn tickets!",
-    "tasks.daily": "Daily Reward",
-    "tasks.daily_sub": "Get a ticket every day",
-    "tasks.checking": "Checking...",
-    "tasks.loading": "Loading tasks...",
-    "tasks.claim": "Claim Reward",
-    "tasks.renews_in": "Renews in",
-    "tasks.no_tasks": "No tasks available",
-    "tasks.done": "Done",
-    "tasks.start": "Start",
-    "deposit.title": "Buy Stars",
-    "deposit.tab_stars": "Stars",
-    "deposit.tab_crypto": "Crypto",
-    "deposit.topup": "Top Up",
-    "deposit.pay_crypto": "Pay with Crypto",
-    "deposit.crypto_limits": "Min $1 - Max $1000",
-    "deposit.pending": "Pending Deposit",
-    "withdraw.title": "Withdraw Earnings",
-    "withdraw.binance_id": "Binance Pay ID",
-    "withdraw.ton_address": "TON Wallet Address",
-    "withdraw.binance_rules": "10 stars = $0.10 | Min 50 stars | Max 5000 stars",
-    "withdraw.ton_rules": "10 stars = 0.1 TON | Min 10 stars",
-    "withdraw.submit": "Submit Request",
-    "withdraw.history": "Withdraw History",
-    "referral.tab_invite": "Invite Friends",
-    "referral.tab_ranking": "Rankings",
-    "referral.manual_title": "Enter Invite Code",
-    "referral.manual_desc": "If you didn't come via invite link, you can enter your friend's ID to get a free ticket.",
-    "referral.manual_placeholder": "Enter referrer ID",
-    "referral.confirm": "Confirm",
-    "referral.title": "Invite Friends & Earn 2 Tickets",
-    "referral.desc": "Get 2 tickets per friend joining through your link, and your friend gets a ticket!",
-    "referral.invited": "Invited",
-    "referral.earned": "Tickets Earned",
-    "referral.share": "Share Link",
-    "referral.link_title": "Invite Link",
-    "referral.id_title": "Your Invite Code",
-    "referral.copy": "Copy",
-    "profile.copy_id": "Copy ID",
-    "profile.invite": "Invite Friends",
-    "profile.invite_desc": "Earn 2 tickets per friend",
-    "profile.properties": "Properties",
-    "profile.properties_desc": "Discover your properties",
-    "profile.deposit": "Deposit",
-    "profile.deposit_desc": "Top up your stars",
-    "profile.help": "Help",
-    "profile.privacy": "Privacy Policy",
-    "profile.terms": "Terms & Fair Play",
-    "dock.tasks": "Tasks",
-    "dock.deposit": "Deposit",
-    "dock.withdraw": "Withdraw",
-    "dock.exit": "Exit",
-    "slots.choose_bet": "Choose your bet",
-    "slots.prizes": "Prizes",
-    "slots.nothing": "Nothing! Better luck next time",
-    "modal.insufficient_title": "Insufficient Balance!",
-    "modal.insufficient_desc": "You need",
-    "modal.insufficient_desc2": "more stars. Please top up.",
-    "modal.topup": "Top Up",
-    "modal.withdraw_success": "Request Submitted Successfully",
-    "modal.withdrew": "You withdrew",
-    "modal.stars": "stars",
-    "modal.you_will_get": "You will receive",
-    "modal.processing": "The request will be processed within 24 hours.",
-    "modal.ok": "OK",
-    "modal.withdraw_history": "Withdraw History",
-    "modal.show_all": "Show All",
-    "modal.close": "Close",
-    "modal.help_title": "Help & Support",
-    "modal.help_desc1": "If you face any issue or have questions, contact our support team via the official bot.",
-    "modal.help_desc2": "Please provide your user ID (from your profile) to help us assist you.",
-    "modal.privacy_title": "Privacy Policy",
-    "modal.privacy_intro": "We take your privacy seriously. Here's how we handle your data:",
-    "modal.privacy_1": "We collect your Telegram ID and username to personalize your experience and save progress.",
-    "modal.privacy_2": "We don't share your data with third parties for marketing purposes.",
-    "modal.privacy_3": "All financial transactions are secured through trusted payment gateways.",
-    "modal.terms_title": "Terms & Fair Play",
-    "modal.terms_intro": "By using the app, you agree to the following terms:",
-    "modal.terms_1": "Fairness & Anti-Cheat: Using bots, exploits, or any game manipulation is strictly prohibited.",
-    "modal.terms_2": "Random Outcomes: All games use RNG systems to ensure complete fairness for all players.",
-    "modal.terms_3": "Withdrawal Holds: The app reserves the right to reject withdrawals or cancel winnings if illegal activity is suspected.",
-    "modal.terms_4": "Responsibility: Playing for stars is for entertainment. Please play responsibly.",
-    "modal.agree": "Agree",
-    "modal.win_title": "Congratulations! You Won",
-    "modal.win_desc": "You got",
-    "modal.prizes_title": "Prize Table",
-    "toast.copied": "Copied!",
-    "toast.no_history": "No withdraw history yet",
-    "toast.insufficient": "Insufficient balance!",
-    "toast.already_referred": "You already have a referrer",
-    "toast.referrer_not_found": "Referrer ID not found",
-    "toast.cant_use_self": "You can't use your own ID",
-    "toast.enter_referrer": "Enter referrer ID",
-    "toast.referral_success": "Invite accepted! +1 ticket",
-    "toast.referral_url_success": "Invite accepted! You got a ticket",
-    "toast.generic_error": "Error, please try again",
-    "toast.not_time_yet": "Not time to claim yet",
-    "toast.daily_success": "Reward claimed successfully!",
-    "toast.daily_error": "Error while claiming",
-    "toast.task_already_done": "You already completed this task",
-    "toast.press_start": "Press Start first",
-    "toast.wait_5s": "Wait 5 seconds",
-    "toast.task_done": "Task completed!",
-    "toast.task_error": "Error occurred",
-    "toast.return_after_5s": "Return after 5 seconds to check",
-    "toast.enter_amount": "Enter a valid amount",
-    "toast.tg_only": "This feature works only inside Telegram",
-    "toast.invoice_creating": "Creating invoice...",
-    "toast.paid": "Payment received!",
-    "toast.invoice_added": "Added successfully!",
-    "toast.cancelled": "Payment cancelled",
-    "toast.failed": "Payment failed",
-    "toast.invoice_expired": "Invoice expired",
-    "toast.crypto_pending": "Invoice still pending",
-    "toast.crypto_verify_failed": "Verification failed",
-    "toast.enter_wallet": "Enter a valid wallet ID",
-    "toast.min_50": "Minimum 50 stars",
-    "toast.min_10": "Minimum 10 stars",
-    "toast.max_5000": "Maximum 5000 stars",
-    "toast.insufficient_balance": "Insufficient balance",
-    "toast.sending": "Sending...",
-    "toast.withdraw_error": "Error during withdrawal",
-    "toast.min_1usd": "Minimum $1",
-    "toast.max_1000usd": "Maximum $1000",
-    "toast.bio_cancelled": "Authentication cancelled",
-    "toast.bio_failed": "Biometric authentication failed",
-    "toast.promo_creating": "Creating invoice..."
-  }
-};
-
-let CURRENT_LANG = 'ar';
-
-function detectLang() {
-  try {
-    const code = window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code || '';
-    return code.toLowerCase().startsWith('ar') ? 'ar' : 'en';
-  } catch(e) {
-    return 'en';
-  }
-}
-
-function t(key) {
-  const dict = I18N[CURRENT_LANG] || I18N.ar;
-  return dict[key] || I18N.ar[key] || key;
-}
-
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = t(key);
-    if (val) el.textContent = val;
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    const val = t(key);
-    if (val) el.setAttribute('placeholder', val);
-  });
-  document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    const key = el.getAttribute('data-i18n-title');
-    const val = t(key);
-    if (val) el.setAttribute('title', val);
-  });
-  document.documentElement.lang = CURRENT_LANG;
-  document.documentElement.dir = CURRENT_LANG === 'ar' ? 'rtl' : 'ltr';
-  document.title = t('app.title');
-}
-
-/* ============ HELPERS ============ */
 function formatNum(n) {
   if (n === null || n === undefined) return '0';
   const num = Number(n);
   if (!isFinite(num)) return '0';
-  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
+  const neg = num < 0;
+  const abs = Math.abs(num);
+  const str = (abs % 1 === 0) ? String(abs) : abs.toFixed(2);
   const [intPart, decPart] = str.split('.');
   const f = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return decPart ? f + '.' + decPart : f;
+  return (neg ? '-' : '') + (decPart ? f + '.' + decPart : f);
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s ?? '');
+  return d.innerHTML;
 }
 
 function sanitizeDigits(el) {
@@ -1589,13 +1851,6 @@ function sanitizeDigits(el) {
   }
 }
 
-document.addEventListener('contextmenu', e => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  e.preventDefault();
-});
-document.addEventListener('dragstart', e => {
-  if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
-});
 document.addEventListener('input', e => {
   if (e.target && e.target.classList && e.target.classList.contains('num-input')) sanitizeDigits(e.target);
 }, true);
@@ -1649,7 +1904,7 @@ const SLOTS_CONFIG = {
   999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
-let user = { id: '123456789', name: 'Player', photo: '', stars: 0, tickets: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
+let user = { id: '123456789', name: 'لاعب', photo: '', stars: 0, tickets: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdShowAll = false;
@@ -1663,51 +1918,17 @@ let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 let slotsState = { currentBet: 69, isSpinning: false };
+
 let isWithdrawing = false;
+
+/* ============ LOAD STATE ============ */
+let userDataLoaded = false;
+let loadTimeoutHandle = null;
+const LOAD_TIMEOUT_MS = 10000;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
 
-/* ============ BIOMETRIC AUTH ============ */
-async function requireBiometric(reason) {
-  const bm = window.Telegram?.WebApp?.BiometricManager;
-  if (!bm) return true;
-
-  return new Promise((resolve) => {
-    try {
-      const runAuth = () => {
-        if (!bm.isBiometricAvailable) { resolve(true); return; }
-        bm.authenticate({ reason: reason || 'Confirm' }, (ok) => resolve(!!ok));
-      };
-      if (!bm.isInited) {
-        bm.init(() => runAuth());
-      } else {
-        runAuth();
-      }
-    } catch(e) {
-      resolve(true);
-    }
-  });
-}
-
-/* ============ CLOSING CONFIRMATION ============ */
-function updateClosingConfirmation() {
-  const w = window.Telegram?.WebApp;
-  if (!w) return;
-  try {
-    const hasActiveState =
-      !!cryptoPendingInvoice ||
-      !!document.querySelector('.modal-overlay.show') ||
-      (crashState && crashState.hasBet && crashState.status !== 'idle');
-    if (hasActiveState && typeof w.enableClosingConfirmation === 'function') {
-      w.enableClosingConfirmation();
-    } else if (typeof w.disableClosingConfirmation === 'function') {
-      w.disableClosingConfirmation();
-    }
-  } catch(e) {}
-}
-
-/* ============ TGS ============ */
 const TGS = {
   _zipCache: {}, _loading: {}, _anims: {},
   async loadZip(zipName) {
@@ -1813,25 +2034,195 @@ function initTelegram() {
     if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
-      user.name = tg.initDataUnsafe.user.first_name || 'Player';
+      user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
     try { updateTelegramBackButton('home'); } catch(e) {}
   }
 }
 
-function initFirebase() {
+/* ============ LOAD MANAGEMENT ============ */
+function markUserDataLoaded() {
+  userDataLoaded = true;
+  if (loadTimeoutHandle) {
+    clearTimeout(loadTimeoutHandle);
+    loadTimeoutHandle = null;
+  }
+  closeModal('modalLoadError');
+}
+
+function startLoadTimer() {
+  if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
+  loadTimeoutHandle = setTimeout(() => {
+    if (!userDataLoaded) {
+      openModal('modalLoadError');
+    }
+  }, LOAD_TIMEOUT_MS);
+}
+
+async function retryLoad() {
+  closeModal('modalLoadError');
+  userDataLoaded = false;
+
+  // Reset displayed balances to 0 while retrying
+  user.stars = 0;
+  user.tickets = 0;
+  user.referrals = 0;
+  updateBalances();
+
+  startLoadTimer();
+
+  // Reinit Firebase if needed
+  if (!db) {
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+      db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+    } catch (e) {
+      console.error('Firebase reinit failed:', e);
+      return;
+    }
+  }
+
+  await fetchUserData();
+
+  Promise.all([
+    loadTasks(),
+    loadWithdrawalHistory(),
+    calibrateServerTime(),
+    loadCrashHistory()
+  ]).then(async () => {
+    await processReferralOnStartup().catch(() => {});
+    updateManualRefCardVisibility();
+  }).catch(e => console.error('Secondary load failed:', e));
+}
+
+/* ============ REFERRAL: AWARD SYSTEM ============ */
+async function awardReferral(referrerId, source = 'url') {
+  const currentUserId = user.id;
+  if (!db) return { ok: false, error: 'no_db' };
+  if (!referrerId || referrerId === currentUserId) return { ok: false, error: 'self' };
+
+  const userRef = db.collection('users').doc(currentUserId);
+  const referrerRef = db.collection('users').doc(referrerId);
+
+  const userDoc = await userRef.get();
+  if (userDoc.exists && userDoc.data().referredBy) {
+    return { ok: false, error: 'already_referred' };
+  }
+
+  const referrerDoc = await referrerRef.get();
+  if (!referrerDoc.exists) return { ok: false, error: 'referrer_not_found' };
+
+  await db.runTransaction(async (transaction) => {
+    const freshUser = await transaction.get(userRef);
+    if (freshUser.exists && freshUser.data().referredBy) throw new Error('Already referred');
+    transaction.set(userRef, {
+      referredBy: referrerId,
+      referredAt: firebase.firestore.FieldValue.serverTimestamp(),
+      referredSource: source,
+      tickets: firebase.firestore.FieldValue.increment(1)
+    }, { merge: true });
+    transaction.update(referrerRef, {
+      referralCount: firebase.firestore.FieldValue.increment(1),
+      tickets: firebase.firestore.FieldValue.increment(2)
+    });
+  });
+
+  return { ok: true };
+}
+
+async function processReferralOnStartup() {
+  if (!tg || !tg.initDataUnsafe || !db) return;
+  const startParam = tg.initDataUnsafe.start_param;
+  if (!startParam || !startParam.startsWith('ref_')) return;
+  const referrerId = startParam.replace('ref_', '').trim();
+  try {
+    const result = await awardReferral(referrerId, 'url');
+    if (result.ok) {
+      user.referredBy = referrerId;
+      user.tickets = (user.tickets || 0) + 1;
+      updateBalances();
+      updateManualRefCardVisibility();
+      showToast('تم قبول الدعوة! حصلت على تذكرة 🎟️');
+    } else {
+      console.log('[Referral] Skipped:', result.error);
+    }
+  } catch (e) {
+    console.log('[Referral] Error:', e.message);
+  }
+}
+
+async function submitManualReferral(btn) {
+  const input = document.getElementById('manualRefInput');
+  const refId = (input.value || '').trim();
+  if (!refId) return showToast('أدخل معرف الداعي');
+  if (refId === user.id) return showToast('لا يمكنك استخدام معرفك الخاص');
+  if (user.referredBy) return showToast('لديك داعٍ بالفعل');
+
+  const oldText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+  try {
+    const result = await awardReferral(refId, 'manual');
+    if (result.ok) {
+      user.referredBy = refId;
+      user.tickets = (user.tickets || 0) + 1;
+      updateBalances();
+      updateManualRefCardVisibility();
+      input.value = '';
+      showToast('تم قبول الدعوة! +1 تذكرة 🎟️');
+    } else if (result.error === 'referrer_not_found') {
+      showToast('معرف الداعي غير موجود');
+    } else if (result.error === 'already_referred') {
+      showToast('لديك داعٍ بالفعل');
+      updateManualRefCardVisibility();
+    } else if (result.error === 'self') {
+      showToast('لا يمكنك استخدام معرفك الخاص');
+    } else {
+      showToast('حدث خطأ، حاول لاحقاً');
+    }
+  } catch (e) {
+    showToast('حدث خطأ، حاول لاحقاً');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = oldText;
+  }
+}
+
+function updateManualRefCardVisibility() {
+  const card = document.getElementById('manualRefCard');
+  if (!card) return;
+  if (user.referredBy) card.classList.remove('show');
+  else card.classList.add('show');
+}
+
+/* ============ INIT FIREBASE (called on start & retry) ============ */
+async function initFirebase() {
+  userDataLoaded = false;
+  startLoadTimer();
+
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    Promise.all([
-      fetchUserData(), loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
-    ]).then(async () => {
-      await processReferralOnStartup().catch(() => {});
-      updateManualRefCardVisibility();
-    }).catch(() => {});
-  } catch (e) {}
+  } catch (e) {
+    console.error('Firebase init failed:', e);
+    return;
+  }
+
+  await fetchUserData();
+
+  Promise.all([
+    loadTasks(),
+    loadWithdrawalHistory(),
+    calibrateServerTime(),
+    loadCrashHistory()
+  ]).then(async () => {
+    await processReferralOnStartup().catch(() => {});
+    updateManualRefCardVisibility();
+  }).catch(e => console.error('Secondary load failed:', e));
 }
 
 async function fetchUserData() {
@@ -1860,7 +2251,10 @@ async function fetchUserData() {
     updateBalances(); initDailyLogin(); renderProfile();
     document.getElementById('refLinkText').innerText = `https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-  } catch (e) {}
+    markUserDataLoaded();
+  } catch (e) {
+    console.error('fetchUserData failed:', e);
+  }
 }
 
 async function syncUserData(updates) {
@@ -1869,12 +2263,10 @@ async function syncUserData(updates) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Detect language first
-  CURRENT_LANG = detectLang();
-
+  // Show the app immediately - no splash
   document.getElementById('app').classList.add('ready');
+
   initTelegram();
-  applyTranslations();
   initCountryTgs();
   initSlots();
   adjustInputWidth(document.getElementById('depositAmountInput'));
@@ -1921,7 +2313,6 @@ function go(viewName) {
   }
 
   updateTelegramBackButton(viewName);
-  updateClosingConfirmation();
 
   const mainScroll = document.getElementById('mainScroll');
   mainScroll.classList.remove('crash-mode');
@@ -1938,7 +2329,10 @@ function go(viewName) {
 }
 
 function updateBalances() {
-  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+  const setText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = val;
+  };
   setText('topStars', formatNum(user.stars));
   setText('topTickets', formatNum(user.tickets));
   setText('statStars', formatNum(user.stars));
@@ -1989,15 +2383,15 @@ function slotsChangeBet(bet) {
 
 function slotsUpdateBalance() {
   const el = document.getElementById('slotsResult');
-  if (el && !slotsState.isSpinning) { el.innerText = t('slots.choose_bet'); el.className = 'slots-result'; }
+  if (el && !slotsState.isSpinning) { el.innerText = 'اختر رهانك'; el.className = 'slots-result'; }
 }
 
 function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
-  if (roll < 75) return { type: 'lose' };
-  if (roll >= 99) return { type: 'win', id: 'p10', value: config.table['p10'] };
+  if (roll < 65) return { type: 'lose' };
+  if (roll >= 95) return { type: 'win', id: 'p10', value: config.table['p10'] };
   const keys = Object.keys(config.table).filter(k => k !== 'p10');
   const randomKey = keys[Math.floor(Math.random() * keys.length)];
   return { type: 'win', id: randomKey, value: config.table[randomKey] };
@@ -2015,7 +2409,7 @@ function showSlotsWinModal(prize) {
 async function slotsSpin() {
   if (slotsState.isSpinning) return;
   const bet = slotsState.currentBet;
-  if (user.stars < bet) { showToast(t('toast.insufficient')); return; }
+  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
 
   slotsState.isSpinning = true;
   const spinBtn = document.getElementById('slotsSpinBtn');
@@ -2113,7 +2507,7 @@ async function slotsSpin() {
         const winningSym = SLOT_SYMBOLS[outcome.id];
         setTimeout(() => showSlotsWinModal({ img: winningSym.img, value: winAmount }), 500);
       } else {
-        resultEl.innerText = t('slots.nothing');
+        resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
         resultEl.className = 'slots-result lose';
       }
     } catch(e) {}
@@ -2174,7 +2568,7 @@ async function initDailyLogin() {
   const btnText = document.getElementById('claimBtnText');
   const streakCount = document.getElementById('streakCount');
   if (!container || !btn) return;
-  if (serverOffset === 0) { btnText.innerText = t('tasks.checking'); await calibrateServerTime(); }
+  if (serverOffset === 0) { btnText.innerText = 'جاري المزامنة...'; await calibrateServerTime(); }
   const now = serverNow();
   const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
   const streak = user.dailyStreak || 0;
@@ -2195,8 +2589,7 @@ async function initDailyLogin() {
   if (dailyTimerInterval) clearInterval(dailyTimerInterval);
   if (canClaim) {
     btn.disabled = false;
-    btnText.innerText = t('tasks.claim');
-    btnText.removeAttribute('data-i18n');
+    btnText.innerText = 'استلام المكافأة';
     btn.style.background = 'var(--gradient-primary)';
     btn.style.color = '#FFFFFF';
   } else {
@@ -2208,12 +2601,12 @@ async function initDailyLogin() {
       if (remain <= 0) {
         clearInterval(dailyTimerInterval);
         btn.disabled = false;
-        btnText.innerText = t('tasks.claim');
+        btnText.innerText = 'استلام المكافأة';
         btn.style.background = 'var(--gradient-primary)';
         btn.style.color = '#FFFFFF';
         return;
       }
-      btnText.innerText = t('tasks.renews_in') + ' ' + formatRemain(remain);
+      btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
     };
     updateTimer();
     dailyTimerInterval = setInterval(updateTimer, 1000);
@@ -2225,14 +2618,14 @@ async function claimDailyReward() {
   isClaimingDaily = true;
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
-    showToast(t('toast.not_time_yet'));
+    showToast('لم يحن وقت الاستلام بعد');
     isClaimingDaily = false;
     return;
   }
   const btn = document.getElementById('dailyClaimBtn');
   const btnText = document.getElementById('claimBtnText');
   btn.disabled = true;
-  btnText.innerText = t('tasks.checking');
+  btnText.innerText = 'جاري التحقق...';
   btn.style.background = 'rgba(0,0,0,0.06)';
   btn.style.color = 'var(--text-secondary)';
   try {
@@ -2254,12 +2647,12 @@ async function claimDailyReward() {
       user.nextDailyClaim = nextClaimTime;
       user.dailyStreak = newStreak;
     });
-    showToast(t('toast.daily_success'));
+    showToast('تم استلام المكافأة بنجاح!');
     updateBalances();
     initDailyLogin();
   } catch (e) {
-    if (e.message === "Too early") showToast(t('toast.not_time_yet'));
-    else showToast(t('toast.daily_error'));
+    if (e.message === "Too early") showToast('لم يحن وقت الاستلام بعد');
+    else showToast('حدث خطأ أثناء الاستلام');
     initDailyLogin();
   } finally { isClaimingDaily = false; }
 }
@@ -2272,7 +2665,7 @@ async function loadTasks() {
     tasksCache = [];
     q.forEach(doc => tasksCache.push({ id: doc.id, ...doc.data() }));
     if (tasksCache.length === 0) {
-      container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">${t('tasks.no_tasks')}</div>`;
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);">لا توجد مهام متاحة حالياً</div>';
       return;
     }
     let html = '<div class="task-group">';
@@ -2281,10 +2674,8 @@ async function loadTasks() {
       const rewardIcon = isTicket ? ASSETS.ticket : ASSETS.star;
       const isCompleted = user.completedTasks.includes(task.id);
       let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
-      let actionBtn = isCompleted
-        ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>${t('tasks.done')}</button>`
-        : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">${t('tasks.start')}</button>`;
-      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${task.title}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
+      let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>تم</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
+      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(task.title)}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
     container.innerHTML = html;
@@ -2294,7 +2685,7 @@ async function loadTasks() {
 function openTaskSheet(taskId) {
   const task = tasksCache.find(t => t.id === taskId);
   if (!task) return;
-  if (user.completedTasks.includes(taskId)) { showToast(t('toast.task_already_done')); return; }
+  if (user.completedTasks.includes(taskId)) { showToast('لقد قمت بإكمال هذه المهمة بالفعل'); return; }
   currentTask = task; taskStartTime = 0;
   document.getElementById('tsTitle').innerText = task.title;
   const iconContainer = document.getElementById('tsIcon');
@@ -2307,16 +2698,16 @@ function startTaskAction() {
   if (!currentTask) return;
   if (tg) tg.openLink(currentTask.link); else window.open(currentTask.link, '_blank');
   taskStartTime = Date.now();
-  showToast(t('toast.return_after_5s'));
+  showToast('يرجى العودة بعد 5 ثوانٍ للتحقق');
 }
 async function checkTaskAction() {
   if (!currentTask) return;
-  if (user.completedTasks.includes(currentTask.id)) { showToast(t('toast.task_already_done')); closeTaskSheet(); return; }
-  if (!taskStartTime) return showToast(t('toast.press_start'));
-  if ((Date.now() - taskStartTime) / 1000 < 5) return showToast(t('toast.wait_5s'));
+  if (user.completedTasks.includes(currentTask.id)) { showToast('لقد قمت بإكمال هذه المهمة بالفعل'); closeTaskSheet(); return; }
+  if (!taskStartTime) return showToast('يجب الضغط على Start أولاً');
+  if ((Date.now() - taskStartTime) / 1000 < 5) return showToast('لم تمر 5 ثوانٍ بعد');
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = t('tasks.checking');
+  btn.innerText = 'جاري التحقق...';
   try {
     const isTicket = currentTask.rewardType === 'ticket';
     const amount = Number(currentTask.rewardAmount);
@@ -2327,9 +2718,9 @@ async function checkTaskAction() {
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
-    showToast(t('toast.task_done') + ' +' + formatNum(amount));
+    showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'نجمة'}`);
     closeTaskSheet(); loadTasks();
-  } catch (e) { showToast(t('toast.task_error')); }
+  } catch (e) { showToast('حدث خطأ'); }
   finally { btn.disabled = false; btn.innerText = 'Check task'; }
 }
 
@@ -2376,9 +2767,9 @@ function addCryptoChip(amount) {
 
 async function processDeposit(type) {
   if (type === 'stars') {
-    if (depositAmount < 1) return showToast(t('toast.enter_amount'));
-    if (!tg || !tg.openInvoice) return showToast(t('toast.tg_only'));
-    showToast(t('toast.invoice_creating'));
+    if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
+    if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
+    showToast('جاري إنشاء الفاتورة...');
     try {
       const resp = await fetch(`${API_BASE}/api/create-invoice`, {
         method: 'POST',
@@ -2386,24 +2777,24 @@ async function processDeposit(type) {
         body: JSON.stringify({ userId: user.id, stars: depositAmount })
       });
       const data = await resp.json();
-      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'Connection failed');
+      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
       tg.openInvoice(data.invoiceLink, (status) => {
         if (status === 'paid') {
           user.stars += depositAmount;
           updateBalances();
           syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
-          showToast(t('toast.invoice_added'));
+          showToast(`تمت إضافة ${formatNum(depositAmount)} نجمة بنجاح!`);
           go('home');
-        } else if (status === 'cancelled') showToast(t('toast.cancelled'));
-        else showToast(t('toast.failed'));
+        } else if (status === 'cancelled') showToast('تم إلغاء الدفع');
+        else showToast('فشل الدفع');
       });
-    } catch (e) { showToast(e.message || 'Payment error'); }
+    } catch (e) { showToast(e.message || 'تعذر بدء الدفع'); }
   } else if (type === 'crypto') {
     const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast(t('toast.min_1usd'));
-    if (amount > 1000) return showToast(t('toast.max_1000usd'));
-    if (!tg || !tg.openLink) return showToast(t('toast.tg_only'));
-    showToast(t('toast.invoice_creating'));
+    if (!amount || amount < 1) return showToast('الحد الأدنى $1');
+    if (amount > 1000) return showToast('الحد الأقصى $1000');
+    if (!tg || !tg.openLink) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
+    showToast('جاري إنشاء الفاتورة...');
     try {
       const payload = {
         userId: user.id,
@@ -2417,16 +2808,16 @@ async function processDeposit(type) {
         body: JSON.stringify(payload)
       });
       let data;
-      try { data = await resp.json(); } catch(e) { throw new Error('Invalid response'); }
-      if (!resp.ok) throw new Error(data.error || data.message || `Error ${resp.status}`);
+      try { data = await resp.json(); } catch(e) { throw new Error('استجابة غير صالحة'); }
+      if (!resp.ok) throw new Error(data.error || data.message || `خطأ ${resp.status}`);
       const payUrl = data.pay_url || data.payment_url || data.url;
-      if (!payUrl) throw new Error(data.error || 'No payment URL received');
+      if (!payUrl) throw new Error(data.error || 'لم يتم استلام رابط الدفع');
       cryptoPendingInvoice = { id: data.invoice_id || data.id, createdAt: Date.now() };
       try { localStorage.setItem('sn_crypto_inv', JSON.stringify(cryptoPendingInvoice)); } catch(e) {}
       startCryptoTimer();
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch(e) { window.open(payUrl, '_blank'); }
-      showToast(t('toast.invoice_creating'));
-    } catch(e) { showToast(e.message || 'Payment error'); }
+      showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
+    } catch(e) { showToast(e.message || 'تعذر بدء الدفع'); }
   }
 }
 
@@ -2438,12 +2829,11 @@ function startCryptoTimer() {
   cryptoTimerInterval = setInterval(() => {
     if (!cryptoPendingInvoice) return;
     const remain = Math.max(0, 30 * 60 * 1000 - (Date.now() - cryptoPendingInvoice.createdAt));
-    if (remain <= 0) { clearInterval(cryptoTimerInterval); cancelCryptoInvoice(); showToast(t('toast.invoice_expired')); return; }
+    if (remain <= 0) { clearInterval(cryptoTimerInterval); cancelCryptoInvoice(); showToast('انتهت الفاتورة'); return; }
     const mins = Math.floor(remain / 60000);
     const secs = Math.floor((remain % 60000) / 1000);
     timerEl.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
   }, 1000);
-  updateClosingConfirmation();
 }
 
 function loadCryptoInvoice() {
@@ -2465,9 +2855,7 @@ function cancelCryptoInvoice() {
   try { localStorage.removeItem('sn_crypto_inv'); } catch(e) {}
   document.getElementById('cryptoPendingBanner').classList.remove('active');
   if (cryptoTimerInterval) clearInterval(cryptoTimerInterval);
-  updateClosingConfirmation();
 }
-
 async function checkCryptoStatus(btn) {
   if (!cryptoPendingInvoice) return;
   const oldTxt = btn.innerHTML;
@@ -2477,14 +2865,14 @@ async function checkCryptoStatus(btn) {
     const resp = await fetch(`${API_BASE}/api/shieldz/invoice/${cryptoPendingInvoice.id}`);
     const data = await resp.json();
     if (data.status === 'paid' || data.paid === true) {
-      showToast(t('toast.paid'));
+      showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
     } else if (data.status === 'expired' || data.status === 'failed') {
-      showToast(t('toast.invoice_expired'));
+      showToast('انتهت الفاتورة أو فشلت');
       cancelCryptoInvoice();
-    } else showToast(t('toast.crypto_pending'));
-  } catch (e) { showToast(t('toast.crypto_verify_failed')); }
+    } else showToast('الفاتورة لا تزال قيد الانتظار');
+  } catch (e) { showToast('تعذر التحقق'); }
   finally { btn.innerHTML = oldTxt; btn.disabled = false; }
 }
 
@@ -2512,7 +2900,9 @@ async function loadWithdrawalHistory() {
     q.forEach(doc => rows.push(doc.data()));
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
-    user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
+    user.totalWithdrawn = rows
+      .filter(w => w.status === 'completed')
+      .reduce((sum, w) => sum + (w.amount || 0), 0);
     const totalEl = document.getElementById('statTotalWithdrawn');
     if (totalEl) totalEl.innerText = formatNum(user.totalWithdrawn);
     renderWithdrawHistory();
@@ -2520,28 +2910,27 @@ async function loadWithdrawalHistory() {
 }
 function openWithdrawHistory() { wdShowAll = false; renderWithdrawHistory(); openModal('modalWithdrawHistory'); }
 function showAllWithdrawals() { wdShowAll = true; renderWithdrawHistory(); }
-
 function renderWithdrawHistory() {
   const list = document.getElementById('withdrawHistoryList');
   const showAllBtn = document.getElementById('showAllWdBtn');
   if (!list) return;
   list.innerHTML = '';
   if (withdrawalHistory.length === 0) {
-    list.innerHTML = `<p style="text-align:center;color:var(--text-secondary);font-weight:600;padding:16px;font-size:13px;">${t('toast.no_history')}</p>`;
+    list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);font-weight:600;padding:16px;font-size:13px;">لا يوجد سجل سحب بعد</p>';
     if (showAllBtn) showAllBtn.classList.remove('visible');
     return;
   }
   const statusMap = {
-    pending: { text: CURRENT_LANG === 'ar' ? 'قيد المراجعة' : 'Pending', class: 'st-pending' },
-    processing: { text: CURRENT_LANG === 'ar' ? 'قيد التنفيذ' : 'Processing', class: 'st-processing' },
-    completed: { text: CURRENT_LANG === 'ar' ? 'مكتمل' : 'Completed', class: 'st-completed' },
-    rejected: { text: CURRENT_LANG === 'ar' ? 'مرفوض' : 'Rejected', class: 'st-rejected' }
+    pending: { text: 'قيد المراجعة', class: 'st-pending' },
+    processing: { text: 'قيد التنفيذ', class: 'st-processing' },
+    completed: { text: 'مكتمل', class: 'st-completed' },
+    rejected: { text: 'مرفوض', class: 'st-rejected' }
   };
   const items = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
   let lastDate = '';
   items.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
-    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString(CURRENT_LANG === 'ar' ? 'ar-EG' : 'en-US') : '-';
+    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
     let methodName = w.method === 'gram' ? 'Gram (TON)' : 'Binance';
     if (dateStr !== lastDate) {
       const dh = document.createElement('div');
@@ -2552,13 +2941,13 @@ function renderWithdrawHistory() {
     }
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `<div class="history-main"><div class="history-amount">${formatNum(w.amount)} ${CURRENT_LANG === 'ar' ? 'نجمة' : 'stars'}</div><div class="history-method">${methodName}</div></div><div class="status ${st.class}">${st.text}</div>`;
+    div.innerHTML = `<div class="history-main"><div class="history-amount">${formatNum(w.amount)} نجمة</div><div class="history-method">${methodName}</div></div><div class="status ${st.class}">${st.text}</div>`;
     list.appendChild(div);
   });
   if (showAllBtn) {
     if (withdrawalHistory.length > 5 && !wdShowAll) {
       showAllBtn.classList.add('visible');
-      showAllBtn.innerText = t('modal.show_all') + ` (${withdrawalHistory.length})`;
+      showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
     } else showAllBtn.classList.remove('visible');
   }
 }
@@ -2576,25 +2965,26 @@ async function processWithdraw(method) {
     amount = parseInt(document.getElementById('wdGramAmount').value);
     payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
-  if (!id || id.length < 4) return showToast(t('toast.enter_wallet'));
-  if (!amount) return showToast(t('toast.enter_amount'));
-  if (method === 'gram') { if (amount < 10) return showToast(t('toast.min_10')); }
-  else { if (amount < 50) return showToast(t('toast.min_50')); }
-  if (amount > 5000) return showToast(t('toast.max_5000'));
-  if (amount > user.stars) return showToast(t('toast.insufficient_balance'));
 
-  // === BIOMETRIC AUTHENTICATION ===
-  const reason = CURRENT_LANG === 'ar' ? 'تأكيد عملية السحب' : 'Confirm withdrawal';
-  const bioOk = await requireBiometric(reason);
-  if (!bioOk) {
-    showToast(t('toast.bio_cancelled'));
-    return;
+  if (method === 'gram') {
+    if (!id) return showToast('أدخل عنوان محفظة TON');
+    const tonOk = /^[EU]Q[A-Za-z0-9_-]{46}$/.test(id) || /^[A-Za-z0-9_-]{48}$/.test(id);
+    if (!tonOk) return showToast('عنوان TON غير صالح');
+  } else if (method === 'binance') {
+    if (!id) return showToast('أدخل معرّف Binance');
+    if (!/^\d{6,12}$/.test(id)) return showToast('معرّف Binance يجب أن يكون 6-12 رقمًا');
   }
+
+  if (!amount) return showToast('أدخل مبلغاً صحيحاً');
+  if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 نجوم'); }
+  else { if (amount < 50) return showToast('الحد الأدنى 50 نجمة'); }
+  if (amount > 5000) return showToast('الحد الأقصى 5000 نجمة');
+  if (amount > user.stars) return showToast('رصيدك غير كافٍ');
 
   isWithdrawing = true;
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = t('toast.sending');
+  btn.innerText = 'جاري الإرسال...';
   try {
     user.stars -= amount;
     updateBalances();
@@ -2620,17 +3010,17 @@ async function processWithdraw(method) {
     updateWdUI('gram', document.getElementById('wdGramAmount'));
     if (db) loadWithdrawalHistory(); else renderWithdrawHistory();
   } catch(e) {
-    showToast(t('toast.withdraw_error'));
+    showToast('حدث خطأ أثناء السحب');
     user.stars += amount;
     updateBalances();
   } finally {
     isWithdrawing = false;
     btn.disabled = false;
-    btn.innerText = t('withdraw.submit');
+    btn.innerText = 'تقديم الطلب';
   }
 }
 
-/* ============ REFERRAL ============ */
+/* ============ REFERRAL TABS ============ */
 function switchRefTab(tab, el) {
   document.querySelectorAll('#view-referral .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -2642,7 +3032,7 @@ function switchRefTab(tab, el) {
 async function loadGlobalRanking() {
   const podiumContainer = document.getElementById('podiumContainer');
   const list = document.getElementById('rankingList');
-  if (!db) { list.innerHTML = `<p style="text-align:center;color:var(--text-secondary);">${t('toast.generic_error')}</p>`; return; }
+  if (!db) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">تعذر التحميل</p>'; return; }
   try {
     const q = await db.collection('users').orderBy('referralCount', 'desc').limit(20).get();
     const allUsers = [];
@@ -2653,7 +3043,7 @@ async function loadGlobalRanking() {
     });
     if (allUsers.length === 0) {
       podiumContainer.innerHTML = '';
-      list.innerHTML = `<p style="text-align:center;color:var(--text-secondary);">${CURRENT_LANG === 'ar' ? 'لا توجد تصنيفات' : 'No rankings'}</p>`;
+      list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">لا توجد تصنيفات</p>';
       return;
     }
     const top3 = allUsers.slice(0, 3);
@@ -2664,14 +3054,12 @@ async function loadGlobalRanking() {
     podiumContainer.innerHTML = '';
     const podium = document.createElement('div');
     podium.className = 'podium';
-    const youLabel = CURRENT_LANG === 'ar' ? ' (أنت)' : ' (You)';
-    const referralLabel = CURRENT_LANG === 'ar' ? 'إحالة' : 'invites';
     order.forEach(({ u, rank }) => {
       const isMe = u.id === user.id;
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const el = document.createElement('div');
       el.className = `podium-item rank-${rank}${isMe ? ' me' : ''}`;
-      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${u.name || 'Player'}${isMe ? youLabel : ''}</div><div class="podium-count">${formatNum(u.referralCount)} ${referralLabel}</div>`;
+      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${escapeHtml(u.name || 'لاعب')}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} إحالة</div>`;
       podium.appendChild(el);
     });
     podiumContainer.appendChild(podium);
@@ -2683,118 +3071,26 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${u.name || 'Player'} ${isMe ? youLabel : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} ${referralLabel}</div></div>`;
+      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${escapeHtml(u.name || 'لاعب')} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} إحالة</div></div>`;
       list.appendChild(div);
     });
     globalRankingLoaded = true;
-  } catch(e) { list.innerHTML = `<p style="text-align:center;color:var(--text-secondary);">${t('toast.generic_error')}</p>`; }
+  } catch(e) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">تعذر التحميل</p>'; }
 }
 
 function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=${encodeURIComponent(CURRENT_LANG === 'ar' ? 'انضم إلى Star Nova واربح جوائز!' : 'Join Star Nova and win rewards!')}`;
+  const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=انضم إلى Star Nova واربح جوائز!`;
   if (tg) tg.openTelegramLink(url); else window.open(url, '_blank');
 }
 function showToast(msg) {
-  const tst = document.getElementById('toast');
-  tst.innerText = msg;
-  tst.classList.add('show');
-  setTimeout(() => tst.classList.remove('show'), 3000);
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
-function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast(t('toast.copied'))); }
-function openModal(id) {
-  document.getElementById(id).classList.add('show');
-  updateClosingConfirmation();
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-  updateClosingConfirmation();
-}
-
-/* ============ REFERRAL STARTUP ============ */
-async function awardReferral(referrerId, source = 'url') {
-  const currentUserId = user.id;
-  if (!db) return { ok: false, error: 'no_db' };
-  if (!referrerId || referrerId === currentUserId) return { ok: false, error: 'self' };
-  const userRef = db.collection('users').doc(currentUserId);
-  const referrerRef = db.collection('users').doc(referrerId);
-  const userDoc = await userRef.get();
-  if (userDoc.exists && userDoc.data().referredBy) return { ok: false, error: 'already_referred' };
-  const referrerDoc = await referrerRef.get();
-  if (!referrerDoc.exists) return { ok: false, error: 'referrer_not_found' };
-  await db.runTransaction(async (transaction) => {
-    const freshUser = await transaction.get(userRef);
-    if (freshUser.exists && freshUser.data().referredBy) throw new Error('Already referred');
-    transaction.set(userRef, {
-      referredBy: referrerId,
-      referredAt: firebase.firestore.FieldValue.serverTimestamp(),
-      referredSource: source,
-      tickets: firebase.firestore.FieldValue.increment(1)
-    }, { merge: true });
-    transaction.update(referrerRef, {
-      referralCount: firebase.firestore.FieldValue.increment(1),
-      tickets: firebase.firestore.FieldValue.increment(2)
-    });
-  });
-  return { ok: true };
-}
-
-async function processReferralOnStartup() {
-  if (!tg || !tg.initDataUnsafe || !db) return;
-  const startParam = tg.initDataUnsafe.start_param;
-  if (!startParam || !startParam.startsWith('ref_')) return;
-  const referrerId = startParam.replace('ref_', '').trim();
-  try {
-    const result = await awardReferral(referrerId, 'url');
-    if (result.ok) {
-      user.referredBy = referrerId;
-      user.tickets = (user.tickets || 0) + 1;
-      updateBalances();
-      updateManualRefCardVisibility();
-      showToast(t('toast.referral_url_success'));
-    }
-  } catch (e) {}
-}
-
-async function submitManualReferral(btn) {
-  const input = document.getElementById('manualRefInput');
-  const refId = (input.value || '').trim();
-  if (!refId) return showToast(t('toast.enter_referrer'));
-  if (refId === user.id) return showToast(t('toast.cant_use_self'));
-  if (user.referredBy) return showToast(t('toast.already_referred'));
-
-  const oldText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-  try {
-    const result = await awardReferral(refId, 'manual');
-    if (result.ok) {
-      user.referredBy = refId;
-      user.tickets = (user.tickets || 0) + 1;
-      updateBalances();
-      updateManualRefCardVisibility();
-      input.value = '';
-      showToast(t('toast.referral_success'));
-    } else if (result.error === 'referrer_not_found') {
-      showToast(t('toast.referrer_not_found'));
-    } else if (result.error === 'already_referred') {
-      showToast(t('toast.already_referred'));
-      updateManualRefCardVisibility();
-    } else if (result.error === 'self') {
-      showToast(t('toast.cant_use_self'));
-    } else {
-      showToast(t('toast.generic_error'));
-    }
-  } catch (e) { showToast(t('toast.generic_error')); }
-  finally { btn.disabled = false; btn.innerHTML = oldText; }
-}
-
-function updateManualRefCardVisibility() {
-  const card = document.getElementById('manualRefCard');
-  if (!card) return;
-  if (user.referredBy) card.classList.remove('show');
-  else card.classList.add('show');
-}
+function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('تم النسخ!')); }
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 /* ============ CRASH ============ */
 const crashState = {
@@ -2922,7 +3218,7 @@ async function checkAndResumeCrashRound() {
     crashStartWaitingPhase();
     const btn = document.getElementById('crash-main-btn');
     if (btn) { btn.innerText = 'Cancel bet'; btn.className = 'crash-main-btn cancel'; }
-    showToast((CURRENT_LANG === 'ar' ? 'تم استرداد رهانك السابق ' : 'Your previous bet restored ') + `(${formatNum(active.activeBet)})`);
+    showToast(`تم استرداد رهانك السابق (${formatNum(active.activeBet)} نجمة)`);
     return true;
   }
   return false;
@@ -2949,7 +3245,6 @@ function crashStartWaitingPhase() {
   crashSetRocketActive(false);
   crashSetExplosionActive(false);
   crashSetWaitingActive(true);
-  updateClosingConfirmation();
 
   if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
   const tick = () => {
@@ -3037,7 +3332,7 @@ function crashHandleCrash() {
     crashSetMultiplierDisplay(final.toFixed(2) + 'x', 'crashed');
     crashSetCountdownDisplay('', false);
   }
-  crashPushHistory(crashState.hasCashedOut ? crashState.cashoutMultiplier : final);
+  crashPushHistory(final);
   if (crashState.hasBet && !crashState.hasCashedOut) {
     saveCrashRound(final, crashState.activeBet, 'lost');
     clearActiveCrashRound();
@@ -3052,7 +3347,6 @@ function crashHandleCrash() {
   crashSetRocketActive(false);
   crashSetWaitingActive(false);
   crashSetExplosionActive(true);
-  updateClosingConfirmation();
   setTimeout(() => { crashSetExplosionActive(false); crashStartWaitingPhase(); }, 2500);
 }
 function crashDoCashOut() {
@@ -3075,7 +3369,6 @@ function crashDoCashOut() {
   }
   const btn = document.getElementById('crash-main-btn');
   if (btn) { btn.innerText = `WON ${win.toFixed(2)}`; btn.className = 'crash-main-btn disabled'; }
-  updateClosingConfirmation();
 }
 function crashHandleMainBtn() {
   if (crashState.status === 'waiting') {
@@ -3087,8 +3380,13 @@ function crashHandleMainBtn() {
 }
 function crashPlaceBet() {
   crashValidateBet();
+  if (crashState.autoCashout) {
+    const inp = document.getElementById('crash-auto-cashout-val');
+    const v = parseFloat(inp.value);
+    crashState.autoCashoutValue = (isFinite(v) && v >= 1.01) ? v : 2.00;
+  }
   const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
-  if (user.stars < bet) { showToast(t('toast.insufficient')); return; }
+  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
   user.stars -= bet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
   updateBalances();
@@ -3098,10 +3396,10 @@ function crashPlaceBet() {
   saveActiveCrashRound({ status: 'waiting', activeBet: bet, hasCashedOut: false });
   const btn = document.getElementById('crash-main-btn');
   if (btn) { btn.innerText = 'Cancel bet'; btn.className = 'crash-main-btn cancel'; }
-  updateClosingConfirmation();
 }
 function crashCancelBet() {
   if (!crashState.hasBet) return;
+  if (crashState.status !== 'waiting') return;
   user.stars += crashState.activeBet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(crashState.activeBet) });
   updateBalances();
@@ -3110,13 +3408,12 @@ function crashCancelBet() {
   clearActiveCrashRound();
   const btn = document.getElementById('crash-main-btn');
   if (btn) { btn.innerText = 'Place bet'; btn.className = 'crash-main-btn'; }
-  updateClosingConfirmation();
 }
 function crashValidateBet() {
   const input = document.getElementById('crash-bet-input');
   sanitizeDigits(input);
-  let val = parseInt(input.value) || 1;
-  if (val < 1) val = 1;
+  let val = parseInt(input.value);
+  if (!isFinite(val) || val < 1) val = 1;
   if (val > 1000) val = 1000;
   input.value = String(val);
 }
@@ -3132,8 +3429,7 @@ function crashUpdateAutoCashout(input) {
   if (val > 100) val = 100;
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
-}
-</script>
+}</script>
 
 </body>
 </html>
