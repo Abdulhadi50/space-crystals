@@ -76,7 +76,6 @@ input[type="number"], .num-input {
   font-family: -apple-system, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* ============ APP SHELL ============ */
 .app-container {
   display: flex; flex-direction: column; height: 100dvh;
   position: relative; z-index: 1;
@@ -129,7 +128,61 @@ input[type="number"], .num-input {
 .view.active { display: block; animation: viewIn 0.35s var(--ease-out); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ HOME ============ */
+/* Home screen banner */
+.home-screen-banner {
+  display: none;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(34,158,217,0.10), rgba(34,158,217,0.03));
+  border: 1px solid rgba(34,158,217,0.28);
+  border-radius: 16px;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(34,158,217,0.06);
+}
+.home-screen-banner.show { display: flex; }
+.home-screen-banner > i {
+  color: #229ED9;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.home-screen-banner .banner-text { flex: 1; min-width: 0; }
+.home-screen-banner .banner-text h4 {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+.home-screen-banner .banner-text p {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.home-screen-banner .banner-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #229ED9;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: transform 0.15s var(--spring);
+  box-shadow: 0 4px 12px rgba(34,158,217,0.30);
+}
+.home-screen-banner .banner-btn:active { transform: scale(0.94); }
+.home-screen-banner .banner-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.06);
+  color: var(--text-secondary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .home-cards { display: flex; flex-direction: column; gap: 16px; }
 .home-card {
   border-radius: 26px; padding: 20px 24px;
@@ -210,12 +263,10 @@ input[type="number"], .num-input {
   margin: 0;
 }
 
-/* ============ HEADERS ============ */
 .page-header { margin-bottom: 24px; }
 .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
 .page-subtitle { font-size: 14px; color: var(--text-secondary); font-weight: 600; }
 
-/* ============ DAILY ============ */
 .daily-claim-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -274,7 +325,6 @@ input[type="number"], .num-input {
   box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
 }
 
-/* ============ TASKS ============ */
 .task-group {
   background: var(--bg-card);
   border-radius: 24px; margin-bottom: 16px; overflow: hidden;
@@ -316,7 +366,6 @@ input[type="number"], .num-input {
   cursor: not-allowed; box-shadow: none;
 }
 
-/* ============ TABS ============ */
 .tabs {
   display: flex;
   background: var(--bg-card);
@@ -342,7 +391,6 @@ input[type="number"], .num-input {
 .tab img { width: 18px; height: 18px; border-radius: 50%; object-fit: contain; }
 .tab .crypto-icon { width: 18px; height: 18px; border-radius: 0; }
 
-/* ============ DEPOSIT / WITHDRAW ============ */
 .dep-layout { display: flex; flex-direction: column; padding-top: 15px; }
 .dep-top-section { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; margin-bottom: 10px; }
 .amount-display { text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; direction: ltr; }
@@ -392,7 +440,6 @@ input[type="number"], .num-input {
 .btn-secondary:active { background: rgba(0,0,0,0.06); transform: scale(0.98); }
 .btn-secondary i { font-size: 16px; color: var(--text-secondary); }
 
-/* ============ CRYPTO PENDING BANNER ============ */
 .crypto-pending-banner {
   display: none;
   background: linear-gradient(135deg, rgba(201,121,26,0.10), rgba(201,121,26,0.03));
@@ -422,7 +469,6 @@ input[type="number"], .num-input {
 .crypto-btn.check { background: var(--gradient-primary); color: #fff; box-shadow: 0 2px 8px rgba(22,24,42,0.15); }
 .crypto-btn.cancel { background: rgba(0,0,0,0.06); color: var(--text-secondary); border: 1px solid var(--border); }
 
-/* ============ MANUAL REFERRAL CARD ============ */
 .manual-ref-card {
   background: linear-gradient(135deg, rgba(91,141,239,0.10), rgba(91,141,239,0.03));
   border: 1px solid rgba(91,141,239,0.25);
@@ -470,7 +516,6 @@ input[type="number"], .num-input {
 .manual-ref-card .btn-copy:disabled { opacity: 0.6; pointer-events: none; }
 .manual-ref-card .btn-copy .fa-spinner { font-size: 12px; }
 
-/* ============ WALLET ADDRESS INPUT ============ */
 .wd-input-group { margin-bottom: 20px; margin-top: 20px; }
 .wd-input-group label {
   display: block; margin-bottom: 8px;
@@ -504,7 +549,6 @@ input[type="number"], .num-input {
   box-shadow: 0 0 0 4px rgba(59, 111, 219, 0.10), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-/* ============ HISTORY ============ */
 .history-modal { max-width: 380px !important; padding: 22px 18px 16px !important; }
 .history-modal h3 { margin-bottom: 14px !important; font-size: 18px !important; }
 .history-list { display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
@@ -534,7 +578,6 @@ input[type="number"], .num-input {
 .show-all-btn:active { background: rgba(0,0,0,0.09); }
 .history-modal .modal-btn { padding: 11px !important; font-size: 13px !important; border-radius: 12px !important; margin-top: 4px; }
 
-/* ============ REFERRAL ============ */
 .referral-header { text-align: center; margin-bottom: 24px; }
 .referral-header h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; line-height: 1.45; letter-spacing: -0.4px; }
 .referral-header p { color: var(--text-secondary); font-size: 14px; font-weight: 600; }
@@ -580,7 +623,6 @@ input[type="number"], .num-input {
 }
 .btn-copy:active { transform: scale(0.95); }
 
-/* ============ PODIUM ============ */
 .podium {
   display: flex; justify-content: center; align-items: flex-end;
   gap: 10px; padding: 8px 0 24px;
@@ -677,7 +719,6 @@ input[type="number"], .num-input {
 .ranking-name { font-weight: 800; font-size: 13px; margin-bottom: 2px; color: var(--text-primary); }
 .ranking-count { font-size: 11px; color: var(--text-secondary); font-weight: 600; direction: ltr; text-align: right; }
 
-/* ============ PROFILE ============ */
 .profile-centered {
   display: flex;
   flex-direction: column;
@@ -774,7 +815,18 @@ input[type="number"], .num-input {
 .profile-action-btn:active { transform: scale(0.98); }
 .profile-action-btn i { color: var(--text-secondary); }
 
-/* ============ MODALS ============ */
+/* Telegram features section */
+.tg-features-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin: 24px 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tg-features-title i { color: #229ED9; font-size: 14px; }
+
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(20,22,40,0.42);
@@ -801,12 +853,18 @@ input[type="number"], .num-input {
   font-size: 15px; font-weight: 800;
   transition: transform 0.15s var(--spring);
   box-shadow: 0 10px 28px rgba(22,24,42,0.22), inset 0 1px 0 rgba(255,255,255,0.15);
+  margin-bottom: 8px;
 }
 .modal-btn:active { transform: scale(0.97); }
 .modal-btn-blue {
   background: var(--gradient-blue) !important;
   color: #fff !important;
   box-shadow: 0 10px 28px rgba(59,111,219,0.32), inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}
+.modal-btn-telegram {
+  background: linear-gradient(135deg, #229ED9 0%, #1a8bc0 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 28px rgba(34,158,217,0.32), inset 0 1px 0 rgba(255,255,255,0.28) !important;
 }
 
 .switch-row {
@@ -855,7 +913,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============ DOCK ============ */
 .dock {
   position: absolute; bottom: calc(14px + env(safe-area-inset-bottom));
   left: 14px; right: 14px;
@@ -928,7 +985,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 0 3px rgba(91,141,239,0.14), 0 8px 24px rgba(30,40,80,0.06);
 }
 
-/* ============ SLOTS GAME ============ */
 #view-slots { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-slots.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
@@ -1054,7 +1110,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   direction: ltr;
 }
 
-/* ============ CRASH GAME ============ */
 .main-scroll.crash-mode { padding: 0; overflow: hidden; }
 #view-crash.active {
   display: flex; flex-direction: column; height: 100%;
@@ -1231,7 +1286,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-main-btn.cancel { background: var(--gradient-danger); box-shadow: 0 10px 26px rgba(230,57,80,0.3), inset 0 1px 0 rgba(255,255,255,0.22); }
 .crash-main-btn.disabled { background: rgba(0,0,0,0.06); color: var(--text-secondary); pointer-events: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.05); }
 
-/* ============ IN-GAME MODE ============ */
 .app-container.in-game .top-app-bar { display: none !important; }
 .app-container.in-game .main-scroll { padding: 0 !important; }
 .app-container.in-game #view-crash.active {
@@ -1291,6 +1345,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crypto-pending-title { font-size: 11px; }
   .crypto-pending-timer { font-size: 12px; }
   .crypto-btn { padding: 6px 9px; font-size: 10px; }
+  .home-screen-banner { padding: 12px; }
+  .home-screen-banner .banner-text h4 { font-size: 12px; }
+  .home-screen-banner .banner-text p { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1319,6 +1376,20 @@ input:checked + .slider:before { transform: translateX(22px); }
   <main class="main-scroll" id="mainScroll">
     
     <div class="view active" id="view-home">
+
+      <!-- Home Screen Shortcut Banner -->
+      <div class="home-screen-banner" id="homeScreenBanner">
+        <i class="fab fa-telegram"></i>
+        <div class="banner-text">
+          <h4>افتح Star Nova بسرعة</h4>
+          <p>أضف التطبيق لشاشتك الرئيسية للوصول السريع</p>
+        </div>
+        <button class="banner-btn" onclick="tgNative.addToHomeScreen()">إضافة</button>
+        <button class="banner-close" onclick="document.getElementById('homeScreenBanner').classList.remove('show'); try{localStorage.setItem('sn_hs_dismissed','1')}catch(e){}">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
       <div class="home-cards">
 
         <div class="home-cards-row">
@@ -1622,6 +1693,26 @@ input:checked + .slider:before { transform: translateX(22px); }
           <i class="fas fa-chevron-left"></i>
         </button>
       </div>
+
+      <!-- Telegram Features -->
+      <div class="tg-features-title">
+        <i class="fab fa-telegram"></i>
+        ميزات تيليجرام
+      </div>
+      <div class="profile-actions">
+        <button class="profile-action-btn" onclick="tgNative.requestFullscreen(); tgNative.haptic('impact','light');">
+          <span><i class="fas fa-expand" style="margin-left: 8px;"></i> ملء الشاشة</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="profile-action-btn" onclick="tgNative.addToHomeScreen()">
+          <span><i class="fas fa-mobile-screen" style="margin-left: 8px;"></i> إضافة للشاشة الرئيسية</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="profile-action-btn" onclick="tgNative.setEmojiStatus()">
+          <span><i class="fas fa-smile" style="margin-left: 8px;"></i> حالة الإيموجي</span>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      </div>
     </div>
 
     <div class="view" id="view-crash">
@@ -1692,21 +1783,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
       <i class="fas fa-user"></i>
     </div>
-  </div>
-</div>
-
-<!-- Load Error Modal -->
-<div class="modal-overlay" id="modalLoadError">
-  <div class="modal-content">
-    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,121,26,0.15), rgba(201,121,26,0.05)); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-      <i class="fas fa-wifi" style="font-size: 36px; color: var(--warning);"></i>
-    </div>
-    <h3>تعذر تحميل البيانات</h3>
-    <p>لم نتمكن من الاتصال بالخادم. تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.</p>
-    <button class="modal-btn" onclick="retryLoad()">
-      <i class="fas fa-rotate" style="margin-left: 6px;"></i>
-      حاول مجدداً
-    </button>
   </div>
 </div>
 
@@ -1792,6 +1868,10 @@ input:checked + .slider:before { transform: translateX(22px); }
     <h3>مبروك! لقد ربحت</h3>
     <p style="margin-bottom: 10px;">لقد حصلت على</p>
     <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45); direction: ltr;"></div>
+    <button class="modal-btn modal-btn-telegram" onclick="shareCurrentSlotWin()" style="margin-bottom: 10px;">
+      <i class="fab fa-telegram" style="margin-left: 6px;"></i>
+      شارك الفوز في القصة
+    </button>
     <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
   </div>
 </div>
@@ -1807,6 +1887,142 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="toast" id="toast">رسالة</div>
 
 <script>'use strict';
+
+/* ============ TELEGRAM NATIVE FEATURES HELPER ============ */
+const tgNative = {
+  haptic(type = 'impact', style = 'light') {
+    try {
+      if (!window.Telegram?.WebApp?.HapticFeedback) return;
+      const hf = window.Telegram.WebApp.HapticFeedback;
+      if (type === 'impact') hf.impactOccurred(style);
+      else if (type === 'notification') hf.notificationOccurred(style);
+      else if (type === 'selection') hf.selectionChanged();
+    } catch(e) {}
+  },
+
+  async requestFullscreen() {
+    try {
+      const t = window.Telegram?.WebApp;
+      if (!t || !t.isVersionAtLeast?.('8.0') || typeof t.requestFullscreen !== 'function') {
+        showToast('هذه الميزة غير متاحة في إصدار تيليجرام لديك');
+        return;
+      }
+      await t.requestFullscreen();
+      tgNative.haptic('notification', 'success');
+    } catch(e) {
+      console.log('[FS]', e.message);
+      showToast('تعذر تفعيل ملء الشاشة');
+    }
+  },
+
+  homeScreenDismissed: false,
+  checkHomeScreen() {
+    try {
+      const t = window.Telegram?.WebApp;
+      if (!t || !t.checkHomeScreenStatus || !t.isVersionAtLeast?.('8.0')) return;
+      if (localStorage.getItem('sn_hs_dismissed') === '1') return;
+      t.checkHomeScreenStatus((status) => {
+        if (status === 'missed' || status === 'unknown') {
+          const banner = document.getElementById('homeScreenBanner');
+          if (banner) banner.classList.add('show');
+        }
+      });
+    } catch(e) {}
+  },
+
+  async addToHomeScreen() {
+    tgNative.haptic('impact', 'light');
+    try {
+      const t = window.Telegram?.WebApp;
+      if (!t || typeof t.addToHomeScreen !== 'function') {
+        showToast('هذه الميزة غير متاحة في إصدار تيليجرام لديك');
+        return;
+      }
+      await t.addToHomeScreen();
+      tgNative.haptic('notification', 'success');
+      showToast('تمت الإضافة لشاشتك الرئيسية ✓');
+      const banner = document.getElementById('homeScreenBanner');
+      if (banner) banner.classList.remove('show');
+    } catch(e) {
+      console.log('[Homescreen]', e.message);
+      showToast('تعذر إضافة التطبيق');
+    }
+  },
+
+  currentSlotPrize: null,
+
+  async shareCurrentSlotWin() {
+    tgNative.haptic('impact', 'medium');
+    try {
+      const t = window.Telegram?.WebApp;
+      if (!t || typeof t.shareToStory !== 'function' || !t.isVersionAtLeast?.('7.8')) {
+        showToast('مشاركة القصص غير متاحة في إصدار تيليجرام لديك');
+        return;
+      }
+      const prize = tgNative.currentSlotPrize;
+      if (!prize) return;
+
+      const storyImageUrl = 'https://up6.cc/2026/11/179433008951731.jpg';
+      const text = `🎰 ربحت ${formatNum(prize.value)} نجمة في Star Nova!\nاكتشف المزيد والعب الآن`;
+
+      t.shareToStory(storyImageUrl, {
+        text: text,
+        widget_link: {
+          url: 'https://t.me/starnovagamebot/starnova',
+          name: 'العب Star Nova'
+        }
+      });
+      tgNative.haptic('notification', 'success');
+    } catch(e) {
+      console.log('[Story]', e.message);
+      showToast('تعذر فتح المشاركة');
+    }
+  },
+
+  setEmojiStatus() {
+    tgNative.haptic('impact', 'light');
+    try {
+      const t = window.Telegram?.WebApp;
+      if (!t || typeof t.setEmojiStatus !== 'function') {
+        showToast('هذه الميزة غير متاحة في إصدار تيليجرام لديك');
+        return;
+      }
+      // Emoji status requires the user to have Telegram Premium to display it
+      // Using a generic star emoji ID (may not work for all users)
+      const emojiId = '5368324170671202286';
+      if (typeof t.requestEmojiStatusAccess === 'function') {
+        t.requestEmojiStatusAccess((granted) => {
+          if (!granted) { showToast('لم يتم منح الإذن'); return; }
+          try {
+            t.setEmojiStatus(emojiId, {}, (success) => {
+              if (success) {
+                showToast('تم تعيين حالة الإيموجي');
+                tgNative.haptic('notification', 'success');
+              } else {
+                showToast('تعذر التعيين - تتطلب Premium');
+              }
+            });
+          } catch(e) {
+            showToast('تعذر تعيين الحالة');
+          }
+        });
+      } else {
+        // Older API
+        try {
+          t.setEmojiStatus(emojiId, (success) => {
+            if (success) showToast('تم تعيين حالة الإيموجي');
+            else showToast('تعذر التعيين - تتطلب Premium');
+          });
+        } catch(e) {
+          showToast('هذه الميزة غير متاحة');
+        }
+      }
+    } catch(e) {
+      showToast('هذه الميزة غير متاحة');
+    }
+  }
+};
+
 document.addEventListener('contextmenu', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   e.preventDefault();
@@ -1819,18 +2035,10 @@ function formatNum(n) {
   if (n === null || n === undefined) return '0';
   const num = Number(n);
   if (!isFinite(num)) return '0';
-  const neg = num < 0;
-  const abs = Math.abs(num);
-  const str = (abs % 1 === 0) ? String(abs) : abs.toFixed(2);
+  const str = (num % 1 === 0) ? String(num) : num.toFixed(2);
   const [intPart, decPart] = str.split('.');
   const f = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return (neg ? '-' : '') + (decPart ? f + '.' + decPart : f);
-}
-
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s ?? '');
-  return d.innerHTML;
+  return decPart ? f + '.' + decPart : f;
 }
 
 function sanitizeDigits(el) {
@@ -1918,13 +2126,6 @@ let currentTask = null;
 let taskStartTime = 0;
 let tasksCache = [];
 let slotsState = { currentBet: 69, isSpinning: false };
-
-let isWithdrawing = false;
-
-/* ============ LOAD STATE ============ */
-let userDataLoaded = false;
-let loadTimeoutHandle = null;
-const LOAD_TIMEOUT_MS = 10000;
 
 const tg = window.Telegram?.WebApp;
 let db = null;
@@ -2021,7 +2222,10 @@ function updateTelegramBackButton(viewName) {
   if (viewName === 'home') {
     bb.hide();
   } else {
-    telegramBackButtonHandler = () => go('home');
+    telegramBackButtonHandler = () => {
+      tgNative.haptic('selection');
+      go('home');
+    };
     bb.onClick(telegramBackButtonHandler);
     bb.show();
   }
@@ -2038,191 +2242,31 @@ function initTelegram() {
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
     try { updateTelegramBackButton('home'); } catch(e) {}
-  }
-}
 
-/* ============ LOAD MANAGEMENT ============ */
-function markUserDataLoaded() {
-  userDataLoaded = true;
-  if (loadTimeoutHandle) {
-    clearTimeout(loadTimeoutHandle);
-    loadTimeoutHandle = null;
-  }
-  closeModal('modalLoadError');
-}
-
-function startLoadTimer() {
-  if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
-  loadTimeoutHandle = setTimeout(() => {
-    if (!userDataLoaded) {
-      openModal('modalLoadError');
-    }
-  }, LOAD_TIMEOUT_MS);
-}
-
-async function retryLoad() {
-  closeModal('modalLoadError');
-  userDataLoaded = false;
-
-  // Reset displayed balances to 0 while retrying
-  user.stars = 0;
-  user.tickets = 0;
-  user.referrals = 0;
-  updateBalances();
-
-  startLoadTimer();
-
-  // Reinit Firebase if needed
-  if (!db) {
+    // Enable vertical swipe to close in full-screen modes (if supported)
     try {
-      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-      db = firebase.firestore();
-      db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    } catch (e) {
-      console.error('Firebase reinit failed:', e);
-      return;
-    }
-  }
+      if (tg.isVersionAtLeast?.('8.0') && tg.disableVerticalSwipes === undefined) {
+        // Older; no-op
+      }
+    } catch(e) {}
 
-  await fetchUserData();
-
-  Promise.all([
-    loadTasks(),
-    loadWithdrawalHistory(),
-    calibrateServerTime(),
-    loadCrashHistory()
-  ]).then(async () => {
-    await processReferralOnStartup().catch(() => {});
-    updateManualRefCardVisibility();
-  }).catch(e => console.error('Secondary load failed:', e));
-}
-
-/* ============ REFERRAL: AWARD SYSTEM ============ */
-async function awardReferral(referrerId, source = 'url') {
-  const currentUserId = user.id;
-  if (!db) return { ok: false, error: 'no_db' };
-  if (!referrerId || referrerId === currentUserId) return { ok: false, error: 'self' };
-
-  const userRef = db.collection('users').doc(currentUserId);
-  const referrerRef = db.collection('users').doc(referrerId);
-
-  const userDoc = await userRef.get();
-  if (userDoc.exists && userDoc.data().referredBy) {
-    return { ok: false, error: 'already_referred' };
-  }
-
-  const referrerDoc = await referrerRef.get();
-  if (!referrerDoc.exists) return { ok: false, error: 'referrer_not_found' };
-
-  await db.runTransaction(async (transaction) => {
-    const freshUser = await transaction.get(userRef);
-    if (freshUser.exists && freshUser.data().referredBy) throw new Error('Already referred');
-    transaction.set(userRef, {
-      referredBy: referrerId,
-      referredAt: firebase.firestore.FieldValue.serverTimestamp(),
-      referredSource: source,
-      tickets: firebase.firestore.FieldValue.increment(1)
-    }, { merge: true });
-    transaction.update(referrerRef, {
-      referralCount: firebase.firestore.FieldValue.increment(1),
-      tickets: firebase.firestore.FieldValue.increment(2)
-    });
-  });
-
-  return { ok: true };
-}
-
-async function processReferralOnStartup() {
-  if (!tg || !tg.initDataUnsafe || !db) return;
-  const startParam = tg.initDataUnsafe.start_param;
-  if (!startParam || !startParam.startsWith('ref_')) return;
-  const referrerId = startParam.replace('ref_', '').trim();
-  try {
-    const result = await awardReferral(referrerId, 'url');
-    if (result.ok) {
-      user.referredBy = referrerId;
-      user.tickets = (user.tickets || 0) + 1;
-      updateBalances();
-      updateManualRefCardVisibility();
-      showToast('تم قبول الدعوة! حصلت على تذكرة 🎟️');
-    } else {
-      console.log('[Referral] Skipped:', result.error);
-    }
-  } catch (e) {
-    console.log('[Referral] Error:', e.message);
+    // Check home screen status after a short delay
+    setTimeout(() => tgNative.checkHomeScreen(), 1500);
   }
 }
 
-async function submitManualReferral(btn) {
-  const input = document.getElementById('manualRefInput');
-  const refId = (input.value || '').trim();
-  if (!refId) return showToast('أدخل معرف الداعي');
-  if (refId === user.id) return showToast('لا يمكنك استخدام معرفك الخاص');
-  if (user.referredBy) return showToast('لديك داعٍ بالفعل');
-
-  const oldText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-  try {
-    const result = await awardReferral(refId, 'manual');
-    if (result.ok) {
-      user.referredBy = refId;
-      user.tickets = (user.tickets || 0) + 1;
-      updateBalances();
-      updateManualRefCardVisibility();
-      input.value = '';
-      showToast('تم قبول الدعوة! +1 تذكرة 🎟️');
-    } else if (result.error === 'referrer_not_found') {
-      showToast('معرف الداعي غير موجود');
-    } else if (result.error === 'already_referred') {
-      showToast('لديك داعٍ بالفعل');
-      updateManualRefCardVisibility();
-    } else if (result.error === 'self') {
-      showToast('لا يمكنك استخدام معرفك الخاص');
-    } else {
-      showToast('حدث خطأ، حاول لاحقاً');
-    }
-  } catch (e) {
-    showToast('حدث خطأ، حاول لاحقاً');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = oldText;
-  }
-}
-
-function updateManualRefCardVisibility() {
-  const card = document.getElementById('manualRefCard');
-  if (!card) return;
-  if (user.referredBy) card.classList.remove('show');
-  else card.classList.add('show');
-}
-
-/* ============ INIT FIREBASE (called on start & retry) ============ */
-async function initFirebase() {
-  userDataLoaded = false;
-  startLoadTimer();
-
+function initFirebase() {
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-  } catch (e) {
-    console.error('Firebase init failed:', e);
-    return;
-  }
-
-  await fetchUserData();
-
-  Promise.all([
-    loadTasks(),
-    loadWithdrawalHistory(),
-    calibrateServerTime(),
-    loadCrashHistory()
-  ]).then(async () => {
-    await processReferralOnStartup().catch(() => {});
-    updateManualRefCardVisibility();
-  }).catch(e => console.error('Secondary load failed:', e));
+    Promise.all([
+      fetchUserData(), loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
+    ]).then(async () => {
+      await processReferralOnStartup().catch(() => {});
+      updateManualRefCardVisibility();
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 async function fetchUserData() {
@@ -2251,10 +2295,7 @@ async function fetchUserData() {
     updateBalances(); initDailyLogin(); renderProfile();
     document.getElementById('refLinkText').innerText = `https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
-    markUserDataLoaded();
-  } catch (e) {
-    console.error('fetchUserData failed:', e);
-  }
+  } catch (e) {}
 }
 
 async function syncUserData(updates) {
@@ -2263,9 +2304,7 @@ async function syncUserData(updates) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Show the app immediately - no splash
   document.getElementById('app').classList.add('ready');
-
   initTelegram();
   initCountryTgs();
   initSlots();
@@ -2273,6 +2312,15 @@ document.addEventListener('DOMContentLoaded', () => {
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
   loadCryptoInvoice();
   initFirebase();
+
+  // Auto-request fullscreen after short delay (graceful fallback if unsupported)
+  setTimeout(() => {
+    try {
+      if (tg?.isVersionAtLeast?.('8.0') && typeof tg.requestFullscreen === 'function') {
+        tg.requestFullscreen().catch(() => {});
+      }
+    } catch(e) {}
+  }, 800);
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -2281,11 +2329,16 @@ document.addEventListener('visibilitychange', () => {
 
 window.addEventListener('pagehide', () => saveActiveRoundState());
 
-function exitGame() { go('home'); }
+function exitGame() {
+  tgNative.haptic('selection');
+  go('home');
+}
 
 function go(viewName) {
-  if (viewName === 'properties') { window.location.href = './properties.html'; return; }
-  if (viewName === 'spaceClock') { window.location.href = './space.html'; return; }
+  if (viewName === 'properties') { tgNative.haptic('selection'); window.location.href = './properties.html'; return; }
+  if (viewName === 'spaceClock') { tgNative.haptic('selection'); window.location.href = './space.html'; return; }
+
+  tgNative.haptic('selection');
 
   const GAME_VIEWS = ['crash'];
   const appContainer = document.getElementById('app');
@@ -2377,6 +2430,7 @@ function slotsUpdateBetUI() {
 
 function slotsChangeBet(bet) {
   if (slotsState.isSpinning) return;
+  tgNative.haptic('impact', 'light');
   slotsState.currentBet = bet;
   slotsUpdateBetUI();
 }
@@ -2390,8 +2444,8 @@ function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
   const roll = Math.random() * 100;
-  if (roll < 65) return { type: 'lose' };
-  if (roll >= 95) return { type: 'win', id: 'p10', value: config.table['p10'] };
+  if (roll < 75) return { type: 'lose' };
+  if (roll >= 99) return { type: 'win', id: 'p10', value: config.table['p10'] };
   const keys = Object.keys(config.table).filter(k => k !== 'p10');
   const randomKey = keys[Math.floor(Math.random() * keys.length)];
   return { type: 'win', id: randomKey, value: config.table[randomKey] };
@@ -2403,13 +2457,21 @@ function showSlotsWinModal(prize) {
   winIcon.innerHTML = `<img src="${prize.img}" alt="Win" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(245,215,110,0.45));">`;
   winValue.innerHTML = `<img src="${ASSETS.star}" style="width:32px;height:32px;"> ${formatNum(prize.value)}`;
   winValue.style.color = '#FFD700';
+  tgNative.currentSlotPrize = prize;
+  tgNative.haptic('notification', 'success');
   openModal('slots-win-modal');
 }
 
 async function slotsSpin() {
   if (slotsState.isSpinning) return;
   const bet = slotsState.currentBet;
-  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+  if (user.stars < bet) {
+    tgNative.haptic('notification', 'error');
+    showToast('رصيدك غير كافٍ!');
+    return;
+  }
+
+  tgNative.haptic('impact', 'medium');
 
   slotsState.isSpinning = true;
   const spinBtn = document.getElementById('slotsSpinBtn');
@@ -2507,6 +2569,7 @@ async function slotsSpin() {
         const winningSym = SLOT_SYMBOLS[outcome.id];
         setTimeout(() => showSlotsWinModal({ img: winningSym.img, value: winAmount }), 500);
       } else {
+        tgNative.haptic('notification', 'warning');
         resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
         resultEl.className = 'slots-result lose';
       }
@@ -2530,6 +2593,7 @@ function slotsHasWinningLine(grid) {
 }
 
 function slotsShowPrizes() {
+  tgNative.haptic('impact', 'light');
   const container = document.getElementById('slots-prizes-grid');
   container.innerHTML = '';
   const config = SLOTS_CONFIG[slotsState.currentBet];
@@ -2618,10 +2682,12 @@ async function claimDailyReward() {
   isClaimingDaily = true;
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
+    tgNative.haptic('notification', 'warning');
     showToast('لم يحن وقت الاستلام بعد');
     isClaimingDaily = false;
     return;
   }
+  tgNative.haptic('impact', 'medium');
   const btn = document.getElementById('dailyClaimBtn');
   const btnText = document.getElementById('claimBtnText');
   btn.disabled = true;
@@ -2647,10 +2713,12 @@ async function claimDailyReward() {
       user.nextDailyClaim = nextClaimTime;
       user.dailyStreak = newStreak;
     });
+    tgNative.haptic('notification', 'success');
     showToast('تم استلام المكافأة بنجاح!');
     updateBalances();
     initDailyLogin();
   } catch (e) {
+    tgNative.haptic('notification', 'error');
     if (e.message === "Too early") showToast('لم يحن وقت الاستلام بعد');
     else showToast('حدث خطأ أثناء الاستلام');
     initDailyLogin();
@@ -2675,7 +2743,7 @@ async function loadTasks() {
       const isCompleted = user.completedTasks.includes(task.id);
       let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
       let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>تم</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
-      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(task.title)}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
+      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${task.title}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
     container.innerHTML = html;
@@ -2683,6 +2751,7 @@ async function loadTasks() {
 }
 
 function openTaskSheet(taskId) {
+  tgNative.haptic('selection');
   const task = tasksCache.find(t => t.id === taskId);
   if (!task) return;
   if (user.completedTasks.includes(taskId)) { showToast('لقد قمت بإكمال هذه المهمة بالفعل'); return; }
@@ -2696,6 +2765,7 @@ function openTaskSheet(taskId) {
 function closeTaskSheet() { closeModal('taskSheet'); currentTask = null; }
 function startTaskAction() {
   if (!currentTask) return;
+  tgNative.haptic('impact', 'light');
   if (tg) tg.openLink(currentTask.link); else window.open(currentTask.link, '_blank');
   taskStartTime = Date.now();
   showToast('يرجى العودة بعد 5 ثوانٍ للتحقق');
@@ -2718,9 +2788,13 @@ async function checkTaskAction() {
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
+    tgNative.haptic('notification', 'success');
     showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'نجمة'}`);
     closeTaskSheet(); loadTasks();
-  } catch (e) { showToast('حدث خطأ'); }
+  } catch (e) {
+    tgNative.haptic('notification', 'error');
+    showToast('حدث خطأ');
+  }
   finally { btn.disabled = false; btn.innerText = 'Check task'; }
 }
 
@@ -2731,6 +2805,7 @@ function adjustInputWidth(input) {
   input.style.width = Math.max(1, input.value.length || 1) + 'ch';
 }
 function switchDepositTab(tab, el) {
+  tgNative.haptic('selection');
   document.querySelectorAll('#view-deposit .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
@@ -2746,6 +2821,7 @@ function updateDepositUI(input) {
   adjustInputWidth(input);
 }
 function addChip(amount) {
+  tgNative.haptic('impact', 'light');
   const input = document.getElementById('depositAmountInput');
   input.value = String((parseInt(input.value) || 0) + amount);
   updateDepositUI(input);
@@ -2759,6 +2835,7 @@ function updateCryptoUI(input) {
   document.getElementById('cryptoCalcSubtext').innerHTML = `${formatNum(stars)} <img src="${ASSETS.star}" style="width:16px;height:16px;border-radius:50%;vertical-align:middle;">`;
 }
 function addCryptoChip(amount) {
+  tgNative.haptic('impact', 'light');
   const input = document.getElementById('cryptoAmountInput');
   const newVal = Math.min((parseFloat(input.value) || 0) + amount, 1000);
   input.value = String(Math.round(newVal * 10) / 10);
@@ -2766,6 +2843,7 @@ function addCryptoChip(amount) {
 }
 
 async function processDeposit(type) {
+  tgNative.haptic('impact', 'medium');
   if (type === 'stars') {
     if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
     if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
@@ -2783,6 +2861,7 @@ async function processDeposit(type) {
           user.stars += depositAmount;
           updateBalances();
           syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
+          tgNative.haptic('notification', 'success');
           showToast(`تمت إضافة ${formatNum(depositAmount)} نجمة بنجاح!`);
           go('home');
         } else if (status === 'cancelled') showToast('تم إلغاء الدفع');
@@ -2858,6 +2937,7 @@ function cancelCryptoInvoice() {
 }
 async function checkCryptoStatus(btn) {
   if (!cryptoPendingInvoice) return;
+  tgNative.haptic('impact', 'light');
   const oldTxt = btn.innerHTML;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
   btn.disabled = true;
@@ -2865,6 +2945,7 @@ async function checkCryptoStatus(btn) {
     const resp = await fetch(`${API_BASE}/api/shieldz/invoice/${cryptoPendingInvoice.id}`);
     const data = await resp.json();
     if (data.status === 'paid' || data.paid === true) {
+      tgNative.haptic('notification', 'success');
       showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
@@ -2877,6 +2958,7 @@ async function checkCryptoStatus(btn) {
 }
 
 function switchWithdrawTab(tab, el) {
+  tgNative.haptic('selection');
   document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.wd-tab-content').forEach(c => c.style.display = 'none');
@@ -2900,15 +2982,16 @@ async function loadWithdrawalHistory() {
     q.forEach(doc => rows.push(doc.data()));
     rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     withdrawalHistory = rows;
-    user.totalWithdrawn = rows
-      .filter(w => w.status === 'completed')
-      .reduce((sum, w) => sum + (w.amount || 0), 0);
+    user.totalWithdrawn = rows.reduce((sum, w) => sum + (w.amount || 0), 0);
     const totalEl = document.getElementById('statTotalWithdrawn');
     if (totalEl) totalEl.innerText = formatNum(user.totalWithdrawn);
     renderWithdrawHistory();
   } catch(e) { renderWithdrawHistory(); }
 }
-function openWithdrawHistory() { wdShowAll = false; renderWithdrawHistory(); openModal('modalWithdrawHistory'); }
+function openWithdrawHistory() {
+  tgNative.haptic('selection');
+  wdShowAll = false; renderWithdrawHistory(); openModal('modalWithdrawHistory');
+}
 function showAllWithdrawals() { wdShowAll = true; renderWithdrawHistory(); }
 function renderWithdrawHistory() {
   const list = document.getElementById('withdrawHistoryList');
@@ -2953,8 +3036,7 @@ function renderWithdrawHistory() {
 }
 
 async function processWithdraw(method) {
-  if (isWithdrawing) return;
-
+  tgNative.haptic('impact', 'medium');
   let id, amount, payoutStr;
   if (method === 'binance') {
     id = document.getElementById('wdBinanceId').value;
@@ -2965,23 +3047,12 @@ async function processWithdraw(method) {
     amount = parseInt(document.getElementById('wdGramAmount').value);
     payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
-
-  if (method === 'gram') {
-    if (!id) return showToast('أدخل عنوان محفظة TON');
-    const tonOk = /^[EU]Q[A-Za-z0-9_-]{46}$/.test(id) || /^[A-Za-z0-9_-]{48}$/.test(id);
-    if (!tonOk) return showToast('عنوان TON غير صالح');
-  } else if (method === 'binance') {
-    if (!id) return showToast('أدخل معرّف Binance');
-    if (!/^\d{6,12}$/.test(id)) return showToast('معرّف Binance يجب أن يكون 6-12 رقمًا');
-  }
-
+  if (!id || id.length < 4) return showToast('أدخل معرّف محفظة صحيح');
   if (!amount) return showToast('أدخل مبلغاً صحيحاً');
   if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 نجوم'); }
   else { if (amount < 50) return showToast('الحد الأدنى 50 نجمة'); }
   if (amount > 5000) return showToast('الحد الأقصى 5000 نجمة');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
-
-  isWithdrawing = true;
   const btn = event.target;
   btn.disabled = true;
   btn.innerText = 'جاري الإرسال...';
@@ -2999,6 +3070,7 @@ async function processWithdraw(method) {
 
     document.getElementById('successWdStars').innerText = formatNum(amount);
     document.getElementById('successWdPayout').innerText = payoutStr;
+    tgNative.haptic('notification', 'success');
     openModal('modalWithdrawSuccess');
     document.getElementById('wdBinanceId').value = '';
     document.getElementById('wdBinanceAmount').value = '';
@@ -3010,18 +3082,19 @@ async function processWithdraw(method) {
     updateWdUI('gram', document.getElementById('wdGramAmount'));
     if (db) loadWithdrawalHistory(); else renderWithdrawHistory();
   } catch(e) {
+    tgNative.haptic('notification', 'error');
     showToast('حدث خطأ أثناء السحب');
     user.stars += amount;
     updateBalances();
   } finally {
-    isWithdrawing = false;
     btn.disabled = false;
     btn.innerText = 'تقديم الطلب';
   }
 }
 
-/* ============ REFERRAL TABS ============ */
+/* ============ REFERRAL ============ */
 function switchRefTab(tab, el) {
+  tgNative.haptic('selection');
   document.querySelectorAll('#view-referral .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.ref-tab-content').forEach(c => c.style.display = 'none');
@@ -3059,7 +3132,7 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const el = document.createElement('div');
       el.className = `podium-item rank-${rank}${isMe ? ' me' : ''}`;
-      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${escapeHtml(u.name || 'لاعب')}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} إحالة</div>`;
+      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${u.name || 'لاعب'}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} إحالة</div>`;
       podium.appendChild(el);
     });
     podiumContainer.appendChild(podium);
@@ -3071,7 +3144,7 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${escapeHtml(u.name || 'لاعب')} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} إحالة</div></div>`;
+      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${u.name || 'لاعب'} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} إحالة</div></div>`;
       list.appendChild(div);
     });
     globalRankingLoaded = true;
@@ -3079,6 +3152,7 @@ async function loadGlobalRanking() {
 }
 
 function shareReferral() {
+  tgNative.haptic('impact', 'light');
   const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=انضم إلى Star Nova واربح جوائز!`;
   if (tg) tg.openTelegramLink(url); else window.open(url, '_blank');
 }
@@ -3088,9 +3162,120 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('تم النسخ!')); }
-function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    tgNative.haptic('notification', 'success');
+    showToast('تم النسخ!');
+  });
+}
+function openModal(id) {
+  tgNative.haptic('selection');
+  document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+/* ============ REFERRAL STARTUP ============ */
+async function awardReferral(referrerId, source = 'url') {
+  const currentUserId = user.id;
+  if (!db) return { ok: false, error: 'no_db' };
+  if (!referrerId || referrerId === currentUserId) return { ok: false, error: 'self' };
+
+  const userRef = db.collection('users').doc(currentUserId);
+  const referrerRef = db.collection('users').doc(referrerId);
+
+  const userDoc = await userRef.get();
+  if (userDoc.exists && userDoc.data().referredBy) {
+    return { ok: false, error: 'already_referred' };
+  }
+
+  const referrerDoc = await referrerRef.get();
+  if (!referrerDoc.exists) return { ok: false, error: 'referrer_not_found' };
+
+  await db.runTransaction(async (transaction) => {
+    const freshUser = await transaction.get(userRef);
+    if (freshUser.exists && freshUser.data().referredBy) throw new Error('Already referred');
+    transaction.set(userRef, {
+      referredBy: referrerId,
+      referredAt: firebase.firestore.FieldValue.serverTimestamp(),
+      referredSource: source,
+      tickets: firebase.firestore.FieldValue.increment(1)
+    }, { merge: true });
+    transaction.update(referrerRef, {
+      referralCount: firebase.firestore.FieldValue.increment(1),
+      tickets: firebase.firestore.FieldValue.increment(2)
+    });
+  });
+
+  return { ok: true };
+}
+
+async function processReferralOnStartup() {
+  if (!tg || !tg.initDataUnsafe || !db) return;
+  const startParam = tg.initDataUnsafe.start_param;
+  if (!startParam || !startParam.startsWith('ref_')) return;
+  const referrerId = startParam.replace('ref_', '').trim();
+  try {
+    const result = await awardReferral(referrerId, 'url');
+    if (result.ok) {
+      user.referredBy = referrerId;
+      user.tickets = (user.tickets || 0) + 1;
+      updateBalances();
+      updateManualRefCardVisibility();
+      tgNative.haptic('notification', 'success');
+      showToast('تم قبول الدعوة! حصلت على تذكرة 🎟️');
+    }
+  } catch (e) {}
+}
+
+async function submitManualReferral(btn) {
+  const input = document.getElementById('manualRefInput');
+  const refId = (input.value || '').trim();
+  if (!refId) return showToast('أدخل معرف الداعي');
+  if (refId === user.id) return showToast('لا يمكنك استخدام معرفك الخاص');
+  if (user.referredBy) return showToast('لديك داعٍ بالفعل');
+
+  tgNative.haptic('impact', 'medium');
+  const oldText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+  try {
+    const result = await awardReferral(refId, 'manual');
+    if (result.ok) {
+      user.referredBy = refId;
+      user.tickets = (user.tickets || 0) + 1;
+      updateBalances();
+      updateManualRefCardVisibility();
+      input.value = '';
+      tgNative.haptic('notification', 'success');
+      showToast('تم قبول الدعوة! +1 تذكرة 🎟️');
+    } else if (result.error === 'referrer_not_found') {
+      tgNative.haptic('notification', 'error');
+      showToast('معرف الداعي غير موجود');
+    } else if (result.error === 'already_referred') {
+      showToast('لديك داعٍ بالفعل');
+      updateManualRefCardVisibility();
+    } else if (result.error === 'self') {
+      showToast('لا يمكنك استخدام معرفك الخاص');
+    } else {
+      showToast('حدث خطأ، حاول لاحقاً');
+    }
+  } catch (e) {
+    showToast('حدث خطأ، حاول لاحقاً');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = oldText;
+  }
+}
+
+function updateManualRefCardVisibility() {
+  const card = document.getElementById('manualRefCard');
+  if (!card) return;
+  if (user.referredBy) card.classList.remove('show');
+  else card.classList.add('show');
+}
 
 /* ============ CRASH ============ */
 const crashState = {
@@ -3332,8 +3517,9 @@ function crashHandleCrash() {
     crashSetMultiplierDisplay(final.toFixed(2) + 'x', 'crashed');
     crashSetCountdownDisplay('', false);
   }
-  crashPushHistory(final);
+  crashPushHistory(crashState.hasCashedOut ? crashState.cashoutMultiplier : final);
   if (crashState.hasBet && !crashState.hasCashedOut) {
+    tgNative.haptic('notification', 'error');
     saveCrashRound(final, crashState.activeBet, 'lost');
     clearActiveCrashRound();
     crashState.hasBet = false;
@@ -3362,6 +3548,7 @@ function crashDoCashOut() {
   clearActiveCrashRound();
   crashState.hasBet = false;
   crashState.activeBet = 0;
+  tgNative.haptic('notification', 'success');
   const area = document.getElementById('crash-game-area');
   if (area && isCrashViewActive()) {
     area.classList.add('cashout-anim');
@@ -3380,13 +3567,13 @@ function crashHandleMainBtn() {
 }
 function crashPlaceBet() {
   crashValidateBet();
-  if (crashState.autoCashout) {
-    const inp = document.getElementById('crash-auto-cashout-val');
-    const v = parseFloat(inp.value);
-    crashState.autoCashoutValue = (isFinite(v) && v >= 1.01) ? v : 2.00;
-  }
   const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
-  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+  if (user.stars < bet) {
+    tgNative.haptic('notification', 'error');
+    showToast('رصيدك غير كافٍ!');
+    return;
+  }
+  tgNative.haptic('impact', 'medium');
   user.stars -= bet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
   updateBalances();
@@ -3399,7 +3586,7 @@ function crashPlaceBet() {
 }
 function crashCancelBet() {
   if (!crashState.hasBet) return;
-  if (crashState.status !== 'waiting') return;
+  tgNative.haptic('impact', 'light');
   user.stars += crashState.activeBet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(crashState.activeBet) });
   updateBalances();
@@ -3412,16 +3599,20 @@ function crashCancelBet() {
 function crashValidateBet() {
   const input = document.getElementById('crash-bet-input');
   sanitizeDigits(input);
-  let val = parseInt(input.value);
-  if (!isFinite(val) || val < 1) val = 1;
+  let val = parseInt(input.value) || 1;
+  if (val < 1) val = 1;
   if (val > 1000) val = 1000;
   input.value = String(val);
 }
 function crashAddBet(amount) {
+  tgNative.haptic('impact', 'light');
   const input = document.getElementById('crash-bet-input');
   input.value = String(Math.min((parseInt(input.value) || 0) + amount, 1000));
 }
-function crashToggleAutoCashout(checkbox) { crashState.autoCashout = checkbox.checked; }
+function crashToggleAutoCashout(checkbox) {
+  tgNative.haptic('selection');
+  crashState.autoCashout = checkbox.checked;
+}
 function crashUpdateAutoCashout(input) {
   sanitizeDigits(input);
   let val = parseFloat(input.value) || 2.00;
@@ -3429,7 +3620,8 @@ function crashUpdateAutoCashout(input) {
   if (val > 100) val = 100;
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
-}</script>
+}
+</script>
 
 </body>
 </html>
