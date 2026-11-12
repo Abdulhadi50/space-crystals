@@ -1625,7 +1625,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </button>
           <div class="ton-deposit-note">
             <i class="fas fa-info-circle"></i>
-            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.01 TON</strong></span>
+            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.0001 TON</strong></span>
           </div>
         </div>
       </div>
@@ -2167,7 +2167,7 @@ async function processTonDeposit() {
 
   const input = document.getElementById('tonDepositAmountInput');
   const amount = parseFloat(input.value);
-  if (!amount || amount < 0.01) return showToast('الحد الأدنى 0.01 TON');
+  if (!amount || amount < 0.0001) return showToast('الحد الأدنى 0.0001 TON'); // <-- Changed to 0.0001 for testing
   if (amount > 100) return showToast('الحد الأقصى 100 TON');
 
   const amountInNano = Math.floor(amount * 1e9);
