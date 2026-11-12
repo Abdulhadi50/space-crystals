@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <title>Star Nova</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -39,7 +40,6 @@
   --nav-indicator-bg: linear-gradient(135deg, rgba(22, 24, 42, 0.10), rgba(22, 24, 42, 0.03));
   --nav-indicator-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 12px rgba(30,40,80,0.08);
   --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
-  --gradient-platinum: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
   --gradient-blue: linear-gradient(135deg, #5B8DEF 0%, #3B6FDB 100%);
   --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
   --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
@@ -774,6 +774,134 @@ input[type="number"], .num-input {
 .profile-action-btn:active { transform: scale(0.98); }
 .profile-action-btn i { color: var(--text-secondary); }
 
+/* ============ TON WALLET CARD (NEW) ============ */
+.wallet-card {
+  background: linear-gradient(135deg, rgba(0,152,234,0.08), rgba(0,152,234,0.02));
+  border: 1.5px solid rgba(0,152,234,0.22);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0,152,234,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.wallet-card-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+.wallet-icon {
+  width: 44px; height: 44px; border-radius: 13px;
+  background: linear-gradient(135deg, #0098EA, #0077BE);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 20px; flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0,152,234,0.30);
+}
+.wallet-info { flex: 1; min-width: 0; text-align: right; }
+.wallet-info h4 {
+  font-size: 14px; font-weight: 800; margin-bottom: 2px;
+  color: var(--text-primary);
+}
+#walletStatus {
+  font-size: 11.5px; color: var(--text-secondary);
+  font-weight: 600;
+}
+.wallet-connected-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--success);
+  font-weight: 800;
+}
+.wallet-connected-badge i { font-size: 11px; }
+
+.wallet-connect-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0098EA, #0077BE);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 22px rgba(0,152,234,0.32), inset 0 1px 0 rgba(255,255,255,0.25);
+  transition: transform 0.15s var(--spring);
+}
+.wallet-connect-btn:active { transform: scale(0.97); }
+.wallet-connect-btn i { font-size: 14px; }
+
+.wallet-address-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.wallet-address {
+  flex: 1;
+  font-family: monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  direction: ltr;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wallet-copy-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform 0.15s var(--spring), background 0.2s;
+}
+.wallet-copy-btn:active { transform: scale(0.92); background: rgba(0,0,0,0.10); }
+
+.wallet-disconnect-btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 12px;
+  background: rgba(224,56,88,0.08);
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 800;
+  border: 1px solid rgba(224,56,88,0.20);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform 0.15s var(--spring), background 0.2s;
+}
+.wallet-disconnect-btn:active { transform: scale(0.97); background: rgba(224,56,88,0.14); }
+.wallet-disconnect-btn i { font-size: 12px; }
+
+/* TON Deposit tab styles */
+.ton-deposit-note {
+  background: rgba(0,152,234,0.06);
+  border: 1px solid rgba(0,152,234,0.15);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.ton-deposit-note i {
+  color: #0098EA;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 /* ============ MODALS ============ */
 .modal-overlay {
   position: fixed; inset: 0;
@@ -1291,6 +1419,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crypto-pending-title { font-size: 11px; }
   .crypto-pending-timer { font-size: 12px; }
   .crypto-btn { padding: 6px 9px; font-size: 10px; }
+  .wallet-card { padding: 14px; }
+  .wallet-icon { width: 38px; height: 38px; font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1423,6 +1553,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> نجوم</div>
         <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو</div>
+        <div class="tab" onclick="switchDepositTab('wallet', this)"><i class="fas fa-wallet" style="font-size: 14px;"></i> محفظة</div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
@@ -1466,6 +1597,32 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
           <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
+        </div>
+      </div>
+
+      <!-- ============ TON WALLET DEPOSIT TAB (NEW) ============ -->
+      <div id="dep-tab-wallet" class="dep-tab-content dep-layout" style="display:none;">
+        <div class="dep-top-section">
+          <div class="amount-display">
+            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="tonDepositAmountInput" value="1" oninput="updateTonDepositUI(this)">
+            <span class="dollar-sign" style="font-size: 1.6rem; font-weight: 900; color: #0098EA;">TON</span>
+          </div>
+          <div class="calc-subtext" id="tonDepositCalc">≈ 100 نجمة</div>
+        </div>
+        <div class="dep-bottom-section">
+          <div class="quick-chips">
+            <button class="chip" onclick="addTonChip(1)">+ 1 TON</button>
+            <button class="chip" onclick="addTonChip(5)">+ 5 TON</button>
+            <button class="chip" onclick="addTonChip(10)">+ 10 TON</button>
+          </div>
+          <button class="topup-btn" style="background: linear-gradient(135deg, #0098EA, #0077BE);" onclick="processTonDeposit()">
+            <i class="fas fa-wallet" style="margin-left: 6px;"></i>
+            إيداع عبر المحفظة
+          </button>
+          <div class="ton-deposit-note">
+            <i class="fas fa-info-circle"></i>
+            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1606,6 +1763,20 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
+      </div>
+
+      <!-- ============ TON WALLET CARD (NEW) ============ -->
+      <div class="wallet-card" id="walletCard">
+        <div class="wallet-card-header">
+          <div class="wallet-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="wallet-info">
+            <h4>محفظة TON</h4>
+            <div id="walletStatus">غير متصلة</div>
+          </div>
+        </div>
+        <div id="walletActions"></div>
       </div>
 
       <div class="profile-actions">
@@ -1807,6 +1978,218 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="toast" id="toast">رسالة</div>
 
 <script>'use strict';
+
+/* ============ TON CONNECT CONSTANTS (NEW) ============ */
+const TON_MANIFEST_URL = 'https://abdulhadi50.github.io/sybet/tonconnect-manifest.json';
+const APP_WALLET_ADDRESS = 'UQD6aGy2f718h3kGsEAXNDwSS6-4dOgmfCOCoSZbpdHWVIur';
+const TWA_RETURN_URL = 'https://t.me/starnovagamebot/starnova';
+const TON_TO_STARS_RATE = 100; // 1 TON = 100 stars
+
+let tonConnectUI = null;
+let connectedWalletAddress = null;
+
+/* ============ TON CONNECT INIT (NEW) ============ */
+function initTonConnect() {
+  if (!window.TON_CONNECT_UI) {
+    console.warn('[TON] SDK not loaded');
+    return;
+  }
+  try {
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: TON_MANIFEST_URL,
+      uiPreferences: {
+        twaReturnUrl: TWA_RETURN_URL
+      }
+    });
+    tonConnectUI.onStatusChange(wallet => {
+      if (wallet && wallet.account && wallet.account.address) {
+        connectedWalletAddress = wallet.account.address;
+        updateWalletUI();
+        saveWalletToFirebase(connectedWalletAddress);
+      } else {
+        connectedWalletAddress = null;
+        updateWalletUI();
+        clearWalletFromFirebase();
+      }
+    });
+    // Initial UI render
+    updateWalletUI();
+  } catch (e) {
+    console.error('[TON] Init error:', e);
+  }
+}
+
+function shortenWalletAddress(addr) {
+  if (!addr) return '';
+  if (addr.length < 12) return addr;
+  return addr.slice(0, 6) + '...' + addr.slice(-4);
+}
+
+function updateWalletUI() {
+  const statusEl = document.getElementById('walletStatus');
+  const actionsEl = document.getElementById('walletActions');
+  if (!statusEl || !actionsEl) return;
+
+  if (connectedWalletAddress) {
+    statusEl.innerHTML = '<span class="wallet-connected-badge"><i class="fas fa-check-circle"></i> متصلة</span>';
+    actionsEl.innerHTML = `
+      <div class="wallet-address-row">
+        <span class="wallet-address" title="${connectedWalletAddress}">${shortenWalletAddress(connectedWalletAddress)}</span>
+        <button class="wallet-copy-btn" onclick="copyWalletAddress()" title="نسخ العنوان">
+          <i class="fas fa-copy"></i>
+        </button>
+      </div>
+      <button class="wallet-disconnect-btn" onclick="disconnectWallet()">
+        <i class="fas fa-unlink"></i>
+        قطع الاتصال
+      </button>
+    `;
+  } else {
+    statusEl.textContent = 'غير متصلة';
+    actionsEl.innerHTML = `
+      <button class="wallet-connect-btn" onclick="connectWallet()">
+        <i class="fas fa-link"></i>
+        ربط المحفظة
+      </button>
+    `;
+  }
+}
+
+async function connectWallet() {
+  if (!tonConnectUI) {
+    showToast('جاري تحميل TON Connect...');
+    return;
+  }
+  try {
+    await tonConnectUI.openModal();
+  } catch (e) {
+    showToast('تعذر فتح نافذة الاتصال');
+  }
+}
+
+async function disconnectWallet() {
+  if (!tonConnectUI) return;
+  try {
+    await tonConnectUI.disconnect();
+    showToast('تم قطع الاتصال بالمحفظة');
+  } catch (e) {
+    showToast('حدث خطأ أثناء قطع الاتصال');
+  }
+}
+
+function copyWalletAddress() {
+  if (connectedWalletAddress) copyText(connectedWalletAddress);
+}
+
+async function saveWalletToFirebase(address) {
+  if (!db) return;
+  try {
+    await db.collection('users').doc(user.id).set({
+      tonWallet: address,
+      tonWalletUpdatedAt: Date.now()
+    }, { merge: true });
+  } catch (e) {
+    console.log('[TON] Save error:', e);
+  }
+}
+
+async function clearWalletFromFirebase() {
+  if (!db) return;
+  try {
+    await db.collection('users').doc(user.id).set({
+      tonWallet: null
+    }, { merge: true });
+  } catch (e) {
+    console.log('[TON] Clear error:', e);
+  }
+}
+
+/* ============ TON WALLET DEPOSIT (NEW) ============ */
+function updateTonDepositUI(input) {
+  sanitizeDigits(input);
+  let val = parseFloat(input.value) || 0;
+  if (val > 100) { input.value = '100'; val = 100; }
+  adjustInputWidth(input);
+  const stars = Math.floor(val * TON_TO_STARS_RATE);
+  const calcEl = document.getElementById('tonDepositCalc');
+  if (calcEl) {
+    calcEl.innerHTML = `≈ ${formatNum(stars)} نجمة`;
+  }
+}
+
+function addTonChip(amount) {
+  const input = document.getElementById('tonDepositAmountInput');
+  const current = parseFloat(input.value) || 0;
+  const newVal = Math.min(current + amount, 100);
+  input.value = String(Math.round(newVal * 100) / 100);
+  updateTonDepositUI(input);
+}
+
+async function processTonDeposit() {
+  if (!tonConnectUI) {
+    showToast('TON Connect غير جاهز، يرجى المحاولة لاحقاً');
+    return;
+  }
+
+  // Check wallet connection
+  if (!connectedWalletAddress) {
+    showToast('يرجى ربط المحفظة أولاً');
+    setTimeout(() => go('profile'), 1200);
+    return;
+  }
+
+  const input = document.getElementById('tonDepositAmountInput');
+  const amount = parseFloat(input.value);
+  if (!amount || amount < 0.1) return showToast('الحد الأدنى 0.1 TON');
+  if (amount > 100) return showToast('الحد الأقصى 100 TON');
+
+  const amountInNano = Math.floor(amount * 1e9);
+
+  try {
+    const tx = {
+      validUntil: Math.floor(Date.now() / 1000) + 600,
+      messages: [{
+        address: APP_WALLET_ADDRESS,
+        amount: String(amountInNano)
+      }]
+    };
+
+    const result = await tonConnectUI.sendTransaction(tx);
+
+    // Save pending deposit for server verification
+    if (db) {
+      try {
+        await db.collection('ton_deposits').add({
+          userId: user.id,
+          userName: user.name,
+          amountTON: amount,
+          amountNano: amountInNano,
+          walletAddress: connectedWalletAddress,
+          boc: result.boc,
+          status: 'pending',
+          createdAt: Date.now()
+        });
+      } catch (dbErr) {
+        console.log('[TON] Failed to save deposit:', dbErr);
+      }
+    }
+
+    showToast('تم إرسال المعاملة! سيتم التحقق منها قريباً');
+    setTimeout(() => {
+      showToast(`ستضاف ${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} نجمة بعد التحقق`);
+    }, 1800);
+
+    // Reset input
+    input.value = '1';
+    updateTonDepositUI(input);
+
+  } catch (e) {
+    console.error('[TON] Transaction error:', e);
+    showToast('فشلت المعاملة أو تم إلغاؤها');
+  }
+}
+
+/* ============ INIT MAIN APP ============ */
 document.addEventListener('contextmenu', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   e.preventDefault();
@@ -2063,57 +2446,37 @@ function startLoadTimer() {
 async function retryLoad() {
   closeModal('modalLoadError');
   userDataLoaded = false;
-
-  // Reset displayed balances to 0 while retrying
   user.stars = 0;
   user.tickets = 0;
   user.referrals = 0;
   updateBalances();
-
   startLoadTimer();
-
-  // Reinit Firebase if needed
   if (!db) {
     try {
       if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
       db = firebase.firestore();
       db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    } catch (e) {
-      console.error('Firebase reinit failed:', e);
-      return;
-    }
+    } catch (e) { return; }
   }
-
   await fetchUserData();
-
   Promise.all([
-    loadTasks(),
-    loadWithdrawalHistory(),
-    calibrateServerTime(),
-    loadCrashHistory()
+    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
   ]).then(async () => {
     await processReferralOnStartup().catch(() => {});
     updateManualRefCardVisibility();
   }).catch(e => console.error('Secondary load failed:', e));
 }
 
-/* ============ REFERRAL: AWARD SYSTEM ============ */
 async function awardReferral(referrerId, source = 'url') {
   const currentUserId = user.id;
   if (!db) return { ok: false, error: 'no_db' };
   if (!referrerId || referrerId === currentUserId) return { ok: false, error: 'self' };
-
   const userRef = db.collection('users').doc(currentUserId);
   const referrerRef = db.collection('users').doc(referrerId);
-
   const userDoc = await userRef.get();
-  if (userDoc.exists && userDoc.data().referredBy) {
-    return { ok: false, error: 'already_referred' };
-  }
-
+  if (userDoc.exists && userDoc.data().referredBy) return { ok: false, error: 'already_referred' };
   const referrerDoc = await referrerRef.get();
   if (!referrerDoc.exists) return { ok: false, error: 'referrer_not_found' };
-
   await db.runTransaction(async (transaction) => {
     const freshUser = await transaction.get(userRef);
     if (freshUser.exists && freshUser.data().referredBy) throw new Error('Already referred');
@@ -2128,7 +2491,6 @@ async function awardReferral(referrerId, source = 'url') {
       tickets: firebase.firestore.FieldValue.increment(2)
     });
   });
-
   return { ok: true };
 }
 
@@ -2145,12 +2507,8 @@ async function processReferralOnStartup() {
       updateBalances();
       updateManualRefCardVisibility();
       showToast('تم قبول الدعوة! حصلت على تذكرة 🎟️');
-    } else {
-      console.log('[Referral] Skipped:', result.error);
     }
-  } catch (e) {
-    console.log('[Referral] Error:', e.message);
-  }
+  } catch (e) {}
 }
 
 async function submitManualReferral(btn) {
@@ -2159,11 +2517,9 @@ async function submitManualReferral(btn) {
   if (!refId) return showToast('أدخل معرف الداعي');
   if (refId === user.id) return showToast('لا يمكنك استخدام معرفك الخاص');
   if (user.referredBy) return showToast('لديك داعٍ بالفعل');
-
   const oldText = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
   try {
     const result = await awardReferral(refId, 'manual');
     if (result.ok) {
@@ -2183,12 +2539,8 @@ async function submitManualReferral(btn) {
     } else {
       showToast('حدث خطأ، حاول لاحقاً');
     }
-  } catch (e) {
-    showToast('حدث خطأ، حاول لاحقاً');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = oldText;
-  }
+  } catch (e) { showToast('حدث خطأ، حاول لاحقاً'); }
+  finally { btn.disabled = false; btn.innerHTML = oldText; }
 }
 
 function updateManualRefCardVisibility() {
@@ -2198,27 +2550,17 @@ function updateManualRefCardVisibility() {
   else card.classList.add('show');
 }
 
-/* ============ INIT FIREBASE (called on start & retry) ============ */
 async function initFirebase() {
   userDataLoaded = false;
   startLoadTimer();
-
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-  } catch (e) {
-    console.error('Firebase init failed:', e);
-    return;
-  }
-
+  } catch (e) { return; }
   await fetchUserData();
-
   Promise.all([
-    loadTasks(),
-    loadWithdrawalHistory(),
-    calibrateServerTime(),
-    loadCrashHistory()
+    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
   ]).then(async () => {
     await processReferralOnStartup().catch(() => {});
     updateManualRefCardVisibility();
@@ -2252,9 +2594,7 @@ async function fetchUserData() {
     document.getElementById('refLinkText').innerText = `https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}`;
     document.getElementById('refIdText').innerText = user.id;
     markUserDataLoaded();
-  } catch (e) {
-    console.error('fetchUserData failed:', e);
-  }
+  } catch (e) { console.error('fetchUserData failed:', e); }
 }
 
 async function syncUserData(updates) {
@@ -2263,14 +2603,15 @@ async function syncUserData(updates) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Show the app immediately - no splash
   document.getElementById('app').classList.add('ready');
-
   initTelegram();
   initCountryTgs();
   initSlots();
+  initTonConnect();
   adjustInputWidth(document.getElementById('depositAmountInput'));
   adjustInputWidth(document.getElementById('cryptoAmountInput'));
+  const tonInp = document.getElementById('tonDepositAmountInput');
+  if (tonInp) adjustInputWidth(tonInp);
   loadCryptoInvoice();
   initFirebase();
 });
@@ -2286,20 +2627,16 @@ function exitGame() { go('home'); }
 function go(viewName) {
   if (viewName === 'properties') { window.location.href = './properties.html'; return; }
   if (viewName === 'spaceClock') { window.location.href = './space.html'; return; }
-
   const GAME_VIEWS = ['crash'];
   const appContainer = document.getElementById('app');
   if (GAME_VIEWS.includes(viewName)) appContainer.classList.add('in-game');
   else appContainer.classList.remove('in-game');
-
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const target = document.getElementById('view-' + viewName);
   if (target) target.classList.add('active');
-
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.nav-profile').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.dock-home-btn').forEach(n => n.classList.remove('active'));
-
   const activeNav = document.querySelector(`.nav-item[data-view="${viewName}"]`);
   const activeProfile = document.querySelector(`.nav-profile[data-view="${viewName}"]`);
   const activeHome = document.querySelector(`.dock-home-btn[data-view="${viewName}"]`);
@@ -2311,12 +2648,9 @@ function go(viewName) {
   } else if (activeProfile) {
     activeProfile.classList.add('active');
   }
-
   updateTelegramBackButton(viewName);
-
   const mainScroll = document.getElementById('mainScroll');
   mainScroll.classList.remove('crash-mode');
-
   if (viewName === 'crash') {
     mainScroll.classList.add('crash-mode');
     startCrashGame();
@@ -2324,15 +2658,12 @@ function go(viewName) {
   } else if (viewName === 'slots') slotsUpdateBalance();
   else if (viewName === 'withdraw') loadWithdrawalHistory();
   else if (viewName === 'referral') updateManualRefCardVisibility();
-
+  else if (viewName === 'profile') updateWalletUI();
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateBalances() {
-  const setText = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.innerText = val;
-  };
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
   setText('topStars', formatNum(user.stars));
   setText('topTickets', formatNum(user.tickets));
   setText('statStars', formatNum(user.stars));
@@ -2367,25 +2698,21 @@ function initSlots() {
   }
   slotsUpdateBalance(); slotsUpdateBetUI();
 }
-
 function slotsUpdateBetUI() {
   document.querySelectorAll('.slots-bet-btn').forEach(btn => {
     btn.classList.toggle('active', parseInt(btn.dataset.bet) === slotsState.currentBet);
   });
   document.getElementById('slotsSpinCost').innerText = slotsState.currentBet;
 }
-
 function slotsChangeBet(bet) {
   if (slotsState.isSpinning) return;
   slotsState.currentBet = bet;
   slotsUpdateBetUI();
 }
-
 function slotsUpdateBalance() {
   const el = document.getElementById('slotsResult');
   if (el && !slotsState.isSpinning) { el.innerText = 'اختر رهانك'; el.className = 'slots-result'; }
 }
-
 function getSlotOutcome() {
   const bet = slotsState.currentBet;
   const config = SLOTS_CONFIG[bet];
@@ -2396,7 +2723,6 @@ function getSlotOutcome() {
   const randomKey = keys[Math.floor(Math.random() * keys.length)];
   return { type: 'win', id: randomKey, value: config.table[randomKey] };
 }
-
 function showSlotsWinModal(prize) {
   const winIcon = document.getElementById('slots-win-icon');
   const winValue = document.getElementById('slots-win-value');
@@ -2405,29 +2731,23 @@ function showSlotsWinModal(prize) {
   winValue.style.color = '#FFD700';
   openModal('slots-win-modal');
 }
-
 async function slotsSpin() {
   if (slotsState.isSpinning) return;
   const bet = slotsState.currentBet;
   if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
-
   slotsState.isSpinning = true;
   const spinBtn = document.getElementById('slotsSpinBtn');
   spinBtn.disabled = true;
   document.querySelectorAll('.slots-bet-btn').forEach(b => b.disabled = true);
-
   user.stars -= bet;
   updateBalances();
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
-
   const resultEl = document.getElementById('slotsResult');
   resultEl.innerText = '...';
   resultEl.className = 'slots-result';
   document.querySelectorAll('.slots-reel-item').forEach(i => i.classList.remove('win'));
-
   const outcome = getSlotOutcome();
   let finalGrid = [[],[],[]];
-
   if (outcome.type === 'win') {
     for (let r = 0; r < 3; r++) {
       for (let row = 0; row < 3; row++) {
@@ -2453,13 +2773,11 @@ async function slotsSpin() {
       finalGrid[0][1] = safeId;
     }
   }
-
   const itemEl = document.querySelector('.slots-reel-item');
   const ITEM_HEIGHT = itemEl ? itemEl.getBoundingClientRect().height : 80;
   const numRandomItems = 40;
   const numExtraItems = 10;
   const durations = [1800, 2200, 2600];
-
   for (let r = 0; r < 3; r++) {
     const track = document.getElementById('reelTrack' + r);
     track.innerHTML = '';
@@ -2485,7 +2803,6 @@ async function slotsSpin() {
       track.style.transform = `translateY(${endY}px)`;
     }, r * 100);
   }
-
   setTimeout(async () => {
     try {
       let winAmount = 0;
@@ -2518,7 +2835,6 @@ async function slotsSpin() {
     }
   }, durations[2] + 300);
 }
-
 function slotsHasWinningLine(grid) {
   const m0 = grid[0][1], m1 = grid[1][1], m2 = grid[2][1];
   if (m0 === m1 && m1 === m2) return true;
@@ -2528,17 +2844,14 @@ function slotsHasWinningLine(grid) {
   if (b0 === b1 && b1 === b2) return true;
   return false;
 }
-
 function slotsShowPrizes() {
   const container = document.getElementById('slots-prizes-grid');
   container.innerHTML = '';
   const config = SLOTS_CONFIG[slotsState.currentBet];
-
   const loseDiv = document.createElement('div');
   loseDiv.className = 'prize-grid-item';
   loseDiv.innerHTML = `<img src="https://img.icons8.com/color/96/000000/cancel.png" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="Nothing"><div class="prize-val"><img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> 0</div>`;
   container.appendChild(loseDiv);
-
   Object.entries(config.table).sort((a,b) => a[1] - b[1]).forEach(([symId, val]) => {
     const sym = SLOT_SYMBOLS[symId];
     const div = document.createElement('div');
@@ -2561,7 +2874,6 @@ function formatRemain(ms) {
   const s = Math.floor((ms % 60000) / 1000);
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
-
 async function initDailyLogin() {
   const container = document.getElementById('dailyWeekDays');
   const btn = document.getElementById('dailyClaimBtn');
@@ -2612,7 +2924,6 @@ async function initDailyLogin() {
     dailyTimerInterval = setInterval(updateTimer, 1000);
   }
 }
-
 async function claimDailyReward() {
   if (isClaimingDaily) return;
   isClaimingDaily = true;
@@ -2656,7 +2967,6 @@ async function claimDailyReward() {
     initDailyLogin();
   } finally { isClaimingDaily = false; }
 }
-
 async function loadTasks() {
   const container = document.getElementById('tasksContainer');
   if (!db) return;
@@ -2681,7 +2991,6 @@ async function loadTasks() {
     container.innerHTML = html;
   } catch(e) {}
 }
-
 function openTaskSheet(taskId) {
   const task = tasksCache.find(t => t.id === taskId);
   if (!task) return;
@@ -2736,6 +3045,10 @@ function switchDepositTab(tab, el) {
   document.querySelectorAll('.dep-tab-content').forEach(c => c.style.display = 'none');
   const target = document.getElementById('dep-tab-' + tab);
   target.style.display = target.classList.contains('dep-layout') ? 'flex' : 'block';
+  if (tab === 'wallet') {
+    const inp = document.getElementById('tonDepositAmountInput');
+    if (inp) updateTonDepositUI(inp);
+  }
 }
 function updateDepositUI(input) {
   sanitizeDigits(input);
@@ -2764,7 +3077,6 @@ function addCryptoChip(amount) {
   input.value = String(Math.round(newVal * 10) / 10);
   updateCryptoUI(input);
 }
-
 async function processDeposit(type) {
   if (type === 'stars') {
     if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
@@ -2820,7 +3132,6 @@ async function processDeposit(type) {
     } catch(e) { showToast(e.message || 'تعذر بدء الدفع'); }
   }
 }
-
 function startCryptoTimer() {
   const banner = document.getElementById('cryptoPendingBanner');
   const timerEl = document.getElementById('cryptoPendingTimer');
@@ -2835,7 +3146,6 @@ function startCryptoTimer() {
     timerEl.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
   }, 1000);
 }
-
 function loadCryptoInvoice() {
   try {
     const raw = localStorage.getItem('sn_crypto_inv');
@@ -2849,7 +3159,6 @@ function loadCryptoInvoice() {
     }
   } catch(e) {}
 }
-
 function cancelCryptoInvoice() {
   cryptoPendingInvoice = null;
   try { localStorage.removeItem('sn_crypto_inv'); } catch(e) {}
@@ -2875,7 +3184,6 @@ async function checkCryptoStatus(btn) {
   } catch (e) { showToast('تعذر التحقق'); }
   finally { btn.innerHTML = oldTxt; btn.disabled = false; }
 }
-
 function switchWithdrawTab(tab, el) {
   document.querySelectorAll('#view-withdraw .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -2891,7 +3199,6 @@ function updateWdUI(method, input) {
   if (method === 'binance') document.getElementById('wdBinanceResult').innerText = `$${(val * 0.01).toFixed(2)}`;
   else if (method === 'gram') document.getElementById('wdGramResult').innerText = `${(val * 0.01).toFixed(2)} TON`;
 }
-
 async function loadWithdrawalHistory() {
   if (!db) { renderWithdrawHistory(); return; }
   try {
@@ -2951,10 +3258,8 @@ function renderWithdrawHistory() {
     } else showAllBtn.classList.remove('visible');
   }
 }
-
 async function processWithdraw(method) {
   if (isWithdrawing) return;
-
   let id, amount, payoutStr;
   if (method === 'binance') {
     id = document.getElementById('wdBinanceId').value;
@@ -2965,7 +3270,6 @@ async function processWithdraw(method) {
     amount = parseInt(document.getElementById('wdGramAmount').value);
     payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
-
   if (method === 'gram') {
     if (!id) return showToast('أدخل عنوان محفظة TON');
     const tonOk = /^[EU]Q[A-Za-z0-9_-]{46}$/.test(id) || /^[A-Za-z0-9_-]{48}$/.test(id);
@@ -2974,13 +3278,11 @@ async function processWithdraw(method) {
     if (!id) return showToast('أدخل معرّف Binance');
     if (!/^\d{6,12}$/.test(id)) return showToast('معرّف Binance يجب أن يكون 6-12 رقمًا');
   }
-
   if (!amount) return showToast('أدخل مبلغاً صحيحاً');
   if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 نجوم'); }
   else { if (amount < 50) return showToast('الحد الأدنى 50 نجمة'); }
   if (amount > 5000) return showToast('الحد الأقصى 5000 نجمة');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
-
   isWithdrawing = true;
   const btn = event.target;
   btn.disabled = true;
@@ -2996,7 +3298,6 @@ async function processWithdraw(method) {
       await db.collection('withdrawals').add(newWithdraw);
       await syncUserData({ stars: firebase.firestore.FieldValue.increment(-amount) });
     } else withdrawalHistory.unshift(newWithdraw);
-
     document.getElementById('successWdStars').innerText = formatNum(amount);
     document.getElementById('successWdPayout').innerText = payoutStr;
     openModal('modalWithdrawSuccess');
@@ -3028,7 +3329,6 @@ function switchRefTab(tab, el) {
   document.getElementById('ref-tab-' + tab).style.display = 'block';
   if (tab === 'ranking' && !globalRankingLoaded) loadGlobalRanking();
 }
-
 async function loadGlobalRanking() {
   const podiumContainer = document.getElementById('podiumContainer');
   const list = document.getElementById('rankingList');
@@ -3063,7 +3363,6 @@ async function loadGlobalRanking() {
       podium.appendChild(el);
     });
     podiumContainer.appendChild(podium);
-
     list.innerHTML = '';
     allUsers.slice(3).forEach((u, i) => {
       const rank = i + 4;
@@ -3077,7 +3376,6 @@ async function loadGlobalRanking() {
     globalRankingLoaded = true;
   } catch(e) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">تعذر التحميل</p>'; }
 }
-
 function shareReferral() {
   const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=انضم إلى Star Nova واربح جوائز!`;
   if (tg) tg.openTelegramLink(url); else window.open(url, '_blank');
@@ -3101,7 +3399,6 @@ const crashState = {
   startTime: 0, waitingEndTime: 0, roundId: null
 };
 let crashHistory = [];
-
 function isCrashViewActive() { return document.getElementById('view-crash').classList.contains('active'); }
 function crashSetRocketActive(a) { const e = document.getElementById('crash-rocket-tgs'); if (e) { e.classList.toggle('active', a); if (a) TGS.replay(['crash-rocket-tgs']); } }
 function crashSetWaitingActive(a) { const e = document.getElementById('crash-waiting-tgs'); if (e) { e.classList.toggle('active', a); if (a) TGS.replay(['crash-waiting-tgs']); } }
@@ -3115,7 +3412,6 @@ function crashSetMultiplierDisplay(t, s) {
   else if (s === 'crashed') e.classList.add('crashed');
 }
 function crashSetCountdownDisplay(t, v) { const e = document.getElementById('crash-countdown-display'); if (e) { e.textContent = t; e.classList.toggle('active', !!v); } }
-
 async function loadCrashHistory() {
   if (!db) { renderCrashHistoryStrip(); return; }
   try {
@@ -3232,20 +3528,16 @@ function crashStartWaitingPhase() {
   crashState.countdown = 6;
   crashState.roundId = null;
   crashState.waitingEndTime = Date.now() + 6000;
-
   const area = document.getElementById('crash-game-area');
   const btn = document.getElementById('crash-main-btn');
   if (area) area.classList.remove('flying');
   crashSetMultiplierDisplay('', 'waiting');
   crashSetCountdownDisplay(crashState.countdown + 's', true);
-
   if (crashState.hasBet) { if (btn) { btn.className = 'crash-main-btn cancel'; btn.innerText = 'Cancel bet'; } }
   else { if (btn) { btn.className = 'crash-main-btn'; btn.innerText = 'Place bet'; } }
-
   crashSetRocketActive(false);
   crashSetExplosionActive(false);
   crashSetWaitingActive(true);
-
   if (crashState.countdownInterval) clearTimeout(crashState.countdownInterval);
   const tick = () => {
     if (crashState.status !== 'waiting') return;
@@ -3264,24 +3556,20 @@ function crashStartFlyingPhase() {
   crashState.startTime = Date.now();
   crashState.crashPoint = crashGenerateCrashPoint();
   crashState.roundId = 'r_' + user.id + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-
   const area = document.getElementById('crash-game-area');
   const btn = document.getElementById('crash-main-btn');
   if (area) area.classList.add('flying');
-
   crashSetCountdownDisplay('', false);
   crashSetMultiplierDisplay('1.00x', '');
   crashSetWaitingActive(false);
   crashSetExplosionActive(false);
   crashSetRocketActive(true);
-
   if (crashState.hasBet && !crashState.hasCashedOut) {
     saveActiveCrashRound({
       status: 'flying', startTime: crashState.startTime,
       crashPoint: crashState.crashPoint, activeBet: crashState.activeBet, hasCashedOut: false
     });
   }
-
   if (crashState.hasBet) {
     if (btn) {
       btn.innerText = `CASH OUT ${(crashState.activeBet * crashState.multiplier).toFixed(2)}`;
@@ -3290,7 +3578,6 @@ function crashStartFlyingPhase() {
   } else {
     if (btn) { btn.innerText = 'Waiting...'; btn.className = 'crash-main-btn disabled'; }
   }
-
   function loop() {
     if (crashState.status !== 'flying') return;
     const elapsed = (Date.now() - crashState.startTime) / 1000;
@@ -3429,7 +3716,8 @@ function crashUpdateAutoCashout(input) {
   if (val > 100) val = 100;
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
-}</script>
+}
+</script>
 
 </body>
 </html>
