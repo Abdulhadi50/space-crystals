@@ -377,6 +377,7 @@ input[type="number"], .num-input {
   font-size: 17px; font-weight: 800;
   transition: transform 0.15s var(--spring);
   box-shadow: 0 12px 30px rgba(22,24,42,0.20), inset 0 1px 0 rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .topup-btn:active { transform: scale(0.97); }
 .btn-secondary {
@@ -789,11 +790,13 @@ input[type="number"], .num-input {
 }
 .wallet-icon {
   width: 44px; height: 44px; border-radius: 13px;
-  background: linear-gradient(135deg, #0098EA, #0077BE);
+  background: #ffffff;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 20px; flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0,152,234,0.30);
+  flex-shrink: 0;
+  border: 1px solid rgba(0,152,234,0.15);
+  box-shadow: 0 4px 12px rgba(0,152,234,0.15);
 }
+.wallet-icon img { width: 32px; height: 32px; object-fit: contain; }
 .wallet-info { flex: 1; min-width: 0; text-align: right; }
 .wallet-info h4 {
   font-size: 14px; font-weight: 800; margin-bottom: 2px;
@@ -1420,7 +1423,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   .crypto-pending-timer { font-size: 12px; }
   .crypto-btn { padding: 6px 9px; font-size: 10px; }
   .wallet-card { padding: 14px; }
-  .wallet-icon { width: 38px; height: 38px; font-size: 17px; }
+  .wallet-icon { width: 38px; height: 38px; }
+  .wallet-icon img { width: 26px; height: 26px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1553,7 +1557,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> نجوم</div>
         <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو</div>
-        <div class="tab" onclick="switchDepositTab('wallet', this)"><i class="fas fa-wallet" style="font-size: 14px;"></i> محفظة</div>
+        <div class="tab" onclick="switchDepositTab('wallet', this)"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 16px; height: 16px; object-fit: contain;"> TON WALLET</div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
@@ -1600,7 +1604,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
       </div>
 
-      <!-- ============ TON WALLET DEPOSIT TAB (NEW) ============ -->
+      <!-- ============ TON WALLET DEPOSIT TAB ============ -->
       <div id="dep-tab-wallet" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
           <div class="amount-display">
@@ -1616,12 +1620,12 @@ input:checked + .slider:before { transform: translateX(22px); }
             <button class="chip" onclick="addTonChip(10)">+ 10 TON</button>
           </div>
           <button class="topup-btn" style="background: linear-gradient(135deg, #0098EA, #0077BE);" onclick="processTonDeposit()">
-            <i class="fas fa-wallet" style="margin-left: 6px;"></i>
-            إيداع عبر المحفظة
+            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 22px; height: 22px; object-fit: contain; margin-left: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            إيداع عبر TON WALLET
           </button>
           <div class="ton-deposit-note">
             <i class="fas fa-info-circle"></i>
-            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.</span>
+            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.01 TON</strong></span>
           </div>
         </div>
       </div>
@@ -1765,14 +1769,14 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
       </div>
 
-      <!-- ============ TON WALLET CARD (NEW) ============ -->
+      <!-- ============ TON WALLET CARD ============ -->
       <div class="wallet-card" id="walletCard">
         <div class="wallet-card-header">
           <div class="wallet-icon">
-            <i class="fas fa-wallet"></i>
+            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON">
           </div>
           <div class="wallet-info">
-            <h4>محفظة TON</h4>
+            <h4>TON WALLET</h4>
             <div id="walletStatus">غير متصلة</div>
           </div>
         </div>
@@ -1979,7 +1983,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 <script>'use strict';
 
-/* ============ TON CONNECT CONSTANTS (NEW) ============ */
+/* ============ TON CONNECT CONSTANTS ============ */
 const TON_MANIFEST_URL = 'https://abdulhadi50.github.io/sybet/tonconnect-manifest.json';
 const APP_WALLET_ADDRESS = 'UQD6aGy2f718h3kGsEAXNDwSS6-4dOgmfCOCoSZbpdHWVIur';
 const TWA_RETURN_URL = 'https://t.me/starnovagamebot/starnova';
@@ -1988,7 +1992,7 @@ const TON_TO_STARS_RATE = 100; // 1 TON = 100 stars
 let tonConnectUI = null;
 let connectedWalletAddress = null;
 
-/* ============ TON CONNECT INIT (NEW) ============ */
+/* ============ TON CONNECT INIT ============ */
 function initTonConnect() {
   if (!window.TON_CONNECT_UI) {
     console.warn('[TON] SDK not loaded');
@@ -2081,11 +2085,33 @@ function copyWalletAddress() {
   if (connectedWalletAddress) copyText(connectedWalletAddress);
 }
 
+/* ============ ADDRESS CONVERSION HELPER ============ */
+function convertToRawAddress(addr) {
+  if (!addr) return '';
+  if (addr.includes(':')) return addr;
+  try {
+    const b64 = addr.substring(2).replace(/-/g, '+').replace(/_/g, '/');
+    const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
+    const bin = atob(padded);
+    const workchain = bin.charCodeAt(1);
+    const wcStr = workchain === 255 ? '-1' : '0';
+    let hex = '';
+    for (let i = 2; i < 34; i++) {
+      hex += bin.charCodeAt(i).toString(16).padStart(2, '0');
+    }
+    return wcStr + ':' + hex;
+  } catch(e) {
+    return addr;
+  }
+}
+
 async function saveWalletToFirebase(address) {
   if (!db) return;
   try {
+    const rawAddress = convertToRawAddress(address); // تحويل العنوان
     await db.collection('users').doc(user.id).set({
-      tonWallet: address,
+      tonWallet: address,           // نحفظ الصيغة الودية للعرض
+      tonWalletRaw: rawAddress,     // نحفظ الصيغة الخام للبحث
       tonWalletUpdatedAt: Date.now()
     }, { merge: true });
   } catch (e) {
@@ -2097,14 +2123,15 @@ async function clearWalletFromFirebase() {
   if (!db) return;
   try {
     await db.collection('users').doc(user.id).set({
-      tonWallet: null
+      tonWallet: null,
+      tonWalletRaw: null
     }, { merge: true });
   } catch (e) {
     console.log('[TON] Clear error:', e);
   }
 }
 
-/* ============ TON WALLET DEPOSIT (NEW) ============ */
+/* ============ TON WALLET DEPOSIT ============ */
 function updateTonDepositUI(input) {
   sanitizeDigits(input);
   let val = parseFloat(input.value) || 0;
@@ -2140,7 +2167,7 @@ async function processTonDeposit() {
 
   const input = document.getElementById('tonDepositAmountInput');
   const amount = parseFloat(input.value);
-  if (!amount || amount < 0.1) return showToast('الحد الأدنى 0.1 TON');
+  if (!amount || amount < 0.01) return showToast('الحد الأدنى 0.01 TON');
   if (amount > 100) return showToast('الحد الأقصى 100 TON');
 
   const amountInNano = Math.floor(amount * 1e9);
@@ -2165,6 +2192,7 @@ async function processTonDeposit() {
           amountTON: amount,
           amountNano: amountInNano,
           walletAddress: connectedWalletAddress,
+          walletAddressRaw: convertToRawAddress(connectedWalletAddress),
           boc: result.boc,
           status: 'pending',
           createdAt: Date.now()
