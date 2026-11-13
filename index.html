@@ -1643,9 +1643,6 @@ input:checked + .slider:before { transform: translateX(22px); }
           <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بـ USDT</button>
           <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
         </div>
-        <div class="deposit-history-section" id="crypto-history">
-          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
-        </div>
       </div>
 
       <div id="dep-tab-wallet" class="dep-tab-content dep-layout" style="display:none;">
@@ -1670,9 +1667,6 @@ input:checked + .slider:before { transform: translateX(22px); }
             <i class="fas fa-info-circle"></i>
             <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.01 TON</strong></span>
           </div>
-        </div>
-        <div class="deposit-history-section" id="ton-history">
-          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
         </div>
       </div>
     </div>
@@ -2037,6 +2031,13 @@ const TON_TO_STARS_RATE = 100; // 1 TON = 100 Stars
 
 let tonConnectUI = null;
 let connectedWalletAddress = null;
+let _lastSavedRaw = null; // تتبع آخر عنوان خام تم حفظه
+
+/* ============ TON ADDRESS VALIDATION ============ */
+// يتحقق أن العنوان بصيغة raw صحيحة: workchain:64hex
+function isValidRawAddress(addr) {
+  return typeof addr === 'string' && /^-?\d+:[0-9a-fA-F]{64}$/.test(addr);
+}
 
 /* ============ TON CONNECT INIT ============ */
 function initTonConnect() {
@@ -2053,17 +2054,17 @@ function initTonConnect() {
     });
     tonConnectUI.onStatusChange(wallet => {
       if (wallet && wallet.account && wallet.account.address) {
-        const isNewConnection = connectedWalletAddress !== wallet.account.address;
         connectedWalletAddress = wallet.account.address;
         updateWalletUI();
-        saveWalletToFirebase(connectedWalletAddress, isNewConnection); // إظهار الخطأ فقط عند الربط الجديد
+        // لا نُظهر أي خطأ أثناء الاسترداد التلقائي
+        saveWalletToFirebase(connectedWalletAddress, false);
       } else {
         connectedWalletAddress = null;
+        _lastSavedRaw = null;
         updateWalletUI();
         clearWalletFromFirebase();
       }
     });
-    // Initial UI render
     updateWalletUI();
   } catch (e) {
     console.error('[TON] Init error:', e);
@@ -2133,23 +2134,25 @@ function copyWalletAddress() {
 }
 
 /* ============ ADDRESS CONVERSION HELPER ============ */
+// يقبل: friendly (UQ..., EQ...), raw (0:hex, -1:hex), hex (64 chars)
+// يعيد دائماً: raw (workchain:hex) أو نفس المُدخل إذا تعذّر التحويل
 function convertToRawAddress(addr) {
   if (!addr) return '';
-  addr = addr.trim();
-  
-  // Already raw with workchain
-  if (addr.includes(':')) return addr; 
-  
-  try {
-    // Hex without workchain
-    if (addr.length === 64 && /^[0-9a-fA-F]+$/.test(addr)) return '0:' + addr;
+  addr = String(addr).trim();
+  if (!addr) return '';
 
-    // Friendly base64url
+  // إذا كان أصلاً raw
+  if (addr.includes(':')) return addr;
+
+  // إذا كان hex فقط (64 حرف)
+  if (addr.length === 64 && /^[0-9a-fA-F]+$/.test(addr)) return '0:' + addr;
+
+  // محاولة فك الترميز كـ base64url (friendly)
+  try {
     const b64 = addr.replace(/-/g, '+').replace(/_/g, '/');
     const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
     const binary = atob(padded);
-    
-    if (binary.length < 34) return addr; // Invalid
+    if (binary.length < 34) return addr; // غير صالح
 
     const wcByte = binary.charCodeAt(1);
     const workchain = (wcByte === 0xFF) ? -1 : 0;
@@ -2164,21 +2167,30 @@ function convertToRawAddress(addr) {
 }
 
 async function saveWalletToFirebase(address, showError = false) {
-  if (!db) return;
+  if (!db || !address) return;
   try {
     const rawAddress = convertToRawAddress(address);
-    if (!rawAddress || rawAddress === address || !rawAddress.includes(':')) {
-      console.error('[TON] ❌ Conversion FAILED! raw === friendly');
-      if (showError) showToast('خطأ في تحويل المحفظة، حاول مرة أخرى');
+
+    // فحص صارم: يجب أن يكون raw صحيح
+    if (!isValidRawAddress(rawAddress)) {
+      console.error('[TON] ❌ Invalid raw address:', rawAddress, 'from:', address);
+      if (showError) showToast('تعذّر حفظ المحفظة، جرّب محفظة أخرى');
       return;
     }
+
+    // تجنّب الكتابة المتكررة لنفس العنوان
+    if (_lastSavedRaw === rawAddress) return;
+    _lastSavedRaw = rawAddress;
+
     await db.collection('users').doc(user.id).set({
       tonWallet: address,
       tonWalletRaw: rawAddress,
       tonWalletUpdatedAt: Date.now()
     }, { merge: true });
+    console.log('[TON] ✅ Wallet saved raw:', rawAddress);
   } catch (e) {
     console.error('[TON] Save error:', e);
+    if (showError) showToast('حدث خطأ أثناء حفظ المحفظة');
   }
 }
 
@@ -2191,6 +2203,23 @@ async function clearWalletFromFirebase() {
     }, { merge: true });
   } catch (e) {
     console.log('[TON] Clear error:', e);
+  }
+}
+
+// إصلاح تلقائي إذا كانت المحفظة المحفوظة خاطئة
+async function autoFixStoredWallet(userData) {
+  if (!db) return;
+  if (!userData || !userData.tonWallet) return;
+  const correctRaw = convertToRawAddress(userData.tonWallet);
+  if (!isValidRawAddress(correctRaw)) return;
+  if (userData.tonWalletRaw === correctRaw) return;
+  try {
+    await db.collection('users').doc(user.id).set({
+      tonWalletRaw: correctRaw
+    }, { merge: true });
+    console.log('[TON] 🔧 Fixed stored raw:', correctRaw);
+  } catch (e) {
+    console.warn('[TON] Auto-fix failed:', e);
   }
 }
 
@@ -2247,19 +2276,18 @@ async function processTonDeposit() {
 
     if (db) {
       try {
+        const rawAddr = convertToRawAddress(connectedWalletAddress);
         await db.collection('ton_deposits').add({
           userId: user.id,
           userName: user.name,
           amountTON: amount,
           amountNano: amountInNano,
           walletAddress: connectedWalletAddress,
-          walletAddressRaw: convertToRawAddress(connectedWalletAddress),
+          walletAddressRaw: rawAddr,
           boc: result.boc,
           status: 'pending',
           createdAt: Date.now()
         });
-        // تحديث السجل بعد الإيداع
-        loadDepositHistory();
       } catch (dbErr) {
         console.log('[TON] Failed to save deposit:', dbErr);
       }
@@ -2318,7 +2346,7 @@ function sanitizeDigits(el) {
     if (p.length > 2) {
       v = p[0] + '.' + p.slice(1).join('');
     } else if (p.length === 2 && p[1].length > 2) {
-      v = p[0] + '.' + p[1].substring(0, 2); // فقط خانتين عشريتين
+      v = p[0] + '.' + p[1].substring(0, 2);
     }
   } else {
     v = v.replace(/[^0-9]/g, '');
@@ -2678,6 +2706,8 @@ async function fetchUserData() {
       user.dailyStreak = d.dailyStreak || 0;
       user.completedTasks = d.completedTasks || [];
       user.referredBy = d.referredBy || null;
+      // إصلاح تلقائي لصيغة المحفظة المخزّنة
+      await autoFixStoredWallet(d).catch(() => {});
     } else {
       await ref.set({
         telegramId: user.id, name: user.name, photoUrl: user.photo,
@@ -2723,16 +2753,12 @@ async function pollStarsCredit(baselineStars, expectedIncrease) {
   return false;
 }
 
-/* ============ DEPOSIT HISTORY LOGIC ============ */
+/* ============ DEPOSIT HISTORY - Stars only ============ */
 async function loadDepositHistory() {
   if (!db) return;
   try {
-    // 1. جلب إيداعات Stars و USDT من مجموعة المعاملات
     const txQuery = await db.collection('transactions').where('userId', '==', user.id).get();
     let starsHist = [];
-    let cryptoHist = [];
-    let tonHist = [];
-
     txQuery.forEach(doc => {
       const d = doc.data();
       if (d.type === 'stars_purchase') {
@@ -2741,63 +2767,10 @@ async function loadDepositHistory() {
           time: d.createdAt || Date.now(),
           status: 'success'
         });
-      } else if (d.type === 'crypto_purchase') {
-        cryptoHist.push({
-          amount: (d.amountUsdCents || 0) / 100,
-          time: d.createdAt || Date.now(),
-          status: 'success'
-        });
       }
     });
-
-    // 2. جلب معاملات TON الناجحة من processed_transactions
-    let successTonTxs = [];
-    try {
-      const pTxQuery = await db.collection('processed_transactions').where('userId', '==', user.id).get();
-      pTxQuery.forEach(doc => {
-        const d = doc.data();
-        successTonTxs.push({
-          amount: d.amountTON || 0,
-          time: d.processedAt ? new Date(d.processedAt).getTime() : Date.now(), // المعالج يرسلها كـ ISO string
-          status: 'success'
-        });
-      });
-    } catch(e) { console.warn('Cannot read processed_transactions', e); }
-
-    // 3. جلب إيداعات TON المعلقة من ton_deposits
-    const tonQuery = await db.collection('ton_deposits').where('userId', '==', user.id).get();
-    tonQuery.forEach(doc => {
-      const d = doc.data();
-      
-      // التحقق مما إذا كان هذا الطلب المعلق قد تمت معالجته بالفعل (لمنع التكرار)
-      const isProcessed = successTonTxs.some(tx => 
-        Math.abs(tx.amount - d.amountTON) < 0.0001 && 
-        tx.time >= (d.createdAt || 0) - 60000 && 
-        tx.time <= (d.createdAt || 0) + 3600000
-      );
-      
-      if (!isProcessed) {
-        tonHist.push({
-          amount: d.amountTON || 0,
-          time: d.createdAt || Date.now(),
-          status: 'pending'
-        });
-      }
-    });
-    
-    // إضافة الإيداعات الناجحة إلى السجل
-    successTonTxs.forEach(tx => tonHist.push(tx));
-
-    // ترتيب من الأحدث للأقدم
-    starsHist.sort((a,b) => b.time - a.time);
-    cryptoHist.sort((a,b) => b.time - a.time);
-    tonHist.sort((a,b) => b.time - a.time);
-
-    // 4. عرض البيانات في الواجهة
+    starsHist.sort((a, b) => b.time - a.time);
     renderDepHist('stars-history', starsHist, 'Stars', ASSETS.star);
-    renderDepHist('crypto-history', cryptoHist, 'USDT', 'https://cryptologos.cc/logos/tether-usdt-logo.png');
-    renderDepHist('ton-history', tonHist, 'TON', 'https://cryptologos.cc/logos/toncoin-ton-logo.png');
-
   } catch (error) {
     console.error('Error loading deposit history:', error);
   }
@@ -2806,14 +2779,10 @@ async function loadDepositHistory() {
 function renderDepHist(containerId, list, currencyName, iconUrl) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
-  // الاحتفاظ بالعنوان وإضافة العناصر
   let html = '<div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>';
-
-  if (list.length === 0) {
+  if (!list || list.length === 0) {
     html += '<div style="text-align:center;padding:15px;color:var(--text-tertiary);font-size:12px;">لا يوجد سجل إيداعات حتى الآن</div>';
   } else {
-    // عرض آخر 10 إيداعات فقط لعدم إثقال الواجهة
     list.slice(0, 10).forEach(item => {
       const date = new Date(item.time).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       let amtStr = '';
@@ -2899,7 +2868,7 @@ function go(viewName) {
   else if (viewName === 'withdraw') loadWithdrawalHistory();
   else if (viewName === 'referral') updateManualRefCardVisibility();
   else if (viewName === 'profile') updateWalletUI();
-  else if (viewName === 'deposit') loadDepositHistory(); // تحديث السجل عند فتح صفحة الإيداع
+  else if (viewName === 'deposit') loadDepositHistory();
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -3332,7 +3301,6 @@ async function processDeposit(type) {
       const data = await resp.json();
       if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
 
-      // 🔒 نأخذ صورة عن المبلغ والرصيد قبل الدفع — لن نضيف Stars من العميل أبداً
       const paidAmount = depositAmount;
       const baselineStars = user.stars;
 
@@ -3345,7 +3313,7 @@ async function processDeposit(type) {
           } else {
             showToast('تم استلام الدفع، سيتم تحديث الرصيد قريباً');
           }
-          loadDepositHistory(); // تحديث السجل
+          loadDepositHistory();
           setTimeout(() => go('home'), 900);
         } else if (status === 'cancelled') {
           showToast('تم إلغاء الدفع');
@@ -3432,7 +3400,6 @@ async function checkCryptoStatus(btn) {
       showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
-      loadDepositHistory(); // تحديث السجل بعد الدفع
     } else if (data.status === 'expired' || data.status === 'failed') {
       showToast('انتهت الفاتورة أو فشلت');
       cancelCryptoInvoice();
