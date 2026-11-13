@@ -775,7 +775,7 @@ input[type="number"], .num-input {
 .profile-action-btn:active { transform: scale(0.98); }
 .profile-action-btn i { color: var(--text-secondary); }
 
-/* ============ TON WALLET CARD (NEW) ============ */
+/* ============ TON WALLET CARD ============ */
 .wallet-card {
   background: linear-gradient(135deg, rgba(0,152,234,0.08), rgba(0,152,234,0.02));
   border: 1.5px solid rgba(0,152,234,0.22);
@@ -1551,12 +1551,12 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view" id="view-deposit">
       <div class="page-header" style="text-align:center; margin-bottom: 15px;">
         <h2 class="page-title" style="justify-content: center;">
-          شراء نجوم <img src="https://up6.cc/2026/10/17932600818491.png" style="width: 28px; height: 28px; border-radius: 50%;">
+          شراء Stars <img src="https://up6.cc/2026/10/17932600818491.png" style="width: 28px; height: 28px; border-radius: 50%;">
         </h2>
       </div>
       <div class="tabs">
-        <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> نجوم</div>
-        <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://img.icons8.com/liquid-glass-color/999/exchange-money-ethereum.png" class="crypto-icon"> كريبتو</div>
+        <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="https://up6.cc/2026/10/17932600818491.png"> Stars</div>
+        <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT"> USDT</div>
         <div class="tab" onclick="switchDepositTab('wallet', this)"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 16px; height: 16px; object-fit: contain;"> TON WALLET</div>
       </div>
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
@@ -1599,7 +1599,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
             <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
           </div>
-          <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بالكريبتو</button>
+          <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بـ USDT</button>
           <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
         </div>
       </div>
@@ -1611,7 +1611,7 @@ input:checked + .slider:before { transform: translateX(22px); }
             <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="tonDepositAmountInput" value="1" oninput="updateTonDepositUI(this)">
             <span class="dollar-sign" style="font-size: 1.6rem; font-weight: 900; color: #0098EA;">TON</span>
           </div>
-          <div class="calc-subtext" id="tonDepositCalc">≈ 100 نجمة</div>
+          <div class="calc-subtext" id="tonDepositCalc">≈ 100 Stars</div>
         </div>
         <div class="dep-bottom-section">
           <div class="quick-chips">
@@ -1649,7 +1649,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           <label>معرّف Binance Pay</label>
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = $0.10 | الحد الأدنى 50 نجمة | الأقصى 5000 نجمة</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = $0.10 | الحد الأدنى 50 Stars | الأقصى 5000 Stars</p>
         <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
       </div>
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
@@ -1662,7 +1662,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           <label>عنوان محفظة TON</label>
           <input type="text" class="wd-input" placeholder="TON Wallet Address" id="wdGramId">
         </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 نجوم = 0.1 TON | الحد الأدنى 10 نجوم</p>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px; font-weight:600; text-align:center;">10 Stars = 0.1 TON | الحد الأدنى 10 Stars</p>
         <button class="topup-btn" onclick="processWithdraw('gram')">تقديم الطلب</button>
       </div>
       <button class="btn-secondary" style="margin-top: 20px;" onclick="openWithdrawHistory()">
@@ -1763,7 +1763,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="profile-nav-card-text">
             <h4>إيداع</h4>
-            <p>اشحن رصيدك من النجوم</p>
+            <p>اشحن رصيدك من Stars</p>
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
@@ -1888,7 +1888,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
     <h3>رصيدك غير كافٍ!</h3>
-    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> نجمة إضافية. يرجى شحن رصيدك.</p>
+    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> Stars إضافية. يرجى شحن رصيدك.</p>
     <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">شحن الرصيد</button>
   </div>
 </div>
@@ -1897,7 +1897,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
     <h3>تم تقديم الطلب بنجاح</h3>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> نجمة</p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> Stars</p>
     <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">وستحصل على <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
     <div style="background: rgba(201,121,26,0.10); color: #a86810; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; margin-bottom: 24px; border: 1px solid rgba(201,121,26,0.22);">
       <i class="fas fa-clock"></i> سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.
@@ -1945,7 +1945,7 @@ input:checked + .slider:before { transform: translateX(22px); }
       <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
       <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
       <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
-      <li><strong>المسؤولية:</strong> اللعب مقابل النجوم هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمله من خسارة.</li>
+      <li><strong>المسؤولية:</strong> اللعب مقابل Stars هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمله من خسارة.</li>
     </ul>
     <button class="modal-btn" onclick="closeModal('modal-terms')">موافق</button>
   </div>
@@ -1987,7 +1987,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 const TON_MANIFEST_URL = 'https://abdulhadi50.github.io/sybet/tonconnect-manifest.json';
 const APP_WALLET_ADDRESS = 'UQD6aGy2f718h3kGsEAXNDwSS6-4dOgmfCOCoSZbpdHWVIur';
 const TWA_RETURN_URL = 'https://t.me/starnovagamebot/starnova';
-const TON_TO_STARS_RATE = 100; // 1 TON = 100 stars
+const TON_TO_STARS_RATE = 100; // 1 TON = 100 Stars
 
 let tonConnectUI = null;
 let connectedWalletAddress = null;
@@ -2108,10 +2108,10 @@ function convertToRawAddress(addr) {
 async function saveWalletToFirebase(address) {
   if (!db) return;
   try {
-    const rawAddress = convertToRawAddress(address); // تحويل العنوان
+    const rawAddress = convertToRawAddress(address);
     await db.collection('users').doc(user.id).set({
-      tonWallet: address,           // نحفظ الصيغة الودية للعرض
-      tonWalletRaw: rawAddress,     // نحفظ الصيغة الخام للبحث
+      tonWallet: address,
+      tonWalletRaw: rawAddress,
       tonWalletUpdatedAt: Date.now()
     }, { merge: true });
   } catch (e) {
@@ -2140,7 +2140,7 @@ function updateTonDepositUI(input) {
   const stars = Math.floor(val * TON_TO_STARS_RATE);
   const calcEl = document.getElementById('tonDepositCalc');
   if (calcEl) {
-    calcEl.innerHTML = `≈ ${formatNum(stars)} نجمة`;
+    calcEl.innerHTML = `≈ ${formatNum(stars)} Stars`;
   }
 }
 
@@ -2158,7 +2158,6 @@ async function processTonDeposit() {
     return;
   }
 
-  // Check wallet connection
   if (!connectedWalletAddress) {
     showToast('يرجى ربط المحفظة أولاً');
     setTimeout(() => go('profile'), 1200);
@@ -2183,7 +2182,6 @@ async function processTonDeposit() {
 
     const result = await tonConnectUI.sendTransaction(tx);
 
-    // Save pending deposit for server verification
     if (db) {
       try {
         await db.collection('ton_deposits').add({
@@ -2204,10 +2202,9 @@ async function processTonDeposit() {
 
     showToast('تم إرسال المعاملة! سيتم التحقق منها قريباً');
     setTimeout(() => {
-      showToast(`ستضاف ${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} نجمة بعد التحقق`);
+      showToast(`ستضاف ${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} Stars بعد التحقق`);
     }, 1800);
 
-    // Reset input
     input.value = '1';
     updateTonDepositUI(input);
 
@@ -2628,6 +2625,33 @@ async function fetchUserData() {
 async function syncUserData(updates) {
   if (!db) return;
   try { await db.collection('users').doc(user.id).set(updates, { merge: true }); } catch (e) {}
+}
+
+/* ============ SAFE STARS PAYMENT HANDLER (Idempotency) ============ */
+/* Lightweight refresh - يجلب Stars فقط دون إعادة تهيئة كامل الواجهة */
+async function refreshUserStars() {
+  if (!db) return;
+  try {
+    const doc = await db.collection('users').doc(user.id).get();
+    if (doc.exists) {
+      const newStars = doc.data().stars || 0;
+      if (newStars !== user.stars) {
+        user.stars = newStars;
+        updateBalances();
+      }
+    }
+  } catch (e) {}
+}
+
+/* ينتظر تحديث السيرفر للرصيد (webhook هو مصدر الحقيقة) */
+async function pollStarsCredit(baselineStars, expectedIncrease) {
+  const target = baselineStars + expectedIncrease;
+  for (let i = 0; i < 10; i++) {
+    await new Promise(r => setTimeout(r, 900));
+    await refreshUserStars();
+    if (user.stars >= target) return true;
+  }
+  return false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -3055,7 +3079,7 @@ async function checkTaskAction() {
     if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
-    showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'نجمة'}`);
+    showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'Stars'}`);
     closeTaskSheet(); loadTasks();
   } catch (e) { showToast('حدث خطأ'); }
   finally { btn.disabled = false; btn.innerText = 'Check task'; }
@@ -3118,15 +3142,28 @@ async function processDeposit(type) {
       });
       const data = await resp.json();
       if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
-      tg.openInvoice(data.invoiceLink, (status) => {
+
+      // 🔒 نأخذ صورة عن المبلغ والرصيد قبل الدفع — لن نضيف Stars من العميل أبداً
+      const paidAmount = depositAmount;
+      const baselineStars = user.stars;
+
+      tg.openInvoice(data.invoiceLink, async (status) => {
         if (status === 'paid') {
-          user.stars += depositAmount;
-          updateBalances();
-          syncUserData({ stars: firebase.firestore.FieldValue.increment(depositAmount) });
-          showToast(`تمت إضافة ${formatNum(depositAmount)} نجمة بنجاح!`);
-          go('home');
-        } else if (status === 'cancelled') showToast('تم إلغاء الدفع');
-        else showToast('فشل الدفع');
+          showToast('جاري التحقق من الدفع...');
+          const confirmed = await pollStarsCredit(baselineStars, paidAmount);
+          if (confirmed) {
+            showToast(`تمت إضافة ${formatNum(paidAmount)} Stars بنجاح! ⭐`);
+          } else {
+            showToast('تم استلام الدفع، سيتم تحديث الرصيد قريباً');
+          }
+          setTimeout(() => go('home'), 900);
+        } else if (status === 'cancelled') {
+          showToast('تم إلغاء الدفع');
+        } else if (status === 'failed') {
+          showToast('فشل الدفع');
+        } else if (status === 'pending') {
+          showToast('الدفع قيد المعالجة...');
+        }
       });
     } catch (e) { showToast(e.message || 'تعذر بدء الدفع'); }
   } else if (type === 'crypto') {
@@ -3276,7 +3313,7 @@ function renderWithdrawHistory() {
     }
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `<div class="history-main"><div class="history-amount">${formatNum(w.amount)} نجمة</div><div class="history-method">${methodName}</div></div><div class="status ${st.class}">${st.text}</div>`;
+    div.innerHTML = `<div class="history-main"><div class="history-amount">${formatNum(w.amount)} Stars</div><div class="history-method">${methodName}</div></div><div class="status ${st.class}">${st.text}</div>`;
     list.appendChild(div);
   });
   if (showAllBtn) {
@@ -3307,9 +3344,9 @@ async function processWithdraw(method) {
     if (!/^\d{6,12}$/.test(id)) return showToast('معرّف Binance يجب أن يكون 6-12 رقمًا');
   }
   if (!amount) return showToast('أدخل مبلغاً صحيحاً');
-  if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 نجوم'); }
-  else { if (amount < 50) return showToast('الحد الأدنى 50 نجمة'); }
-  if (amount > 5000) return showToast('الحد الأقصى 5000 نجمة');
+  if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 Stars'); }
+  else { if (amount < 50) return showToast('الحد الأدنى 50 Stars'); }
+  if (amount > 5000) return showToast('الحد الأقصى 5000 Stars');
   if (amount > user.stars) return showToast('رصيدك غير كافٍ');
   isWithdrawing = true;
   const btn = event.target;
@@ -3542,7 +3579,7 @@ async function checkAndResumeCrashRound() {
     crashStartWaitingPhase();
     const btn = document.getElementById('crash-main-btn');
     if (btn) { btn.innerText = 'Cancel bet'; btn.className = 'crash-main-btn cancel'; }
-    showToast(`تم استرداد رهانك السابق (${formatNum(active.activeBet)} نجمة)`);
+    showToast(`تم استرداد رهانك السابق (${formatNum(active.activeBet)} Stars)`);
     return true;
   }
   return false;
