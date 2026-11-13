@@ -393,6 +393,42 @@ input[type="number"], .num-input {
 .btn-secondary:active { background: rgba(0,0,0,0.06); transform: scale(0.98); }
 .btn-secondary i { font-size: 16px; color: var(--text-secondary); }
 
+/* ============ DEPOSIT HISTORY ============ */
+.deposit-history-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+.deposit-history-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dep-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+.dep-history-left { display: flex; align-items: center; gap: 10px; }
+.dep-history-icon { width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: #fff; padding: 2px; border: 1px solid var(--border); }
+.dep-history-info { display: flex; flex-direction: column; }
+.dep-history-amount { font-size: 14px; font-weight: 800; color: var(--text-primary); direction: ltr; text-align: right; }
+.dep-history-date { font-size: 10px; color: var(--text-tertiary); font-weight: 600; }
+.dep-history-status { font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
+.status-success { background: rgba(15,169,110,0.1); color: #0a8a5a; }
+.status-pending { background: rgba(201,121,26,0.1); color: #a86810; }
+.status-failed { background: rgba(224,56,88,0.1); color: #c02944; }
+
 /* ============ CRYPTO PENDING BANNER ============ */
 .crypto-pending-banner {
   display: none;
@@ -1559,6 +1595,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="tab" onclick="switchDepositTab('crypto', this)"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT"> USDT</div>
         <div class="tab" onclick="switchDepositTab('wallet', this)"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 16px; height: 16px; object-fit: contain;"> TON WALLET</div>
       </div>
+      
       <div id="dep-tab-stars" class="dep-tab-content dep-layout">
         <div class="dep-top-section">
           <div class="amount-display">
@@ -1574,7 +1611,11 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
         </div>
+        <div class="deposit-history-section" id="stars-history">
+          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
+        </div>
       </div>
+
       <div id="dep-tab-crypto" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
           <div id="cryptoPendingBanner" class="crypto-pending-banner">
@@ -1587,7 +1628,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="amount-display">
             <span class="dollar-sign">$</span>
-            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="cryptoAmountInput" value="1" oninput="updateCryptoUI(this)">
+            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="cryptoAmountInput" value="1.00" oninput="updateCryptoUI(this)">
           </div>
           <div class="calc-subtext" id="cryptoCalcSubtext" style="display:flex; justify-content:center; align-items:center; gap:5px;">
             100 <img src="https://up6.cc/2026/10/17932600818491.png" style="width:16px; height:16px; border-radius:50%;">
@@ -1602,13 +1643,15 @@ input:checked + .slider:before { transform: translateX(22px); }
           <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بـ USDT</button>
           <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
         </div>
+        <div class="deposit-history-section" id="crypto-history">
+          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
+        </div>
       </div>
 
-      <!-- ============ TON WALLET DEPOSIT TAB ============ -->
       <div id="dep-tab-wallet" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
           <div class="amount-display">
-            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="tonDepositAmountInput" value="1" oninput="updateTonDepositUI(this)">
+            <input type="text" inputmode="decimal" class="num-input" data-decimal="1" id="tonDepositAmountInput" value="1.00" oninput="updateTonDepositUI(this)">
             <span class="dollar-sign" style="font-size: 1.6rem; font-weight: 900; color: #0098EA;">TON</span>
           </div>
           <div class="calc-subtext" id="tonDepositCalc">≈ 100 Stars</div>
@@ -1627,6 +1670,9 @@ input:checked + .slider:before { transform: translateX(22px); }
             <i class="fas fa-info-circle"></i>
             <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.01 TON</strong></span>
           </div>
+        </div>
+        <div class="deposit-history-section" id="ton-history">
+          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
         </div>
       </div>
     </div>
@@ -2086,22 +2132,34 @@ function copyWalletAddress() {
 }
 
 /* ============ ADDRESS CONVERSION HELPER ============ */
-function convertToRawAddress(addr) {
-  if (!addr) return '';
-  if (addr.includes(':')) return addr;
+function convertToRawAddress(friendly) {
+  if (!friendly) return '';
+  if (friendly.includes(':')) return friendly;
+
   try {
-    const b64 = addr.substring(2).replace(/-/g, '+').replace(/_/g, '/');
+    friendly = friendly.trim();
+
+    const b64 = friendly.replace(/-/g, '+').replace(/_/g, '/');
     const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
-    const bin = atob(padded);
-    const workchain = bin.charCodeAt(1);
-    const wcStr = workchain === 255 ? '-1' : '0';
+    const binary = atob(padded);
+
+    if (binary.length < 34) {
+      console.warn('[TON] invalid friendly address length:', binary.length);
+      return friendly;
+    }
+
+    const wcByte = binary.charCodeAt(1);
+    const workchain = (wcByte === 0xFF) ? -1 : 0;
+
     let hex = '';
     for (let i = 2; i < 34; i++) {
-      hex += bin.charCodeAt(i).toString(16).padStart(2, '0');
+      hex += binary.charCodeAt(i).toString(16).padStart(2, '0');
     }
-    return wcStr + ':' + hex;
-  } catch(e) {
-    return addr;
+
+    return workchain + ':' + hex;
+  } catch (e) {
+    console.warn('[TON] convertToRawAddress failed:', e);
+    return friendly;
   }
 }
 
@@ -2109,13 +2167,21 @@ async function saveWalletToFirebase(address) {
   if (!db) return;
   try {
     const rawAddress = convertToRawAddress(address);
+    console.log('[TON] Friendly:', address);
+    console.log('[TON] Raw:', rawAddress);
+    if (!rawAddress || rawAddress === address || !rawAddress.includes(':')) {
+      console.error('[TON] ❌ Conversion FAILED! raw === friendly');
+      showToast('خطأ في تحويل المحفظة، حاول مرة أخرى');
+      return;
+    }
     await db.collection('users').doc(user.id).set({
       tonWallet: address,
       tonWalletRaw: rawAddress,
       tonWalletUpdatedAt: Date.now()
     }, { merge: true });
+    console.log('[TON] ✅ Wallet saved:', rawAddress);
   } catch (e) {
-    console.log('[TON] Save error:', e);
+    console.error('[TON] Save error:', e);
   }
 }
 
@@ -2135,7 +2201,7 @@ async function clearWalletFromFirebase() {
 function updateTonDepositUI(input) {
   sanitizeDigits(input);
   let val = parseFloat(input.value) || 0;
-  if (val > 100) { input.value = '100'; val = 100; }
+  if (val > 100) { input.value = '100.00'; val = 100; }
   adjustInputWidth(input);
   const stars = Math.floor(val * TON_TO_STARS_RATE);
   const calcEl = document.getElementById('tonDepositCalc');
@@ -2195,6 +2261,8 @@ async function processTonDeposit() {
           status: 'pending',
           createdAt: Date.now()
         });
+        // تحديث السجل بعد الإيداع
+        loadDepositHistory();
       } catch (dbErr) {
         console.log('[TON] Failed to save deposit:', dbErr);
       }
@@ -2205,7 +2273,7 @@ async function processTonDeposit() {
       showToast(`ستضاف ${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} Stars بعد التحقق`);
     }, 1800);
 
-    input.value = '1';
+    input.value = '1.00';
     updateTonDepositUI(input);
 
   } catch (e) {
@@ -2250,8 +2318,14 @@ function sanitizeDigits(el) {
   if (allowDec) {
     v = v.replace(/[^0-9.]/g, '');
     const p = v.split('.');
-    if (p.length > 2) v = p[0] + '.' + p.slice(1).join('');
-  } else v = v.replace(/[^0-9]/g, '');
+    if (p.length > 2) {
+      v = p[0] + '.' + p.slice(1).join('');
+    } else if (p.length === 2 && p[1].length > 2) {
+      v = p[0] + '.' + p[1].substring(0, 2);
+    }
+  } else {
+    v = v.replace(/[^0-9]/g, '');
+  }
   if (v !== el.value) {
     const pos = el.selectionStart;
     el.value = v;
@@ -2485,7 +2559,7 @@ async function retryLoad() {
   }
   await fetchUserData();
   Promise.all([
-    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
+    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory(), loadDepositHistory()
   ]).then(async () => {
     await processReferralOnStartup().catch(() => {});
     updateManualRefCardVisibility();
@@ -2585,7 +2659,7 @@ async function initFirebase() {
   } catch (e) { return; }
   await fetchUserData();
   Promise.all([
-    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory()
+    loadTasks(), loadWithdrawalHistory(), calibrateServerTime(), loadCrashHistory(), loadDepositHistory()
   ]).then(async () => {
     await processReferralOnStartup().catch(() => {});
     updateManualRefCardVisibility();
@@ -2628,7 +2702,6 @@ async function syncUserData(updates) {
 }
 
 /* ============ SAFE STARS PAYMENT HANDLER (Idempotency) ============ */
-/* Lightweight refresh - يجلب Stars فقط دون إعادة تهيئة كامل الواجهة */
 async function refreshUserStars() {
   if (!db) return;
   try {
@@ -2643,7 +2716,6 @@ async function refreshUserStars() {
   } catch (e) {}
 }
 
-/* ينتظر تحديث السيرفر للرصيد (webhook هو مصدر الحقيقة) */
 async function pollStarsCredit(baselineStars, expectedIncrease) {
   const target = baselineStars + expectedIncrease;
   for (let i = 0; i < 10; i++) {
@@ -2653,6 +2725,98 @@ async function pollStarsCredit(baselineStars, expectedIncrease) {
   }
   return false;
 }
+
+/* ============ DEPOSIT HISTORY LOGIC ============ */
+async function loadDepositHistory() {
+  if (!db) return;
+  try {
+    // 1. جلب إيداعات Stars و USDT من مجموعة المعاملات
+    const txQuery = await db.collection('transactions').where('userId', '==', user.id).get();
+    let starsHist = [];
+    let cryptoHist = [];
+    let tonHist = [];
+
+    txQuery.forEach(doc => {
+      const d = doc.data();
+      if (d.type === 'stars_purchase') {
+        starsHist.push({
+          amount: d.stars,
+          time: d.createdAt || Date.now(),
+          status: 'success'
+        });
+      } else if (d.type === 'crypto_purchase') {
+        cryptoHist.push({
+          amount: (d.amountUsdCents || 0) / 100,
+          time: d.createdAt || Date.now(),
+          status: 'success'
+        });
+      }
+    });
+
+    // 2. جلب إيداعات TON من مجموعة ton_deposits
+    const tonQuery = await db.collection('ton_deposits').where('userId', '==', user.id).get();
+    tonQuery.forEach(doc => {
+      const d = doc.data();
+      tonHist.push({
+        amount: d.amountTON || 0,
+        time: d.createdAt || Date.now(),
+        status: d.status === 'pending' ? 'pending' : 'success'
+      });
+    });
+
+    // ترتيب من الأحدث للأقدم
+    starsHist.sort((a,b) => b.time - a.time);
+    cryptoHist.sort((a,b) => b.time - a.time);
+    tonHist.sort((a,b) => b.time - a.time);
+
+    // 3. عرض البيانات في الواجهة
+    renderDepHist('stars-history', starsHist, 'Stars', ASSETS.star);
+    renderDepHist('crypto-history', cryptoHist, 'USDT', 'https://cryptologos.cc/logos/tether-usdt-logo.png');
+    renderDepHist('ton-history', tonHist, 'TON', 'https://cryptologos.cc/logos/toncoin-ton-logo.png');
+
+  } catch (error) {
+    console.error('Error loading deposit history:', error);
+  }
+}
+
+function renderDepHist(containerId, list, currencyName, iconUrl) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // الاحتفاظ بالعنوان وإضافة العناصر
+  let html = '<div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>';
+
+  if (list.length === 0) {
+    html += '<div style="text-align:center;padding:15px;color:var(--text-tertiary);font-size:12px;">لا يوجد سجل إيداعات حتى الآن</div>';
+  } else {
+    // عرض آخر 10 إيداعات فقط لعدم إثقال الواجهة
+    list.slice(0, 10).forEach(item => {
+      const date = new Date(item.time).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      let amtStr = '';
+      if (currencyName === 'USDT') amtStr = '$' + item.amount.toFixed(2);
+      else if (currencyName === 'TON') amtStr = item.amount.toFixed(2) + ' TON';
+      else amtStr = formatNum(item.amount) + ' ⭐';
+
+      const statusClass = item.status === 'success' ? 'status-success' : (item.status === 'pending' ? 'status-pending' : 'status-failed');
+      const statusText = item.status === 'success' ? 'ناجح' : (item.status === 'pending' ? 'قيد المعالجة' : 'فشل');
+
+      html += `
+        <div class="dep-history-item">
+          <div class="dep-history-left">
+            <img src="${iconUrl}" class="dep-history-icon">
+            <div class="dep-history-info">
+              <div class="dep-history-amount">${amtStr}</div>
+              <div class="dep-history-date">${date}</div>
+            </div>
+          </div>
+          <div class="dep-history-status ${statusClass}">${statusText}</div>
+        </div>
+      `;
+    });
+  }
+  container.innerHTML = html;
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('app').classList.add('ready');
@@ -2711,6 +2875,7 @@ function go(viewName) {
   else if (viewName === 'withdraw') loadWithdrawalHistory();
   else if (viewName === 'referral') updateManualRefCardVisibility();
   else if (viewName === 'profile') updateWalletUI();
+  else if (viewName === 'deposit') loadDepositHistory(); // تحديث السجل عند فتح صفحة الإيداع
   mainScroll.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -3118,7 +3283,7 @@ function addChip(amount) {
 function updateCryptoUI(input) {
   sanitizeDigits(input);
   let val = parseFloat(input.value) || 0;
-  if (val > 1000) { input.value = '1000'; val = 1000; }
+  if (val > 1000) { input.value = '1000.00'; val = 1000; }
   adjustInputWidth(input);
   const stars = Math.floor(val * 100);
   document.getElementById('cryptoCalcSubtext').innerHTML = `${formatNum(stars)} <img src="${ASSETS.star}" style="width:16px;height:16px;border-radius:50%;vertical-align:middle;">`;
@@ -3126,7 +3291,7 @@ function updateCryptoUI(input) {
 function addCryptoChip(amount) {
   const input = document.getElementById('cryptoAmountInput');
   const newVal = Math.min((parseFloat(input.value) || 0) + amount, 1000);
-  input.value = String(Math.round(newVal * 10) / 10);
+  input.value = String(Math.round(newVal * 100) / 100);
   updateCryptoUI(input);
 }
 async function processDeposit(type) {
@@ -3156,6 +3321,7 @@ async function processDeposit(type) {
           } else {
             showToast('تم استلام الدفع، سيتم تحديث الرصيد قريباً');
           }
+          loadDepositHistory(); // تحديث السجل
           setTimeout(() => go('home'), 900);
         } else if (status === 'cancelled') {
           showToast('تم إلغاء الدفع');
@@ -3242,6 +3408,7 @@ async function checkCryptoStatus(btn) {
       showToast('تم استلام الدفع بنجاح!');
       fetchUserData();
       cancelCryptoInvoice();
+      loadDepositHistory(); // تحديث السجل بعد الدفع
     } else if (data.status === 'expired' || data.status === 'failed') {
       showToast('انتهت الفاتورة أو فشلت');
       cancelCryptoInvoice();
