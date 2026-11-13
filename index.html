@@ -2053,9 +2053,10 @@ function initTonConnect() {
     });
     tonConnectUI.onStatusChange(wallet => {
       if (wallet && wallet.account && wallet.account.address) {
+        const isNewConnection = connectedWalletAddress !== wallet.account.address;
         connectedWalletAddress = wallet.account.address;
         updateWalletUI();
-        saveWalletToFirebase(connectedWalletAddress);
+        saveWalletToFirebase(connectedWalletAddress, isNewConnection); // إظهار الخطأ فقط عند الربط الجديد
       } else {
         connectedWalletAddress = null;
         updateWalletUI();
@@ -2132,46 +2133,43 @@ function copyWalletAddress() {
 }
 
 /* ============ ADDRESS CONVERSION HELPER ============ */
-function convertToRawAddress(friendly) {
-  if (!friendly) return '';
-  if (friendly.includes(':')) return friendly;
-
+function convertToRawAddress(addr) {
+  if (!addr) return '';
+  addr = addr.trim();
+  
+  // Already raw with workchain
+  if (addr.includes(':')) return addr; 
+  
   try {
-    friendly = friendly.trim();
+    // Hex without workchain
+    if (addr.length === 64 && /^[0-9a-fA-F]+$/.test(addr)) return '0:' + addr;
 
-    const b64 = friendly.replace(/-/g, '+').replace(/_/g, '/');
+    // Friendly base64url
+    const b64 = addr.replace(/-/g, '+').replace(/_/g, '/');
     const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
     const binary = atob(padded);
-
-    if (binary.length < 34) {
-      console.warn('[TON] invalid friendly address length:', binary.length);
-      return friendly;
-    }
+    
+    if (binary.length < 34) return addr; // Invalid
 
     const wcByte = binary.charCodeAt(1);
     const workchain = (wcByte === 0xFF) ? -1 : 0;
-
     let hex = '';
     for (let i = 2; i < 34; i++) {
       hex += binary.charCodeAt(i).toString(16).padStart(2, '0');
     }
-
     return workchain + ':' + hex;
   } catch (e) {
-    console.warn('[TON] convertToRawAddress failed:', e);
-    return friendly;
+    return addr;
   }
 }
 
-async function saveWalletToFirebase(address) {
+async function saveWalletToFirebase(address, showError = false) {
   if (!db) return;
   try {
     const rawAddress = convertToRawAddress(address);
-    console.log('[TON] Friendly:', address);
-    console.log('[TON] Raw:', rawAddress);
     if (!rawAddress || rawAddress === address || !rawAddress.includes(':')) {
       console.error('[TON] ❌ Conversion FAILED! raw === friendly');
-      showToast('خطأ في تحويل المحفظة، حاول مرة أخرى');
+      if (showError) showToast('خطأ في تحويل المحفظة، حاول مرة أخرى');
       return;
     }
     await db.collection('users').doc(user.id).set({
@@ -2179,7 +2177,6 @@ async function saveWalletToFirebase(address) {
       tonWalletRaw: rawAddress,
       tonWalletUpdatedAt: Date.now()
     }, { merge: true });
-    console.log('[TON] ✅ Wallet saved:', rawAddress);
   } catch (e) {
     console.error('[TON] Save error:', e);
   }
@@ -2321,7 +2318,7 @@ function sanitizeDigits(el) {
     if (p.length > 2) {
       v = p[0] + '.' + p.slice(1).join('');
     } else if (p.length === 2 && p[1].length > 2) {
-      v = p[0] + '.' + p[1].substring(0, 2);
+      v = p[0] + '.' + p[1].substring(0, 2); // فقط خانتين عشريتين
     }
   } else {
     v = v.replace(/[^0-9]/g, '');
@@ -2753,23 +2750,50 @@ async function loadDepositHistory() {
       }
     });
 
-    // 2. جلب إيداعات TON من مجموعة ton_deposits
+    // 2. جلب معاملات TON الناجحة من processed_transactions
+    let successTonTxs = [];
+    try {
+      const pTxQuery = await db.collection('processed_transactions').where('userId', '==', user.id).get();
+      pTxQuery.forEach(doc => {
+        const d = doc.data();
+        successTonTxs.push({
+          amount: d.amountTON || 0,
+          time: d.processedAt ? new Date(d.processedAt).getTime() : Date.now(), // المعالج يرسلها كـ ISO string
+          status: 'success'
+        });
+      });
+    } catch(e) { console.warn('Cannot read processed_transactions', e); }
+
+    // 3. جلب إيداعات TON المعلقة من ton_deposits
     const tonQuery = await db.collection('ton_deposits').where('userId', '==', user.id).get();
     tonQuery.forEach(doc => {
       const d = doc.data();
-      tonHist.push({
-        amount: d.amountTON || 0,
-        time: d.createdAt || Date.now(),
-        status: d.status === 'pending' ? 'pending' : 'success'
-      });
+      
+      // التحقق مما إذا كان هذا الطلب المعلق قد تمت معالجته بالفعل (لمنع التكرار)
+      const isProcessed = successTonTxs.some(tx => 
+        Math.abs(tx.amount - d.amountTON) < 0.0001 && 
+        tx.time >= (d.createdAt || 0) - 60000 && 
+        tx.time <= (d.createdAt || 0) + 3600000
+      );
+      
+      if (!isProcessed) {
+        tonHist.push({
+          amount: d.amountTON || 0,
+          time: d.createdAt || Date.now(),
+          status: 'pending'
+        });
+      }
     });
+    
+    // إضافة الإيداعات الناجحة إلى السجل
+    successTonTxs.forEach(tx => tonHist.push(tx));
 
     // ترتيب من الأحدث للأقدم
     starsHist.sort((a,b) => b.time - a.time);
     cryptoHist.sort((a,b) => b.time - a.time);
     tonHist.sort((a,b) => b.time - a.time);
 
-    // 3. عرض البيانات في الواجهة
+    // 4. عرض البيانات في الواجهة
     renderDepHist('stars-history', starsHist, 'Stars', ASSETS.star);
     renderDepHist('crypto-history', cryptoHist, 'USDT', 'https://cryptologos.cc/logos/tether-usdt-logo.png');
     renderDepHist('ton-history', tonHist, 'TON', 'https://cryptologos.cc/logos/toncoin-ton-logo.png');
