@@ -1222,7 +1222,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   direction: ltr;
 }
 
-/* ============ COIN FLIP (النقش) ============ */
+/* ============ COIN FLIP (الجليد و النار) ============ */
 #view-coin { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-coin.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
@@ -1587,7 +1587,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   <header class="top-app-bar"></header>
   <div class="floating-balances">
     <div class="balance-pill">
-      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
+      <img src="PerfectTitanium-008-by-StickerEmojiRobot.png" alt="طاقة">
       <span id="topTickets">0</span>
     </div>
     <div class="balance-pill">
@@ -1601,10 +1601,18 @@ input:checked + .slider:before { transform: translateX(22px); }
     <div class="view active" id="view-home">
       <div class="home-cards">
 
+        <div class="home-card card-crash" onclick="go('crash')">
+          <div class="card-text">
+            <h3>Crash</h3>
+            <p>لعبة السرعة</p>
+          </div>
+          <img src="IMG_20261110_200620_178.png" class="card-icon" alt="Crash" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+        </div>
+
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
             <div class="card-video-icon">
-              <img src="PerfectTitanium-008-by-StickerEmojiRobot.png" style="width:100%;height:100%;object-fit:contain;" alt="ايفينت الشتاء">
+              <img src="PerfectTitanium-035-by-StickerEmojiRobot.png" style="width:100%;height:100%;object-fit:contain;" alt="ايفينت الشتاء">
             </div>
             <div class="card-text">
               <h3>ايفينت الشتاء</h3>
@@ -1612,7 +1620,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="home-card card-space-clock" onclick="go('spaceClock')">
             <div class="card-video-icon">
-              <img src="PerfectTitanium-035-by-StickerEmojiRobot.png" style="width:100%;height:100%;object-fit:contain;" alt="الطاقة الحمراء">
+              <img src="PerfectTitanium-008-by-StickerEmojiRobot.png" style="width:100%;height:100%;object-fit:contain;" alt="الطاقة الحمراء">
             </div>
             <div class="card-text">
               <h3>الطاقة الحمراء</h3>
@@ -1630,24 +1638,16 @@ input:checked + .slider:before { transform: translateX(22px); }
 
         <div class="home-card card-coin" onclick="go('coin')">
           <div class="card-text">
-            <h3>النقش</h3>
-            <p>طابق العملتين واربح ×2</p>
+            <h3>الجليد و النار</h3>
+            <p>طابق الجليد و النار واربح ×2</p>
           </div>
-          <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" class="card-icon" alt="النقش" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
-        </div>
-
-        <div class="home-card card-crash" onclick="go('crash')">
-          <div class="card-text">
-            <h3>Crash</h3>
-            <p>لعبة السرعة</p>
-          </div>
-          <img src="IMG_20261110_200620_178.png" class="card-icon" alt="Crash" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
+          <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" class="card-icon" alt="الجليد و النار" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
 
         <div class="home-card referral" onclick="go('referral')">
           <div class="card-text">
             <h3>دعوة الأصدقاء</h3>
-            <p>اربح 2 تيكت عن كل صديق</p>
+            <p>اربح 2 طاقة حمراء عن كل صديق</p>
           </div>
           <img src="IMG_20261029_131620_989.png" class="card-icon" alt="Referral" onerror="this.src='https://up6.cc/2026/10/17932600818491.png'">
         </div>
@@ -1694,7 +1694,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
         </div>
         <div class="coin-result" id="coinResult">اختر رهانك</div>
-        <div class="coin-info">طابق وجهي العملتين لتربح ضعف الرهان ×2</div>
+        <div class="coin-info">طابق الجليد و النار لتربح ضعف الرهان ×2</div>
         <div class="coin-bet-levels" id="coinBetLevels">
           <button class="coin-bet-btn active" data-bet="10" onclick="coinChangeBet(10)"><img src="https://up6.cc/2026/10/17932600818491.png"> 10</button>
           <button class="coin-bet-btn" data-bet="25" onclick="coinChangeBet(25)"><img src="https://up6.cc/2026/10/17932600818491.png"> 25</button>
@@ -1717,7 +1717,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         <div class="daily-card-header">
           <div class="daily-title-area">
             <h3>المكافأة اليومية</h3>
-            <p>احصل على تذكرة كل يوم</p>
+            <p>احصل على طاقة حمراء كل يوم</p>
           </div>
           <div class="daily-streak-badge">
             <i class="fas fa-fire"></i>
@@ -1726,7 +1726,7 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
         <div class="daily-week-days" id="dailyWeekDays"></div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
-          <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+          <img src="PerfectTitanium-008-by-StickerEmojiRobot.png" style="width: 18px; height: 18px;">
           <span id="claimBtnText">جاري التحقق...</span>
         </button>
       </div>
@@ -1870,7 +1870,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
         <div class="manual-ref-card" id="manualRefCard">
           <h3><i class="fas fa-key"></i> إدخال معرف دعوة</h3>
-          <p>إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على تذكرة مجانية.</p>
+          <p>إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على طاقة حمراء مجانية.</p>
           <div class="link-box">
             <input type="text" class="manual-ref-input" id="manualRefInput" placeholder="أدخل معرف الداعي" inputmode="numeric" />
             <button class="btn-copy" onclick="submitManualReferral(this)">تأكيد</button>
@@ -1878,8 +1878,8 @@ input:checked + .slider:before { transform: translateX(22px); }
         </div>
 
         <div class="referral-header">
-          <h2>ادعُ أصدقاءك واربح تذكرتين</h2>
-          <p>احصل على تذكرتين مقابل كل صديق ينضم عبر رابطك، وصديقك يحصل على تذكرة!</p>
+          <h2>ادعُ أصدقاءك واربح 2 طاقة حمراء</h2>
+          <p>احصل على 2 طاقة حمراء مقابل كل صديق ينضم عبر رابطك، وصديقك يحصل على طاقة حمراء!</p>
         </div>
         <div class="ref-stats">
           <div class="ref-stat-box">
@@ -1888,7 +1888,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="ref-stat-box">
             <h3 id="refEarned">0</h3>
-            <p>التذاكر المكتسبة</p>
+            <p>الطاقة المكتسبة</p>
           </div>
         </div>
         <button class="topup-btn" onclick="shareReferral()" style="margin-bottom: 24px;"><i class="fas fa-share-alt"></i> شارك الرابط</button>
@@ -1932,18 +1932,7 @@ input:checked + .slider:before { transform: translateX(22px); }
           </div>
           <div class="profile-nav-card-text">
             <h4>دعوة الأصدقاء</h4>
-            <p>اربح 2 تيكت عن كل صديق</p>
-          </div>
-          <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
-        </div>
-
-        <div class="profile-nav-card" onclick="go('properties')">
-          <div class="profile-nav-card-icon" style="background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,215,0,0.05));">
-            <i class="fas fa-building" style="color: #c9a227;"></i>
-          </div>
-          <div class="profile-nav-card-text">
-            <h4>الممتلكات</h4>
-            <p>اكتشف ممتلكاتك</p>
+            <p>اربح 2 طاقة حمراء عن كل صديق</p>
           </div>
           <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
         </div>
@@ -2517,7 +2506,7 @@ const ASSETS = {
   star: 'https://up6.cc/2026/10/17932600818491.png',
   binance: 'https://up6.cc/2026/09/178982889076391.png',
   gram: 'https://up6.cc/2026/10/179327300871781.png',
-  ticket: 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png'
+  ticket: 'PerfectTitanium-008-by-StickerEmojiRobot.png'
 };
 
 const FIREBASE_CONFIG = {
@@ -2562,7 +2551,7 @@ const SLOTS_CONFIG = {
   999: { table: { p10: 10000, p18: 8000, p13: 5000, p4: 2500, p5: 1500, p9: 1200, p8: 1000, p7: 800, p6: 600, p3: 400, p14: 300, p2: 200, p15: 150, p1: 100, p11: 80, p16: 60, p17: 40, p12: 20 } }
 };
 
-let user = { id: '123456789', name: 'لاعب', photo: '', stars: 0, tickets: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
+let user = { id: '123456789', name: 'لاعب', photo: '', stars: 0, redEnergy: 0, referrals: 0, totalWithdrawn: 0, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdShowAll = false;
@@ -2723,7 +2712,7 @@ async function retryLoad() {
   closeModal('modalLoadError');
   userDataLoaded = false;
   user.stars = 0;
-  user.tickets = 0;
+  user.redEnergy = 0;
   user.referrals = 0;
   updateBalances();
   startLoadTimer();
@@ -2760,11 +2749,11 @@ async function awardReferral(referrerId, source = 'url') {
       referredBy: referrerId,
       referredAt: firebase.firestore.FieldValue.serverTimestamp(),
       referredSource: source,
-      tickets: firebase.firestore.FieldValue.increment(1)
+      redEnergy: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     transaction.update(referrerRef, {
       referralCount: firebase.firestore.FieldValue.increment(1),
-      tickets: firebase.firestore.FieldValue.increment(2)
+      redEnergy: firebase.firestore.FieldValue.increment(2)
     });
   });
   return { ok: true };
@@ -2779,10 +2768,10 @@ async function processReferralOnStartup() {
     const result = await awardReferral(referrerId, 'url');
     if (result.ok) {
       user.referredBy = referrerId;
-      user.tickets = (user.tickets || 0) + 1;
+      user.redEnergy = (user.redEnergy || 0) + 1;
       updateBalances();
       updateManualRefCardVisibility();
-      showToast('تم قبول الدعوة! حصلت على تذكرة 🎟️');
+      showToast('تم قبول الدعوة! حصلت على طاقة حمراء ⚡');
     }
   } catch (e) {}
 }
@@ -2800,11 +2789,11 @@ async function submitManualReferral(btn) {
     const result = await awardReferral(refId, 'manual');
     if (result.ok) {
       user.referredBy = refId;
-      user.tickets = (user.tickets || 0) + 1;
+      user.redEnergy = (user.redEnergy || 0) + 1;
       updateBalances();
       updateManualRefCardVisibility();
       input.value = '';
-      showToast('تم قبول الدعوة! +1 تذكرة 🎟️');
+      showToast('تم قبول الدعوة! +1 طاقة حمراء ⚡');
     } else if (result.error === 'referrer_not_found') {
       showToast('معرف الداعي غير موجود');
     } else if (result.error === 'already_referred') {
@@ -2851,7 +2840,7 @@ async function fetchUserData() {
     if (doc.exists) {
       const d = doc.data();
       user.stars = d.stars || 0;
-      user.tickets = d.tickets || 0;
+      user.redEnergy = d.redEnergy || d.tickets || 0;
       user.referrals = d.referralCount || 0;
       user.lastDailyClaim = d.lastDailyClaim || 0;
       user.nextDailyClaim = d.nextDailyClaim || 0;
@@ -2863,7 +2852,7 @@ async function fetchUserData() {
     } else {
       await ref.set({
         telegramId: user.id, name: user.name, photoUrl: user.photo,
-        stars: 0, tickets: 0, referralCount: 0,
+        stars: 0, redEnergy: 0, referralCount: 0,
         lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0,
         completedTasks: [], referredBy: null, createdAt: Date.now()
       });
@@ -3028,9 +3017,9 @@ function go(viewName) {
 function updateBalances() {
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
   setText('topStars', formatNum(user.stars));
-  setText('topTickets', formatNum(user.tickets));
+  setText('topTickets', formatNum(user.redEnergy));
   setText('statStars', formatNum(user.stars));
-  setText('statTickets', formatNum(user.tickets));
+  setText('statTickets', formatNum(user.redEnergy));
   setText('statRefs', formatNum(user.referrals));
   setText('statTotalWithdrawn', formatNum(user.totalWithdrawn));
   setText('refInvited', formatNum(user.referrals));
@@ -3229,7 +3218,7 @@ function slotsShowPrizes() {
   openModal('slots-prizes-modal');
 }
 
-/* ============ COIN FLIP (النقش) ============ */
+/* ============ COIN FLIP (الجليد و النار) ============ */
 const COIN_HEADS = 'LuckyLocket-016-512-by-StickerEmojiRobot.png';
 const COIN_TAILS = 'LuckyLocket-006-512-by-StickerEmojiRobot.png';
 
@@ -3288,10 +3277,16 @@ async function coinFlip() {
   coin1.classList.add('flipping');
   coin2.classList.add('flipping');
 
-  // Determine results (independent 50/50)
-  const side1 = Math.random() < 0.5 ? 'heads' : 'tails';
-  const side2 = Math.random() < 0.5 ? 'heads' : 'tails';
-  const isMatch = side1 === side2;
+  // Match rate 35% (win), 65% no match
+  const isMatch = Math.random() < 0.35;
+  let side1, side2;
+  if (isMatch) {
+    side1 = Math.random() < 0.5 ? 'heads' : 'tails';
+    side2 = side1;
+  } else {
+    side1 = Math.random() < 0.5 ? 'heads' : 'tails';
+    side2 = side1 === 'heads' ? 'tails' : 'heads';
+  }
 
   // Midway swap images for realism (after ~1.1s)
   setTimeout(() => {
@@ -3420,12 +3415,12 @@ async function claimDailyReward() {
       const nextClaimTime = getNextMidnight();
       const newStreak = (data.dailyStreak || 0) + 1;
       transaction.update(userRef, {
-        tickets: (data.tickets || 0) + 1,
+        redEnergy: (data.redEnergy || data.tickets || 0) + 1,
         lastDailyClaim: firebase.firestore.FieldValue.serverTimestamp(),
         nextDailyClaim: nextClaimTime,
         dailyStreak: newStreak
       });
-      user.tickets = (data.tickets || 0) + 1;
+      user.redEnergy = (data.redEnergy || data.tickets || 0) + 1;
       user.nextDailyClaim = nextClaimTime;
       user.dailyStreak = newStreak;
     });
@@ -3491,14 +3486,14 @@ async function checkTaskAction() {
   try {
     const isTicket = currentTask.rewardType === 'ticket';
     const amount = Number(currentTask.rewardAmount);
-    if (isTicket) user.tickets += amount; else user.stars += amount;
+    if (isTicket) user.redEnergy += amount; else user.stars += amount;
     user.completedTasks.push(currentTask.id);
     updateBalances();
     const updates = { completedTasks: firebase.firestore.FieldValue.arrayUnion(currentTask.id) };
-    if (isTicket) updates.tickets = firebase.firestore.FieldValue.increment(amount);
+    if (isTicket) updates.redEnergy = firebase.firestore.FieldValue.increment(amount);
     else updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
-    showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'تيكت' : 'Stars'}`);
+    showToast(`تم إكمال المهمة! +${formatNum(amount)} ${isTicket ? 'طاقة' : 'Stars'}`);
     closeTaskSheet(); loadTasks();
   } catch (e) { showToast('حدث خطأ'); }
   finally { btn.disabled = false; btn.innerText = 'Check task'; }
