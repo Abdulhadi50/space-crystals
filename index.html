@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#ffffff">
 <title>Star Nova</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://unpkg.com/@tonconnect/ui@2.0.9/dist/tonconnect-ui.min.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1579,68 +1579,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     transition-duration: 0.001ms !important;
   }
 }
-
-/* ===== Black Glass theme ===== */
-:root{--bg-main:#000;--bg-card:rgba(255,255,255,.06);--bg-soft:rgba(255,255,255,.05);--text-primary:#f3f4f8;--text-secondary:#a3a6b6;--text-tertiary:#6f7284;--border:rgba(255,255,255,.10);--glass-border:rgba(255,255,255,.14);--nav-bg:rgba(60,62,74,.45);--nav-border:rgba(255,255,255,.12);
---rim:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.12),0 8px 22px rgba(0,0,0,.55);
---gray-glass:linear-gradient(160deg,rgba(128,132,150,.40),rgba(54,56,68,.58));--card-glass:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03))}
-html,body{background:#000!important;color:var(--text-primary)}
-body::before{background:radial-gradient(60% 35% at 15% 0,rgba(150,155,175,.14),transparent 60%),radial-gradient(50% 35% at 100% 20%,rgba(110,115,135,.12),transparent 60%)!important}
-.main-scroll{scroll-behavior:smooth;will-change:scroll-position}
-.view.active{animation:iv .26s cubic-bezier(.22,1,.36,1)}@keyframes iv{from{opacity:0;transform:translateY(8px)}}
-.top-app-bar{background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,0))!important;backdrop-filter:blur(30px) saturate(180%)!important;-webkit-backdrop-filter:blur(30px) saturate(180%)!important}
-.balance-pill,.dock,.nav-profile,.dock-home-btn,.modal-btn,.topup-btn,.chip,.start-btn,.daily-claim-btn,.btn-copy,.crypto-btn,.profile-action-btn,.wallet-connect-btn,.wallet-disconnect-btn,.wallet-copy-btn,.btn-secondary,.gbtn,.close-sheet,.show-all-btn,.tab.active,.view:not(#view-crash):not(#view-slots):not(#view-coin) button:not(.nav-item){background:var(--gray-glass)!important;color:#fff!important;border:0!important;box-shadow:var(--rim)!important;backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border-radius:22px;transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s}
-.balance-pill{border-radius:999px!important;padding:5px 14px 5px 10px!important;font-size:16px!important}
-.dock{border-radius:34px!important}
-.modal-btn:active,.topup-btn:active,.gbtn:active,.start-btn:active,.chip:active,.view:not(#view-crash):not(#view-slots):not(#view-coin) button:active{transform:scale(.95);filter:brightness(1.25)}
-.dock i,.dock .nav-text,.nav-item,.nav-profile i,.dock-home-btn i{color:rgba(255,255,255,.65)!important}
-.nav-item.active i,.nav-item.active .nav-text,.nav-profile.active i,.dock-home-btn.active i{color:#fff!important;text-shadow:0 0 12px rgba(255,255,255,.5)}
-.home-card,.g-card,.task-group,.daily-claim-card,.wallet-card,.ref-stat-box,.profile-nav-card,.dep-history-item,.history-item,.manual-ref-card,.link-box,.crypto-pending-banner,.ton-deposit-note{background:var(--card-glass)!important;backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid rgba(255,255,255,.12)!important;border-radius:28px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 14px 34px rgba(0,0,0,.5)!important;color:var(--text-primary)}
-.home-card:active,.g-card:active{transform:scale(.97)}
-.view:not(#view-crash):not(#view-slots):not(#view-coin) :is(h2,h3,h4,.page-title,.task-text h4,.profile-username,.ranking-name,.podium-name){color:var(--text-primary)!important}
-.view:not(#view-crash):not(#view-slots):not(#view-coin) :is(p,small,.page-subtitle,.calc-subtext,.history-method,.dep-history-date){color:var(--text-secondary)!important}
-.page-header{margin:6px 4px 22px}.page-title{font-size:30px!important;font-weight:800;letter-spacing:-.6px}
-.modal-overlay{backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px);background:rgba(0,0,0,.6)!important}
-.modal-content,.history-modal,.info-modal{background:linear-gradient(165deg,rgba(54,56,68,.92),rgba(20,21,28,.94))!important;color:var(--text-primary)!important;backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.14)!important;border-radius:34px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 30px 80px rgba(0,0,0,.8)!important;animation:sheet .32s cubic-bezier(.34,1.4,.64,1)}
-@keyframes sheet{from{opacity:0;transform:translateY(30px) scale(.94)}}
-.toast{background:var(--gray-glass)!important;color:#fff!important;box-shadow:var(--rim)!important;border-radius:999px!important;backdrop-filter:blur(24px);padding:12px 22px!important;font-weight:700}
-.wd-input,.manual-ref-input,.view:not(#view-crash):not(#view-slots):not(#view-coin) input{background:rgba(255,255,255,.07)!important;color:#fff!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:20px!important;min-height:56px;box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
-.tabs{background:rgba(255,255,255,.07)!important;backdrop-filter:blur(20px);border-radius:24px!important;border:1px solid rgba(255,255,255,.12);padding:4px}
-.tab{border-radius:20px!important;color:var(--text-secondary)}
-.profile-centered{background:var(--card-glass);backdrop-filter:blur(30px) saturate(180%);border:1px solid rgba(255,255,255,.14);border-radius:38px;padding:30px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 18px 44px rgba(0,0,0,.55)}
-.profile-avatar{border-radius:50%!important;box-shadow:0 0 0 3px rgba(255,255,255,.85),0 0 0 7px rgba(255,255,255,.12),0 14px 30px rgba(0,0,0,.6)!important}
-.profile-username{font-weight:800;font-size:24px}
-.dep-layout,.wd-tab-content{gap:20px}
-.wv-bar{height:12px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin:10px 0}.wv-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#9aa0b8,#fff);border-radius:9px;transition:width .6s}
-.g-card{padding:18px;margin-bottom:14px}.g-card h3{font-size:17px;font-weight:800;margin-bottom:4px}.g-card p{font-size:13px}
-.gbtn{width:100%;padding:15px;font-weight:800;font-size:15px;margin-top:12px}.gbtn[disabled]{opacity:.4}
-.wv-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08)}.wv-row:last-child{border:0}.wv-row .gbtn{width:auto;margin:0;padding:9px 16px;font-size:13px}
-.en-ring{width:150px;height:150px;border-radius:50%;margin:8px auto 14px;display:grid;place-items:center;font-size:44px;font-weight:800;color:#fff;background:radial-gradient(circle at 30% 25%,#8b8fa5,#2a2b36);box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 0 40px rgba(255,255,255,.12)}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-/* ===== v3: floating dock, compact buttons, dark games ===== */
-:root{--nav-bg:rgba(70,72,88,.38);--nav-border:rgba(255,255,255,.16);--nav-indicator-bg:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.08));--nav-indicator-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
-.dock{background:none!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-radius:0!important;gap:10px}
-.dock-home-btn,.nav-profile{width:52px!important;height:52px!important;border-radius:50%!important;background:rgba(70,72,88,.34)!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important;backdrop-filter:blur(18px) saturate(170%)!important;-webkit-backdrop-filter:blur(18px) saturate(170%)!important;font-size:19px!important}
-.dock-home-btn.active,.nav-profile.active{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.4)!important}
-.dock-nav{height:58px!important;background:var(--nav-bg)!important;border:1px solid var(--nav-border)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important;backdrop-filter:blur(18px) saturate(170%)!important;-webkit-backdrop-filter:blur(18px) saturate(170%)!important;border-radius:30px!important}
-.dock-nav::before{top:5px;bottom:5px;right:5px;width:calc((100% - 10px)/3)}
-.nav-item{font-size:10px!important}.nav-item i{font-size:17px!important}
-.nav-item.active i,.nav-item.active .nav-text{text-shadow:none!important}
-.modal-btn,.topup-btn,.start-btn,.btn-copy,.crypto-btn,.profile-action-btn,.wallet-connect-btn,.wallet-disconnect-btn,.wallet-copy-btn,.btn-secondary,.show-all-btn,.daily-claim-btn,.gbtn,.view:not(#view-crash):not(#view-slots):not(#view-coin) button:not(.nav-item){min-height:0!important;padding:10px 18px!important;font-size:14px!important;font-weight:700!important;border-radius:16px!important}
-.chip{padding:7px 14px!important;font-size:13px!important;border-radius:14px!important}
-.gbtn{width:auto;min-width:120px;margin-top:10px}.wv-row .gbtn{padding:8px 14px!important;font-size:13px!important}
-.wd-input,.manual-ref-input,.view:not(#view-crash):not(#view-slots):not(#view-coin) input{min-height:48px!important;border-radius:16px!important}
-.close-sheet{width:34px;height:34px;padding:0!important}
-#view-slots.active{background:radial-gradient(ellipse 68% 48% at 50% 40%,rgba(255,165,0,.10),transparent 72%),#0c0d14;border:1px solid rgba(255,255,255,.08)}
-#view-coin.active{background:radial-gradient(ellipse 68% 48% at 50% 40%,rgba(201,162,39,.12),transparent 72%),#0c0d14;border:1px solid rgba(255,255,255,.08)}
-.slots-reels,.coin-stage{background:linear-gradient(165deg,#1d1f2b,#0f1018)!important;border:1px solid rgba(255,255,255,.10)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 34px rgba(0,0,0,.6)!important}
-.slots-reel{background:rgba(255,255,255,.04)!important}
-.crash-sky-bg{background:linear-gradient(to bottom,#04050a 0%,#0a0d1a 40%,#131828 75%,#1c2236 100%)!important}
-.crash-game-area::after{background:radial-gradient(ellipse 70% 55% at 50% 45%,rgba(120,140,255,.10),transparent 70%)!important}
-.crash-multiplier-display,.crash-countdown-display{color:#f2f4ff;text-shadow:0 0 30px rgba(140,160,255,.25)}
-.crash-bet-controls{background:rgba(30,32,44,.78)!important;border:1px solid rgba(255,255,255,.12)!important;color:#fff}
-#view-crash,#view-slots,#view-coin{color:var(--text-primary)}
 </style>
 </head>
 <body>
@@ -1716,19 +1654,7 @@ body::before{background:radial-gradient(60% 35% at 15% 0,rgba(150,155,175,.14),t
       </div>
     </div>
 
-    
-<div class="view" id="view-winter"><div class="page-header"><h2 class="page-title">ايفينت الشتاء</h2><p class="page-subtitle">أكمل المهام، افتح صناديق الجليد واربح نجوماً</p></div>
-<div class="g-card"><h3>مستوى الصقيع <span id="wvLvl">0</span>/5</h3><div class="wv-bar"><i id="wvBar"></i></div><p>كل مهمة مكتملة ترفع مستواك وتمنحك جائزة</p></div>
-<div class="g-card" id="wvMissions"></div>
-<div class="g-card"><h3>صندوق الجليد</h3><p>يكلّف 1 طاقة حمراء، وجائزته من 0.5 إلى 20 نجمة</p><button class="gbtn" id="wvOpen" onclick="winterOpen()">افتح الصندوق</button><p id="wvRes" style="margin-top:10px;text-align:center;font-weight:800"></p></div></div>
-<div class="view" id="view-energy"><div class="page-header"><h2 class="page-title">الطاقة الحمراء</h2><p class="page-subtitle">رصيدك ومصادر الحصول عليها واستخداماتها</p></div>
-<div class="g-card" style="text-align:center"><div class="en-ring" id="enNum">0</div><p>طاقة حمراء متاحة</p></div>
-<div class="g-card"><h3>اكسب طاقة</h3>
-<div class="wv-row"><span>تسجيل دخول يومي (+1)</span><button class="gbtn" onclick="go('home')">الرئيسية</button></div>
-<div class="wv-row"><span>دعوة صديق (+2)</span><button class="gbtn" onclick="go('referral')">ادعُ</button></div>
-<div class="wv-row"><span>إكمال المهام</span><button class="gbtn" onclick="go('tasks')">المهام</button></div></div>
-<div class="g-card"><h3>استخدمها</h3><div class="wv-row"><span>صندوق الجليد في ايفينت الشتاء</span><button class="gbtn" onclick="go('winter')">افتح</button></div></div></div>
-<div class="view" id="view-slots">
+    <div class="view" id="view-slots">
       <div class="slots-container">
         <div class="slots-reels" id="slotsReels">
           <div class="slots-reel" id="reel0"><div class="slots-reel-track" id="reelTrack0"></div></div>
@@ -2262,9 +2188,9 @@ function initTonConnect() {
   try {
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       manifestUrl: TON_MANIFEST_URL,
-      restoreConnection: true,
-      actionsConfiguration: { twaReturnUrl: TWA_RETURN_URL },
-      uiPreferences: { theme: 'SYSTEM', borderRadius: 'm' }
+      uiPreferences: {
+        twaReturnUrl: TWA_RETURN_URL
+      }
     });
     tonConnectUI.onStatusChange(wallet => {
       if (wallet && wallet.account && wallet.account.address) {
@@ -2756,7 +2682,7 @@ function initTelegram() {
     if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
-      user.name = String(tg.initDataUnsafe.user.first_name || 'لاعب').replace(/[<>&"'`]/g,'').slice(0,40);
+      user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
     }
     try { updateTelegramBackButton('home'); } catch(e) {}
@@ -4270,20 +4196,6 @@ function crashUpdateAutoCashout(input) {
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
 }
-
-/* ===== v27 additions ===== */
-Math.random=function(){return crypto.getRandomValues(new Uint32Array(1))[0]/4294967296};
-(function(){const fz=o=>{Object.values(o).forEach(v=>typeof v==='object'&&v&&fz(v));return Object.freeze(o)};try{fz(WINNING_TABLE);fz(SLOTS_CONFIG)}catch(e){}})();
-(function(){let last=new WeakMap();document.addEventListener('click',e=>{const b=e.target.closest('button,.modal-btn,.topup-btn');if(!b)return;const n=Date.now();if(n-(last.get(b)||0)<180){e.stopImmediatePropagation();e.preventDefault()}last.set(b,n)},true)})();
-showToast=function(m){const t=document.getElementById('toast');t.textContent=String(m).slice(0,120);t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600)};
-const _go0=go;go=function(v){if(v==='properties')v='winter';if(v==='spaceClock')v='energy';_go0(v);if(v==='winter')winterRender();if(v==='energy')energyRender()};
-const WV=[['سجّل دخولاً يومياً 3 أيام',()=>user.dailyStreak>=3,5],['أكمل مهمة واحدة',()=>(user.completedTasks||[]).length>=1,3],['ادعُ صديقاً',()=>user.referrals>=1,10],['اجمع 5 طاقة حمراء',()=>user.redEnergy>=5,5],['ادعُ 3 أصدقاء',()=>user.referrals>=3,20]];
-let wvClaimed=null,wvBusy=false,wvLast=0;
-async function wvLoad(){if(wvClaimed)return;try{const d=await db.collection('users').doc(user.id).get();wvClaimed=(d.data()||{}).winterClaimed||[]}catch(e){wvClaimed=JSON.parse(localStorage.getItem('wv_'+user.id)||'[]')}}
-async function winterRender(){await wvLoad();const el=document.getElementById('wvMissions');let done=0;el.innerHTML='<h3>مهام الشتاء</h3>'+WV.map((m,i)=>{const ok=m[1](),c=wvClaimed.includes(i);if(c)done++;return`<div class="wv-row"><span>${m[0]}<br><small>الجائزة: ${m[2]} نجمة</small></span><button class="gbtn" ${(!ok||c)?'disabled':''} onclick="winterClaim(${i})">${c?'تم':ok?'استلم':'قفل'}</button></div>`}).join('');document.getElementById('wvLvl').textContent=done;document.getElementById('wvBar').style.width=done*20+'%'}
-async function winterClaim(i){if(wvBusy||wvClaimed.includes(i)||!WV[i][1]())return;wvBusy=true;try{wvClaimed.push(i);user.stars+=WV[i][2];updateBalances();try{localStorage.setItem('wv_'+user.id,JSON.stringify(wvClaimed))}catch(e){}await syncUserData({stars:firebase.firestore.FieldValue.increment(WV[i][2]),winterClaimed:wvClaimed});showToast('تم استلام '+WV[i][2]+' نجمة')}finally{wvBusy=false;winterRender()}}
-async function winterOpen(){const n=Date.now();if(wvBusy||n-wvLast<3000)return;if(user.redEnergy<1){showToast('تحتاج طاقة حمراء واحدة على الأقل');return}wvBusy=true;wvLast=n;try{const T=[[0.5,50],[1,30],[2,14],[5,5],[20,1]];let r=Math.random()*100,w=T[0][0];for(const t of T){if(r<t[1]){w=t[0];break}r-=t[1]}user.redEnergy-=1;user.stars+=w;updateBalances();await syncUserData({redEnergy:firebase.firestore.FieldValue.increment(-1),stars:firebase.firestore.FieldValue.increment(w)});document.getElementById('wvRes').textContent='ربحت '+w+' نجمة'}finally{wvBusy=false}}
-function energyRender(){document.getElementById('enNum').textContent=formatNum(user.redEnergy)}
 </script>
 
 </body>
