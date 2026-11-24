@@ -1417,7 +1417,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 .crash-rocket.active { opacity: 1; }
 .crash-waiting-icon { width: 130px; height: 130px; filter: drop-shadow(0 10px 22px rgba(30,40,80,0.2)); }
 .crash-waiting-icon.active { opacity: 1; }
-.crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(255,120,60,0.3)); }
+.crash-explosion { width: 230px; height: 230px; z-index: 3; filter: drop-shadow(0 0 34px rgba(76,201,240,0.3)); }
 .crash-explosion.active { opacity: 1; }
 .crash-bottom-panel { padding: 8px 16px 0; flex-shrink: 0; z-index: 10; }
 .crash-bet-controls {
@@ -1778,7 +1778,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 .crash-multiplier-display.crashed { color: #FF5D73; text-shadow: 0 0 26px rgba(255,93,115,0.45); }
 .crash-countdown-display { color: #EAF6FF; text-shadow: 0 0 18px rgba(76,201,240,0.35); }
 .crash-rocket { filter: drop-shadow(0 0 22px rgba(120,190,255,0.45)); }
-.crash-explosion { filter: drop-shadow(0 0 30px rgba(255,120,60,0.5)); }
+.crash-explosion { filter: drop-shadow(0 0 30px rgba(76,201,240,0.5)); }
 .crash-bet-controls { background: rgba(16, 17, 22, 0.88); border: 1px solid rgba(255,255,255,0.09); box-shadow: 0 -10px 40px rgba(0,0,0,0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .crash-history-strip { background: rgba(255,255,255,0.03); }
 .crash-history-pill { background: rgba(255,255,255,0.07); color: #9BA1AF; }
@@ -1973,9 +1973,9 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
     radial-gradient(circle, var(--icon-glow, rgba(255,255,255,0.15)) 0%, transparent 66%);
 }
 .home-cards-grid .home-card .card-icon { filter: drop-shadow(0 10px 24px var(--icon-glow, rgba(255,255,255,0.16))); }
-.home-card.card-slots { --icon-glow: rgba(255,150,60,0.50); }
+.home-card.card-slots { --icon-glow: rgba(76,201,240,0.50); }
 .home-card.card-crash { --icon-glow: rgba(91,141,239,0.55); }
-.home-card.card-coin { --icon-glow: rgba(201,162,39,0.50); }
+.home-card.card-coin { --icon-glow: rgba(76,201,240,0.50); }
 .home-card.referral { --icon-glow: rgba(170,90,255,0.50); }
 .home-card.card-properties { --icon-glow: rgba(110,190,255,0.55); }
 .home-cards-row .home-card.card-properties .card-video-icon { filter: drop-shadow(0 8px 22px var(--icon-glow)); }
@@ -3665,8 +3665,8 @@ function slotsShowPrizes() {
     const div = document.createElement('div');
     div.className = 'prize-grid-item';
     if (symId === 'p10') {
-      div.style.background = 'linear-gradient(160deg, rgba(255,215,0,0.15), rgba(200,150,0,0.25))';
-      div.style.borderColor = 'rgba(255,215,0,0.4)';
+      div.style.background = 'linear-gradient(160deg, rgba(76,201,240,0.12), rgba(76,201,240,0.22))';
+      div.style.borderColor = 'rgba(76,201,240,0.4)';
     }
     div.innerHTML = `<img src="${sym.img}" style="width:60px;height:60px;object-fit:contain;margin-bottom:8px;" alt="${val}"><div class="prize-val" ${symId === 'p10' ? 'style="color: var(--gold);"' : ''}><img src="${ASSETS.star}" style="width:14px;height:14px;border-radius:50%;"> ${formatNum(val)}</div>`;
     container.appendChild(div);
