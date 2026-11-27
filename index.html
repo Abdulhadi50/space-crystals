@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
@@ -50,10 +50,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; }
 body {
-  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   background: var(--bg-main); color: var(--text-primary);
   font-size: 15px; line-height: 1.5;
-  overscroll-behavior: none; user-select: none; -webkit-user-select: none; direction: rtl;
+  overscroll-behavior: none; user-select: none; -webkit-user-select: none; direction: ltr;
   position: relative;
 }
 body::before {
@@ -166,12 +166,12 @@ input[type="number"], .num-input {
 .home-card p { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
 .home-card .card-icon {
   width: 95px; height: 95px; object-fit: contain;
-  margin-left: -5px; transform: scale(1.06);
+  margin-right: -5px; transform: scale(1.06);
   filter: drop-shadow(0 8px 20px rgba(30,40,80,0.18));
 }
 .home-card .card-video-icon {
   width: 95px; height: 95px;
-  margin-left: -5px;
+  margin-right: -5px;
   background: transparent;
   pointer-events: none;
   flex-shrink: 0;
@@ -198,7 +198,7 @@ input[type="number"], .num-input {
 }
 .home-cards-row .home-card .card-text {
   align-items: flex-start;
-  text-align: right;
+  text-align: left;
   margin-bottom: 0;
 }
 .home-cards-row .home-card h3 {
@@ -787,7 +787,7 @@ input[type="number"], .num-input {
   display: flex; align-items: center; justify-content: center;
   font-size: 17px; flex-shrink: 0;
 }
-.profile-nav-card-text { flex: 1; min-width: 0; text-align: right; }
+.profile-nav-card-text { flex: 1; min-width: 0; text-align: left; }
 .profile-nav-card-text h4 {
   font-size: 14px; font-weight: 800; margin-bottom: 2px;
   color: var(--text-primary);
@@ -835,7 +835,7 @@ input[type="number"], .num-input {
   box-shadow: 0 4px 12px rgba(0,152,234,0.15);
 }
 .wallet-icon img { width: 32px; height: 32px; object-fit: contain; }
-.wallet-info { flex: 1; min-width: 0; text-align: right; }
+.wallet-info { flex: 1; min-width: 0; text-align: left; }
 .wallet-info h4 {
   font-size: 14px; font-weight: 800; margin-bottom: 2px;
   color: var(--text-primary);
@@ -1004,10 +1004,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 #tsIcon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 #tsIcon i { font-size: 40px; color: #fff; }
 
-.info-modal { text-align: right; }
+.info-modal { text-align: left; }
 .info-modal h3 { text-align: center; margin-bottom: 16px; }
 .info-modal p { font-size: 13px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
-.info-modal ul { padding-right: 20px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+.info-modal ul { padding-left: 20px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
 
 .toast {
   position: fixed; top: 20px; left: 50%;
@@ -1223,7 +1223,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   direction: ltr;
 }
 
-/* ============ COIN FLIP (الجليد و النار) ============ */
+/* ============ COIN FLIP (Ice and Fire) ============ */
 #view-coin { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 80vh; }
 #view-coin.active {
   display: flex; animation: viewIn 0.35s var(--ease-out);
@@ -1894,7 +1894,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   display: flex; align-items: center; gap: 14px;
   background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
   border-radius: 20px; padding: 16px 18px; margin-bottom: 14px;
-  margin-top: 14px; /* spacing from the profile hero card (عبود's final note) */
+  margin-top: 14px; /* note */
 }
 .profile-games-icon {
   width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
@@ -1938,8 +1938,8 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   width: calc((100% - 8px) / 4 - 8px);
   height: auto; aspect-ratio: 1 / 1;
   border-radius: 50%;
-  right: calc(8px + (var(--nav-index) * ((100% - 8px) / 4)));
-  transition: right 480ms cubic-bezier(.22, 1.4, .36, 1), opacity 240ms ease;
+  left: calc(8px + (var(--nav-index) * ((100% - 8px) / 4)));
+  transition: left 480ms cubic-bezier(.22, 1.4, .36, 1), opacity 240ms ease;
 }
 .dock-nav.no-pill::before { opacity: 0; }
 .dock .nav-profile {
@@ -2045,7 +2045,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 .home-card .card-text {
   position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
   padding: 30px 16px 14px; margin: 0;
-  align-items: flex-start; text-align: right;
+  align-items: flex-start; text-align: left;
   background: linear-gradient(to top, rgba(5,6,12,0.80) 0%, rgba(5,6,12,0.38) 55%, transparent 100%);
 }
 .home-card .card-text h3 {
@@ -2058,7 +2058,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 }
 .home-cards-grid .home-card .card-text h3 { font-size: 27px; }
 .home-cards-row .home-card .card-text h3 { font-size: 24px; margin-bottom: 0; }
-.home-cards-grid .home-card .card-text { text-align: right; margin-top: 0; }
+.home-cards-grid .home-card .card-text { text-align: left; margin-top: 0; }
 @media (max-width: 380px) {
   .home-card .card-text h3 { font-size: 22px; }
   .home-cards-row .home-card { height: 150px; }
@@ -2108,13 +2108,13 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   display: flex; align-items: center; justify-content: center;
   font-size: 24px;
 }
-.vip-info { flex: 1; min-width: 0; text-align: right; }
-.vip-name { font-size: 16px; font-weight: 800; letter-spacing: 1px; direction: ltr; text-align: right; }
-.vip-lock { color: #8A90A0; font-size: 12px; margin-right: 6px; }
+.vip-info { flex: 1; min-width: 0; text-align: left; }
+.vip-name { font-size: 16px; font-weight: 800; letter-spacing: 1px; direction: ltr; text-align: left; }
+.vip-lock { color: #8A90A0; font-size: 12px; margin-left: 6px; }
 .vip-threshold {
   margin-top: 3px;
   font-size: 15px; font-weight: 700; color: #F4F5FA;
-  direction: ltr; text-align: right;
+  direction: ltr; text-align: left;
   display: flex; align-items: center; gap: 6px; justify-content: flex-end;
 }
 .vip-threshold img { width: 16px; height: 16px; }
@@ -2175,7 +2175,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   border: 3px solid #15161B;
   box-shadow: 0 0 12px rgba(76,201,240,0.5);
 }
-.profile-hero-info { flex: 1; min-width: 0; text-align: right; }
+.profile-hero-info { flex: 1; min-width: 0; text-align: left; }
 .profile-hero-info .profile-username { margin: 0 0 6px; }
 .vip-status-row {
   margin-top: 16px;
@@ -2196,7 +2196,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 .vip-status-text span { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #9BA1AF; }
 .vip-status-text b { font-size: 18px; font-weight: 800; color: #F4F5FA; }
 .vip-status-arrow { color: #8A90A0; font-size: 13px; }
-/* balance row and deposit button removed from the profile card per عبود: "احذفة نهائيا" */
+/* note */
 .turnover-block { margin-top: 14px; direction: ltr; }
 .turnover-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #9BA1AF; margin-bottom: 8px; }
 .turnover-bar {
@@ -2225,6 +2225,13 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 .turnover-target-star { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; }
 .turnover-left { margin-top: 8px; font-size: 12px; font-weight: 700; color: #9BA1AF; font-variant-numeric: tabular-nums; }
 .turnover-left b { letter-spacing: 1px; }
+/* ============ THEME: dark (default) / light ============ */
+.theme-card { margin: 14px 0; padding: 14px; border-radius: 22px; background: linear-gradient(160deg, #1E1F24 0%, #121318 100%); border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
+.theme-card-title { font-size: 14px; font-weight: 800; color: #F4F5FA; margin: 2px 4px 12px; display: flex; align-items: center; gap: 8px; }
+.theme-card .tabs { margin: 0; }
+.theme-card .tab i { margin-right: 6px; }
+html[data-theme="light"] { filter: invert(1) hue-rotate(180deg); background: #fff; }
+html[data-theme="light"] img, html[data-theme="light"] video, html[data-theme="light"] canvas, html[data-theme="light"] svg:not(.fa-svg) { filter: invert(1) hue-rotate(180deg); }
 </style>
 </head>
 <body>
@@ -2233,7 +2240,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   <header class="top-app-bar"></header>
   <div class="floating-balances">
     <div class="balance-pill">
-      <div class="balance-tgs" id="ticket-icon-tgs"><img src="PerfectTitanium-008-by-StickerEmojiRobot.png" alt="طاقة"></div>
+      <div class="balance-tgs" id="ticket-icon-tgs"><img src="PerfectTitanium-008-by-StickerEmojiRobot.png" alt="Energy"></div>
       <span id="topTickets">0</span>
     </div>
     <div class="balance-pill">
@@ -2250,7 +2257,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 
         <div class="home-cards-row">
           <div class="home-card card-properties" onclick="go('properties')">
-            <img src="card_winter.webp" class="card-cover" alt="ايفينت الشتاء">
+            <img src="card_winter.webp" class="card-cover" alt="Winter Event">
             <div class="card-text">
               <h3>Winter Event</h3>
             </div>
@@ -2274,7 +2281,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 
         <div class="home-cards-grid">
           <div class="home-card card-coin" onclick="go('coin')">
-            <img src="card_icefire.webp" class="card-cover" alt="الجليد و النار" onerror="this.src='PerfectTitanium-071-by-StickerEmojiRobot.png'">
+            <img src="card_icefire.webp" class="card-cover" alt="Ice and Fire" onerror="this.src='PerfectTitanium-071-by-StickerEmojiRobot.png'">
             <div class="card-text">
               <h3>Ice &amp; Fire</h3>
             </div>
@@ -2296,7 +2303,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           <div class="slots-reel" id="reel1"><div class="slots-reel-track" id="reelTrack1"></div></div>
           <div class="slots-reel" id="reel2"><div class="slots-reel-track" id="reelTrack2"></div></div>
         </div>
-        <div class="slots-result" id="slotsResult">اختر رهانك</div>
+        <div class="slots-result" id="slotsResult">Choose your bet</div>
         <div class="slots-bet-levels" id="slotsBetLevels">
           <button class="slots-bet-btn" data-bet="69" onclick="slotsChangeBet(69)"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png"> 69</button>
           <button class="slots-bet-btn" data-bet="149" onclick="slotsChangeBet(149)"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png"> 149</button>
@@ -2305,7 +2312,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         </div>
         <div style="display: flex; gap: 10px; width: 100%; max-width: 360px;">
           <button class="slots-prizes-btn" onclick="slotsShowPrizes()" style="flex: 1; padding: 16px; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <i class="fas fa-gift"></i> الجوائز
+            <i class="fas fa-gift"></i> Prizes
           </button>
           <button class="slots-spin-btn" id="slotsSpinBtn" onclick="slotsSpin()" style="flex: 2; margin: 0;">
             Spin for <img src="PerfectTitanium-071-by-StickerEmojiRobot.png" alt="star"> <span id="slotsSpinCost">69</span>
@@ -2319,17 +2326,17 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         <div class="coin-stage">
           <div class="coin-wrapper">
             <div class="coin" id="coin1">
-              <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" alt="وجه" id="coin1Img">
+              <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" alt="Face" id="coin1Img">
             </div>
           </div>
           <div class="coin-wrapper">
             <div class="coin" id="coin2">
-              <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" alt="وجه" id="coin2Img">
+              <img src="LuckyLocket-016-512-by-StickerEmojiRobot.png" alt="Face" id="coin2Img">
             </div>
           </div>
         </div>
-        <div class="coin-result" id="coinResult">اختر رهانك</div>
-        <div class="coin-info">طابق الجليد و النار لتربح ضعف الرهان ×2</div>
+        <div class="coin-result" id="coinResult">Choose your bet</div>
+        <div class="coin-info">Match Ice and Fire to win double your bet ×2</div>
         <div class="coin-bet-levels" id="coinBetLevels">
           <button class="coin-bet-btn active" data-bet="10" onclick="coinChangeBet(10)"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png"> 10</button>
           <button class="coin-bet-btn" data-bet="25" onclick="coinChangeBet(25)"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png"> 25</button>
@@ -2345,14 +2352,14 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 
     <div class="view" id="view-tasks">
       <div class="page-header">
-        <h2 class="page-title">المهام</h2>
-        <p class="page-subtitle">أكمل المهام السهلة لتربح النجوم!</p>
+        <h2 class="page-title">Tasks</h2>
+        <p class="page-subtitle">Complete easy tasks to earn stars!</p>
       </div>
       <div class="daily-claim-card">
         <div class="daily-card-header">
           <div class="daily-title-area">
-            <h3>المكافأة اليومية</h3>
-            <p>احصل على نجوم كل يوم</p>
+            <h3>Daily Reward</h3>
+            <p>Get stars every day</p>
           </div>
           <div class="daily-streak-badge">
             <i class="fas fa-fire"></i>
@@ -2362,18 +2369,18 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         <div class="daily-week-days" id="dailyWeekDays"></div>
         <button class="daily-claim-btn" id="dailyClaimBtn" onclick="claimDailyReward()">
           <img src="PerfectTitanium-071-by-StickerEmojiRobot.png" style="width: 18px; height: 18px;">
-          <span id="claimBtnText">جاري التحقق...</span>
+          <span id="claimBtnText">Checking...</span>
         </button>
       </div>
       <div id="tasksContainer">
-        <div style="text-align:center; padding:30px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> جاري تحميل المهام...</div>
+        <div style="text-align:center; padding:30px; color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</div>
       </div>
     </div>
 
     <div class="view" id="view-deposit">
       <div class="page-header" style="text-align:center; margin-bottom: 15px;">
         <div class="page-hero-icon" id="deposit-hero-tgs"></div>
-        <h2 class="page-title" style="justify-content: center;">إيداع</h2>
+        <h2 class="page-title" style="justify-content: center;">Deposit</h2>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="switchDepositTab('stars', this)"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png"> Stars</div>
@@ -2394,21 +2401,21 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <button class="chip" onclick="addChip(2000)">+ 2,000</button>
             <button class="chip" onclick="addChip(5000)">+ 5,000</button>
           </div>
-          <button class="topup-btn" onclick="processDeposit('stars')">شحن الرصيد</button>
+          <button class="topup-btn" onclick="processDeposit('stars')">Top Up Balance</button>
         </div>
         <div class="deposit-history-section" id="stars-history">
-          <div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>
+          <div class="deposit-history-title"><i class="fas fa-history"></i> Deposit History</div>
         </div>
       </div>
 
       <div id="dep-tab-crypto" class="dep-tab-content dep-layout" style="display:none;">
         <div class="dep-top-section">
           <div id="cryptoPendingBanner" class="crypto-pending-banner">
-            <span class="crypto-pending-title"><i class="fas fa-clock"></i> إيداع معلق</span>
+            <span class="crypto-pending-title"><i class="fas fa-clock"></i> Pending Deposit</span>
             <span class="crypto-pending-timer" id="cryptoPendingTimer">30:00</span>
             <div class="crypto-pending-actions">
-              <button class="crypto-btn check" onclick="checkCryptoStatus(this)" title="تحقق"><i class="fas fa-rotate"></i></button>
-              <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()" title="إلغاء"><i class="fas fa-xmark"></i></button>
+              <button class="crypto-btn check" onclick="checkCryptoStatus(this)" title="Check"><i class="fas fa-rotate"></i></button>
+              <button class="crypto-btn cancel" onclick="cancelCryptoInvoice()" title="Cancel"><i class="fas fa-xmark"></i></button>
             </div>
           </div>
           <div class="amount-display">
@@ -2425,8 +2432,8 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <button class="chip" onclick="addCryptoChip(5)">+ $5</button>
             <button class="chip" onclick="addCryptoChip(10)">+ $10</button>
           </div>
-          <button class="topup-btn" onclick="processDeposit('crypto')">ادفع بـ USDT</button>
-          <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">الحد الأدنى $1 - الأقصى $1000</p>
+          <button class="topup-btn" onclick="processDeposit('crypto')">Pay with USDT</button>
+          <p style="text-align:center; font-size:12px; color:var(--text-secondary); margin-top:10px;">Minimum $1 - Maximum $1000</p>
         </div>
       </div>
 
@@ -2445,12 +2452,12 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <button class="chip" onclick="addTonChip(10)">+ 10 TON</button>
           </div>
           <button class="topup-btn" style="background: linear-gradient(135deg, #0098EA, #0077BE);" onclick="processTonDeposit()">
-            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 22px; height: 22px; object-fit: contain; margin-left: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
-            إيداع عبر TON WALLET
+            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" style="width: 22px; height: 22px; object-fit: contain; margin-right: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            Deposit via TON WALLET
           </button>
           <div class="ton-deposit-note">
             <i class="fas fa-info-circle"></i>
-            <span>يجب ربط محفظة TON أولاً من الملف الشخصي. سيتم فتح محفظتك لتأكيد المعاملة.<br>الحد الأدنى للإيداع: <strong>0.01 TON</strong></span>
+            <span>You must connect a TON wallet from your profile first. Your wallet will open to confirm the transaction.<br>Minimum deposit: <strong>0.01 TON</strong></span>
           </div>
         </div>
       </div>
@@ -2459,7 +2466,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
     <div class="view" id="view-withdraw">
       <div class="page-header" style="text-align:center;">
         <div class="page-hero-icon" id="withdraw-hero-tgs"></div>
-        <h2 class="page-title" style="justify-content: center;">سحب الأرباح</h2>
+        <h2 class="page-title" style="justify-content: center;">Withdraw Winnings</h2>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="switchWithdrawTab('binance', this)"><img src="https://up6.cc/2026/09/178982889076391.png"> Binance</div>
@@ -2474,7 +2481,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         <div class="wd-input-group" style="margin-top:47.5px; margin-bottom:20px;">
           <input type="text" class="wd-input" placeholder="Binance Pay ID" id="wdBinanceId">
         </div>
-        <button class="topup-btn" onclick="processWithdraw('binance')">تقديم الطلب</button>
+        <button class="topup-btn" onclick="processWithdraw('binance')">Submit Request</button>
       </div>
       <div id="wd-tab-gram" class="wd-tab-content" style="display:none;">
         <div class="amount-display">
@@ -2485,10 +2492,10 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         <div class="wd-input-group" style="margin-top:47.5px; margin-bottom:20px;">
           <input type="text" class="wd-input" placeholder="TON Wallet Address" id="wdGramId">
         </div>
-        <button class="topup-btn" onclick="processWithdraw('gram')">تقديم الطلب</button>
+        <button class="topup-btn" onclick="processWithdraw('gram')">Submit Request</button>
       </div>
       <button class="btn-secondary" style="margin-top: 20px;" onclick="openWithdrawHistory()">
-        <i class="fas fa-history"></i> سجل السحوبات
+        <i class="fas fa-history"></i> Withdrawal History
       </button>
     </div>
 
@@ -2497,33 +2504,33 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 
         <div class="ref-gem" id="ref-gem-tgs"></div>
         <div class="referral-header">
-          <h2>ادعُ أصدقاءك</h2>
-          <p>برنامج الإحالة: 0.5 نجمة عن كل صديق ينضم عبر رابطك</p>
+          <h2>Invite Your Friends</h2>
+          <p>Referral program: 0.5 star for every friend who joins through your link</p>
         </div>
         <div class="ref-reward-card">
-          <div class="ref-reward-icon"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png" alt="نجمة"></div>
+          <div class="ref-reward-icon"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png" alt="Star"></div>
           <div class="ref-reward-text">
-            <h3>0.5 نجمة على كل دعوة</h3>
-            <p>تُضاف تلقائياً إلى رصيدك عند كل دعوة ناجحة</p>
+            <h3>0.5 star per invite</h3>
+            <p>Added to your balance automatically for every successful invite</p>
           </div>
         </div>
         <div class="ref-earnings-card">
-          <div class="ref-earnings-label">أرباحك من الإحالات</div>
+          <div class="ref-earnings-label">Your referral earnings</div>
           <div class="ref-earnings-value"><img src="PerfectTitanium-071-by-StickerEmojiRobot.png" alt="Stars"><span id="refEarned">0</span></div>
-          <div class="ref-earnings-sub"><b id="refInvited">0</b> صديق انضم عبر رابطك</div>
+          <div class="ref-earnings-sub"><b id="refInvited">0</b> friends joined through your link</div>
         </div>
         <div class="ref-share-row">
           <span id="refLinkText" style="display:none"></span>
           <span id="refIdText" style="display:none"></span>
-          <button class="ref-share-btn ref-copy-btn" onclick="copyText(document.getElementById('refLinkText').textContent)"><i class="fas fa-copy"></i> نسخ الرابط</button>
-          <button class="ref-share-btn" onclick="shareReferral()"><i class="fas fa-paper-plane"></i> دعوة</button>
+          <button class="ref-share-btn ref-copy-btn" onclick="copyText(document.getElementById('refLinkText').textContent)"><i class="fas fa-copy"></i> Copy Link</button>
+          <button class="ref-share-btn" onclick="shareReferral()"><i class="fas fa-paper-plane"></i> Invite</button>
         </div>
                 <div class="manual-ref-card" id="manualRefCard">
-          <h3><i class="fas fa-key"></i> إدخال معرف دعوة</h3>
-          <p>إذا لم تدخل عبر رابط دعوة، يمكنك إدخال معرف صديقك الداعي للحصول على مكافأة نجوم.</p>
+          <h3><i class="fas fa-key"></i> Enter Invite ID</h3>
+          <p>If you did not join through an invite link, you can enter your inviting friend's ID to get a star reward.</p>
           <div class="link-box">
-            <input type="text" class="manual-ref-input" id="manualRefInput" placeholder="أدخل معرف الداعي" inputmode="numeric" />
-            <button class="btn-copy" onclick="submitManualReferral(this)">تأكيد</button>
+            <input type="text" class="manual-ref-input" id="manualRefInput" placeholder="Enter inviter ID" inputmode="numeric" />
+            <button class="btn-copy" onclick="submitManualReferral(this)">Confirm</button>
           </div>
         </div>
 
@@ -2545,10 +2552,10 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <div class="level-badge" id="levelBadge">1</div>
           </div>
           <div class="profile-hero-info">
-            <h2 class="profile-username" id="profileName">اسم المستخدم</h2>
+            <h2 class="profile-username" id="profileName">Username</h2>
             <div class="profile-id-row">
               <span id="profileId">123456789</span>
-              <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)" title="نسخ المعرف">
+              <button class="profile-id-copy" onclick="copyText(document.getElementById('profileId').innerText)" title="Copy ID">
                 <i class="fas fa-copy"></i>
               </button>
             </div>
@@ -2557,7 +2564,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
         <div class="vip-status-row" onclick="document.getElementById('vipSection').scrollIntoView({behavior:'smooth'})">
           <div class="vip-status-icon"><i class="fas fa-crown"></i></div>
           <div class="vip-status-text"><span>VIP STATUS</span><b id="vipStatusName">No status</b></div>
-          <i class="fas fa-chevron-left vip-status-arrow"></i>
+          <i class="fas fa-chevron-right vip-status-arrow"></i>
         </div>
         <div class="turnover-block">
           <div class="turnover-label" id="turnoverLabel">YOUR WINNINGS</div>
@@ -2572,8 +2579,8 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
       <div class="profile-games-card">
         <div class="profile-games-icon"><i class="fas fa-gamepad"></i></div>
         <div class="profile-games-text">
-          <h4>إجمالي الألعاب</h4>
-          <p><b id="profileGames">0</b> لعبة لعبتها</p>
+          <h4>Total Games</h4>
+          <p><b id="profileGames">0</b> games played</p>
         </div>
       </div>
 
@@ -2581,15 +2588,15 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
       <div class="vip-section" id="vipSection">
         <div class="vip-header">
           <div class="vip-header-icon"><i class="fas fa-crown"></i></div>
-          <h3>مستويات VIP</h3>
+          <h3>VIP Levels</h3>
         </div>
-        <div class="vip-sub">مستواك يزيد مع أرباحك من الـ Stars — كل مستوى بيربحك 1,000 تكت</div>
+        <div class="vip-sub">Your level rises with your Stars winnings, each level earns you 1,000 tickets</div>
 
         <div class="vip-gate" id="vipGate" style="display:none;">
           <div class="vip-gate-icon"><i class="fas fa-lock"></i></div>
-          <div class="vip-gate-text">قائمة المستويات مقفلة</div>
-          <div class="vip-gate-sub">بتنفتح أول ما يصير عندك أي رصيد Stars</div>
-          <button class="profile-deposit-btn vip-gate-btn" onclick="go('deposit')">إيداع</button>
+          <div class="vip-gate-text">Level list is locked</div>
+          <div class="vip-gate-sub">It unlocks as soon as you have any Stars balance</div>
+          <button class="profile-deposit-btn vip-gate-btn" onclick="go('deposit')">Deposit</button>
         </div>
         <div id="vipRows">
         <div class="vip-row" data-threshold="100000" onclick="toggleVip(this)">
@@ -2600,7 +2607,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <i class="fas fa-chevron-down vip-chevron"></i>
         </div>
-        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>مكافأة الوصول: 1,000 تكت</span></div></div></div>
+        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>Arrival reward: 1,000 tickets</span></div></div></div>
 
         <div class="vip-row" data-threshold="250000" onclick="toggleVip(this)">
           <div class="vip-crown" style="color:#C9CED6; background: radial-gradient(circle at 50% 30%, rgba(201,206,214,0.30), rgba(201,206,214,0.07));"><i class="fas fa-crown"></i></div>
@@ -2610,7 +2617,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <i class="fas fa-chevron-down vip-chevron"></i>
         </div>
-        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>مكافأة الوصول: 1,000 تكت</span></div></div></div>
+        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>Arrival reward: 1,000 tickets</span></div></div></div>
 
         <div class="vip-row" data-threshold="500000" onclick="toggleVip(this)">
           <div class="vip-crown" style="color:#3E9BE9; background: radial-gradient(circle at 50% 30%, rgba(62,155,233,0.35), rgba(62,155,233,0.08));"><i class="fas fa-crown"></i></div>
@@ -2620,7 +2627,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <i class="fas fa-chevron-down vip-chevron"></i>
         </div>
-        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>مكافأة الوصول: 1,000 تكت</span></div></div></div>
+        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>Arrival reward: 1,000 tickets</span></div></div></div>
 
         <div class="vip-row" data-threshold="1000000" onclick="toggleVip(this)">
           <div class="vip-crown" style="color:#B04CE0; background: radial-gradient(circle at 50% 30%, rgba(176,76,224,0.35), rgba(176,76,224,0.08));"><i class="fas fa-crown"></i></div>
@@ -2630,7 +2637,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <i class="fas fa-chevron-down vip-chevron"></i>
         </div>
-        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>مكافأة الوصول: 1,000 تكت</span></div></div></div>
+        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>Arrival reward: 1,000 tickets</span></div></div></div>
 
         <div class="vip-row" data-threshold="5000000" onclick="toggleVip(this)">
           <div class="vip-crown" style="color:#2ECC8F; background: radial-gradient(circle at 50% 30%, rgba(46,204,143,0.35), rgba(46,204,143,0.08));"><i class="fas fa-crown"></i></div>
@@ -2640,7 +2647,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <i class="fas fa-chevron-down vip-chevron"></i>
         </div>
-        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>مكافأة الوصول: 1,000 تكت</span></div></div></div>
+        <div class="vip-details"><div class="vip-details-inner"><div class="vip-reward-item"><i class="fas fa-check-circle"></i><span>Arrival reward: 1,000 tickets</span></div></div></div>
         </div>
       </div>
 
@@ -2650,10 +2657,10 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <i class="fas fa-user-friends" style="color: #963cff;"></i>
           </div>
           <div class="profile-nav-card-text">
-            <h4>دعوة الأصدقاء</h4>
-            <p>0.5 نجمة على كل دعوة</p>
+            <h4>Invite Friends</h4>
+            <p>0.5 star per invite</p>
           </div>
-          <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
+          <i class="fas fa-chevron-right profile-nav-card-arrow"></i>
         </div>
 
         <div class="profile-nav-card" onclick="go('tasks')">
@@ -2661,10 +2668,10 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
             <i class="fas fa-clipboard-check" style="color: #3b6fdb;"></i>
           </div>
           <div class="profile-nav-card-text">
-            <h4>المهام</h4>
-            <p>أكمل المهام واربح نجوماً</p>
+            <h4>Tasks</h4>
+            <p>Complete tasks and win stars</p>
           </div>
-          <i class="fas fa-chevron-left profile-nav-card-arrow"></i>
+          <i class="fas fa-chevron-right profile-nav-card-arrow"></i>
         </div>
       </div>
 
@@ -2676,24 +2683,32 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           </div>
           <div class="wallet-info">
             <h4>TON WALLET</h4>
-            <div id="walletStatus">غير متصلة</div>
+            <div id="walletStatus">Not connected</div>
           </div>
         </div>
         <div id="walletActions"></div>
       </div>
 
+            <div class="theme-card">
+        <div class="theme-card-title"><i class="fas fa-circle-half-stroke"></i> Appearance</div>
+        <div class="tabs" id="themeTabs">
+          <div class="tab" data-theme-opt="light" onclick="setTheme('light')"><i class="fas fa-sun"></i> Light</div>
+          <div class="tab" data-theme-opt="dark" onclick="setTheme('dark')"><i class="fas fa-moon"></i> Dark</div>
+        </div>
+      </div>
+
       <div class="profile-actions">
         <button class="profile-action-btn" onclick="openModal('modal-help')">
-          <span><i class="fas fa-question-circle" style="margin-left: 8px;"></i> المساعدة</span>
-          <i class="fas fa-chevron-left"></i>
+          <span><i class="fas fa-question-circle" style="margin-right: 8px;"></i> Help</span>
+          <i class="fas fa-chevron-right"></i>
         </button>
         <button class="profile-action-btn" onclick="openModal('modal-privacy')">
-          <span><i class="fas fa-shield-alt" style="margin-left: 8px;"></i> سياسة الخصوصية</span>
-          <i class="fas fa-chevron-left"></i>
+          <span><i class="fas fa-shield-alt" style="margin-right: 8px;"></i> Privacy Policy</span>
+          <i class="fas fa-chevron-right"></i>
         </button>
         <button class="profile-action-btn" onclick="openModal('modal-terms')">
-          <span><i class="fas fa-file-contract" style="margin-left: 8px;"></i> شروط اللعب والنزاهة</span>
-          <i class="fas fa-chevron-left"></i>
+          <span><i class="fas fa-file-contract" style="margin-right: 8px;"></i> Terms of Play & Fairness</span>
+          <i class="fas fa-chevron-right"></i>
         </button>
       </div>
     </div>
@@ -2745,23 +2760,23 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
     <div class="dock-nav">
       <div class="nav-item" data-view="home" onclick="go('home')">
         <i class="fas fa-home"></i>
-        <span class="nav-text">الرئيسية</span>
+        <span class="nav-text">Home</span>
       </div>
       <div class="nav-item" data-view="tasks" onclick="go('tasks')">
         <i class="fas fa-tasks"></i>
-        <span class="nav-text">المهام</span>
+        <span class="nav-text">Tasks</span>
       </div>
       <div class="nav-item" data-view="deposit" onclick="go('deposit')">
         <i class="fas fa-wallet"></i>
-        <span class="nav-text">إيداع</span>
+        <span class="nav-text">Deposit</span>
       </div>
       <div class="nav-item" data-view="withdraw" onclick="go('withdraw')">
         <i class="fas fa-money-bill-transfer"></i>
-        <span class="nav-text">سحب</span>
+        <span class="nav-text">Withdraw</span>
       </div>
       <button class="nav-item nav-exit" onclick="exitGame()">
         <i class="fas fa-door-open"></i>
-        <span>الخروج</span>
+        <span>Exit</span>
       </button>
     </div>
     <div class="nav-profile" data-view="profile" onclick="go('profile')">
@@ -2776,78 +2791,78 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
     <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(201,121,26,0.15), rgba(201,121,26,0.05)); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
       <i class="fas fa-wifi" style="font-size: 36px; color: var(--warning);"></i>
     </div>
-    <h3>تعذر تحميل البيانات</h3>
-    <p>لم نتمكن من الاتصال بالخادم. تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.</p>
+    <h3>Unable to load data</h3>
+    <p>We could not connect to the server. Check your internet connection and try again.</p>
     <button class="modal-btn" onclick="retryLoad()">
-      <i class="fas fa-rotate" style="margin-left: 6px;"></i>
-      حاول مجدداً
+      <i class="fas fa-rotate" style="margin-right: 6px;"></i>
+      Try Again
     </button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalInsufficient">
   <div class="modal-content">
-    <h3>رصيدك غير كافٍ!</h3>
-    <p>تحتاج <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> Stars إضافية. يرجى شحن رصيدك.</p>
-    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">شحن الرصيد</button>
+    <h3>Insufficient balance!</h3>
+    <p>You need <span id="shortAmount" style="color:#e03858; font-weight:800; direction:ltr;">999</span> more Stars. Please top up your balance.</p>
+    <button class="modal-btn" onclick="closeModal('modalInsufficient'); go('deposit');">Top Up Balance</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalWithdrawSuccess">
   <div class="modal-content">
     <img src="https://img.icons8.com/liquid-glass-color/999/ok.png" style="width: 80px; height: 80px; margin-bottom: 20px;">
-    <h3>تم تقديم الطلب بنجاح</h3>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">قمت بسحب <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> Stars</p>
-    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">وستحصل على <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
+    <h3>Request submitted successfully</h3>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 8px;">You withdrew <span id="successWdStars" style="color:#b8912a; font-weight:800; direction:ltr;">0</span> Stars</p>
+    <p style="font-size: 16px; color: var(--text-primary); margin-bottom: 20px;">You will receive <span id="successWdPayout" style="color:#0a8a5a; font-weight:800; direction:ltr;">$0.00</span></p>
     <div style="background: rgba(201,121,26,0.10); color: #a86810; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; margin-bottom: 24px; border: 1px solid rgba(201,121,26,0.22);">
-      <i class="fas fa-clock"></i> سيتم التحقق من الطلب ومعالجته خلال 24 ساعة.
+      <i class="fas fa-clock"></i> Your request will be verified and processed within 24 hours.
     </div>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')">حسناً</button>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawSuccess')">OK</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalWithdrawHistory">
   <div class="modal-content history-modal">
-    <h3>سجل السحوبات</h3>
+    <h3>Withdrawal History</h3>
     <div class="history-list" id="withdrawHistoryList"></div>
-    <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">عرض الكل</button>
-    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">إغلاق</button>
+    <button class="show-all-btn" id="showAllWdBtn" onclick="showAllWithdrawals()">View All</button>
+    <button class="modal-btn" onclick="closeModal('modalWithdrawHistory')">Close</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-help">
   <div class="modal-content info-modal">
-    <h3>المساعدة والدعم</h3>
-    <p>إذا واجهت أي مشكلة في التطبيق أو كانت لديك استفسارات، يمكنك التواصل مع فريق الدعم عبر البوت الرسمي.</p>
-    <p>يرجى تقديم معرف المستخدم الخاص بك (الموجود في الملف الشخصي) لتسهيل عملية الدعم.</p>
-    <button class="modal-btn" onclick="closeModal('modal-help')">إغلاق</button>
+    <h3>Help & Support</h3>
+    <p>If you run into any problem in the app or have questions, you can contact the support team through the official bot.</p>
+    <p>Please provide your user ID (found in your profile) to make support easier.</p>
+    <button class="modal-btn" onclick="closeModal('modal-help')">Close</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-privacy">
   <div class="modal-content info-modal">
-    <h3>سياسة الخصوصية</h3>
-    <p>نحن نأخذ خصوصيتك على محمل الجد. إليك كيف نتعامل مع بياناتك:</p>
+    <h3>Privacy Policy</h3>
+    <p>We take your privacy seriously. Here is how we handle your data:</p>
     <ul>
-      <li>نقوم بجمع معرف تيليجرام (Telegram ID) واسم المستخدم لتخصيص تجربتك وحفظ تقدمك.</li>
-      <li>لا نقوم بمشاركة بياناتك مع أي أطراف ثالثة لأغراض تسويقية.</li>
-      <li>يتم تأمين جميع المعاملات المالية من خلال بوابات دفع موثوقة.</li>
+      <li>We collect your Telegram ID and username to personalize your experience and save your progress.</li>
+      <li>We do not share your data with any third parties for marketing purposes.</li>
+      <li>All financial transactions are secured through trusted payment gateways.</li>
     </ul>
-    <button class="modal-btn" onclick="closeModal('modal-privacy')">إغلاق</button>
+    <button class="modal-btn" onclick="closeModal('modal-privacy')">Close</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal-terms">
   <div class="modal-content info-modal">
-    <h3>شروط اللعب والنزاهة</h3>
-    <p>باستخدامك للتطبيق، فإنك توافق على الشروط التالية:</p>
+    <h3>Terms of Play & Fairness</h3>
+    <p>By using the app, you agree to the following terms:</p>
     <ul>
-      <li><strong>النزاهة ومنع الغش:</strong> يُمنع منعاً باتاً استخدام أي برامج آلية، ثغرات، أو محاولة التلاعب في نتائج الألعاب. أي محاولة غش ستؤدي إلى حظر الحساب فوراً ومصادرة الأرصدة.</li>
-      <li><strong>النتائج العشوائية:</strong> تعتمد جميع الألعاب على أنظمة عشوائية (RNG) لضمان العدالة الكاملة لجميع اللاعبين.</li>
-      <li><strong>حظر السحب:</strong> يحتفظ التطبيق بالحق في رفض أي طلب سحب أو إلغاء أرباح إذا تم الاشتباه في وجود أنشطة غير قانونية، غش، أو استخدام حسابات مكررة (Multi-accounts).</li>
-      <li><strong>المسؤولية:</strong> اللعب مقابل Stars هو نشاط ترفيهي. يرجى اللعب بمسؤولية وعدم المراهنة بأكثر مما يمكنك تحمله من خسارة.</li>
+      <li><strong>Fairness and anti-cheating:</strong> Using any bots, exploits, or attempts to manipulate game results is strictly forbidden. Any cheating attempt will lead to an immediate account ban and confiscation of balances.</li>
+      <li><strong>Random results:</strong> All games rely on random number generators (RNG) to ensure complete fairness for all players.</li>
+      <li><strong>Withdrawal restrictions:</strong> The app reserves the right to reject any withdrawal request or cancel winnings if illegal activity, cheating, or duplicate accounts (multi-accounts) are suspected.</li>
+      <li><strong>Responsibility:</strong> Playing for Stars is an entertainment activity. Please play responsibly and do not bet more than you can afford to lose.</li>
     </ul>
-    <button class="modal-btn" onclick="closeModal('modal-terms')">موافق</button>
+    <button class="modal-btn" onclick="closeModal('modal-terms')">Agree</button>
   </div>
 </div>
 
@@ -2855,7 +2870,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   <div class="modal-content" style="position: relative; border-bottom-left-radius: 0; border-bottom-right-radius: 0; padding: 30px 24px calc(24px + env(safe-area-inset-bottom)); text-align: center;">
     <button class="close-sheet" onclick="closeTaskSheet()" style="position: absolute; top: 16px; right: 16px; color: var(--text-secondary); font-size: 20px; background: none; border: none;"><i class="fas fa-times"></i></button>
     <div class="task-modal-icon" id="tsIcon" style="width: 80px; height: 80px; border-radius: 50%; background: #229ED9; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
-    <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: var(--text-primary); line-height: 1.4; padding: 0 10px;">اسم المهمة</h3>
+    <h3 id="tsTitle" style="font-size: 20px; font-weight: 800; margin-bottom: 24px; color: var(--text-primary); line-height: 1.4; padding: 0 10px;">Task name</h3>
     <button class="modal-btn" id="tsStartBtn" onclick="startTaskAction()" style="margin-bottom: 12px;">Start</button>
     <button class="modal-btn modal-btn-blue" onclick="checkTaskAction()">Check task</button>
   </div>
@@ -2864,22 +2879,22 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
 <div class="modal-overlay" id="slots-win-modal">
   <div class="modal-content spin-win-modal" style="border: 1px solid rgba(76,201,240,0.28);">
     <div class="modal-icon" id="slots-win-icon" style="width: 100px; height: 100px; margin: 0 auto 20px;"></div>
-    <h3>مبروك! لقد ربحت</h3>
-    <p style="margin-bottom: 10px;">لقد حصلت على</p>
+    <h3>Congratulations! You won</h3>
+    <p style="margin-bottom: 10px;">You received</p>
     <div class="win-value" id="slots-win-value" style="font-size: 32px; font-weight: 900; color: var(--star-color); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; text-shadow: 0 4px 20px rgba(255,215,0,0.45); direction: ltr;"></div>
-    <button class="modal-btn" onclick="closeModal('slots-win-modal')">حسناً</button>
+    <button class="modal-btn" onclick="closeModal('slots-win-modal')">OK</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="slots-prizes-modal">
   <div class="modal-content" style="max-width: 400px; padding: 20px;">
-    <h3 style="margin-bottom: 20px;">جدول الجوائز</h3>
+    <h3 style="margin-bottom: 20px;">Prize Table</h3>
     <div class="prizes-grid" id="slots-prizes-grid"></div>
-    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')">إغلاق</button>
+    <button class="modal-btn" onclick="closeModal('slots-prizes-modal')">Close</button>
   </div>
 </div>
 
-<div class="toast" id="toast">رسالة</div>
+<div class="toast" id="toast">Message</div>
 
 <script>'use strict';
 
@@ -2891,10 +2906,10 @@ const TON_TO_STARS_RATE = 100; // 1 TON = 100 Stars
 
 let tonConnectUI = null;
 let connectedWalletAddress = null;
-let _lastSavedRaw = null; // تتبع آخر عنوان خام تم حفظه
+let _lastSavedRaw = null; // note
 
 /* ============ TON ADDRESS VALIDATION ============ */
-// يتحقق أن العنوان بصيغة raw صحيحة: workchain:64hex
+// note
 function isValidRawAddress(addr) {
   return typeof addr === 'string' && /^-?\d+:[0-9a-fA-F]{64}$/.test(addr);
 }
@@ -2916,7 +2931,7 @@ function initTonConnect() {
       if (wallet && wallet.account && wallet.account.address) {
         connectedWalletAddress = wallet.account.address;
         updateWalletUI();
-        // لا نُظهر أي خطأ أثناء الاسترداد التلقائي
+        // note
         saveWalletToFirebase(connectedWalletAddress, false);
       } else {
         connectedWalletAddress = null;
@@ -2943,25 +2958,25 @@ function updateWalletUI() {
   if (!statusEl || !actionsEl) return;
 
   if (connectedWalletAddress) {
-    statusEl.innerHTML = '<span class="wallet-connected-badge"><i class="fas fa-check-circle"></i> متصلة</span>';
+    statusEl.innerHTML = '<span class="wallet-connected-badge"><i class="fas fa-check-circle"></i> Connected</span>';
     actionsEl.innerHTML = `
       <div class="wallet-address-row">
         <span class="wallet-address" title="${connectedWalletAddress}">${shortenWalletAddress(connectedWalletAddress)}</span>
-        <button class="wallet-copy-btn" onclick="copyWalletAddress()" title="نسخ العنوان">
+        <button class="wallet-copy-btn" onclick="copyWalletAddress()" title="Copy address">
           <i class="fas fa-copy"></i>
         </button>
       </div>
       <button class="wallet-disconnect-btn" onclick="disconnectWallet()">
         <i class="fas fa-unlink"></i>
-        قطع الاتصال
+        Disconnect
       </button>
     `;
   } else {
-    statusEl.textContent = 'غير متصلة';
+    statusEl.textContent = 'Not connected';
     actionsEl.innerHTML = `
       <button class="wallet-connect-btn" onclick="connectWallet()">
         <i class="fas fa-link"></i>
-        ربط المحفظة
+        Connect Wallet
       </button>
     `;
   }
@@ -2969,13 +2984,13 @@ function updateWalletUI() {
 
 async function connectWallet() {
   if (!tonConnectUI) {
-    showToast('جاري تحميل TON Connect...');
+    showToast('Loading TON Connect...');
     return;
   }
   try {
     await tonConnectUI.openModal();
   } catch (e) {
-    showToast('تعذر فتح نافذة الاتصال');
+    showToast('Could not open the connection window');
   }
 }
 
@@ -2983,9 +2998,9 @@ async function disconnectWallet() {
   if (!tonConnectUI) return;
   try {
     await tonConnectUI.disconnect();
-    showToast('تم قطع الاتصال بالمحفظة');
+    showToast('Wallet disconnected');
   } catch (e) {
-    showToast('حدث خطأ أثناء قطع الاتصال');
+    showToast('An error occurred while disconnecting');
   }
 }
 
@@ -2994,25 +3009,25 @@ function copyWalletAddress() {
 }
 
 /* ============ ADDRESS CONVERSION HELPER ============ */
-// يقبل: friendly (UQ..., EQ...), raw (0:hex, -1:hex), hex (64 chars)
-// يعيد دائماً: raw (workchain:hex) أو نفس المُدخل إذا تعذّر التحويل
+// note
+// note
 function convertToRawAddress(addr) {
   if (!addr) return '';
   addr = String(addr).trim();
   if (!addr) return '';
 
-  // إذا كان أصلاً raw
+  // note
   if (addr.includes(':')) return addr;
 
-  // إذا كان hex فقط (64 حرف)
+  // note
   if (addr.length === 64 && /^[0-9a-fA-F]+$/.test(addr)) return '0:' + addr;
 
-  // محاولة فك الترميز كـ base64url (friendly)
+  // note
   try {
     const b64 = addr.replace(/-/g, '+').replace(/_/g, '/');
     const padded = b64 + '='.repeat((4 - b64.length % 4) % 4);
     const binary = atob(padded);
-    if (binary.length < 34) return addr; // غير صالح
+    if (binary.length < 34) return addr; // note
 
     const wcByte = binary.charCodeAt(1);
     const workchain = (wcByte === 0xFF) ? -1 : 0;
@@ -3031,14 +3046,14 @@ async function saveWalletToFirebase(address, showError = false) {
   try {
     const rawAddress = convertToRawAddress(address);
 
-    // فحص صارم: يجب أن يكون raw صحيح
+    // note
     if (!isValidRawAddress(rawAddress)) {
       console.error('[TON] ❌ Invalid raw address:', rawAddress, 'from:', address);
-      if (showError) showToast('تعذّر حفظ المحفظة، جرّب محفظة أخرى');
+      if (showError) showToast('Could not save the wallet, try another wallet');
       return;
     }
 
-    // تجنّب الكتابة المتكررة لنفس العنوان
+    // note
     if (_lastSavedRaw === rawAddress) return;
     _lastSavedRaw = rawAddress;
 
@@ -3050,7 +3065,7 @@ async function saveWalletToFirebase(address, showError = false) {
     console.log('[TON] ✅ Wallet saved raw:', rawAddress);
   } catch (e) {
     console.error('[TON] Save error:', e);
-    if (showError) showToast('حدث خطأ أثناء حفظ المحفظة');
+    if (showError) showToast('An error occurred while saving the wallet');
   }
 }
 
@@ -3066,7 +3081,7 @@ async function clearWalletFromFirebase() {
   }
 }
 
-// إصلاح تلقائي إذا كانت المحفظة المحفوظة خاطئة
+// note
 async function autoFixStoredWallet(userData) {
   if (!db) return;
   if (!userData || !userData.tonWallet) return;
@@ -3106,20 +3121,20 @@ function addTonChip(amount) {
 
 async function processTonDeposit() {
   if (!tonConnectUI) {
-    showToast('TON Connect غير جاهز، يرجى المحاولة لاحقاً');
+    showToast('TON Connect is not ready, please try again later');
     return;
   }
 
   if (!connectedWalletAddress) {
-    showToast('يرجى ربط المحفظة أولاً');
+    showToast('Please connect your wallet first');
     setTimeout(() => go('profile'), 1200);
     return;
   }
 
   const input = document.getElementById('tonDepositAmountInput');
   const amount = parseFloat(input.value);
-  if (!amount || amount < 0.01) return showToast('الحد الأدنى 0.01 TON');
-  if (amount > 100) return showToast('الحد الأقصى 100 TON');
+  if (!amount || amount < 0.01) return showToast('Minimum 0.01 TON');
+  if (amount > 100) return showToast('Maximum 100 TON');
 
   const amountInNano = Math.floor(amount * 1e9);
 
@@ -3153,9 +3168,9 @@ async function processTonDeposit() {
       }
     }
 
-    showToast('تم إرسال المعاملة! سيتم التحقق منها قريباً');
+    showToast('Transaction sent! It will be verified soon');
     setTimeout(() => {
-      showToast(`ستضاف ${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} Stars بعد التحقق`);
+      showToast(`${formatNum(Math.floor(amount * TON_TO_STARS_RATE))} Stars will be added after verification`);
     }, 1800);
 
     input.value = '1.00';
@@ -3163,7 +3178,7 @@ async function processTonDeposit() {
 
   } catch (e) {
     console.error('[TON] Transaction error:', e);
-    showToast('فشلت المعاملة أو تم إلغاؤها');
+    showToast('Transaction failed or was canceled');
   }
 }
 
@@ -3198,8 +3213,8 @@ function sanitizeDigits(el) {
   if (!el) return;
   const allowDec = el.dataset && el.dataset.decimal === '1';
   let v = el.value || '';
-  v = v.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
-  v = v.replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)));
+  v = v.replace(/[\u0660-\u0669]/g, d => String('\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'.indexOf(d)));
+  v = v.replace(/[\u06f0-\u06f9]/g, d => String('\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9'.indexOf(d)));
   if (allowDec) {
     v = v.replace(/[^0-9.]/g, '');
     const p = v.split('.');
@@ -3272,13 +3287,13 @@ const SLOTS_CONFIG = {
 };
 
 /* ============ VIP LEVELS ============ */
-/* VIP gate: the levels list opens as long as the player has any Stars balance (عبود: "بس صار عندة اي رصيد تفتح مافي داعي الإيداع") */
+/* note */
 function applyVipGate() {
   const gate = document.getElementById('vipGate');
   const rows = document.getElementById('vipRows');
   if (!gate || !rows) return;
   if (typeof user === 'undefined') return;
-  // latch: first time the balance is positive, unlocked stays unlocked (confirmed by عبود)
+  // note
   if (!user.vipUnlocked && (user.stars || 0) > 0) {
     user.vipUnlocked = true;
     if (db && user.id) syncUserData({ vipUnlocked: true });
@@ -3360,7 +3375,7 @@ async function grantVipRewards() {
       if (granted) {
         user.redEnergy = (user.redEnergy || 0) + VIP_LEVEL_REWARD;
         updateBalances();
-        showToast('مبروك! وصلت مستوى ' + tier.name + ' وربحت ' + VIP_LEVEL_REWARD + ' تكت');
+        showToast('Congrats! You reached level ' + tier.name + ' and won ' + VIP_LEVEL_REWARD + ' tickets');
       }
     } catch (e) {
       // leave unclaimed: retried on next win or next data load, earned reward is never lost
@@ -3376,7 +3391,7 @@ function addStarsWon(amount) {
 }
 document.addEventListener('DOMContentLoaded', updateVipLevels);
 
-let user = { id: '123456789', name: 'لاعب', photo: '', username: '', stars: 0, referralEarnings: 0, redEnergy: 0, referrals: 0, totalWithdrawn: 0, gamesPlayed: 0, starsWon: 0, claimedLevels: [], vipUnlocked: false, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
+let user = { id: '123456789', name: 'Player', photo: '', username: '', stars: 0, referralEarnings: 0, redEnergy: 0, referrals: 0, totalWithdrawn: 0, gamesPlayed: 0, starsWon: 0, claimedLevels: [], vipUnlocked: false, lastDailyClaim: 0, nextDailyClaim: 0, dailyStreak: 0, completedTasks: [], referredBy: null };
 let depositAmount = 200;
 let withdrawalHistory = [];
 let wdShowAll = false;
@@ -3515,7 +3530,7 @@ function initTelegram() {
     if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
     if (tg.initDataUnsafe?.user) {
       user.id = String(tg.initDataUnsafe.user.id);
-      user.name = tg.initDataUnsafe.user.first_name || 'لاعب';
+      user.name = tg.initDataUnsafe.user.first_name || 'Player';
       user.photo = tg.initDataUnsafe.user.photo_url || '';
       user.username = tg.initDataUnsafe.user.username || '';
     }
@@ -3617,7 +3632,7 @@ async function processReferralOnStartup() {
       user.stars = (user.stars || 0) + 0.05;
       updateBalances();
       updateManualRefCardVisibility();
-      showToast('تم قبول الدعوة! حصلت على 0.05 نجمة');
+      showToast('Invite accepted! You got 0.05 star');
     }
   } catch (e) {}
 }
@@ -3625,9 +3640,9 @@ async function processReferralOnStartup() {
 async function submitManualReferral(btn) {
   const input = document.getElementById('manualRefInput');
   const refId = (input.value || '').trim();
-  if (!refId) return showToast('أدخل معرف الداعي');
-  if (refId === user.id) return showToast('لا يمكنك استخدام معرفك الخاص');
-  if (user.referredBy) return showToast('لديك داعٍ بالفعل');
+  if (!refId) return showToast('Enter inviter ID');
+  if (refId === user.id) return showToast('You cannot use your own ID');
+  if (user.referredBy) return showToast('You already have an inviter');
   const oldText = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -3639,18 +3654,18 @@ async function submitManualReferral(btn) {
       updateBalances();
       updateManualRefCardVisibility();
       input.value = '';
-      showToast('تم قبول الدعوة! +0.05 نجمة');
+      showToast('Invite accepted! +0.05 star');
     } else if (result.error === 'referrer_not_found') {
-      showToast('معرف الداعي غير موجود');
+      showToast('Inviter ID not found');
     } else if (result.error === 'already_referred') {
-      showToast('لديك داعٍ بالفعل');
+      showToast('You already have an inviter');
       updateManualRefCardVisibility();
     } else if (result.error === 'self') {
-      showToast('لا يمكنك استخدام معرفك الخاص');
+      showToast('You cannot use your own ID');
     } else {
-      showToast('حدث خطأ، حاول لاحقاً');
+      showToast('An error occurred, try again later');
     }
-  } catch (e) { showToast('حدث خطأ، حاول لاحقاً'); }
+  } catch (e) { showToast('An error occurred, try again later'); }
   finally { btn.disabled = false; btn.innerHTML = oldText; }
 }
 
@@ -3701,7 +3716,7 @@ async function fetchUserData() {
       updateVipLevels();
       grantVipRewards();
       applyVipGate();
-      // إصلاح تلقائي لصيغة المحفظة المخزّنة
+      // note
       await autoFixStoredWallet(d).catch(() => {});
     } else {
       await ref.set({
@@ -3781,19 +3796,19 @@ async function loadDepositHistory() {
 function renderDepHist(containerId, list, currencyName, iconUrl) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  let html = '<div class="deposit-history-title"><i class="fas fa-history"></i> سجل الإيداعات</div>';
+  let html = '<div class="deposit-history-title"><i class="fas fa-history"></i> Deposit History</div>';
   if (!list || list.length === 0) {
-    html += '<div style="text-align:center;padding:15px;color:var(--text-tertiary);font-size:12px;">لا يوجد سجل إيداعات حتى الآن</div>';
+    html += '<div style="text-align:center;padding:15px;color:var(--text-tertiary);font-size:12px;">No deposit history yet</div>';
   } else {
     list.slice(0, 10).forEach(item => {
-      const date = new Date(item.time).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const date = new Date(item.time).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       let amtStr = '';
       if (currencyName === 'USDT') amtStr = '$' + item.amount.toFixed(2);
       else if (currencyName === 'TON') amtStr = item.amount.toFixed(2) + ' TON';
       else amtStr = formatNum(item.amount) + ' <img src="PerfectTitanium-071-by-StickerEmojiRobot.png" style="width:14px;height:14px;vertical-align:-2px;">';
 
       const statusClass = item.status === 'success' ? 'status-success' : (item.status === 'pending' ? 'status-pending' : 'status-failed');
-      const statusText = item.status === 'success' ? 'ناجح' : (item.status === 'pending' ? 'قيد المعالجة' : 'فشل');
+      const statusText = item.status === 'success' ? 'Success' : (item.status === 'pending' ? 'Processing' : 'Failed');
 
       html += `
         <div class="dep-history-item">
@@ -3921,7 +3936,7 @@ function slotsChangeBet(bet) {
 }
 function slotsUpdateBalance() {
   const el = document.getElementById('slotsResult');
-  if (el && !slotsState.isSpinning) { el.innerText = 'اختر رهانك'; el.className = 'slots-result'; }
+  if (el && !slotsState.isSpinning) { el.innerText = 'Choose your bet'; el.className = 'slots-result'; }
 }
 function getSlotOutcome() {
   const bet = slotsState.currentBet;
@@ -3944,7 +3959,7 @@ function showSlotsWinModal(prize) {
 async function slotsSpin() {
   if (slotsState.isSpinning) return;
   const bet = slotsState.currentBet;
-  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+  if (user.stars < bet) { showToast('Insufficient balance!'); return; }
   slotsState.isSpinning = true;
   const spinBtn = document.getElementById('slotsSpinBtn');
   spinBtn.disabled = true;
@@ -4036,7 +4051,7 @@ async function slotsSpin() {
         const winningSym = SLOT_SYMBOLS[outcome.id];
         setTimeout(() => showSlotsWinModal({ img: winningSym.img, value: winAmount }), 500);
       } else {
-        resultEl.innerText = 'لا شيء! حظ أوفر المرة القادمة';
+        resultEl.innerText = 'Nothing! Better luck next time';
         resultEl.className = 'slots-result lose';
       }
     } catch(e) {}
@@ -4078,7 +4093,7 @@ function slotsShowPrizes() {
   openModal('slots-prizes-modal');
 }
 
-/* ============ COIN FLIP (الجليد و النار) ============ */
+/* ============ COIN FLIP (Ice and Fire) ============ */
 const COIN_HEADS = 'LuckyLocket-016-512-by-StickerEmojiRobot.png';
 const COIN_TAILS = 'LuckyLocket-006-512-by-StickerEmojiRobot.png';
 
@@ -4094,7 +4109,7 @@ function coinChangeBet(bet) {
 function coinUpdateBalance() {
   const el = document.getElementById('coinResult');
   if (el && !coinState.isFlipping) {
-    el.innerText = 'اختر رهانك';
+    el.innerText = 'Choose your bet';
     el.className = 'coin-result';
   }
 }
@@ -4103,7 +4118,7 @@ async function coinFlip() {
   if (coinState.isFlipping) return;
   const bet = coinState.currentBet;
   if (user.stars < bet) {
-    showToast('رصيدك غير كافٍ!');
+    showToast('Insufficient balance!');
     return;
   }
 
@@ -4169,7 +4184,7 @@ async function coinFlip() {
         updateBalances();
         syncUserData({ stars: firebase.firestore.FieldValue.increment(winAmount) });
         addStarsWon(Math.max(0, winAmount - bet));
-        resultEl.innerText = 'تطابق! ربحت ×2';
+        resultEl.innerText = 'Match! You won ×2';
         resultEl.className = 'coin-result win';
 
         // Reuse slots win modal
@@ -4182,7 +4197,7 @@ async function coinFlip() {
           openModal('slots-win-modal');
         }
       } else {
-        resultEl.innerText = 'لا تطابق! حظ أوفر';
+        resultEl.innerText = 'No match! Better luck';
         resultEl.className = 'coin-result lose';
       }
     } catch (e) {}
@@ -4208,7 +4223,7 @@ async function initDailyLogin() {
   const btnText = document.getElementById('claimBtnText');
   const streakCount = document.getElementById('streakCount');
   if (!container || !btn) return;
-  if (serverOffset === 0) { btnText.innerText = 'جاري المزامنة...'; await calibrateServerTime(); }
+  if (serverOffset === 0) { btnText.innerText = 'Syncing...'; await calibrateServerTime(); }
   const now = serverNow();
   const canClaim = !user.nextDailyClaim || now >= user.nextDailyClaim;
   const streak = user.dailyStreak || 0;
@@ -4229,7 +4244,7 @@ async function initDailyLogin() {
   if (dailyTimerInterval) clearInterval(dailyTimerInterval);
   if (canClaim) {
     btn.disabled = false;
-    btnText.innerText = 'استلام المكافأة';
+    btnText.innerText = 'Claim Reward';
     btn.style.background = 'var(--gradient-primary)';
     btn.style.color = '#FFFFFF';
   } else {
@@ -4241,12 +4256,12 @@ async function initDailyLogin() {
       if (remain <= 0) {
         clearInterval(dailyTimerInterval);
         btn.disabled = false;
-        btnText.innerText = 'استلام المكافأة';
+        btnText.innerText = 'Claim Reward';
         btn.style.background = 'var(--gradient-primary)';
         btn.style.color = '#FFFFFF';
         return;
       }
-      btnText.innerText = 'يتجدد خلال ' + formatRemain(remain);
+      btnText.innerText = 'Renews in ' + formatRemain(remain);
     };
     updateTimer();
     dailyTimerInterval = setInterval(updateTimer, 1000);
@@ -4257,14 +4272,14 @@ async function claimDailyReward() {
   isClaimingDaily = true;
   const now = serverNow();
   if (user.nextDailyClaim && now < user.nextDailyClaim) {
-    showToast('لم يحن وقت الاستلام بعد');
+    showToast('Not time to claim yet');
     isClaimingDaily = false;
     return;
   }
   const btn = document.getElementById('dailyClaimBtn');
   const btnText = document.getElementById('claimBtnText');
   btn.disabled = true;
-  btnText.innerText = 'جاري التحقق...';
+  btnText.innerText = 'Checking...';
   btn.style.background = 'rgba(0,0,0,0.06)';
   btn.style.color = 'var(--text-secondary)';
   try {
@@ -4286,12 +4301,12 @@ async function claimDailyReward() {
       user.nextDailyClaim = nextClaimTime;
       user.dailyStreak = newStreak;
     });
-    showToast('تم استلام المكافأة بنجاح!');
+    showToast('Reward claimed successfully!');
     updateBalances();
     initDailyLogin();
   } catch (e) {
-    if (e.message === "Too early") showToast('لم يحن وقت الاستلام بعد');
-    else showToast('حدث خطأ أثناء الاستلام');
+    if (e.message === "Too early") showToast('Not time to claim yet');
+    else showToast('An error occurred while claiming');
     initDailyLogin();
   } finally { isClaimingDaily = false; }
 }
@@ -4303,7 +4318,7 @@ async function loadTasks() {
     tasksCache = [];
     q.forEach(doc => tasksCache.push({ id: doc.id, ...doc.data() }));
     if (tasksCache.length === 0) {
-      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);">لا توجد مهام متاحة حالياً</div>';
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-secondary);">No tasks available right now</div>';
       return;
     }
     let html = '<div class="task-group">';
@@ -4312,7 +4327,7 @@ async function loadTasks() {
       const rewardIcon = ASSETS.star;
       const isCompleted = user.completedTasks.includes(task.id);
       let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
-      let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>تم</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">ابدأ</button>`;
+      let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>Done</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">Start</button>`;
       html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(task.title)}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(isTicket ? task.rewardAmount * 0.05 : task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
@@ -4322,7 +4337,7 @@ async function loadTasks() {
 function openTaskSheet(taskId) {
   const task = tasksCache.find(t => t.id === taskId);
   if (!task) return;
-  if (user.completedTasks.includes(taskId)) { showToast('لقد قمت بإكمال هذه المهمة بالفعل'); return; }
+  if (user.completedTasks.includes(taskId)) { showToast('You have already completed this task'); return; }
   currentTask = task; taskStartTime = 0;
   document.getElementById('tsTitle').innerText = task.title;
   const iconContainer = document.getElementById('tsIcon');
@@ -4335,16 +4350,16 @@ function startTaskAction() {
   if (!currentTask) return;
   if (tg) tg.openLink(currentTask.link); else window.open(currentTask.link, '_blank');
   taskStartTime = Date.now();
-  showToast('يرجى العودة بعد 5 ثوانٍ للتحقق');
+  showToast('Please come back after 5 seconds to verify');
 }
 async function checkTaskAction() {
   if (!currentTask) return;
-  if (user.completedTasks.includes(currentTask.id)) { showToast('لقد قمت بإكمال هذه المهمة بالفعل'); closeTaskSheet(); return; }
-  if (!taskStartTime) return showToast('يجب الضغط على Start أولاً');
-  if ((Date.now() - taskStartTime) / 1000 < 5) return showToast('لم تمر 5 ثوانٍ بعد');
+  if (user.completedTasks.includes(currentTask.id)) { showToast('You have already completed this task'); closeTaskSheet(); return; }
+  if (!taskStartTime) return showToast('You must press Start first');
+  if ((Date.now() - taskStartTime) / 1000 < 5) return showToast('5 seconds have not passed yet');
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = 'جاري التحقق...';
+  btn.innerText = 'Checking...';
   try {
     const isTicket = currentTask.rewardType === 'ticket';
     const amount = isTicket ? Number(currentTask.rewardAmount) * 0.05 : Number(currentTask.rewardAmount);
@@ -4354,9 +4369,9 @@ async function checkTaskAction() {
     const updates = { completedTasks: firebase.firestore.FieldValue.arrayUnion(currentTask.id) };
     updates.stars = firebase.firestore.FieldValue.increment(amount);
     await syncUserData(updates);
-    showToast(`تم إكمال المهمة! +${formatNum(amount)} نجمة`);
+    showToast(`Task completed! +${formatNum(amount)} stars`);
     closeTaskSheet(); loadTasks();
-  } catch (e) { showToast('حدث خطأ'); }
+  } catch (e) { showToast('An error occurred'); }
   finally { btn.disabled = false; btn.innerText = 'Check task'; }
 }
 
@@ -4406,9 +4421,9 @@ function addCryptoChip(amount) {
 }
 async function processDeposit(type) {
   if (type === 'stars') {
-    if (depositAmount < 1) return showToast('أدخل مبلغاً صحيحاً');
-    if (!tg || !tg.openInvoice) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
-    showToast('جاري إنشاء الفاتورة...');
+    if (depositAmount < 1) return showToast('Enter a valid amount');
+    if (!tg || !tg.openInvoice) return showToast('This feature only works inside Telegram');
+    showToast('Creating invoice...');
     try {
       const resp = await fetch(`${API_BASE}/api/create-invoice`, {
         method: 'POST',
@@ -4416,37 +4431,37 @@ async function processDeposit(type) {
         body: JSON.stringify({ userId: user.id, stars: depositAmount })
       });
       const data = await resp.json();
-      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
+      if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'Connection failed');
 
       const paidAmount = depositAmount;
       const baselineStars = user.stars;
 
       tg.openInvoice(data.invoiceLink, async (status) => {
         if (status === 'paid') {
-          showToast('جاري التحقق من الدفع...');
+          showToast('Verifying payment...');
           const confirmed = await pollStarsCredit(baselineStars, paidAmount);
           if (confirmed) {
-            showToast(`تمت إضافة ${formatNum(paidAmount)} Stars بنجاح!`);
+            showToast(`${formatNum(paidAmount)} Stars added successfully!`);
           } else {
-            showToast('تم استلام الدفع، سيتم تحديث الرصيد قريباً');
+            showToast('Payment received, your balance will update soon');
           }
           loadDepositHistory();
           setTimeout(() => go('home'), 900);
         } else if (status === 'cancelled') {
-          showToast('تم إلغاء الدفع');
+          showToast('Payment canceled');
         } else if (status === 'failed') {
-          showToast('فشل الدفع');
+          showToast('Payment failed');
         } else if (status === 'pending') {
-          showToast('الدفع قيد المعالجة...');
+          showToast('Payment is processing...');
         }
       });
-    } catch (e) { showToast(e.message || 'تعذر بدء الدفع'); }
+    } catch (e) { showToast(e.message || 'Could not start payment'); }
   } else if (type === 'crypto') {
     const amount = parseFloat(document.getElementById('cryptoAmountInput').value);
-    if (!amount || amount < 1) return showToast('الحد الأدنى $1');
-    if (amount > 1000) return showToast('الحد الأقصى $1000');
-    if (!tg || !tg.openLink) return showToast('هذه الميزة تعمل فقط داخل تيليجرام');
-    showToast('جاري إنشاء الفاتورة...');
+    if (!amount || amount < 1) return showToast('Minimum $1');
+    if (amount > 1000) return showToast('Maximum $1000');
+    if (!tg || !tg.openLink) return showToast('This feature only works inside Telegram');
+    showToast('Creating invoice...');
     try {
       const payload = {
         userId: user.id,
@@ -4460,16 +4475,16 @@ async function processDeposit(type) {
         body: JSON.stringify(payload)
       });
       let data;
-      try { data = await resp.json(); } catch(e) { throw new Error('استجابة غير صالحة'); }
-      if (!resp.ok) throw new Error(data.error || data.message || `خطأ ${resp.status}`);
+      try { data = await resp.json(); } catch(e) { throw new Error('Invalid response'); }
+      if (!resp.ok) throw new Error(data.error || data.message || `Error ${resp.status}`);
       const payUrl = data.pay_url || data.payment_url || data.url;
-      if (!payUrl) throw new Error(data.error || 'لم يتم استلام رابط الدفع');
+      if (!payUrl) throw new Error(data.error || 'No payment link received');
       cryptoPendingInvoice = { id: data.invoice_id || data.id, createdAt: Date.now() };
       try { localStorage.setItem('sn_crypto_inv', JSON.stringify(cryptoPendingInvoice)); } catch(e) {}
       startCryptoTimer();
       try { tg.openLink(payUrl, { try_instant_view: false }); } catch(e) { window.open(payUrl, '_blank'); }
-      showToast('تم إنشاء الفاتورة، يرجى إكمال الدفع');
-    } catch(e) { showToast(e.message || 'تعذر بدء الدفع'); }
+      showToast('Invoice created, please complete the payment');
+    } catch(e) { showToast(e.message || 'Could not start payment'); }
   }
 }
 function startCryptoTimer() {
@@ -4480,7 +4495,7 @@ function startCryptoTimer() {
   cryptoTimerInterval = setInterval(() => {
     if (!cryptoPendingInvoice) return;
     const remain = Math.max(0, 30 * 60 * 1000 - (Date.now() - cryptoPendingInvoice.createdAt));
-    if (remain <= 0) { clearInterval(cryptoTimerInterval); cancelCryptoInvoice(); showToast('انتهت الفاتورة'); return; }
+    if (remain <= 0) { clearInterval(cryptoTimerInterval); cancelCryptoInvoice(); showToast('Invoice expired'); return; }
     const mins = Math.floor(remain / 60000);
     const secs = Math.floor((remain % 60000) / 1000);
     timerEl.innerText = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
@@ -4514,14 +4529,14 @@ async function checkCryptoStatus(btn) {
     const resp = await fetch(`${API_BASE}/api/shieldz/invoice/${cryptoPendingInvoice.id}`);
     const data = await resp.json();
     if (data.status === 'paid' || data.paid === true) {
-      showToast('تم استلام الدفع بنجاح!');
+      showToast('Payment received successfully!');
       fetchUserData();
       cancelCryptoInvoice();
     } else if (data.status === 'expired' || data.status === 'failed') {
-      showToast('انتهت الفاتورة أو فشلت');
+      showToast('Invoice expired or failed');
       cancelCryptoInvoice();
-    } else showToast('الفاتورة لا تزال قيد الانتظار');
-  } catch (e) { showToast('تعذر التحقق'); }
+    } else showToast('Invoice is still pending');
+  } catch (e) { showToast('Could not verify'); }
   finally { btn.innerHTML = oldTxt; btn.disabled = false; }
 }
 function switchWithdrawTab(tab, el) {
@@ -4563,21 +4578,21 @@ function renderWithdrawHistory() {
   if (!list) return;
   list.innerHTML = '';
   if (withdrawalHistory.length === 0) {
-    list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);font-weight:600;padding:16px;font-size:13px;">لا يوجد سجل سحب بعد</p>';
+    list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);font-weight:600;padding:16px;font-size:13px;">No withdrawal history yet</p>';
     if (showAllBtn) showAllBtn.classList.remove('visible');
     return;
   }
   const statusMap = {
-    pending: { text: 'قيد المراجعة', class: 'st-pending' },
-    processing: { text: 'قيد التنفيذ', class: 'st-processing' },
-    completed: { text: 'مكتمل', class: 'st-completed' },
-    rejected: { text: 'مرفوض', class: 'st-rejected' }
+    pending: { text: 'Under review', class: 'st-pending' },
+    processing: { text: 'In progress', class: 'st-processing' },
+    completed: { text: 'Completed', class: 'st-completed' },
+    rejected: { text: 'Rejected', class: 'st-rejected' }
   };
   const items = wdShowAll ? withdrawalHistory : withdrawalHistory.slice(0, 5);
   let lastDate = '';
   items.forEach(w => {
     const st = statusMap[w.status] || statusMap.pending;
-    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('ar-EG') : 'مؤخراً';
+    const dateStr = w.createdAt ? new Date(w.createdAt).toLocaleDateString('en-US') : 'Recently';
     let methodName = w.method === 'gram' ? 'Gram (TON)' : 'Binance';
     if (dateStr !== lastDate) {
       const dh = document.createElement('div');
@@ -4594,7 +4609,7 @@ function renderWithdrawHistory() {
   if (showAllBtn) {
     if (withdrawalHistory.length > 5 && !wdShowAll) {
       showAllBtn.classList.add('visible');
-      showAllBtn.innerText = `عرض الكل (${withdrawalHistory.length})`;
+      showAllBtn.innerText = `View All (${withdrawalHistory.length})`;
     } else showAllBtn.classList.remove('visible');
   }
 }
@@ -4611,22 +4626,22 @@ async function processWithdraw(method) {
     payoutStr = (amount * 0.01).toFixed(2) + ' TON';
   }
   if (method === 'gram') {
-    if (!id) return showToast('أدخل عنوان محفظة TON');
+    if (!id) return showToast('Enter a TON wallet address');
     const tonOk = /^[EU]Q[A-Za-z0-9_-]{46}$/.test(id) || /^[A-Za-z0-9_-]{48}$/.test(id);
-    if (!tonOk) return showToast('عنوان TON غير صالح');
+    if (!tonOk) return showToast('Invalid TON address');
   } else if (method === 'binance') {
-    if (!id) return showToast('أدخل معرّف Binance');
-    if (!/^\d{6,12}$/.test(id)) return showToast('معرّف Binance يجب أن يكون 6-12 رقمًا');
+    if (!id) return showToast('Enter Binance ID');
+    if (!/^\d{6,12}$/.test(id)) return showToast('Binance ID must be 6-12 digits');
   }
-  if (!amount) return showToast('أدخل مبلغاً صحيحاً');
-  if (method === 'gram') { if (amount < 10) return showToast('الحد الأدنى 10 Stars'); }
-  else { if (amount < 50) return showToast('الحد الأدنى 50 Stars'); }
-  if (amount > 5000) return showToast('الحد الأقصى 5000 Stars');
-  if (amount > user.stars) return showToast('رصيدك غير كافٍ');
+  if (!amount) return showToast('Enter a valid amount');
+  if (method === 'gram') { if (amount < 10) return showToast('Minimum 10 Stars'); }
+  else { if (amount < 50) return showToast('Minimum 50 Stars'); }
+  if (amount > 5000) return showToast('Maximum 5000 Stars');
+  if (amount > user.stars) return showToast('Insufficient balance');
   isWithdrawing = true;
   const btn = event.target;
   btn.disabled = true;
-  btn.innerText = 'جاري الإرسال...';
+  btn.innerText = 'Sending...';
   try {
     user.stars -= amount;
     updateBalances();
@@ -4651,13 +4666,13 @@ async function processWithdraw(method) {
     updateWdUI('gram', document.getElementById('wdGramAmount'));
     if (db) loadWithdrawalHistory(); else renderWithdrawHistory();
   } catch(e) {
-    showToast('حدث خطأ أثناء السحب');
+    showToast('An error occurred during withdrawal');
     user.stars += amount;
     updateBalances();
   } finally {
     isWithdrawing = false;
     btn.disabled = false;
-    btn.innerText = 'تقديم الطلب';
+    btn.innerText = 'Submit Request';
   }
 }
 
@@ -4672,7 +4687,7 @@ function switchRefTab(tab, el) {
 async function loadGlobalRanking() {
   const podiumContainer = document.getElementById('podiumContainer');
   const list = document.getElementById('rankingList');
-  if (!db) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">تعذر التحميل</p>'; return; }
+  if (!db) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">Failed to load</p>'; return; }
   try {
     const q = await db.collection('users').orderBy('referralCount', 'desc').limit(20).get();
     const allUsers = [];
@@ -4683,7 +4698,7 @@ async function loadGlobalRanking() {
     });
     if (allUsers.length === 0) {
       podiumContainer.innerHTML = '';
-      list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">لا توجد تصنيفات</p>';
+      list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">No rankings yet</p>';
       return;
     }
     const top3 = allUsers.slice(0, 3);
@@ -4699,7 +4714,7 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const el = document.createElement('div');
       el.className = `podium-item rank-${rank}${isMe ? ' me' : ''}`;
-      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${escapeHtml(u.name || 'لاعب')}${isMe ? ' (أنت)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} إحالة</div>`;
+      el.innerHTML = `<div class="podium-rank">${rank}</div><div class="podium-avatar">${avatar}</div><div class="podium-name">${escapeHtml(u.name || 'Player')}${isMe ? ' (You)' : ''}</div><div class="podium-count">${formatNum(u.referralCount)} referrals</div>`;
       podium.appendChild(el);
     });
     podiumContainer.appendChild(podium);
@@ -4710,14 +4725,14 @@ async function loadGlobalRanking() {
       const avatar = u.photoUrl ? `<img src="${u.photoUrl}" onerror="this.outerHTML='<i class=\\'fas fa-user\\'></i>'">` : '<i class="fas fa-user"></i>';
       const div = document.createElement('div');
       div.className = `ranking-row ${isMe ? 'me' : ''}`;
-      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${escapeHtml(u.name || 'لاعب')} ${isMe ? '(أنت)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} إحالة</div></div>`;
+      div.innerHTML = `<div class="ranking-rank">${rank}</div><div class="ranking-avatar">${avatar}</div><div class="ranking-info"><div class="ranking-name">${escapeHtml(u.name || 'Player')} ${isMe ? '(You)' : ''}</div><div class="ranking-count">${formatNum(u.referralCount)} referrals</div></div>`;
       list.appendChild(div);
     });
     globalRankingLoaded = true;
-  } catch(e) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">تعذر التحميل</p>'; }
+  } catch(e) { list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">Failed to load</p>'; }
 }
 function shareReferral() {
-  const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=انضم إلى Star Nova واربح جوائز!`;
+  const url = `https://t.me/share/url?url=https://t.me/starnovagamebot/starnova?startapp=ref_${user.id}&text=Join Star Nova and win prizes!`;
   if (tg) tg.openTelegramLink(url); else window.open(url, '_blank');
 }
 function showToast(msg) {
@@ -4726,7 +4741,7 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('تم النسخ!')); }
+function copyText(text) { navigator.clipboard.writeText(text).then(() => showToast('Copied!')); }
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
@@ -4854,7 +4869,7 @@ async function checkAndResumeCrashRound() {
     crashStartWaitingPhase();
     const btn = document.getElementById('crash-main-btn');
     if (btn) { btn.innerText = 'Cancel bet'; btn.className = 'crash-main-btn cancel'; }
-    showToast(`تم استرداد رهانك السابق (${formatNum(active.activeBet)} Stars)`);
+    showToast(`Your previous bet was refunded (${formatNum(active.activeBet)} Stars)`);
     return true;
   }
   return false;
@@ -5014,7 +5029,7 @@ function crashPlaceBet() {
     crashState.autoCashoutValue = (isFinite(v) && v >= 1.01) ? v : 2.00;
   }
   const bet = parseInt(document.getElementById('crash-bet-input').value) || 1;
-  if (user.stars < bet) { showToast('رصيدك غير كافٍ!'); return; }
+  if (user.stars < bet) { showToast('Insufficient balance!'); return; }
   user.stars -= bet;
   syncUserData({ stars: firebase.firestore.FieldValue.increment(-bet) });
   updateBalances();
@@ -5059,10 +5074,15 @@ function crashUpdateAutoCashout(input) {
   input.value = val.toFixed(2);
   crashState.autoCashoutValue = val;
 }
+// ---- theme (light / dark) ----
+function applyTheme(m){ document.documentElement.setAttribute('data-theme', m); var meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute('content', m==='light' ? '#fafafa' : '#050505'); document.querySelectorAll('[data-theme-opt]').forEach(function(el){ el.classList.toggle('active', el.getAttribute('data-theme-opt')===m); }); try{ if(window.Telegram&&Telegram.WebApp){ Telegram.WebApp.setHeaderColor(m==='light'?'#fafafa':'#050505'); Telegram.WebApp.setBackgroundColor(m==='light'?'#fafafa':'#050505'); } }catch(e){} }
+function setTheme(m){ try{ localStorage.setItem('sn_theme', m); }catch(e){} applyTheme(m); }
+(function(){ var m='dark'; try{ m=localStorage.getItem('sn_theme')==='light'?'light':'dark'; }catch(e){} document.documentElement.setAttribute('data-theme', m); document.addEventListener('DOMContentLoaded', function(){ applyTheme(m); }); })();
 </script>
 
 </body>
 </html>
+
 
 
 
