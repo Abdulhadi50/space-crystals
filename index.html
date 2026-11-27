@@ -2560,7 +2560,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
           <i class="fas fa-chevron-left vip-status-arrow"></i>
         </div>
         <div class="turnover-block">
-          <div class="turnover-label">YOUR WINNINGS</div>
+          <div class="turnover-label" id="turnoverLabel">YOUR WINNINGS</div>
           <div class="turnover-bar">
             <div class="turnover-fill" id="turnoverFill"><span id="turnoverCurrent">0%</span></div>
             <span class="turnover-target" id="turnoverTarget">100%</span>
@@ -3331,8 +3331,10 @@ function updateVipLevels() {
   const tgtEl = document.getElementById('turnoverTarget');
   if (tgtEl) tgtEl.textContent = next ? '100%' : 'MAX';
   const leftEl = document.getElementById('turnoverLeft');
+  const lblEl = document.getElementById('turnoverLabel');
+  if (lblEl) lblEl.textContent = 'YOUR WINNINGS  ' + t.toLocaleString('en-US') + (next ? ' / ' + next.threshold.toLocaleString('en-US') : '') + ' \u2B50';
   if (leftEl) leftEl.innerHTML = next
-    ? (Math.ceil((100 - pct) * 10) / 10).toString().replace(/\.0$/, '') + '% left to <b style="color:' + next.color + '">' + next.name + '</b>'
+    ? (next.threshold - t).toLocaleString('en-US') + ' \u2B50 left to <b style="color:' + next.color + '">' + next.name + '</b>'
     : 'MAX LEVEL REACHED';
 }
 async function grantVipRewards() {
