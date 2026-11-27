@@ -118,6 +118,7 @@ input[type="number"], .num-input {
 }
 .balance-pill:active { transform: scale(0.96); }
 .balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
+.balance-tgs { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
 
 .main-scroll {
@@ -2232,7 +2233,7 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   <header class="top-app-bar"></header>
   <div class="floating-balances">
     <div class="balance-pill">
-      <img src="PerfectTitanium-008-by-StickerEmojiRobot.png" alt="طاقة">
+      <div class="balance-tgs" id="ticket-icon-tgs"><img src="PerfectTitanium-008-by-StickerEmojiRobot.png" alt="طاقة"></div>
       <span id="topTickets">0</span>
     </div>
     <div class="balance-pill">
@@ -3453,6 +3454,7 @@ const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
 const ZIP_DEPOSIT_HERO = '3-RestrictedEmoji-572-tgs-by-StickerEmojiRobot.zip';
 const ZIP_WITHDRAW_HERO = '2-RestrictedEmoji_by_StickerEmojiRobot-570-tgs.zip';
 const ZIP_GEM = 'gifts-117-tgs-by-StickerEmojiRobot.zip';
+const ZIP_TICKET = 'RestrictedEmoji-493-tgs-by-StickerEmojiRobot.zip';
 
 async function initCountryTgs() {
   for (let i = 0; i < 60; i++) {
@@ -3463,6 +3465,7 @@ async function initCountryTgs() {
   TGS.playIn(document.getElementById('home-properties-tgs'), ZIP_PROPERTIES).catch(() => {});
   TGS.playIn(document.getElementById('home-space-clock-tgs'), ZIP_SPACE_CLOCK).catch(() => {});
   TGS.playIn(document.getElementById('ref-gem-tgs'), ZIP_GEM).catch(() => {});
+  TGS.playIn(document.getElementById('ticket-icon-tgs'), ZIP_TICKET).catch(() => {});
   TGS.playIn(document.getElementById('deposit-hero-tgs'), ZIP_DEPOSIT_HERO).catch(() => {});
   TGS.playIn(document.getElementById('withdraw-hero-tgs'), ZIP_WITHDRAW_HERO).catch(() => {});
   TGS.playIn(document.getElementById('crash-rocket-tgs'), ZIP_ROCKET).catch(() => {});
@@ -5058,6 +5061,7 @@ function crashUpdateAutoCashout(input) {
 
 </body>
 </html>
+
 
 
 
