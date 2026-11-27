@@ -2213,10 +2213,10 @@ input:checked + .slider { background: rgba(45,212,168,0.55); box-shadow: 0 0 14p
   box-shadow: 0 0 14px rgba(76,201,240,0.45);
   display: flex; align-items: center; gap: 5px;
   padding: 0 12px;
-  overflow: hidden; white-space: nowrap;
+  white-space: nowrap;
   transition: width 0.6s ease;
 }
-.turnover-fill span { font-size: 14px; font-weight: 800; color: #10131A; font-variant-numeric: tabular-nums; }
+.turnover-fill span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); z-index: 1; font-size: 14px; font-weight: 800; color: #F4F5FA; text-shadow: 0 1px 3px rgba(0,0,0,0.65); font-variant-numeric: tabular-nums; }
 .turnover-fill img { width: 15px; height: 15px; }
 .turnover-target {
   position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
