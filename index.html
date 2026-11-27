@@ -45,8 +45,8 @@
   
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-button, input, select, textarea { border: none; font-family: inherit; }
 html, body { height: 100%; overflow: hidden; }
+button, input, select, textarea { border: none; font-family: inherit; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   background: var(--bg-main); color: var(--text-primary);
@@ -2249,9 +2249,19 @@ html[data-theme="light"] .slots-spin-btn {   }
 html[data-theme="light"] .prize-val { background:rgba(244,246,252,0.05); }
 html[data-theme="light"] .coin-bet-levels {  }
 html[data-theme="light"] .coin-play-btn { color:#f8f5eb;   }
-html[data-theme="light"] .crash-air-waves span { background:linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent); }
+html[data-theme="light"] .crash-sky-bg { background:linear-gradient(to bottom, #4a9eff 0%, #6fb5ff 25%, #a8d8ff 50%, #cceaff 70%, #081017 78%, #f0f8ff 88%, #ffffff 100%); }
+html[data-theme="light"] .crash-game-area::after { background:radial-gradient(ellipse 70% 55% at 50% 45%, rgba(20,24,40,0.225), transparent 70%); }
+html[data-theme="light"] .crash-air-waves span { background:linear-gradient(90deg, transparent, rgba(20,24,40,0.765), transparent);  }
 html[data-theme="light"] .crash-multiplier-display.waiting { color:#9193a4; }
 html[data-theme="light"] .crash-countdown-display {  }
+html[data-theme="light"] .crash-bet-controls { background:rgba(20,24,40,0.765);  }
+html[data-theme="light"] .crash-history-pill { background:rgba(244,246,252,0.05); }
+html[data-theme="light"] .crash-toggle-slider { background-color:rgba(244,246,252,0.12); }
+html[data-theme="light"] .crash-toggle-slider:before { background:#84848B; }
+html[data-theme="light"] .crash-auto-input-wrap input { background:rgba(244,246,252,0.04); }
+html[data-theme="light"] .crash-bet-input-row { background:rgba(244,246,252,0.03);  }
+html[data-theme="light"] .crash-quick-chips button { background:rgba(244,246,252,0.04); }
+html[data-theme="light"] .crash-quick-chips button:active { background:rgba(244,246,252,0.08); }
 html[data-theme="light"] .crash-main-btn {   }
 html[data-theme="light"] .crash-main-btn.cashout {  }
 html[data-theme="light"] .crash-main-btn.cancel {  }
@@ -2355,8 +2365,8 @@ html[data-theme="light"] #view-coin.active { background:radial-gradient(120% 90%
 html[data-theme="light"] .coin-stage { background:#E2E3E8;  }
 html[data-theme="light"] .coin-result.lose { color:#b80019; }
 html[data-theme="light"] .coin-play-btn { color:#f8f5eb;  }
-html[data-theme="light"] .crash-sky-bg { background:#79C7F2; }
-html[data-theme="light"] .crash-game-area::after { background:radial-gradient(ellipse 70% 55% at 50% 38%, rgba(255,255,255,0.35), transparent 70%); }
+html[data-theme="light"] .crash-sky-bg { background:linear-gradient(to bottom, #f7f8fc 0%, #e8edf8 30%, #dbe2f3 62%, #101A36 100%); }
+html[data-theme="light"] .crash-game-area::after { background:radial-gradient(2px 2px at 12% 22%, rgba(20,24,40,0.81), transparent 60%), radial-gradient(1.5px 1.5px at 68% 12%, rgba(20,24,40,0.63), transparent 60%), radial-gradient(2px 2px at 84% 34%, rgba(190,225,255,0.8), transparent 60%), radial-gradient(1.5px 1.5px at 34% 8%, rgba(20,24,40,0.54), transparent 60%), radial-gradient(1.5px 1.5px at 50% 30%, rgba(20,24,40,0.45), transparent 60%), radial-gradient(2px 2px at 24% 44%, rgba(190,225,255,0.6), transparent 60%); }
 html[data-theme="light"] .crash-multiplier-display { color:#050b10; }
 html[data-theme="light"] .crash-multiplier-display.waiting { color:#2d3139; }
 html[data-theme="light"] .crash-multiplier-display.crashed { color:#b80019; }
@@ -5296,7 +5306,6 @@ function setTheme(m){ try{ localStorage.setItem('sn_theme', m); }catch(e){} appl
 
 </body>
 </html>
-
 
 
 
