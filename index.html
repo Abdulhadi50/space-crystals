@@ -4328,7 +4328,7 @@ async function loadTasks() {
       const isCompleted = user.completedTasks.includes(task.id);
       let iconHtml = task.imageUrl ? `<img src="${task.imageUrl}" onerror="this.src='${ASSETS.ticket}'">` : `<i class="fab fa-telegram"></i>`;
       let actionBtn = isCompleted ? `<button class="start-btn" style="background:rgba(0,0,0,0.06);color:var(--text-secondary);box-shadow:none;" disabled>Done</button>` : `<button class="start-btn" onclick="openTaskSheet('${task.id}')">Start</button>`;
-      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(task.title)}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(isTicket ? task.rewardAmount * 0.05 : task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
+      html += `<div class="task-item"><div class="task-info"><div class="task-icon">${iconHtml}</div><div class="task-text"><h4>${escapeHtml(enText(task.title,"Task"))}</h4><div class="task-reward"><img src="${rewardIcon}"> <span>${formatNum(isTicket ? task.rewardAmount * 0.05 : task.rewardAmount)}</span></div></div></div>${actionBtn}</div>`;
     });
     html += '</div>';
     container.innerHTML = html;
@@ -4339,7 +4339,7 @@ function openTaskSheet(taskId) {
   if (!task) return;
   if (user.completedTasks.includes(taskId)) { showToast('You have already completed this task'); return; }
   currentTask = task; taskStartTime = 0;
-  document.getElementById('tsTitle').innerText = task.title;
+  document.getElementById('tsTitle').innerText = enText(task.title,'Task');
   const iconContainer = document.getElementById('tsIcon');
   if (task.imageUrl) iconContainer.innerHTML = `<img src="${task.imageUrl}" onerror="this.outerHTML='<i class=\\'fab fa-telegram\\'></i>'">`;
   else iconContainer.innerHTML = `<i class="fab fa-telegram"></i>`;
@@ -4737,7 +4737,7 @@ function shareReferral() {
 }
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.innerText = msg;
+  t.innerText = enText(msg);
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
@@ -5075,6 +5075,10 @@ function crashUpdateAutoCashout(input) {
   crashState.autoCashoutValue = val;
 }
 // ---- theme (light / dark) ----
+// English-only guard for server-provided text
+const _AR_RE=/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFEFF]/;
+const _EN_MAP={'\u0627\u0634\u062a\u0631\u0627\u0643':'Subscribe'};
+function enText(s,fb){ s=String(s==null?'':s); if(_EN_MAP[s.trim()]) return _EN_MAP[s.trim()]; return _AR_RE.test(s)?(fb||'Something went wrong'):s; }
 function applyTheme(m){ document.documentElement.setAttribute('data-theme', m); var meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute('content', m==='light' ? '#fafafa' : '#050505'); document.querySelectorAll('[data-theme-opt]').forEach(function(el){ el.classList.toggle('active', el.getAttribute('data-theme-opt')===m); }); try{ if(window.Telegram&&Telegram.WebApp){ Telegram.WebApp.setHeaderColor(m==='light'?'#fafafa':'#050505'); Telegram.WebApp.setBackgroundColor(m==='light'?'#fafafa':'#050505'); } }catch(e){} }
 function setTheme(m){ try{ localStorage.setItem('sn_theme', m); }catch(e){} applyTheme(m); }
 (function(){ var m='dark'; try{ m=localStorage.getItem('sn_theme')==='light'?'light':'dark'; }catch(e){} document.documentElement.setAttribute('data-theme', m); document.addEventListener('DOMContentLoaded', function(){ applyTheme(m); }); })();
