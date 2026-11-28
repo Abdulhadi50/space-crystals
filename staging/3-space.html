@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>ساعة الفضاء - Star Nova</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<style>
+:root {
+  --bg-main: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-soft: rgba(0, 0, 0, 0.03);
+  --text-primary: #151622;
+  --text-secondary: #5b5d6e;
+  --text-tertiary: #9395a5;
+  --border: rgba(0, 0, 0, 0.08);
+  --success: #0fa96e;
+  --danger: #e03858;
+  --warning: #c9791a;
+  --gold: #b8912a;
+  --purple: #8B5CF6;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --safe-top: env(safe-area-inset-top, 20px);
+  --top-bar-height: 10vh;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --gradient-primary: linear-gradient(135deg, #1a1c2e 0%, #2d3048 100%);
+  --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  --gradient-gold: linear-gradient(135deg, #F5D76E 0%, #C9A227 100%);
+  --shadow-card: 0 10px 28px rgba(30, 40, 80, 0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-purple: 0 12px 30px rgba(139, 92, 246, 0.35);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+  background: var(--bg-main); color: var(--text-primary);
+  font-size: 15px; line-height: 1.5;
+  overscroll-behavior: none; user-select: none; -webkit-user-select: none;
+  direction: rtl; position: relative;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(91, 141, 239, 0.05), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 98% 12%, rgba(201, 162, 39, 0.03), transparent 55%),
+    radial-gradient(ellipse 75% 55% at 50% 108%, rgba(140, 90, 220, 0.04), transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input { font: inherit; }
+::-webkit-scrollbar { display: none; }
+
+.app-container {
+  display: flex; flex-direction: column; height: 100dvh;
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto; overflow: hidden;
+}
+
+/* ============ APP BAR (same as index) ============ */
+.top-app-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: calc(var(--top-bar-height) + var(--safe-top));
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  z-index: 50; padding-top: var(--safe-top);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+}
+.floating-balances {
+  position: absolute;
+  top: calc(var(--top-bar-height) + var(--safe-top) + 10px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between; z-index: 51;
+}
+.balance-pill {
+  display: flex; align-items: center;
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 3px 10px; gap: 6px;
+  color: var(--text-primary); font-weight: 800; font-size: 15px;
+  box-shadow: 0 6px 18px rgba(30,40,80,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.balance-pill img { width: 20px; height: 20px; border-radius: 50%; }
+.balance-pill span { direction: ltr; font-variant-numeric: tabular-nums; }
+
+.main-scroll {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: calc(var(--top-bar-height) + var(--safe-top) + 60px) 16px calc(var(--safe-bottom) + 40px);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============ HERO CLOCK (TGS) ============ */
+.clock-hero {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  height: 280px;
+  margin-bottom: 8px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.12), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(201, 162, 39, 0.08), transparent 60%);
+  pointer-events: none;
+}
+.clock-glow {
+  position: absolute;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.35), transparent 60%);
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.clock-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(201, 162, 39, 0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+.clock-orbit.o1 { width: 280px; height: 280px; animation: orbitSpin 20s linear infinite; }
+.clock-orbit.o2 { width: 320px; height: 320px; border-color: rgba(201, 162, 39, 0.15); animation: orbitSpin 30s linear infinite reverse; }
+@keyframes orbitSpin { to { transform: rotate(360deg); } }
+.clock-tgs-wrap {
+  position: relative;
+  width: 240px; height: 240px;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+}
+.clock-tgs-wrap svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  filter: drop-shadow(0 12px 28px rgba(201, 162, 39, 0.35));
+}
+
+.hero-title {
+  text-align: center;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #2d3048, #6D28D9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.rarity-badge {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 auto 16px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 20px;
+  color: var(--gold);
+  font-weight: 800; font-size: 12px;
+  width: fit-content;
+}
+.rarity-badge i { font-size: 12px; }
+
+.value-row {
+  display: flex; justify-content: center;
+  margin-bottom: 20px;
+}
+.value-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+}
+.value-label { font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-bottom: 2px; }
+.value-amount {
+  font-size: 17px; font-weight: 800; color: var(--gold);
+  direction: ltr;
+  display: flex; align-items: center; gap: 6px;
+}
+.value-amount img { width: 16px; height: 16px; border-radius: 50%; }
+
+/* ============ SEASON CARD ============ */
+.season-card {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #2a1f4d 0%, #1a1235 100%);
+  border-radius: 24px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 14px 40px rgba(109, 40, 217, 0.25);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+.season-stars {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.season-stars i {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  animation: starTwinkle 2.5s ease-in-out infinite;
+}
+.season-stars i:nth-child(1) { top: 8%; left: 12%; animation-delay: 0s; }
+.season-stars i:nth-child(2) { top: 15%; left: 78%; animation-delay: 0.3s; font-size: 10px; }
+.season-stars i:nth-child(3) { top: 40%; left: 8%; animation-delay: 0.6s; font-size: 12px; }
+.season-stars i:nth-child(4) { top: 55%; left: 88%; animation-delay: 0.9s; }
+.season-stars i:nth-child(5) { top: 75%; left: 20%; animation-delay: 1.2s; font-size: 10px; }
+.season-stars i:nth-child(6) { top: 82%; left: 70%; animation-delay: 1.5s; font-size: 12px; }
+.season-stars i:nth-child(7) { top: 30%; left: 45%; animation-delay: 1.8s; font-size: 8px; }
+.season-stars i:nth-child(8) { top: 65%; left: 55%; animation-delay: 2.1s; font-size: 9px; }
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.season-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 20px;
+  color: #c4b5fd;
+  font-weight: 800; font-size: 12px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.season-badge i { color: #f5d76e; }
+.season-card h3 {
+  color: #ffffff;
+  font-size: 20px; font-weight: 800;
+  margin-bottom: 6px;
+  position: relative;
+}
+.season-card p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.subscribe-btn {
+  position: relative; overflow: hidden;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--gradient-purple);
+  color: #ffffff;
+  box-shadow: var(--shadow-purple);
+  transition: transform 0.15s var(--spring);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.subscribe-btn:active:not(:disabled) { transform: scale(0.97); }
+.subscribe-btn:disabled { opacity: 0.7; pointer-events: none; }
+.btn-stars {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.btn-stars i {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+  animation: btnStarPulse 2s ease-in-out infinite;
+}
+.btn-stars i:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+.btn-stars i:nth-child(2) { top: 70%; left: 15%; animation-delay: 0.3s; font-size: 8px; }
+.btn-stars i:nth-child(3) { top: 25%; left: 45%; animation-delay: 0.6s; }
+.btn-stars i:nth-child(4) { top: 60%; left: 60%; animation-delay: 0.9s; font-size: 8px; }
+.btn-stars i:nth-child(5) { top: 80%; left: 85%; animation-delay: 1.2s; }
+.btn-stars i:nth-child(6) { top: 10%; left: 92%; animation-delay: 1.5s; font-size: 8px; }
+@keyframes btnStarPulse {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+.btn-content {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; gap: 12px;
+}
+.btn-label { font-size: 16px; font-weight: 800; }
+.btn-price {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 800; font-size: 14px;
+  direction: ltr;
+  backdrop-filter: blur(4px);
+}
+.btn-price img { width: 14px; height: 14px; border-radius: 50%; }
+
+/* ============ PROGRESS ============ */
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+.progress-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+  font-weight: 800; font-size: 14px;
+}
+.progress-header span:last-child {
+  color: var(--purple);
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+}
+.progress-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: var(--gradient-purple);
+  border-radius: 999px;
+  transition: width 0.5s var(--ease-out);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+/* ============ MISSIONS ============ */
+.missions-list {
+  display: flex; flex-direction: column;
+  gap: 10px; margin-bottom: 20px;
+}
+.mission-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s;
+}
+.mission-item.completed {
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.08), rgba(15, 169, 110, 0.02));
+  border-color: rgba(15, 169, 110, 0.3);
+}
+.mission-icon {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
+  color: var(--purple);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.mission-item.completed .mission-icon {
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.2), rgba(15, 169, 110, 0.05));
+  color: var(--success);
+}
+.mission-body { flex: 1; min-width: 0; }
+.mission-title { font-weight: 800; font-size: 13px; margin-bottom: 3px; }
+.mission-desc { font-size: 11px; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px; }
+.mission-progress {
+  font-size: 11px; color: var(--purple); font-weight: 800;
+  direction: ltr;
+}
+.mission-item.completed .mission-progress { color: var(--success); }
+.mission-check {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: transparent;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.mission-item.completed .mission-check {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+/* ============ CLAIM BUTTON ============ */
+.claim-btn {
+  width: 100%; padding: 18px;
+  border-radius: 20px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 16px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.22);
+  transition: transform 0.15s var(--spring);
+}
+.claim-btn:active:not(:disabled) { transform: scale(0.97); }
+.claim-btn:disabled {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-secondary);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.claim-btn.ready {
+  background: var(--gradient-gold);
+  color: #1a1400;
+  box-shadow: 0 12px 30px rgba(245, 215, 110, 0.5);
+  animation: claimPulse 2s ease-in-out infinite;
+}
+@keyframes claimPulse {
+  0%, 100% { box-shadow: 0 12px 30px rgba(245, 215, 110, 0.5); }
+  50% { box-shadow: 0 12px 40px rgba(245, 215, 110, 0.8); }
+}
+
+/* ============ OWNED ============ */
+.owned-card {
+  background: linear-gradient(160deg, rgba(15, 169, 110, 0.1), rgba(15, 169, 110, 0.02));
+  border: 1px solid rgba(15, 169, 110, 0.3);
+  border-radius: 24px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(15, 169, 110, 0.15);
+}
+.owned-icon {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(15, 169, 110, 0.2), rgba(15, 169, 110, 0.05));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.owned-icon i { font-size: 36px; color: var(--success); }
+.owned-card h3 {
+  font-size: 20px; font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.owned-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.view-props-btn {
+  width: 100%; padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.2);
+  transition: transform 0.15s var(--spring);
+}
+.view-props-btn:active { transform: scale(0.97); }
+
+/* ============ LOADING ============ */
+.loading-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; padding: 80px 20px;
+  color: var(--text-secondary);
+}
+.loading-state i { font-size: 32px; color: var(--purple); }
+.loading-state p { font-weight: 700; font-size: 14px; }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed; top: 20px; left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: linear-gradient(135deg, #ffffff, #f5f7fc);
+  color: var(--text-primary);
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  z-index: 2000;
+  transition: transform 0.4s var(--spring);
+  border: 1px solid rgba(0,0,0,0.08);
+  max-width: 90%; text-align: center;
+  box-shadow: 0 14px 40px rgba(30,40,80,0.18);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { background: linear-gradient(135deg, #fff0f2, #ffe6ea); border-color: rgba(224, 56, 88, 0.3); color: var(--danger); }
+.toast.success { background: linear-gradient(135deg, #f0fff6, #e6faf0); border-color: rgba(15, 169, 110, 0.3); color: var(--success); }
+
+/* ============ MODAL ============ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,22,40,0.42);
+  z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.22s var(--ease-out); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+  background: linear-gradient(160deg, #ffffff 0%, #f5f7fc 100%);
+  border-radius: 28px; padding: 30px;
+  width: 100%; max-width: 340px; text-align: center;
+  animation: popInModal 0.32s var(--spring);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 26px 70px rgba(30,40,80,0.25);
+}
+@keyframes popInModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-content h3 { font-size: 21px; font-weight: 800; margin-bottom: 10px; }
+.modal-content p { color: var(--text-secondary); font-size: 14px; margin-bottom: 22px; font-weight: 600; line-height: 1.55; }
+.modal-icon-wrap {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.18), rgba(201, 162, 39, 0.05));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  border: 2px solid rgba(201, 162, 39, 0.3);
+}
+.modal-icon-wrap i { font-size: 42px; color: var(--gold); }
+.modal-btn {
+  width: 100%; padding: 16px;
+  border-radius: 18px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 15px; font-weight: 800;
+  box-shadow: 0 10px 28px rgba(22, 24, 42, 0.22);
+  transition: transform 0.15s var(--spring);
+}
+.modal-btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <header class="top-app-bar"></header>
+  <div class="floating-balances">
+    <div class="balance-pill">
+      <img src="https://img.icons8.com/liquid-glass-color/999/starred-ticket.png" alt="Tickets">
+      <span id="topTickets">0</span>
+    </div>
+    <div class="balance-pill">
+      <img src="https://up6.cc/2026/10/17932600818491.png" alt="Stars">
+      <span id="topStars">0</span>
+    </div>
+  </div>
+
+  <main class="main-scroll" id="mainScroll">
+    <div class="loading-state" id="loading">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>جاري التحميل...</p>
+    </div>
+
+    <div id="mainContent" style="display:none;">
+      <!-- Hero Clock (TGS) -->
+      <div class="clock-hero">
+        <div class="hero-bg"></div>
+        <div class="clock-orbit o1"></div>
+        <div class="clock-orbit o2"></div>
+        <div class="clock-glow"></div>
+        <div class="clock-tgs-wrap" id="space-clock-tgs"></div>
+      </div>
+
+      <h2 class="hero-title">ساعة الفضاء</h2>
+      <p class="hero-subtitle">هدية أسطورية من الموسم الأول</p>
+
+      <div class="rarity-badge">
+        <i class="fas fa-crown"></i>
+        <span>أسطورية</span>
+      </div>
+
+      <div class="value-row">
+        <div class="value-item">
+          <span class="value-label">قيمة البيع</span>
+          <span class="value-amount">
+            <img src="https://up6.cc/2026/10/17932600818491.png" alt="star">
+            <span id="sellPriceDisplay">1,200</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Subscribe -->
+      <div id="subscribeState">
+        <div class="season-card">
+          <div class="season-stars" aria-hidden="true">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="season-badge">
+            <i class="fas fa-medal"></i>
+            الموسم الأول
+          </div>
+          <h3>اشترك واكمل المهام</h3>
+          <p>احصل على الساعة الأسطورية بعد إتمام جميع مهام الموسم</p>
+          <button class="subscribe-btn" id="subscribeBtn" onclick="handleSubscribe()">
+            <div class="btn-stars" aria-hidden="true">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="btn-content">
+              <span class="btn-label">اشترك الآن</span>
+              <span class="btn-price">
+                <img src="https://up6.cc/2026/10/17932600818491.png" alt="">
+                <span id="subPrice">1,000</span>
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Missions -->
+      <div id="missionsState" style="display:none;">
+        <div class="progress-card">
+          <div class="progress-header">
+            <span>المهام المكتملة</span>
+            <span id="progressText">0 / 4</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="missions-list" id="missionsList"></div>
+        <button class="claim-btn" id="claimBtn" onclick="handleClaim()" disabled>
+          <i class="fas fa-gift"></i>
+          <span id="claimBtnText">اكمل جميع المهام أولاً</span>
+        </button>
+      </div>
+
+      <!-- Owned -->
+      <div id="ownedState" style="display:none;">
+        <div class="owned-card" id="ownedCardBox">
+          <div class="owned-icon">
+            <i class="fas fa-check-circle" id="ownedIcon"></i>
+          </div>
+          <h3 id="ownedTitle">الساعة في ممتلكاتك</h3>
+          <p id="ownedDesc">يمكنك الآن بيعها من صفحة الممتلكات</p>
+          <button class="view-props-btn" id="ownedActionBtn" onclick="goToProperties()">
+            <i class="fas fa-box"></i>
+            <span>عرض الممتلكات</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal-content">
+    <div class="modal-icon-wrap"><i class="fas fa-check"></i></div>
+    <h3>مبروك!</h3>
+    <p>تمت إضافة ساعة الفضاء إلى ممتلكاتك</p>
+    <button class="modal-btn" onclick="goToProperties()">عرض الممتلكات</button>
+  </div>
+</div>
+
+<script>'use strict';
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCRTtD3EvlnrcGMt6MoSfzp-vrVdkEtkC4",
+  authDomain: "starnova-staging.firebaseapp.com",
+  projectId: "starnova-staging",
+  storageBucket: "starnova-staging.firebasestorage.app",
+  messagingSenderId: "1078549045625",
+  appId: "1:1078549045625:web:ed945234acc16b9c978fa8"
+};
+
+const API_BASE = 'https://starnova-api-staging.starlimitedcom.workers.dev';
+let __session = null;
+function newOpId(tag) { return Date.now() + '_' + Math.random().toString(36).slice(2, 10) + (tag || ''); }
+async function api(path, body) {
+  const resp = await fetch(API_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(__session ? { Authorization: 'Bearer ' + __session } : {}) },
+    body: JSON.stringify(body || {})
+  });
+  const data = await resp.json().catch(() => ({ ok: false, error: 'bad_response' }));
+  if (!resp.ok || !data.ok) { const e = new Error(data.error || ('http_' + resp.status)); e.code = data.error; e.body = data; throw e; }
+  return data;
+}
+async function serverAuth() {
+  if (!tg || !tg.initData) return;
+  const resp = await fetch(API_BASE + '/api/auth/telegram', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ initData: tg.initData })
+  });
+  const data = await resp.json().catch(() => null);
+  if (data && data.ok) {
+    __session = data.session;
+    try { if (firebase.auth) await firebase.auth().signInWithCustomToken(data.customToken); } catch (e) { console.warn('custom token sign-in failed:', e); }
+  }
+}
+const STAR_ICON = 'https://up6.cc/2026/10/17932600818491.png';
+const TICKET_ICON = 'https://img.icons8.com/liquid-glass-color/999/starred-ticket.png';
+
+const SEASON_CONFIG = {
+  id: 'season1',
+  name: 'الموسم الأول',
+  price: 1000,
+  missions: [
+    { key: 'invite', title: 'ادعُ 3 أصدقاء', desc: 'شارك رابط الدعوة وادعُ 3 أصدقاء', icon: 'fa-user-friends', goal: 3 },
+    { key: 'crash', title: 'العب 10 جولات Crash', desc: 'العب 10 جولات كاملة في لعبة Crash', icon: 'fa-rocket', goal: 10 },
+    { key: 'streak', title: 'حافظ على 3 أيام متتالية', desc: 'استلم المكافأة اليومية 3 أيام متتالية', icon: 'fa-fire', goal: 3 },
+    { key: 'tickets', title: 'اجمع 10 تذاكر', desc: 'اجمع 10 تذاكر من المهام والدعوات', icon: 'fa-ticket-alt', goal: 10 }
+  ]
+};
+
+const CLOCK_ITEM = {
+  id: 'spaceClock',
+  name: 'ساعة الفضاء',
+  rarity: 'legendary',
+  sellPrice: 1200,
+  season: SEASON_CONFIG.id
+};
+
+const ZIP_SPACE_CLOCK = 'Rolex-030-tgs-by-StickerEmojiRobot.zip';
+
+const tg = window.Telegram?.WebApp;
+let db = null;
+let userId = null;
+let userData = {};
+let crashCount = 0;
+let isLoading = false;
+let clockAnimLoaded = false;
+
+/* ============ HELPERS ============ */
+function formatNum(n) {
+  if (n === null || n === undefined) return '0';
+  const num = Number(n);
+  if (!isFinite(num)) return '0';
+  return String(Math.floor(num)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s ?? '');
+  return d.innerHTML;
+}
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function goBack() {
+  try {
+    if (window.history.length > 1) { window.history.back(); return; }
+  } catch(e) {}
+  window.location.href = './index.html';
+}
+function goToProperties() {
+  closeModal('successModal');
+  window.location.href = './properties.html';
+}
+
+/* ============ TGS LOADER ============ */
+const TGS = {
+  _zipCache: {}, _loading: {}, _anims: {},
+  async loadZip(zipName) {
+    if (this._zipCache[zipName]) return this._zipCache[zipName];
+    if (this._loading[zipName]) return this._loading[zipName];
+    this._loading[zipName] = (async () => {
+      if (!window.JSZip || !window.pako) throw new Error('libs not ready');
+      const resp = await fetch('./' + zipName, { cache: 'force-cache' });
+      if (!resp.ok) throw new Error('ZIP fetch ' + resp.status);
+      const zip = await JSZip.loadAsync(await resp.arrayBuffer());
+      const files = Object.values(zip.files).filter(f => !f.dir && f.name.toLowerCase().endsWith('.tgs')).sort((a, b) => a.name.localeCompare(b.name));
+      const list = [];
+      for (const f of files) {
+        try {
+          const compressed = await f.async('uint8array');
+          const text = pako.ungzip(compressed, { to: 'string' });
+          list.push(JSON.parse(text));
+        } catch (e) {}
+      }
+      if (!list.length) throw new Error('No valid TGS');
+      this._zipCache[zipName] = list;
+      return list;
+    })();
+    try { return await this._loading[zipName]; } finally { delete this._loading[zipName]; }
+  },
+  async playIn(element, zipName, opts = {}) {
+    if (!element) throw new Error('element missing');
+    const list = await this.loadZip(zipName);
+    const data = list[(opts.index || 0) % list.length];
+    if (this._anims[element.id]) { try { this._anims[element.id].destroy(); } catch(e) {} }
+    element.innerHTML = '';
+    const anim = lottie.loadAnimation({
+      container: element, renderer: 'svg', loop: opts.loop !== false, autoplay: true,
+      animationData: data,
+      rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+    });
+    this._anims[element.id] = anim;
+    return anim;
+  }
+};
+
+async function loadClockAnimation() {
+  if (clockAnimLoaded) return;
+  for (let i = 0; i < 60; i++) {
+    if (window.lottie && window.JSZip && window.pako) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if (!window.lottie) return;
+  try {
+    await TGS.playIn(document.getElementById('space-clock-tgs'), ZIP_SPACE_CLOCK);
+    clockAnimLoaded = true;
+  } catch(e) {
+    console.warn('TGS clock failed to load:', e);
+  }
+}
+
+/* ============ TELEGRAM ============ */
+function initTelegram() {
+  if (!tg) {
+    userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
+    localStorage.setItem('sn_demo_id', userId);
+    return false;
+  }
+  tg.ready(); tg.expand();
+  if (tg.setHeaderColor) tg.setHeaderColor('#ffffff');
+  if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
+  if (tg.BackButton) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => goBack());
+  }
+  const u = tg.initDataUnsafe?.user;
+  if (u) { userId = String(u.id); return true; }
+  userId = localStorage.getItem('sn_demo_id') || 'demo_' + Date.now();
+  localStorage.setItem('sn_demo_id', userId);
+  return false;
+}
+
+/* ============ FIREBASE ============ */
+async function initFirebase() {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  try { await db.enablePersistence({ synchronizeTabs: true }); } catch(e) {}
+  await serverAuth();
+}
+
+async function loadUserData() {
+  if (!db || !userId) throw new Error('no user');
+  const ref = db.collection('users').doc(userId);
+  const doc = await ref.get();
+  if (!doc.exists) {
+    // The auth endpoint creates the doc server-side; this is a pre-lockdown fallback only.
+    try {
+      await ref.set({
+        telegramId: userId, name: 'لاعب',
+        stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0,
+        ownedItems: [], seasonSubscription: {},
+        createdAt: Date.now()
+      }, { merge: true });
+    } catch (e) { console.warn('client-side doc create denied (expected after rules lockdown):', e && e.code); }
+    userData = { stars: 0, tickets: 0, referralCount: 0, dailyStreak: 0, ownedItems: [], seasonSubscription: {} };
+  } else {
+    userData = doc.data();
+  }
+  try {
+    const snap = await db.collection('users').doc(userId).collection('crash_rounds').get();
+    crashCount = snap.size;
+  } catch (e) { crashCount = 0; }
+}
+
+/* ============ STATE ============ */
+function getSeasonState() {
+  const sub = userData.seasonSubscription?.[SEASON_CONFIG.id];
+  const owned = Array.isArray(userData.ownedItems) && userData.ownedItems.some(i => i.id === CLOCK_ITEM.id);
+  const claimed = sub?.claimed === true;
+  const subscribed = sub?.subscribed === true;
+  if (owned) return { state: 'owned', hasItem: true };
+  if (claimed) return { state: 'owned', hasItem: false };
+  if (subscribed) return { state: 'missions' };
+  return { state: 'subscribe' };
+}
+
+function getMissionProgress(mission) {
+  switch (mission.key) {
+    case 'invite': return userData.referralCount || 0;
+    case 'crash': return crashCount || 0;
+    case 'streak': return userData.dailyStreak || 0;
+    case 'tickets': return (userData.redEnergy !== undefined ? userData.redEnergy : userData.tickets) || 0;
+    default: return 0;
+  }
+}
+
+/* ============ RENDER ============ */
+function renderMissions() {
+  const list = document.getElementById('missionsList');
+  list.innerHTML = '';
+  let completedCount = 0;
+  SEASON_CONFIG.missions.forEach(m => {
+    const current = Math.min(getMissionProgress(m), m.goal);
+    const done = current >= m.goal;
+    if (done) completedCount++;
+    const item = document.createElement('div');
+    item.className = 'mission-item' + (done ? ' completed' : '');
+    item.innerHTML = `
+      <div class="mission-icon"><i class="fas ${m.icon}"></i></div>
+      <div class="mission-body">
+        <div class="mission-title">${escapeHtml(m.title)}</div>
+        <div class="mission-desc">${escapeHtml(m.desc)}</div>
+        <div class="mission-progress">${current} / ${m.goal}</div>
+      </div>
+      <div class="mission-check"><i class="fas fa-check"></i></div>
+    `;
+    list.appendChild(item);
+  });
+  const total = SEASON_CONFIG.missions.length;
+  document.getElementById('progressText').textContent = `${completedCount} / ${total}`;
+  document.getElementById('progressFill').style.width = (completedCount / total * 100) + '%';
+  const claimBtn = document.getElementById('claimBtn');
+  const claimBtnText = document.getElementById('claimBtnText');
+  const allDone = completedCount === total;
+  if (allDone) {
+    claimBtn.disabled = false;
+    claimBtn.classList.add('ready');
+    claimBtnText.textContent = 'استلم ساعة الفضاء';
+  } else {
+    claimBtn.disabled = true;
+    claimBtn.classList.remove('ready');
+    claimBtnText.textContent = `اكمل ${total - completedCount} مهام متبقية`;
+  }
+}
+
+function renderUI() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  document.getElementById('topStars').textContent = formatNum(userData.stars || 0);
+  document.getElementById('topTickets').textContent = formatNum((userData.redEnergy !== undefined ? userData.redEnergy : userData.tickets) || 0);
+  document.getElementById('subPrice').textContent = formatNum(SEASON_CONFIG.price);
+  document.getElementById('sellPriceDisplay').textContent = formatNum(CLOCK_ITEM.sellPrice);
+
+  const { state, hasItem } = getSeasonState();
+  document.getElementById('subscribeState').style.display = 'none';
+  document.getElementById('missionsState').style.display = 'none';
+  document.getElementById('ownedState').style.display = 'none';
+
+  if (state === 'subscribe') {
+    document.getElementById('subscribeState').style.display = 'block';
+    // Reset subscribe button
+    const btn = document.getElementById('subscribeBtn');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `
+        <div class="btn-stars" aria-hidden="true">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="btn-content">
+          <span class="btn-label">اشترك الآن</span>
+          <span class="btn-price">
+            <img src="${STAR_ICON}" alt="">
+            <span>${formatNum(SEASON_CONFIG.price)}</span>
+          </span>
+        </div>
+      `;
+    }
+  } else if (state === 'missions') {
+    document.getElementById('missionsState').style.display = 'block';
+    renderMissions();
+  } else {
+    document.getElementById('ownedState').style.display = 'block';
+    const box = document.getElementById('ownedCardBox');
+    if (hasItem) {
+      box.style.background = 'linear-gradient(160deg, rgba(15,169,110,0.10), rgba(15,169,110,0.02))';
+      box.style.borderColor = 'rgba(15,169,110,0.3)';
+      document.getElementById('ownedIcon').className = 'fas fa-check-circle';
+      document.getElementById('ownedIcon').style.color = 'var(--success)';
+      document.getElementById('ownedTitle').textContent = 'الساعة في ممتلكاتك';
+      document.getElementById('ownedDesc').textContent = 'يمكنك الآن بيعها من صفحة الممتلكات';
+      const btn = document.getElementById('ownedActionBtn');
+      btn.style.display = 'flex';
+      btn.innerHTML = '<i class="fas fa-box"></i><span>عرض الممتلكات</span>';
+      btn.onclick = goToProperties;
+    } else {
+      box.style.background = 'linear-gradient(160deg, rgba(201,162,39,0.10), rgba(201,162,39,0.02))';
+      box.style.borderColor = 'rgba(201,162,39,0.3)';
+      document.getElementById('ownedIcon').className = 'fas fa-history';
+      document.getElementById('ownedIcon').style.color = 'var(--gold)';
+      document.getElementById('ownedTitle').textContent = 'لقد حصلت على هذه الساعة سابقاً';
+      document.getElementById('ownedDesc').textContent = 'لقد استلمتها وبعتها بالفعل. انتظر المواسم القادمة لهدايا جديدة!';
+      const btn = document.getElementById('ownedActionBtn');
+      btn.style.display = 'flex';
+      btn.innerHTML = '<i class="fas fa-arrow-right"></i><span>العودة للرئيسية</span>';
+      btn.onclick = () => { window.location.href = './index.html'; };
+    }
+  }
+}
+
+/* ============ SUBSCRIBE (Direct Telegram Purchase) ============ */
+async function handleSubscribe() {
+  if (isLoading) return;
+  const { state } = getSeasonState();
+  if (state !== 'subscribe') return;
+  if (!tg || !tg.openInvoice) {
+    showToast('الشراء يعمل فقط داخل تيليجرام', 'error');
+    return;
+  }
+
+  isLoading = true;
+  const btn = document.getElementById('subscribeBtn');
+  btn.disabled = true;
+  btn.innerHTML = `
+    <div class="btn-stars" aria-hidden="true">
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+    </div>
+    <div class="btn-content">
+      <span class="btn-label"><i class="fas fa-spinner fa-spin"></i> جاري إنشاء الفاتورة...</span>
+    </div>
+  `;
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/create-invoice`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        stars: SEASON_CONFIG.price,
+        purpose: SEASON_CONFIG.id,
+        v: 3
+      })
+    });
+    const data = await resp.json();
+    if (!data.ok || !data.invoiceLink) throw new Error(data.error || 'فشل الاتصال');
+
+    tg.openInvoice(data.invoiceLink, async (status) => {
+      if (status === 'paid') {
+        showToast('تم الدفع، جاري تفعيل الاشتراك...');
+        const granted = await grantSubscriptionAfterPayment();
+        if (granted) {
+          try { await loadUserData(); } catch(e) {}
+          renderUI();
+          showToast('تم الاشتراك بنجاح! ابدأ بإكمال المهام', 'success');
+        } else {
+          showToast('تم الدفع لكن تعذر التفعيل. أعد فتح الصفحة للمحاولة', 'error');
+          isLoading = false;
+          return;
+        }
+      } else if (status === 'cancelled') {
+        showToast('تم إلغاء الشراء', 'error');
+      } else {
+        showToast('فشل الدفع، حاول لاحقاً', 'error');
+      }
+      isLoading = false;
+      renderUI();
+    });
+  } catch (e) {
+    showToast(e.message || 'تعذر بدء الدفع', 'error');
+    isLoading = false;
+    renderUI();
+  }
+}
+
+// The payment webhook activates the subscription server-side (purpose+v3 invoice).
+// The client only waits for the activation to become visible - no balance writes here.
+async function grantSubscriptionAfterPayment() {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    await new Promise(r => setTimeout(r, 900));
+    try {
+      const doc = await db.collection('users').doc(userId).get();
+      if (doc.exists && doc.data().seasonSubscription?.[SEASON_CONFIG.id]?.subscribed) return true;
+    } catch(e) {}
+  }
+  return false;
+}
+
+/* ============ CLAIM ============ */
+async function handleClaim() {
+  if (isLoading) return;
+  const { state } = getSeasonState();
+  if (state !== 'missions') return;
+  const allDone = SEASON_CONFIG.missions.every(m => getMissionProgress(m) >= m.goal);
+  if (!allDone) { showToast('لم تكمل جميع المهام بعد', 'error'); return; }
+
+  isLoading = true;
+  const btn = document.getElementById('claimBtn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'جاري الاستلام...';
+
+  try {
+    await api('/api/game/season-claim', { opId: newOpId('sc') });
+    try { await loadUserData(); } catch(e) {}
+    document.getElementById('successModal').classList.add('show');
+    renderUI();
+  } catch (e) {
+    if (e.code === 'already_claimed' || e.code === 'already_owned') {
+      showToast('لقد استلمت الساعة بالفعل', 'error');
+      try { await loadUserData(); } catch(err) {}
+      renderUI();
+    } else if (e.code === 'missions') {
+      showToast('لم تكمل جميع المهام بعد', 'error');
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'استلم ساعة الفضاء';
+    } else {
+      showToast('حدث خطأ، حاول لاحقاً', 'error');
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'استلم ساعة الفضاء';
+    }
+  } finally {
+    isLoading = false;
+  }
+}
+
+/* ============ INIT ============ */
+async function init() {
+  try {
+    initTelegram();
+    await initFirebase();
+    await loadUserData();
+    renderUI();
+    loadClockAnimation();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('loading').innerHTML = `
+      <i class="fas fa-exclamation-circle" style="color:#e03858"></i>
+      <p>تعذر تحميل البيانات</p>
+      <button onclick="location.reload()" style="margin-top:12px; padding:10px 20px; background:#1a1c2e; color:#fff; border-radius:12px; font-weight:800;">إعادة المحاولة</button>
+    `;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
